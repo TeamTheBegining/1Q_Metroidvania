@@ -28,8 +28,11 @@ public class ShowText : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        textMeshPro.gameObject.SetActive(true);
-        StartCoroutine(fadeIn);
+        if(collision.CompareTag("Player"))
+        {
+            textMeshPro.gameObject.SetActive(true);
+            StartCoroutine(fadeIn);
+        }
     }
 
     private IEnumerator FadeInProcess()
