@@ -23,5 +23,10 @@ public interface IDamageable
     /// </summary>
     public Action OnDead { get; set; }
 
+    /// <summary>
+    /// 사망 확인 변수
+    /// </summary>
+    public bool IsDead { get; }
+
     public void TakeDamage(float damage);
 }

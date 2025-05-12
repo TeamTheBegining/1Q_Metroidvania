@@ -11,4 +11,9 @@ public class Test_01_TestDummy : TestBase
         IDamageable target = testDummy.GetComponent<IDamageable>();
         target.TakeDamage(damage);
     }
+
+    protected override void OnTest2(InputAction.CallbackContext context)
+    {
+        testDummy.ResetHp();
+    }
 }
