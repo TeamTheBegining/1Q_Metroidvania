@@ -8,7 +8,7 @@ public class Test_03_PlayerSpotLight : TestBase
 
     private void Start()
     {
-        LightManager.Instacne.SetGlobalLight(Color.black);
+        LightManager.Instance.SetGlobalLight(Color.black);
     }
 
     protected override void OnTest1(InputAction.CallbackContext context)
@@ -18,12 +18,12 @@ public class Test_03_PlayerSpotLight : TestBase
 
     protected override void OnTest2(InputAction.CallbackContext context)
     {
-        playerSpotLight.SetOuterRadius(1f);
+        playerSpotLight.SetSpotlight(1f);
     }
 
     protected override void OnTest3(InputAction.CallbackContext context)
     {
-        LightManager.Instacne.SetGlobalLight(Color.white);
+        LightManager.Instance.SetGlobalLight(Color.white);
     }
 
     private IEnumerator SpreadSpot()
@@ -35,7 +35,7 @@ public class Test_03_PlayerSpotLight : TestBase
         while(timeElapsed < duration)
         {
             timeElapsed += Time.deltaTime;
-            playerSpotLight.SetOuterRadius((targetRadius / duration) * (timeElapsed / duration));
+            playerSpotLight.SetSpotlight(targetRadius * (timeElapsed / duration));
             yield return null;
         }    
     }

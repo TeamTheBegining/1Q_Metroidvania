@@ -1,14 +1,32 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class LightManager : Singleton<LightManager>
 {
     private Light2D globalLight;
+    private PlayerSpotLight playerSpotlight;
+    public PlayerSpotLight PlayerSpotlihgt { get => playerSpotlight; }
 
     protected override void Awake()
     {
         Init();    
     }
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Init();
+    }
+
 
     private void Init()
     {
@@ -18,6 +36,12 @@ public class LightManager : Singleton<LightManager>
         {
             globalLight = gameObject.AddComponent<Light2D>();
             globalLight.lightType = Light2D.LightType.Global;
+        }
+
+        PlayerSpotLight playerSpotlightComp = FindFirstObjectByType<PlayerSpotLight>();
+        if(playerSpotlightComp != null)
+        {
+            playerSpotlight = playerSpotlightComp;
         }
     }
 

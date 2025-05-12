@@ -27,8 +27,9 @@ public class PlayerSpotLight : MonoBehaviour
         }
     }
 
-    public void SetOuterRadius(float outerRadius)
+    public void SetSpotlight(float outerRadius, float intensity = 1f)
     {
         spotLight.pointLightOuterRadius = outerRadius;
+        spotLight.intensity = intensity;
     }
 }

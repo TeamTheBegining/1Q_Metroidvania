@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6153889557abe0d43b91452623dabcb6
+guid: a46305a772a74a545b7f1f9d4cf22685
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3227874300927184456
-    second: Test_StoneStatue_0
+      213: -7039384236854132703
+    second: Test_Intro_1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Test_StoneStatue_0
+      name: Test_Intro_1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 52
-        height: 87
+        width: 1024
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8b17f91ec694433d0800000000000000
-      internalID: -3227874300927184456
+      spriteID: 12043d435551f4e90800000000000000
+      internalID: -7039384236854132703
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Test_StoneStatue_0: -3227874300927184456
+      Test_Intro_1_0: -7039384236854132703
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
