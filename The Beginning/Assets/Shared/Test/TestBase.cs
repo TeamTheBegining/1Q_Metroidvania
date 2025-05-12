@@ -20,10 +20,12 @@ public class TestBase : MonoBehaviour
         inputActions.Test.Test3.performed += OnTest3;
         inputActions.Test.Test4.performed += OnTest4;
         inputActions.Test.Test5.performed += OnTest5;
+        inputActions.Test.Test5.performed += OnTest6;
     }
 
     private void OnDisable()
     {
+        inputActions.Test.Test5.performed += OnTest6;
         inputActions.Test.Test5.performed -= OnTest5;
         inputActions.Test.Test4.performed -= OnTest4;
         inputActions.Test.Test3.performed -= OnTest3;
@@ -32,6 +34,10 @@ public class TestBase : MonoBehaviour
         inputActions.Disable();
     }
 
+    protected virtual void OnTest6(InputAction.CallbackContext context)
+    {
+        //
+    }
     protected virtual void OnTest5(InputAction.CallbackContext context)
     {
         //
