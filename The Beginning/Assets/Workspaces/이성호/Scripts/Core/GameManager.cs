@@ -110,10 +110,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public bool IsCameraDoneBlending()
-    {
-        return camBrain.IsBlending;
-    }
+    // NOTE 밑의 내용 카메라 매니저로 새로 생성해서 분리하기
 
     #region Title Cam
     public void ShowTitleCamera()
@@ -124,6 +121,13 @@ public class GameManager : Singleton<GameManager>
     public void HideTitleCamera()
     {
         titleVCam.Priority = 0;
+    }
+    #endregion
+
+    #region Cinemachine Brain
+    public void SetCameraBlendingSpeed(float blendTime = 2f)
+    {
+        camBrain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.EaseInOut, blendTime);
     }
     #endregion
 }

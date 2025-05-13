@@ -3,12 +3,21 @@ using UnityEngine;
 
 public class Scene1Manager : MonoBehaviour
 {
+    private bool isFirstGameStart = false;
+
     private void Start()
     {
         LightManager.Instance.SetGlobalLight(Color.black);
         LightManager.Instance.PlayerSpotlihgt.SetSpotlight(4f, 0f);
+    }
 
-        StartCoroutine(GameStateChange());
+    private void Update()
+    {
+        if(!isFirstGameStart && GameManager.Instance.State == GameState.Play)
+        {
+            isFirstGameStart = true;
+            StartCoroutine(FirstSpreadSpot());
+        }
     }
 
     private IEnumerator FirstSpreadSpot()
@@ -23,20 +32,5 @@ public class Scene1Manager : MonoBehaviour
             LightManager.Instance.PlayerSpotlihgt.SetSpotlight(targetRadius * (timeElapsed / duration), 1f);
             yield return null;
         }
-    }
-
-    // 임시 : 나중에 컷 씬 후 전환하게 바꿀 것
-    private IEnumerator GameStateChange()
-    {
-        float timeElapsed = 0f;
-
-        while (timeElapsed < 5f)
-        {
-            timeElapsed += Time.deltaTime;
-            yield return null;
-            GameManager.Instance.State = GameState.Play;
-        }
-
-        StartCoroutine(FirstSpreadSpot());
     }
 }

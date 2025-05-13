@@ -9,11 +9,13 @@ using UnityEngine.UI;
 
 public class CutSceneManager : Singleton<CutSceneManager>
 {
-    public CutsceneSequenceSO[] sequences;
+    public CutsceneSequenceSO[] sequences; // NOTE : 생성시 비어있으므로 씬에서 만들어주기 or 리소스 로드 코드 나중에 추가하기
     private Canvas cutsceneCanvas;
     private GameObject currentCutsceneObject;
 
     private int currentSceneIndex = 0;
+
+    public bool isPlay { get; private set; }
 
     void Start()
     {
@@ -23,6 +25,7 @@ public class CutSceneManager : Singleton<CutSceneManager>
 
     public void ShowCutscene(int sequenceIndex)
     {
+        isPlay = true;
         gameObject.SetActive(true);
         currentSceneIndex = 0;
 
@@ -54,9 +57,10 @@ public class CutSceneManager : Singleton<CutSceneManager>
         {
             StartCoroutine(ProcessShowCutscene(sequenceIndex, sequences[sequenceIndex].lines[currentSceneIndex].showTime));
         }
-        else
+        else // 종료
         {
             Destroy(currentCutsceneObject);
+            isPlay = false;
         }
     }
 

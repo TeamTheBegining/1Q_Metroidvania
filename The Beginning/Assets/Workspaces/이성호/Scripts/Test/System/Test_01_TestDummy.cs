@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Test_01_TestDummy : TestBase
 {
+#if UNITY_EDITOR
     public TestDummy testDummy;
     public float damage = 1f;
 
@@ -16,4 +17,5 @@ public class Test_01_TestDummy : TestBase
     {
         testDummy.ResetHp();
     }
+#endif
 }

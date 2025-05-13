@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class Test_03_PlayerSpotLight : TestBase
 {
+#if UNITY_EDITOR
     public PlayerSpotLight playerSpotLight;
 
     private void Start()
@@ -39,4 +40,5 @@ public class Test_03_PlayerSpotLight : TestBase
             yield return null;
         }    
     }
+#endif
 }

@@ -9,6 +9,8 @@ public class TitlePanel : MonoBehaviour
 
     PlayerInputActions actions;
 
+    private bool isIntroStart = false;
+
     private void Awake()
     {
         titleText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -22,6 +24,17 @@ public class TitlePanel : MonoBehaviour
         InitInput();
     }
 
+    private void Update()
+    {
+        if(GameManager.Instance.State == GameState.CutScene && isIntroStart)
+        {
+            if(!CutSceneManager.Instance.isPlay)
+            {
+                GameManager.Instance.State = GameState.Play;
+            }
+        }
+    }
+
     public void InitInput()
     {
         actions = new PlayerInputActions();
@@ -33,16 +46,16 @@ public class TitlePanel : MonoBehaviour
     {       
         actions.UI.GameStart.Disable();
         titleText.text += ";";
+        StartCoroutine(ProcessGameIntro());
 
-        StartCoroutine(TextFadeOut());
-
-        // TODO : 게임 시작하게 만들기
         GameManager.Instance.HideTitleCamera();
         GameManager.Instance.State = GameState.CutScene;
     }
 
-    private IEnumerator TextFadeOut()
+    private IEnumerator ProcessGameIntro()
     {
+        GameManager.Instance.SetCameraBlendingSpeed(5f);
+
         float timeElapsed = 0.0f;
         float duration = 2f;
 
@@ -54,5 +67,9 @@ public class TitlePanel : MonoBehaviour
             guideText.color = new Color(1f, 1f, 1f, 1 - timeElapsed / duration);
             yield return null;
         }
+
+        CutSceneManager.Instance.ShowCutscene(0);
+        GameManager.Instance.SetCameraBlendingSpeed();
+        isIntroStart = true;
     }
 }
