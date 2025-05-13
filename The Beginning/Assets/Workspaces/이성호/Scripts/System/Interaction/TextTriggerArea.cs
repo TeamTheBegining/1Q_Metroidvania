@@ -43,7 +43,7 @@ public class TextTriggerArea : MonoBehaviour
         while(timeElapsed < duration)
         {
             timeElapsed += Time.deltaTime;
-            textMeshPro.color = new Color(1, 1, 1, duration * timeElapsed / duration);
+            textMeshPro.color = new Color(1, 1, 1, timeElapsed / duration);
             yield return null;
         }
 
@@ -60,7 +60,7 @@ public class TextTriggerArea : MonoBehaviour
         while (timeElapsed < duration)
         {
             timeElapsed += Time.deltaTime;
-            textMeshPro.color = new Color(1, 1, 1, 1 - duration * timeElapsed / duration);
+            textMeshPro.color = new Color(1, 1, 1, 1 - timeElapsed / duration);
             yield return null;
         }
     }

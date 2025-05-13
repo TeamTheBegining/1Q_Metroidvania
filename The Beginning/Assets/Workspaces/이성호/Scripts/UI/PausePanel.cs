@@ -56,6 +56,7 @@ public class PausePanel : MonoBehaviour
 
     private void ShowPanel()
     {
+        Time.timeScale = 0f;
         cg.alpha = 1;
         cg.interactable = true;
         cg.blocksRaycasts = true;
@@ -63,6 +64,7 @@ public class PausePanel : MonoBehaviour
 
     private void ClosePanel()
     {
+        Time.timeScale = 1f;
         cg.alpha = 0;
         cg.interactable = false;
         cg.blocksRaycasts = false;
