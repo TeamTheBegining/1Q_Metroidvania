@@ -49,7 +49,7 @@ public class PlayerAnimation : MonoBehaviour
                 animator.Play("Landing");
                 break;
             case Player.PlayerState.Attack:
-                //animator.Play("Attack");
+                animator.Play("Attack");
                 break;
             case Player.PlayerState.Skill1:
                 //animator.Play("Skill1");

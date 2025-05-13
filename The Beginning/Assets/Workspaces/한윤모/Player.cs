@@ -8,7 +8,7 @@ using static PlayerAnimation;
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerAnimation))]
 
-public class Player : MonoBehaviour//, IDamageable, Interactable
+public class Player : MonoBehaviour, IDamageable
 {
 
 
@@ -22,6 +22,8 @@ public class Player : MonoBehaviour//, IDamageable, Interactable
     [SerializeField] float jumpTimer = 0f;
     [SerializeField] float parryTimer = 0f;
     [SerializeField] float parryDelay = 0.5f;
+    [SerializeField] float currentHp = 3f;
+    [SerializeField] float maxHp = 3f;
     //private float ladderInputHoldTime = 0;
     //[SerializeField] private float ladderEnterDelay = 0.2f;
 
@@ -31,6 +33,7 @@ public class Player : MonoBehaviour//, IDamageable, Interactable
     private Transform groundCheckTransform;
     private LayerMask groundLayer;
     private SpriteRenderer spriternderer;
+    private Collider2D attackcoll;
     bool isGround = false;
     bool isparrying = false;
 
@@ -60,12 +63,9 @@ public class Player : MonoBehaviour//, IDamageable, Interactable
     }
 
     public PlayerInput Input { get => input; }
-    /*public float CurrentHp { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public float MaxHp { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public Action OnHit { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public Action OnDead { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }*/
-
-    //public bool IsDead => throw new NotImplementedException();
+    public float CurrentHp { get => currentHp; set => currentHp = value; }
+    public float MaxHp { get => maxHp; set => maxHp = value; }
+    public bool IsDead => currentHp <= 0;
 
     private void Awake()
     {
@@ -74,8 +74,10 @@ public class Player : MonoBehaviour//, IDamageable, Interactable
         animatorCtrl = GetComponent<PlayerAnimation>();
         spriternderer = gameObject.GetComponent<SpriteRenderer>();
         groundCheckTransform = transform.GetChild(0).transform;
+        attackcoll = transform.GetChild(1).GetComponent<Collider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
+        maxHp = 3;
     }
 
     void Start()
@@ -102,7 +104,7 @@ public class Player : MonoBehaviour//, IDamageable, Interactable
                 PlayerLandingUpdate();
                 break;
             case PlayerState.Attack:
-                //PlayerAttack();
+                PlayerAttackUpdate();
                 break;
             case PlayerState.Skill1:
                 //PlayerSkillk1();
@@ -176,8 +178,15 @@ public class Player : MonoBehaviour//, IDamageable, Interactable
             currentState = PlayerState.Parrying;
             input.IsParrying = false;   // 패링 입력 종료
             isparrying = true;          // 패링중 확인
+        }
+
+        if (input.IsAttack)
+        {
+            currentState = PlayerState.Attack;
+            input.IsAttack = false;
             rb.linearVelocity = Vector2.zero;
         }
+
     }
     private void PlayerMoveUpdate()
     {
@@ -213,6 +222,13 @@ public class Player : MonoBehaviour//, IDamageable, Interactable
             currentState = PlayerState.Parrying;
             input.IsParrying = false;   // 패링 입력 종료
             isparrying = true;          // 패링중 확인
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        if (input.IsAttack)
+        {
+            currentState = PlayerState.Attack;
+            input.IsAttack = false;
             rb.linearVelocity = Vector2.zero;
         }
 
@@ -282,18 +298,32 @@ public class Player : MonoBehaviour//, IDamageable, Interactable
         if (input.InputVec.x != 0)
             currentState = PlayerState.Move;
     }
-    private void LandingFish()
+    private void PlayerAttackUpdate()
+    {
+
+
+    }
+    private void LandingFinish()
     {
         if(currentState == PlayerState.Landing) 
             currentState = PlayerState.Idle;
     }
     private void ParryingCheck()
     {
-            //콜라이더 활성화
+        isparrying = false;
     }
-    private void ParryingFish()
+    private void ParryingFinish()
     {
         currentState = PlayerState.Idle;
+    }
+    private void AttackCollider()
+    {
+        attackcoll.enabled = true;
+    }
+    private void AttackFinish()
+    {
+        currentState = PlayerState.Idle;
+        attackcoll.enabled = false;
     }
 
 
@@ -337,12 +367,17 @@ public class Player : MonoBehaviour//, IDamageable, Interactable
 
     public void TakeDamage(float damage)
     {
-        throw new NotImplementedException();
-        //OnHit?.Invoke();
+        CurrentHp -= damage;
+        PlayerHit();
     }
 
-    public void OnInteraction()
+    private void PlayerHit()
     {
-        
+        // 히트 할 때 실행할 함수 내용
+    }
+
+    private void PlayerDead()
+    {
+        // 죽을때 실행할 함수 내용
     }
 }

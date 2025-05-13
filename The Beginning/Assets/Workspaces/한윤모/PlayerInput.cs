@@ -10,7 +10,7 @@ public class PlayerInput : MonoBehaviour
     public Vector2 InputVec { get => inputVec; }
     
     bool isAttack = false;
-    public bool IsAttack { get => isAttack; }
+    public bool IsAttack { get => isAttack; set => isAttack = value; }
 
     bool isRoll = false;
     public bool IsRoll { get => isRoll; set => isRoll = value; }
