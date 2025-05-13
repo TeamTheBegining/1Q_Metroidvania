@@ -144,6 +144,24 @@ public partial class @TestInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PageUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""f1b9f79e-c5e2-41ad-885d-031cd7949858"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PageDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""3ee9864a-f52a-4de7-8c98-16f90a9de036"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -212,6 +230,28 @@ public partial class @TestInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Test6"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43baeb3c-ea77-4ed1-943c-318652184f4f"",
+                    ""path"": ""<Keyboard>/pageUp"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PageUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf88bf19-1882-41f6-a3a0-92fb2e00bb9b"",
+                    ""path"": ""<Keyboard>/pageDown"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PageDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -226,6 +266,8 @@ public partial class @TestInputActions: IInputActionCollection2, IDisposable
         m_Test_Test4 = m_Test.FindAction("Test4", throwIfNotFound: true);
         m_Test_Test5 = m_Test.FindAction("Test5", throwIfNotFound: true);
         m_Test_Test6 = m_Test.FindAction("Test6", throwIfNotFound: true);
+        m_Test_PageUp = m_Test.FindAction("PageUp", throwIfNotFound: true);
+        m_Test_PageDown = m_Test.FindAction("PageDown", throwIfNotFound: true);
     }
 
     ~@TestInputActions()
@@ -312,6 +354,8 @@ public partial class @TestInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Test_Test4;
     private readonly InputAction m_Test_Test5;
     private readonly InputAction m_Test_Test6;
+    private readonly InputAction m_Test_PageUp;
+    private readonly InputAction m_Test_PageDown;
     /// <summary>
     /// Provides access to input actions defined in input action map "Test".
     /// </summary>
@@ -347,6 +391,14 @@ public partial class @TestInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Test/Test6".
         /// </summary>
         public InputAction @Test6 => m_Wrapper.m_Test_Test6;
+        /// <summary>
+        /// Provides access to the underlying input action "Test/PageUp".
+        /// </summary>
+        public InputAction @PageUp => m_Wrapper.m_Test_PageUp;
+        /// <summary>
+        /// Provides access to the underlying input action "Test/PageDown".
+        /// </summary>
+        public InputAction @PageDown => m_Wrapper.m_Test_PageDown;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -391,6 +443,12 @@ public partial class @TestInputActions: IInputActionCollection2, IDisposable
             @Test6.started += instance.OnTest6;
             @Test6.performed += instance.OnTest6;
             @Test6.canceled += instance.OnTest6;
+            @PageUp.started += instance.OnPageUp;
+            @PageUp.performed += instance.OnPageUp;
+            @PageUp.canceled += instance.OnPageUp;
+            @PageDown.started += instance.OnPageDown;
+            @PageDown.performed += instance.OnPageDown;
+            @PageDown.canceled += instance.OnPageDown;
         }
 
         /// <summary>
@@ -420,6 +478,12 @@ public partial class @TestInputActions: IInputActionCollection2, IDisposable
             @Test6.started -= instance.OnTest6;
             @Test6.performed -= instance.OnTest6;
             @Test6.canceled -= instance.OnTest6;
+            @PageUp.started -= instance.OnPageUp;
+            @PageUp.performed -= instance.OnPageUp;
+            @PageUp.canceled -= instance.OnPageUp;
+            @PageDown.started -= instance.OnPageDown;
+            @PageDown.performed -= instance.OnPageDown;
+            @PageDown.canceled -= instance.OnPageDown;
         }
 
         /// <summary>
@@ -502,5 +566,19 @@ public partial class @TestInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTest6(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PageUp" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPageUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PageDown" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPageDown(InputAction.CallbackContext context);
     }
 }

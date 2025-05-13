@@ -5,6 +5,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static TestInputActions;
 
 public enum GameState
 {
@@ -68,7 +69,10 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         State = GameState.Menu;
-    }
+#if UNITY_EDITOR
+        TestInit();
+#endif
+}
 
     private void Update()
     {
@@ -133,4 +137,34 @@ public class GameManager : Singleton<GameManager>
         camBrain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.EaseInOut, blendTime);
     }
     #endregion
+
+#if UNITY_EDITOR
+
+    [Space(20f)]
+    [Header("Test Section")]
+    public int nextSceneIndex = 0;
+    private TestInputActions testActions;
+
+    private void TestInit()
+    {
+        testActions = new TestInputActions();
+        testActions.Enable();
+        testActions.Test.PageUp.performed += PageUp_performed;
+        testActions.Test.PageDown.performed += PageDown_performed;
+    }
+
+    private void PageDown_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        GameSceneManager.Instance.ChangeScene(1, true);
+        LightManager.Instance.SetGlobalLight(Color.white);
+    }
+
+    private void PageUp_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        GameSceneManager.Instance.ChangeScene(nextSceneIndex);
+        LightManager.Instance.SetGlobalLight(Color.white);
+    }
+
+
+#endif
 }

@@ -16,7 +16,6 @@ public class TestDummy : MonoBehaviour, IDamageable
                 // 사망
                 Debug.Log($"Dummy dead");
                  
-                OnDead?.Invoke();
                 isDead = true;
             }
         }
@@ -28,8 +27,6 @@ public class TestDummy : MonoBehaviour, IDamageable
         get => maxHp;
         set => maxHp = value; 
     }
-    public Action OnHit { get; set; }
-    public Action OnDead { get; set; }
 
     private bool isDead = false;
     public bool IsDead { get => isDead; }
@@ -45,7 +42,6 @@ public class TestDummy : MonoBehaviour, IDamageable
         if (IsDead) return;
 
         Debug.Log($"Dummy take damage {damage}");
-        OnHit?.Invoke();
         CurrentHp -= damage;
     }
 

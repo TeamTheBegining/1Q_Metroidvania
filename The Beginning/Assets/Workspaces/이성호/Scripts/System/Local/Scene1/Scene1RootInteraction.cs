@@ -16,7 +16,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     public float targetDuration;
 
     public float DisableDelay = 3f;
-
+    
     private void Awake()
     {
         actions = new PlayerInputActions();
@@ -77,6 +77,8 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
             yield return null;
         }
 
-        gameObject.SetActive(false);
+        //GameSceneManager.Instance.ChangeScene(1);
+
+        //gameObject.SetActive(false);
     }
 }
