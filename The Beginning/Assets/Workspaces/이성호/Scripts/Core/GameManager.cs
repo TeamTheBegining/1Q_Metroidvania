@@ -85,7 +85,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private void ExitGame()
+    public void ExitGame()
     {
         Application.Quit();
     }
