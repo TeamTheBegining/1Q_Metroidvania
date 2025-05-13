@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Collider2D))]
 public class Test_00_RootInteraction : TestBase
 {
+#if UNITY_EDITOR
     Interactable target;
 
     private void Start()
@@ -28,4 +29,5 @@ public class Test_00_RootInteraction : TestBase
             target.OnInteraction();
         }
     }
+#endif
 }

@@ -17,8 +17,10 @@ public enum GameState
 
 public class GameManager : Singleton<GameManager>
 {
-    CinemachineBrain camBrain;
-    CinemachineCamera titleVCam;
+    private CinemachineBrain camBrain;
+    private CinemachineCamera titleVCam;
+    private InteractiveMessagePanel messagePanel;
+    public InteractiveMessagePanel MessagePanel => messagePanel;
 
     [Tooltip("PoolType 순서대로 오브젝트를 배치 할 것")]
     public GameObject[] poolPrefabs = new GameObject[(int)PoolType.PoolTypeCount];
@@ -60,6 +62,7 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         camBrain = GameObject.Find("Main Camera").GetComponent<CinemachineBrain>();
         titleVCam = transform.GetChild(0).GetComponent<CinemachineCamera>();
+        messagePanel = GetComponentInChildren<InteractiveMessagePanel>();
     }
 
     private void Start()

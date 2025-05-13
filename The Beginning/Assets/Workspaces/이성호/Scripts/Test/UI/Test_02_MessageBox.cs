@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Test_02_MessageBox : TestBase
 {
+#if UNITY_EDITOR
     public InteractiveMessagePanel panel;
     public TextDataSO data;
 
@@ -34,4 +35,5 @@ public class Test_02_MessageBox : TestBase
     {
         panel.FadeOutClose();
     }
+#endif
 }
