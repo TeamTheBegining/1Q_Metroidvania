@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f24bd89d0f889fe45a6e27e548704d02, type: 3}
   m_Name: CutsceneLine_Test2
   m_EditorClassIdentifier: 
-  image: {fileID: -3833336398871840257, guid: c1d792e2a336b994ca0e901696aee828, type: 3}
-  speaker: ...
-  dialogue: asdfasdf
+  CutsceneObject: {fileID: 3362426354211488704, guid: 1f2ebd0c20dfb9c44926938c737f1a1a, type: 3}
+  showTime: 3

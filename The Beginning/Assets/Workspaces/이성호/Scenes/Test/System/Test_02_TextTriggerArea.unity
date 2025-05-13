@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '02. Test Interaction
+  m_text: '02. Test TextTriggerArea
 
 '
   m_isRightToLeft: 0
@@ -831,7 +831,7 @@ GameObject:
   m_Component:
   - component: {fileID: 875997452}
   m_Layer: 0
-  m_Name: Test_02_Interaction
+  m_Name: Test_02_TextTriggerArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

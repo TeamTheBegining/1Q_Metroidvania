@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,42 +10,62 @@ using UnityEngine.UI;
 public class CutSceneManager : Singleton<CutSceneManager>
 {
     public CutsceneSequenceSO[] sequences;
+    private Canvas cutsceneCanvas;
+    private GameObject currentCutsceneObject;
 
-    private int currentIndex = 0;
-
-    public Image sceneImage;
-    public TextMeshProUGUI speakerText;
-    public TextMeshProUGUI dialogueText;
+    private int currentSceneIndex = 0;
 
     void Start()
     {
         Transform child = transform.GetChild(0);
-        sceneImage = child.transform.GetChild(0).GetComponent<Image>();
-        speakerText = child.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        dialogueText = child.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        cutsceneCanvas = child.GetComponent<Canvas>();
     }
 
-    public void ShowCutScene(int sequenceIndex)
+    public void ShowCutscene(int sequenceIndex)
     {
         gameObject.SetActive(true);
-        ShowLine(sequenceIndex, currentIndex);
+        currentSceneIndex = 0;
+
+        StartCoroutine(ProcessShowCutscene(sequenceIndex, sequences[sequenceIndex].lines[currentSceneIndex].showTime));
     }
 
-    public void OnNextClicked(int sequenceIndex)
+    // 컷 씬 자동 넘기기를 위한 코루틴
+    private IEnumerator ProcessShowCutscene(int sequenceIndex, float maxTime)
     {
-        currentIndex++;
-        if (currentIndex < sequences[sequenceIndex].lines.Length)
-            ShowLine(sequenceIndex, currentIndex);
+        // 기존 컷 씬 제거
+        if (currentCutsceneObject != null)
+        {
+            Destroy(currentCutsceneObject);
+        }
+
+        // 컷 씬 보여주기
+        float elapsedTimer = 0.0f;
+
+        currentCutsceneObject = ShowLine(sequenceIndex, currentSceneIndex);
+        while(elapsedTimer < maxTime)
+        {
+            elapsedTimer += Time.deltaTime;
+            yield return null;
+        }
+
+        // 다음 컷 씬 실행
+        currentSceneIndex++;
+        if (currentSceneIndex < sequences[sequenceIndex].lines.Length)
+        {
+            StartCoroutine(ProcessShowCutscene(sequenceIndex, sequences[sequenceIndex].lines[currentSceneIndex].showTime));
+        }
         else
-            EndCutscene();
+        {
+            Destroy(currentCutsceneObject);
+        }
     }
 
-    void ShowLine(int sequenceIndex, int index)
+    GameObject ShowLine(int sequenceIndex, int index)
     {
         var line = sequences[sequenceIndex].lines[index];
-        sceneImage.sprite = line.image;
-        speakerText.text = line.speaker;
-        dialogueText.text = line.dialogue;
+        var obj = Instantiate(line.CutsceneObject, cutsceneCanvas.gameObject.transform);
+
+        return obj;
     }
 
     void EndCutscene()

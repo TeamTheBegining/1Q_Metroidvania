@@ -3,18 +3,12 @@ using UnityEngine;
 
 public class Scene1Manager : MonoBehaviour
 {
-    bool isSceneStart = false;
-
     private void Start()
     {
         LightManager.Instance.SetGlobalLight(Color.black);
         LightManager.Instance.PlayerSpotlihgt.SetSpotlight(4f, 0f);
 
         StartCoroutine(GameStateChange());
-    }
-
-    private void Update()
-    {
     }
 
     private IEnumerator FirstSpreadSpot()
@@ -36,7 +30,7 @@ public class Scene1Manager : MonoBehaviour
     {
         float timeElapsed = 0f;
 
-        while (timeElapsed < 4f)
+        while (timeElapsed < 5f)
         {
             timeElapsed += Time.deltaTime;
             yield return null;

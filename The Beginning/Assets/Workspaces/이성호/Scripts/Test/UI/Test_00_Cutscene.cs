@@ -7,11 +7,6 @@ public class Test_00_Cutscene : TestBase
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
-        CutSceneManager.Instance.ShowCutScene(sequenceIndex);
-    }
-
-    protected override void OnTest2(InputAction.CallbackContext context)
-    {
-        CutSceneManager.Instance.OnNextClicked(sequenceIndex);
+        CutSceneManager.Instance.ShowCutscene(sequenceIndex);
     }
 }

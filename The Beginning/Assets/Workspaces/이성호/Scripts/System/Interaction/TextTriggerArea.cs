@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-public class ShowText : MonoBehaviour
+public class TextTriggerArea : MonoBehaviour
 {
     private TextMeshPro textMeshPro;
     public TextDataSO textData;
