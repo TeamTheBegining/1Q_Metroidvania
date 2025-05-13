@@ -189,6 +189,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DashLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""5473d49d-1e26-4f1d-9c3a-40a4c2745a3f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DashRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""69250907-4a60-42a2-bf11-2aaea87801d0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -354,6 +372,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Sliding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""076a125f-5b3a-40ae-940b-27a821be7623"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": ""MultiTap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DashLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9827555a-62bf-48db-b300-fe4b9147d8df"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": ""MultiTap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DashRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -992,6 +1032,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Parrying = m_Player.FindAction("Parrying", throwIfNotFound: true);
         m_Player_Dodging = m_Player.FindAction("Dodging", throwIfNotFound: true);
         m_Player_Sliding = m_Player.FindAction("Sliding", throwIfNotFound: true);
+        m_Player_DashLeft = m_Player.FindAction("DashLeft", throwIfNotFound: true);
+        m_Player_DashRight = m_Player.FindAction("DashRight", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1098,6 +1140,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Parrying;
     private readonly InputAction m_Player_Dodging;
     private readonly InputAction m_Player_Sliding;
+    private readonly InputAction m_Player_DashLeft;
+    private readonly InputAction m_Player_DashRight;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1153,6 +1197,14 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Sliding".
         /// </summary>
         public InputAction @Sliding => m_Wrapper.m_Player_Sliding;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/DashLeft".
+        /// </summary>
+        public InputAction @DashLeft => m_Wrapper.m_Player_DashLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/DashRight".
+        /// </summary>
+        public InputAction @DashRight => m_Wrapper.m_Player_DashRight;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1212,6 +1264,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Sliding.started += instance.OnSliding;
             @Sliding.performed += instance.OnSliding;
             @Sliding.canceled += instance.OnSliding;
+            @DashLeft.started += instance.OnDashLeft;
+            @DashLeft.performed += instance.OnDashLeft;
+            @DashLeft.canceled += instance.OnDashLeft;
+            @DashRight.started += instance.OnDashRight;
+            @DashRight.performed += instance.OnDashRight;
+            @DashRight.canceled += instance.OnDashRight;
         }
 
         /// <summary>
@@ -1256,6 +1314,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Sliding.started -= instance.OnSliding;
             @Sliding.performed -= instance.OnSliding;
             @Sliding.canceled -= instance.OnSliding;
+            @DashLeft.started -= instance.OnDashLeft;
+            @DashLeft.performed -= instance.OnDashLeft;
+            @DashLeft.canceled -= instance.OnDashLeft;
+            @DashRight.started -= instance.OnDashRight;
+            @DashRight.performed -= instance.OnDashRight;
+            @DashRight.canceled -= instance.OnDashRight;
         }
 
         /// <summary>
@@ -1655,6 +1719,20 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSliding(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DashLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDashLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DashRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDashRight(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
