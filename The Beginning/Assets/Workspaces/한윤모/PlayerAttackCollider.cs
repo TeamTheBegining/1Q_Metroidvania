@@ -17,6 +17,6 @@ public class PlayerAttackCollider : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(player.Damage);
+        collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(player.Damage,player.gameObject);
     }
 }
