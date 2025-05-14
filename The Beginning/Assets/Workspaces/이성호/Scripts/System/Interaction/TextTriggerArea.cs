@@ -2,6 +2,9 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// 트리거 내에 들어왔을 떄 textData를 월드에 보여주는 클래스
+/// </summary>
 public class TextTriggerArea : MonoBehaviour
 {
     private TextMeshPro textMeshPro;

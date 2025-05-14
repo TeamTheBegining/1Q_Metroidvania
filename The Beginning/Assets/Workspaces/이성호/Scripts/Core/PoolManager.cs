@@ -20,6 +20,9 @@ public interface IPoolable
 // 배열 확장
 // 모든 오브젝트 제거
 
+/// <summary>
+/// 오브젝트 풀링 시스템 관리 매니저 ( 사용 시 오브젝트는 IPoolable을 상속 받고 사용 )
+/// </summary>
 public class PoolManager : Singleton<PoolManager>
 {
     private class PoolData

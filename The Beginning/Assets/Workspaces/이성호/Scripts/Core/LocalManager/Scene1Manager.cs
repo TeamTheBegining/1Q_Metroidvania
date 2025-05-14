@@ -7,8 +7,8 @@ public class Scene1Manager : MonoBehaviour
 
     private void Start()
     {
-        LightManager.Instance.SetGlobalLight(Color.black);
-        LightManager.Instance.PlayerSpotlihgt.SetSpotlight(4f, 0f);
+        LightManager.Instance.SetGlobalLight(Color.black);          // 처음 빛 색 - 검정
+        LightManager.Instance.PlayerSpotlihgt.SetSpotlight(4f, 0f); // 플레이어 스폿 라이트 초기화
     }
 
     private void Update()
@@ -20,6 +20,9 @@ public class Scene1Manager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 게임 시작 시 플레이어 라이트 설정 코루틴 ( 플레이어 스폿 라이트 크게 만들기 )
+    /// </summary>
     private IEnumerator FirstSpreadSpot()
     {
         float timeElapsed = 0f;

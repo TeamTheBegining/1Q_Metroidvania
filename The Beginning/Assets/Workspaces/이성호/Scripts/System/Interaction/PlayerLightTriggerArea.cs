@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 트리거 내에 플레이어가 들어왔을 때 target값으로 빛 프로퍼티 값을 바꾸는 클래스
+/// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class PlayerLightTriggerArea : MonoBehaviour
 {

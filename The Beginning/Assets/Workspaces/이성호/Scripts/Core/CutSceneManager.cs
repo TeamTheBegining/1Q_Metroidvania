@@ -5,8 +5,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-// TODO : Cutscene 시퀀스가 play되면 자동 재생될 수 있게 만들기 (각 시퀀스 개별 작동)
-
+/// <summary>
+/// 개별 캔버스를 가져서 해당 캔버스에 Cutscene sequence의 이미지들을 실행하는 매니저
+/// </summary>
 public class CutSceneManager : Singleton<CutSceneManager>
 {
     public CutsceneSequenceSO[] sequences; // NOTE : 생성시 비어있으므로 씬에서 만들어주기 or 리소스 로드 코드 나중에 추가하기

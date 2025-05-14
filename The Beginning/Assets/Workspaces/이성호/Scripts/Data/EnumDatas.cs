@@ -1,6 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
+/// 범용 Enum 타입정의
 
 public enum PoolType
 {

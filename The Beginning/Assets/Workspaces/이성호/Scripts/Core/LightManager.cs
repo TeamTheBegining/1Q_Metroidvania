@@ -2,6 +2,9 @@
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Global Light와 Player Spot Light 등 빛관련 컴포넌트 관리 매니저
+/// </summary>
 public class LightManager : Singleton<LightManager>
 {
     private Light2D globalLight;

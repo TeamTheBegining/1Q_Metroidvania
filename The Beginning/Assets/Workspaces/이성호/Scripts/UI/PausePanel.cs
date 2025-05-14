@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+/// <summary>
+/// Pause 패널 관리 클래스
+/// </summary>
 public class PausePanel : MonoBehaviour
 {
     private PlayerInputActions actions;

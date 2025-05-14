@@ -2,6 +2,9 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// 메세지 패널 관리 클래스
+/// </summary>
 public class InteractiveMessagePanel : MonoBehaviour
 {
     private CanvasGroup cg;

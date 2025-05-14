@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 트리거에 진입 시 guidImage를 보여주는 클래스
+/// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class InteractableGuideObject : MonoBehaviour
 {

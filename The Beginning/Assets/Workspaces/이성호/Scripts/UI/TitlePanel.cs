@@ -2,6 +2,9 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// 타이틀 패널 관리 클래스
+/// </summary>
 public class TitlePanel : MonoBehaviour
 {
     private TextMeshProUGUI titleText;

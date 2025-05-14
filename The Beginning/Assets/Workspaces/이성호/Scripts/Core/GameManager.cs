@@ -5,14 +5,13 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static TestInputActions;
 
 public enum GameState
 {
     BeforeStart = 0, // 프로그램 시작 후 State 호출 전 상태
-    Menu,
     Play,
     CutScene,
+    Pause,
     PlayEnd, // 플레이어 사망이나 게임 클리어일 때 
 }
 
@@ -68,7 +67,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        State = GameState.Menu;
+        State = GameState.BeforeStart;
 #if UNITY_EDITOR
         TestInit();
 #endif
@@ -81,11 +80,21 @@ public class GameManager : Singleton<GameManager>
 
     private void Initialize(GameState state)
     {
+        if(state != GameState.Pause)
+        {
+            OnUnpause();
+        }
+
         switch (state)
         {
-            case GameState.Menu:
+            case GameState.BeforeStart:
                 break;
             case GameState.Play:
+                break;
+            case GameState.Pause:
+                OnPause();
+                break;
+            case GameState.CutScene:
                 break;
             default:
                 break;
@@ -97,24 +106,34 @@ public class GameManager : Singleton<GameManager>
         Application.Quit();
     }
 
-    public void SceneChange(int sceneIndex)
+    /*    public void SceneChange(int sceneIndex)
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.LoadScene(sceneIndex);
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded; // 중복 호출 방지
+            PoolManager.Instance.ClearPoolData();
+            if (SceneManager.GetActiveScene().buildIndex == 0)
+            {
+                State = GameState.Menu;
+            }
+            else
+            {
+                State = GameState.Play;
+            }
+        }*/
+
+    private void OnPause()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.LoadScene(sceneIndex);
+        Time.timeScale = 0f;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnUnpause()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded; // 중복 호출 방지
-        PoolManager.Instance.ClearPoolData();
-        if (SceneManager.GetActiveScene().buildIndex == 0)
-        {
-            State = GameState.Menu;
-        }
-        else
-        {
-            State = GameState.Play;
-        }
+        Time.timeScale = 1f;
     }
 
     // NOTE 밑의 내용 카메라 매니저로 새로 생성해서 분리하기
