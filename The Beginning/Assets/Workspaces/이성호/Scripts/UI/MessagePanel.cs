@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 메세지 패널 관리 클래스
 /// </summary>
-public class InteractiveMessagePanel : MonoBehaviour
+public class MessagePanel : MonoBehaviour
 {
     private CanvasGroup cg;
     private TextMeshProUGUI messageText;

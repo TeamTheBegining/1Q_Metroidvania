@@ -24,8 +24,8 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     public void OnInteraction()
     {
         // 임시
-        GameManager.Instance.MessagePanel.FadeInShow();
-        GameManager.Instance.MessagePanel.SetText(textData.text);
+        GameManager.Instance.MiddleMessagePanel.FadeInShow();
+        GameManager.Instance.MiddleMessagePanel.SetText(textData.text);
 
         actions.UI.Enable();
         actions.UI.Click.performed += Click_performed;        
@@ -33,7 +33,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
 
     private IEnumerator SpreadSpot()
     {
-        GameManager.Instance.MessagePanel.FadeOutClose();
+        GameManager.Instance.MiddleMessagePanel.FadeOutClose();
 
         yield return new WaitForSeconds(3f); // 빛 퍼짐 딜레이
 
@@ -62,7 +62,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
 
     private void OnClick()
     {
-        GameManager.Instance.MessagePanel.AddText(" ;");
+        GameManager.Instance.MiddleMessagePanel.AddText(" ;");
         actions.UI.Click.performed -= Click_performed;
         actions.UI.Disable();
         StartCoroutine(SpreadSpot());

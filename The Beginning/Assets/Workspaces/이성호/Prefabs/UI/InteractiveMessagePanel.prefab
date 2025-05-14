@@ -145,7 +145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7909155416368337263}
-  - component: {fileID: 4781890813935028835}
+  - component: {fileID: 1722633101571894648}
   - component: {fileID: 7872884917926087024}
   m_Layer: 5
   m_Name: InteractiveMessagePanel
@@ -175,7 +175,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4781890813935028835
+--- !u!114 &1722633101571894648
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6825399146383734290}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6a8a9047b15d59408cf765f7c7c3543, type: 3}
+  m_Script: {fileID: 11500000, guid: e6d7d764ccd24084a827c808dbb54307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!225 &7872884917926087024

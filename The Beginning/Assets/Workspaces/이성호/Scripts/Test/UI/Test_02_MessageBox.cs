@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class Test_02_MessageBox : TestBase
 {
 #if UNITY_EDITOR
-    public InteractiveMessagePanel panel;
+    public MessagePanel panel;
     public TextDataSO data;
 
     [TextArea]

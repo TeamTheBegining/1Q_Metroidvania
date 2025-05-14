@@ -27,7 +27,7 @@ public class Scene1Manager : MonoBehaviour
     {
         float timeElapsed = 0f;
         float duration = 3f;
-        float targetRadius = 4f;
+        float targetRadius = 2f;
 
         while (timeElapsed < duration)
         {

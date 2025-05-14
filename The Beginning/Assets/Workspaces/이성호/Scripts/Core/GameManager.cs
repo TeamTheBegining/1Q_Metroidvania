@@ -19,14 +19,17 @@ public class GameManager : Singleton<GameManager>
 {
     private CinemachineBrain camBrain;
     private CinemachineCamera titleVCam;
-    private InteractiveMessagePanel messagePanel;
-    public InteractiveMessagePanel MessagePanel => messagePanel;
+    private MessagePanel middleMessagePanel;
+    public MessagePanel MiddleMessagePanel => middleMessagePanel;
+
+    private MessagePanel bottomMessagePanel;
+    public MessagePanel BottomMessagePanel => bottomMessagePanel;
 
     [Tooltip("PoolType 순서대로 오브젝트를 배치 할 것")]
     public GameObject[] poolPrefabs = new GameObject[(int)PoolType.PoolTypeCount];
     public AudioClip[] audioClips; 
 
-    private GameState state;
+    [SerializeField] private GameState state;
     public GameState State
     {
         get => state;
@@ -62,7 +65,8 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         camBrain = GameObject.Find("Main Camera").GetComponent<CinemachineBrain>();
         titleVCam = transform.GetChild(0).GetComponent<CinemachineCamera>();
-        messagePanel = GetComponentInChildren<InteractiveMessagePanel>();
+        middleMessagePanel = transform.GetChild(2).GetComponent<MessagePanel>();
+        bottomMessagePanel = transform.GetChild(3).GetComponent<MessagePanel>();
     }
 
     private void Start()
