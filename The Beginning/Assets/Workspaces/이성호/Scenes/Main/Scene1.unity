@@ -5926,10 +5926,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameSceneManager
       objectReference: {fileID: 0}
-    - target: {fileID: 8250262433410954832, guid: cc1afa0b5d56617448bb4cba5b0ca560, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

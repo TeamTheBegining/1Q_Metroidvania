@@ -65,8 +65,8 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         camBrain = GameObject.Find("Main Camera").GetComponent<CinemachineBrain>();
         titleVCam = transform.GetChild(0).GetComponent<CinemachineCamera>();
-        middleMessagePanel = transform.GetChild(2).GetComponent<MessagePanel>();
-        bottomMessagePanel = transform.GetChild(3).GetComponent<MessagePanel>();
+        middleMessagePanel = transform.GetChild(1).GetChild(2).GetComponent<MessagePanel>();
+        bottomMessagePanel = transform.GetChild(1).GetChild(3).GetComponent<MessagePanel>();
     }
 
     private void Start()

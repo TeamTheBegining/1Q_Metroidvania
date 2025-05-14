@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "Item_99", menuName = "ScriptableObject/ItemData", order = 1)]
 public class ItemDataSO : ScriptableObject
 {
     public Sprite icon;
