@@ -17,8 +17,6 @@ public enum GameState
 
 public class GameManager : Singleton<GameManager>
 {
-    private CinemachineBrain camBrain;
-    private CinemachineCamera titleVCam;
     private MessagePanel middleMessagePanel;
     public MessagePanel MiddleMessagePanel => middleMessagePanel;
 
@@ -63,10 +61,8 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
-        camBrain = GameObject.Find("Main Camera").GetComponent<CinemachineBrain>();
-        titleVCam = transform.GetChild(0).GetComponent<CinemachineCamera>();
-        middleMessagePanel = transform.GetChild(1).GetChild(2).GetComponent<MessagePanel>();
-        bottomMessagePanel = transform.GetChild(1).GetChild(3).GetComponent<MessagePanel>();
+        middleMessagePanel = transform.GetChild(0).GetChild(2).GetComponent<MessagePanel>();
+        bottomMessagePanel = transform.GetChild(0).GetChild(3).GetComponent<MessagePanel>();
     }
 
     private void Start()
@@ -110,26 +106,6 @@ public class GameManager : Singleton<GameManager>
         Application.Quit();
     }
 
-    /*    public void SceneChange(int sceneIndex)
-        {
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene(sceneIndex);
-        }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded; // 중복 호출 방지
-            PoolManager.Instance.ClearPoolData();
-            if (SceneManager.GetActiveScene().buildIndex == 0)
-            {
-                State = GameState.Menu;
-            }
-            else
-            {
-                State = GameState.Play;
-            }
-        }*/
-
     private void OnPause()
     {
         Time.timeScale = 0f;
@@ -139,27 +115,6 @@ public class GameManager : Singleton<GameManager>
     {
         Time.timeScale = 1f;
     }
-
-    // NOTE 밑의 내용 카메라 매니저로 새로 생성해서 분리하기
-
-    #region Title Cam
-    public void ShowTitleCamera()
-    {
-        titleVCam.Priority = 20;
-    }
-
-    public void HideTitleCamera()
-    {
-        titleVCam.Priority = 0;
-    }
-    #endregion
-
-    #region Cinemachine Brain
-    public void SetCameraBlendingSpeed(float blendTime = 2f)
-    {
-        camBrain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.EaseInOut, blendTime);
-    }
-    #endregion
 
 #if UNITY_EDITOR
 

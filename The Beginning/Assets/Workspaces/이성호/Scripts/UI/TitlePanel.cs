@@ -51,13 +51,13 @@ public class TitlePanel : MonoBehaviour
         titleText.text += ";";
         StartCoroutine(ProcessGameIntro());
 
-        GameManager.Instance.HideTitleCamera();
+        CameraManager.Instance.HideTitleCamera(CameraType.TitleCamra);
         GameManager.Instance.State = GameState.CutScene;
     }
 
     private IEnumerator ProcessGameIntro()
     {
-        GameManager.Instance.SetCameraBlendingSpeed(5f);
+        CameraManager.Instance.SetCameraBlendingSpeed(5f);
 
         float timeElapsed = 0.0f;
         float duration = 2f;
@@ -72,7 +72,7 @@ public class TitlePanel : MonoBehaviour
         }
 
         CutSceneManager.Instance.ShowCutscene(0);
-        GameManager.Instance.SetCameraBlendingSpeed();
+        CameraManager.Instance.SetCameraBlendingSpeed();
         isIntroStart = true;
     }
 }

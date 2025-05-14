@@ -8,7 +8,7 @@ public class Scene1LookTreeTrigger : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            CameraManager.Instance.SetVirtualCameraPriority("WorldTreeVCam", 25);
+            CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene2Camera, 25); // 임시
         }
     }
 }

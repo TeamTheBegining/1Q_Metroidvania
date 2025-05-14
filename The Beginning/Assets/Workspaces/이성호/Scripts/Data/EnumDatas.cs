@@ -27,3 +27,18 @@ public enum SFXType
     Step,
     SoundTypeCount
 }
+
+public enum CameraType
+{
+    TitleCamra = 0,
+    Scene1Camera,
+    Scene2Camera,
+    Scene3Camera,
+    CameraTypeCount
+}
+
+public enum PlayerSkillType
+{
+    skill1 = 0,
+    PlayerSkillTypeCount,
+}
