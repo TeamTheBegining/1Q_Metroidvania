@@ -48,8 +48,11 @@ public class PlayerAnimation : MonoBehaviour
             case Player.PlayerState.Landing:
                 animator.Play("Landing");
                 break;
-            case Player.PlayerState.Attack:
-                animator.Play("Attack");
+            case Player.PlayerState.Attack1:
+                animator.Play("Attack1");
+                break;
+            case Player.PlayerState.Attack2:
+                animator.Play("Attack2");
                 break;
             case Player.PlayerState.Skill1:
                 //animator.Play("Skill1");
@@ -80,6 +83,9 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Dash:
                 //animator.Play("Dash");
+                break;
+            case Player.PlayerState.Hit:
+                animator.Play("Hit");
                 break;
         }
     }

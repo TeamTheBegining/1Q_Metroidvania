@@ -22,8 +22,8 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float jumpTimer = 0f;
     [SerializeField] float parryTimer = 0f;
     [SerializeField] float parryDelay = 0.5f;
-    [SerializeField] float currentHp = 3f;
     [SerializeField] float maxHp = 3f;
+    public float currentHp = 3f;
     //private float ladderInputHoldTime = 0;
     //[SerializeField] private float ladderEnterDelay = 0.2f;
 
@@ -36,6 +36,8 @@ public class Player : MonoBehaviour, IDamageable
     private Collider2D attackcoll;
     bool isGround = false;
     bool isparrying = false;
+    bool isparrysuccess = false;
+    bool attack2able = false;
 
     [SerializeField] private PlayerState currentState;
     public PlayerState CurrentState
@@ -49,7 +51,8 @@ public class Player : MonoBehaviour, IDamageable
         Move,
         Jump,
         Landing,
-        Attack,
+        Attack1,
+        Attack2,
         Skill1,
         Skill2,
         Skill3,
@@ -59,7 +62,8 @@ public class Player : MonoBehaviour, IDamageable
         ParryingKnockback,      //패링 - 밀림
         Ladder,
         Dodging,
-        Dash
+        Dash,
+        Hit
     }
 
     public PlayerInput Input { get => input; }
@@ -103,8 +107,11 @@ public class Player : MonoBehaviour, IDamageable
             case PlayerState.Landing:
                 PlayerLandingUpdate();
                 break;
-            case PlayerState.Attack:
-                PlayerAttackUpdate();
+            case PlayerState.Attack1:
+                PlayerAttack1Update();
+                break;
+            case PlayerState.Attack2:
+                //PlayerAttack2Update(); //이벤트 함수로 조절
                 break;
             case PlayerState.Skill1:
                 //PlayerSkillk1();
@@ -139,6 +146,7 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+
     private void ParryingDelayCheck()
     {
         if (isparrying)
@@ -150,88 +158,42 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    private void PlayerParryingUpdate()
-    {
-        if(currentState == PlayerState.Parrying)
-            currentState = PlayerState.Idle;
-    }
 
     private bool CheckIsGround()
     {
         return Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
     }
+    public void TakeDamage(float damage)
+    {
+        if(!isparrysuccess) CurrentHp -= damage;
+        PlayerHit();
+    }
 
+    private void PlayerHit()
+    {
+        // 히트 할 때 실행할 함수 내용
+    }
+
+    private void PlayerDead()
+    {
+        // 죽을때 실행할 함수 내용
+    }
+
+    #region Update 모음
     private void PlayerIdleUpdate()
     {
         if (input.InputVec.x != 0)
             currentState = PlayerState.Move;
-
-        if (input.IsJump && isGround)
-        {
-            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-            currentState = PlayerState.Jump;
-            input.IsJump = false;
-        }
-
-        if(input.IsParrying && !isparrying)
-        {
-            currentState = PlayerState.Parrying;
-            input.IsParrying = false;   // 패링 입력 종료
-            isparrying = true;          // 패링중 확인
-        }
-
-        if (input.IsAttack)
-        {
-            currentState = PlayerState.Attack;
-            input.IsAttack = false;
-            rb.linearVelocity = Vector2.zero;
-        }
-
+        Jumpable();
+        Attackable();
+        Parryable();
     }
     private void PlayerMoveUpdate()
     {
-        if (input.InputVec.x != 0)
-        {
-            rb.linearVelocity = new Vector2(input.InputVec.x * moveSpeed, rb.linearVelocity.y);
-            if (transform.localScale.x > 0 && input.InputVec.x < 0)
-            {
-                transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-                transform.position += new Vector3(spriternderer.size.x / 2, 0, 0);
-            }
-            if (transform.localScale.x < 0 && input.InputVec.x > 0)
-            {
-                transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-                transform.position -= new Vector3(spriternderer.size.x / 2, 0, 0);
-            }
-        }
-        else
-        {
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-            currentState = PlayerState.Idle;
-        }
-
-        if (input.IsJump && isGround)
-        {
-            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-            currentState = PlayerState.Jump;
-            input.IsJump = false;
-        }
-
-        if (input.IsParrying && !isparrying)
-        {
-            currentState = PlayerState.Parrying;
-            input.IsParrying = false;   // 패링 입력 종료
-            isparrying = true;          // 패링중 확인
-            rb.linearVelocity = Vector2.zero;
-        }
-
-        if (input.IsAttack)
-        {
-            currentState = PlayerState.Attack;
-            input.IsAttack = false;
-            rb.linearVelocity = Vector2.zero;
-        }
-
+        Movable();
+        Jumpable();
+        Parryable();
+        Attackable();
     }
 
     private void PlayerLadderUpdate()
@@ -268,6 +230,32 @@ public class Player : MonoBehaviour, IDamageable
     private void PlayerJumpUpdate()
     {
         jumpTimer += Time.deltaTime;
+        if (jumpTimer > jumpDisableGroundCheckTime && isGround)
+        {
+            currentState = PlayerState.Landing;
+            jumpTimer = 0;
+        }
+
+        Movable();
+    }
+    private void PlayerLandingUpdate()
+    {
+        if (input.InputVec.x != 0)
+            currentState = PlayerState.Move;
+    }
+    private void PlayerAttack1Update()
+    {
+        if(attack2able&& input.IsAttack)
+        {
+            attack2able = false;
+        }
+    }
+
+    #endregion
+
+    #region 움직임 가능 함수
+    void Movable()
+    {
         if (input.InputVec.x != 0)
         {
             rb.linearVelocity = new Vector2(input.InputVec.x * moveSpeed, rb.linearVelocity.y);
@@ -285,24 +273,42 @@ public class Player : MonoBehaviour, IDamageable
         else
         {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            if(currentState == PlayerState.Move) 
+                currentState = PlayerState.Idle;
         }
-
-        if (jumpTimer > jumpDisableGroundCheckTime&&isGround)
+    }
+    void Attackable()
+    {
+        if (input.IsAttack)
         {
-            currentState = PlayerState.Landing;
-            jumpTimer = 0;
+            currentState = PlayerState.Attack1;
+            rb.linearVelocity = Vector2.zero;
+            input.IsAttack = false;
         }
     }
-    private void PlayerLandingUpdate()
+    void Parryable()
     {
-        if (input.InputVec.x != 0)
-            currentState = PlayerState.Move;
+        if (input.IsParrying && !isparrying)
+        {
+            currentState = PlayerState.Parrying;
+            rb.linearVelocity = Vector2.zero;
+            input.IsParrying = false;   // 패링 입력 종료
+            isparrying = true;          // 패링중 확인
+            isparrysuccess = true;      // 패링성공 확인 변수
+        }
     }
-    private void PlayerAttackUpdate()
+    void Jumpable()
     {
-
-
+        if (input.IsJump && isGround)
+        {
+            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            currentState = PlayerState.Jump;
+            input.IsJump = false;
+        }
     }
+    #endregion
+
+    #region 이벤트 함수
     private void LandingFinish()
     {
         if(currentState == PlayerState.Landing) 
@@ -310,7 +316,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void ParryingCheck()
     {
-        isparrying = false;
+        isparrysuccess = false;
     }
     private void ParryingFinish()
     {
@@ -324,11 +330,17 @@ public class Player : MonoBehaviour, IDamageable
     {
         currentState = PlayerState.Idle;
         attackcoll.enabled = false;
+        attack2able = false;
     }
 
+    private void Attack2Check()
+    {
+        attack2able = true;
+    }
 
+    #endregion
 
-
+    #region 트리거
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.tag == "Ladder" && input.InputVec.y!=0 && !isLadder)
@@ -339,6 +351,12 @@ public class Player : MonoBehaviour, IDamageable
             isLadder = true;
             rb.linearVelocity = Vector2.zero; // 속도 제거
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        collision.gameObject.GetComponent<IDamageable>();
+        //공격 받는 함수
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -354,6 +372,7 @@ public class Player : MonoBehaviour, IDamageable
             animatorCtrl.AniSpeed = 1f;
         }
     }
+    #endregion
 
     void OnDrawGizmos()
     {
@@ -365,19 +384,5 @@ public class Player : MonoBehaviour, IDamageable
 #endif
     }
 
-    public void TakeDamage(float damage)
-    {
-        CurrentHp -= damage;
-        PlayerHit();
-    }
-
-    private void PlayerHit()
-    {
-        // 히트 할 때 실행할 함수 내용
-    }
-
-    private void PlayerDead()
-    {
-        // 죽을때 실행할 함수 내용
-    }
+   
 }
