@@ -1,4 +1,5 @@
 using System;
+using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Windows;
@@ -25,6 +26,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float maxHp = 10f;
     [SerializeField] float maxMp = 25f;
     [SerializeField] float damage = 2f;
+    [SerializeField] float flyPower = 3f;
     public float currentHp = 10f;
     public float currentMp = 0f;
     //private float ladderInputHoldTime = 0;
@@ -69,23 +71,46 @@ public class Player : MonoBehaviour, IDamageable
         Skill1,
         Skill2,
         Skill3,
-        Parrying,
-        ParryingCounterAttack,  //패링 - 반격
-        ParryingReflect,        //패링 - 반사
-        ParryingKnockback,      //패링 - 밀림
+        Parrying,               //패링 - 패링중
+        ParrySuccess,        //패링 - 성공 애니메이션 + 적 경직
+        ParryCounterAttack,  //패링 - 반격
+        ParryReflect,        //패링 - 반사
+        ParryKnockback,      //패링 - 밀림
         Ladder,
         Dodging,
         Dash,
         Hit,
-        Dead
+        Dead,
+        Crouch
+    }
+
+    PlayerFlipState curflip= PlayerFlipState.Right;//현재 플립 상태
+    PlayerFlipState preflip= PlayerFlipState.Right;//이전 플립 상태
+    enum PlayerFlipState
+    {
+        Left,
+        Right
     }
 
     public PlayerInput Input { get => input; }
-    public float CurrentHp { get => currentHp; set => currentHp = value; }
+    public float CurrentHp 
+    { 
+        get => currentHp; 
+        set
+        {
+            currentHp = value;
+
+            if(IsDead)
+            {
+                PlayerDead();
+            }
+        }
+    }
     public float MaxHp { get => maxHp; set => maxHp = value; }
     public float CurrentMp { get => currentMp; set => currentMp = value; }
     public float MaxMp { get => maxMp; set => maxMp = value; }
     public bool IsDead => currentHp <= 0;
+    public Action OnDead { get; set; }
 
     private void Awake()
     {
@@ -99,8 +124,6 @@ public class Player : MonoBehaviour, IDamageable
         attackcoll3 = transform.GetChild(3).GetComponent<Collider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
-        currentHp = 10;
-        currentMp = 0;
     }
 
     void Start()
@@ -111,6 +134,7 @@ public class Player : MonoBehaviour, IDamageable
     private void FixedUpdate()
     {
         ParryingDelayCheck();
+        FlipCheck();
         isGround = CheckIsGround();
         switch (currentState)
         {
@@ -147,13 +171,16 @@ public class Player : MonoBehaviour, IDamageable
             case PlayerState.Parrying:
                 //PlayerParryingUpdate();
                 break;
-            case PlayerState.ParryingCounterAttack:
+            case PlayerState.ParrySuccess:
+                //ParrySuccessUpdate();
+                break;
+            case PlayerState.ParryCounterAttack:
                 //PlayerParryingCounterAttackUpdate();
                 break;
-            case PlayerState.ParryingReflect:
+            case PlayerState.ParryReflect:
                 //PlayerParryingReflectUpdate();
                 break;
-            case PlayerState.ParryingKnockback:
+            case PlayerState.ParryKnockback:
                 //PlayerParryingKnockbackUpdate();
                 break;
             case PlayerState.Ladder:
@@ -165,9 +192,17 @@ public class Player : MonoBehaviour, IDamageable
             case PlayerState.Dash:
                 //PlayerDash();
                 break;
+            case PlayerState.Hit:
+                PlayerHitUpdate();
+                break;
+            case PlayerState.Dead:
+                //PlayerDash();
+                break;
+            case PlayerState.Crouch:
+                PlayerCrouchUpdate();
+                break;
         }
     }
-
 
     private void ParryingDelayCheck()
     {
@@ -194,6 +229,7 @@ public class Player : MonoBehaviour, IDamageable
         Jumpable();
         Attackable();
         Parryable();
+        Ｃrouchable();
     }
     private void PlayerMoveUpdate()
     {
@@ -201,6 +237,7 @@ public class Player : MonoBehaviour, IDamageable
         Jumpable();
         Parryable();
         Attackable();
+        Ｃrouchable();
     }
 
     private void PlayerLadderUpdate()
@@ -274,6 +311,22 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+
+    private void PlayerHitUpdate()
+    {
+
+    }
+
+
+
+    private void PlayerCrouchUpdate()
+    {
+        if(input.InputVec.y >=0)
+        {
+            currentState = PlayerState.Idle;
+        }
+    }
+
     #endregion
 
     #region 움직임 가능 함수
@@ -282,22 +335,22 @@ public class Player : MonoBehaviour, IDamageable
         if (input.InputVec.x != 0)
         {
             rb.linearVelocity = new Vector2(input.InputVec.x * moveSpeed, rb.linearVelocity.y);
-            if (transform.localScale.x > 0 && input.InputVec.x < 0)
-            {
-                transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-                transform.position += new Vector3(spriternderer.size.x / 2, 0, 0);
-            }
-            if (transform.localScale.x < 0 && input.InputVec.x > 0)
-            {
-                transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-                transform.position -= new Vector3(spriternderer.size.x / 2, 0, 0);
-            }
+            curflip = input.InputVec.x  < 0? PlayerFlipState.Left :PlayerFlipState.Right;
         }
         else
         {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
             if(currentState == PlayerState.Move) 
                 currentState = PlayerState.Idle;
+        }
+    }
+
+    void FlipCheck()
+    {
+        if(curflip != preflip)
+        {
+            transform.eulerAngles = curflip == PlayerFlipState.Right ? Vector3.zero : new Vector3(0, -180, 0);
+            preflip = curflip;
         }
     }
     void Attackable()
@@ -331,6 +384,14 @@ public class Player : MonoBehaviour, IDamageable
             input.IsJump = false;
         }
     }
+    void Ｃrouchable()
+    {
+        if (input.InputVec.y<0 && isGround)
+        {
+            rb.linearVelocity = Vector2.zero;
+            currentState = PlayerState.Crouch;
+        }
+    }
     #endregion
 
     #region 이벤트 함수
@@ -346,6 +407,7 @@ public class Player : MonoBehaviour, IDamageable
     private void ParryingFinish()
     {
         currentState = PlayerState.Idle;
+        isparrysuccess = false;
     }
     private void AttackCollider()
     {
@@ -424,20 +486,29 @@ public class Player : MonoBehaviour, IDamageable
 #endif
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, GameObject enemypos)
     {
-        if (!isparrysuccess) CurrentHp -= damage;
-        PlayerHit();
+        if (!isparrysuccess)
+        {
+            CurrentHp -= damage;
+            PlayerHit();
+        }
+        else
+            currentState = PlayerState.ParrySuccess;
+
+
     }
     private void PlayerHit()
     {
         currentState = PlayerState.Hit;
+        rb.AddForce(new Vector2(0.5f ,1) * flyPower, ForceMode2D.Impulse);
+        //flipState == PlayerFlipState.Left ? -1 : 
     }
 
     private void PlayerDead()
     {
-        if(IsDead)
-            currentState = PlayerState.Dead;
+        OnDead?.Invoke();
+        currentState = PlayerState.Dead;
     }
 
 }

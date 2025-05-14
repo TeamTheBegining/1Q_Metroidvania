@@ -25,6 +25,8 @@ public class PlayerAnimation : MonoBehaviour
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         player = GetComponent<Player>();
+        animator.Play("Idle");
+        aniSpeed = 1;
     }
 
     // Update is called once per frame
@@ -72,15 +74,19 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Parrying:
                 animator.Play("Parrying");
+                if (stateInfo.IsName("Parrying") && stateInfo.normalizedTime >= 1) player.CurrentState = Player.PlayerState.Idle;
                 break;
-            case Player.PlayerState.ParryingCounterAttack:
-                //animator.Play("ParryingCounterAttack");
+            case Player.PlayerState.ParrySuccess:
+                animator.Play("ParrySuccess");
                 break;
-            case Player.PlayerState.ParryingReflect:
-                //animator.Play("ParryingReflect");
+            case Player.PlayerState.ParryCounterAttack:
+                //animator.Play("ParryCounterAttack");
                 break;
-            case Player.PlayerState.ParryingKnockback:
-                //animator.Play("ParryingKnockback");
+            case Player.PlayerState.ParryReflect:
+                //animator.Play("ParryReflect");
+                break;
+            case Player.PlayerState.ParryKnockback:
+                //animator.Play("ParryKnockback");
                 break;
             case Player.PlayerState.Ladder:
                 animator.Play("Ladder");
@@ -93,11 +99,13 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Hit:
                 animator.Play("Hit");
-                if(stateInfo.normalizedTime >= 1)
-                    player.CurrentState = Player.PlayerState.Idle;
+                if(stateInfo.IsName("Hit") && stateInfo.normalizedTime >= 1) player.CurrentState = Player.PlayerState.Idle;
                 break;
             case Player.PlayerState.Dead:
                 animator.Play("Dead");
+                break;
+            case Player.PlayerState.Crouch:
+                animator.Play("Crouch");
                 break;
         }
     }

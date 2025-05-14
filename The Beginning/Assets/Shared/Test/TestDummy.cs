@@ -37,7 +37,7 @@ public class TestDummy : MonoBehaviour, IDamageable
         isDead = false; 
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, GameObject gameobject)
     {
         if (IsDead) return;
 
@@ -50,4 +50,5 @@ public class TestDummy : MonoBehaviour, IDamageable
         CurrentHp = maxHp;
         isDead = false; 
     }
+    public Action OnDead { get; set; }
 }
