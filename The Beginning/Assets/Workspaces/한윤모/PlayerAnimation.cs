@@ -93,6 +93,11 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Hit:
                 animator.Play("Hit");
+                if(stateInfo.normalizedTime >= 1)
+                    player.CurrentState = Player.PlayerState.Idle;
+                break;
+            case Player.PlayerState.Dead:
+                animator.Play("Dead");
                 break;
         }
     }

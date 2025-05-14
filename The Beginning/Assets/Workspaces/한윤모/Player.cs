@@ -25,7 +25,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float maxHp = 10f;
     [SerializeField] float maxMp = 25f;
     [SerializeField] float damage = 2f;
-    public float currentHp = 3f;
+    public float currentHp = 10f;
     public float currentMp = 0f;
     //private float ladderInputHoldTime = 0;
     //[SerializeField] private float ladderEnterDelay = 0.2f;
@@ -76,7 +76,8 @@ public class Player : MonoBehaviour, IDamageable
         Ladder,
         Dodging,
         Dash,
-        Hit
+        Hit,
+        Dead
     }
 
     public PlayerInput Input { get => input; }
@@ -96,8 +97,8 @@ public class Player : MonoBehaviour, IDamageable
         attackcoll3 = transform.GetChild(3).GetComponent<Collider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
-        maxHp = 3;
-        maxMp = 0;
+        currentHp = 10;
+        currentMp = 0;
     }
 
     void Start()
@@ -181,16 +182,6 @@ public class Player : MonoBehaviour, IDamageable
     private bool CheckIsGround()
     {
         return Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
-    }
-
-    private void PlayerHit()
-    {
-        // 히트 할 때 실행할 함수 내용
-    }
-
-    private void PlayerDead()
-    {
-        // 죽을때 실행할 함수 내용
     }
 
     #region Update 모음
@@ -435,6 +426,16 @@ public class Player : MonoBehaviour, IDamageable
     {
         if (!isparrysuccess) CurrentHp -= damage;
         PlayerHit();
+    }
+    private void PlayerHit()
+    {
+        currentState = PlayerState.Hit;
+    }
+
+    private void PlayerDead()
+    {
+        if(IsDead)
+            currentState = PlayerState.Dead;
     }
 
 }

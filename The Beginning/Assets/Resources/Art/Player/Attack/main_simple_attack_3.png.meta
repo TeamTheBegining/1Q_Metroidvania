@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0197d8a7d7d91fa489aa84699159105f
+guid: 853226d70f4d39e46911934bbf4a4d99
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5932027798323608029
-    second: main_simple_attack_2_0
+      213: -3561981151380259280
+    second: main_simple_attack_3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: main_simple_attack_2_0
+      name: main_simple_attack_3_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 10
         width: 61
-        height: 68
+        height: 58
       alignment: 9
-      pivot: {x: 0.65, y: 0.43316633}
+      pivot: {x: 0.31218985, y: 0.5489733}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 326cd2b85243dada0800000000000000
-      internalID: -5932027798323608029
+      spriteID: 03eb757d30d419ec0800000000000000
+      internalID: -3561981151380259280
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 7356756ba9acdbf4da72e92c7a9ab88b
+    spriteID: 797a989172f034249a883923547a4b75
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      main_simple_attack_2_0: -5932027798323608029
+      main_simple_attack_3_0: -3561981151380259280
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
