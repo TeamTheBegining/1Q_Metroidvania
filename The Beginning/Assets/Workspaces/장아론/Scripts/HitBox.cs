@@ -52,7 +52,7 @@ public class EnemyHitbox : MonoBehaviour
             if (damageableTarget != null)
             {
                 // --- 수정: 저장된 attackDamage 변수의 값을 사용 ---
-                damageableTarget.TakeDamage(attackDamage); // 여기에 B_GirlController에서 받아온 값을 사용합니다.
+                damageableTarget.TakeDamage(attackDamage, enemyController.gameObject); // 여기에 B_GirlController에서 받아온 값을 사용합니다.
                 // -----------------------------------------------
                 //Debug.Log("플레이어에게 " + attackDamage + " 데미지 적용!");
             }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;   
+using UnityEngine;
 using System.Collections;
 
 // B_Girl 캐릭터의 고유 동작 및 패턴을 관리하는 컨트롤러 (Derived Class)
@@ -66,9 +67,10 @@ public class B_GirlController : CommonEnemyController, IDamageable
     // IsDead는 체력으로 판단하되, 사망 상태 진입 시 별도의 플래그를 사용하는 것이 안전
     public bool IsDead { get; private set; } = false; // 외부에서 읽을 수 있지만, 내부에서만 설정
     // ----------------------------------------------------
-
+    
+    public Action OnDead { get; set; }
     // --- TakeDamage 함수 수정 (피격 애니메이션 및 사망 처리 로직 추가) ---
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, GameObject player)
     {
         if (IsDead) return; // 이미 죽었으면 처리 안함
 

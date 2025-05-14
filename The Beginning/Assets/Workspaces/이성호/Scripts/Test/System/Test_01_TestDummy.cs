@@ -10,7 +10,7 @@ public class Test_01_TestDummy : TestBase
     protected override void OnTest1(InputAction.CallbackContext context)
     {
         IDamageable target = testDummy.GetComponent<IDamageable>();
-        target.TakeDamage(damage);
+        target.TakeDamage(damage, testDummy.gameObject);
     }
 
     protected override void OnTest2(InputAction.CallbackContext context)
