@@ -135,6 +135,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         ParryingDelayCheck();
         FlipCheck();
+        EnergyOverCheck();
         isGround = CheckIsGround();
         switch (currentState)
         {
@@ -204,6 +205,12 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+    private void EnergyOverCheck()
+    {
+        currentHp = currentHp > MaxHp ? MaxHp : currentHp;
+        currentMp = currentMp > MaxMp ? MaxHp : currentMp;
+    }
+
     private void ParryingDelayCheck()
     {
         if (isparrying)
@@ -212,6 +219,15 @@ public class Player : MonoBehaviour, IDamageable
         {
             isparrying = false;
             parryTimer = 0;
+        }
+    }
+
+    void FlipCheck()
+    {
+        if (curflip != preflip)
+        {
+            transform.eulerAngles = curflip == PlayerFlipState.Right ? Vector3.zero : new Vector3(0, -180, 0);
+            preflip = curflip;
         }
     }
 
@@ -345,14 +361,6 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    void FlipCheck()
-    {
-        if(curflip != preflip)
-        {
-            transform.eulerAngles = curflip == PlayerFlipState.Right ? Vector3.zero : new Vector3(0, -180, 0);
-            preflip = curflip;
-        }
-    }
     void Attackable()
     {
         if (input.IsAttack)
@@ -490,11 +498,15 @@ public class Player : MonoBehaviour, IDamageable
     {
         if (!isparrysuccess)
         {
-            CurrentHp -= damage;
+            currentHp -= damage;
+            currentMp += 5;
             PlayerHit();
         }
         else
+        {
+            currentMp += 10;
             currentState = PlayerState.ParrySuccess;
+        }
 
 
     }
