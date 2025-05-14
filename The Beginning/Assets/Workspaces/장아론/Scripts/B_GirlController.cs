@@ -25,10 +25,15 @@ public class B_GirlController : CommonEnemyController, IDamageable
     private BoxCollider2D attack2HitboxCollider;
     // ----------------------------------------------------------
 
+    // --- 추가: 히트박스 오브젝트에 붙어있는 EnemyHitbox 스크립트 참조 ---
+    private EnemyHitbox attack1EnemyHitbox;
+    private EnemyHitbox attack2EnemyHitbox;
+    // ------------------------------------------------------------
+
 
     // B_Girl 캐릭터의 스탯
     /*[Header("B_Girl Stats")]
-    public float //Debug.Log = 15f; // <--- 여기에 B_Girl의 공격력 설정*/
+    public float AttackDamage = 15f; // CommonEnemyController에 정의될 가능성이 높음*/ // 주석 처리 유지
 
     // B_Girl의 공격 패턴 관리를 위한 변수
     private int nextAttackIndex = 1; // 다음에 실행할 공격 (1: Attack1, 2: Attack2)
@@ -43,6 +48,13 @@ public class B_GirlController : CommonEnemyController, IDamageable
     // private float lastAttack2Time = -Mathf.Infinity; // 삭제
     private float nextAttackTime = 0f; // 다음 공격이 가능해지는 시간
     // ------------------------------------------
+
+    // --- 추가: 공격별 데미지 값 ---
+    [Header("B_Girl Attack Values")]
+    public float attack1Value = 1.5f; // Attack1에 사용할 값 (예: 데미지) - 인스펙터 수정 가능
+    public float attack2Value = 2.5f; // Attack2에 사용할 값 (예: 데미지) - 인스펙터 수정 가능
+    // ----------------------------
+
 
     //Damageable 인터페이스 구현  
     [Header("B_Girl Health")] // 헤더 추가
@@ -64,6 +76,7 @@ public class B_GirlController : CommonEnemyController, IDamageable
         //Debug.Log("B_Girl 피격! 체력: " + currentHp); // 체력 감소 확인 로그
 
         // 체력이 0보다 크면 피격 애니메이션 재생
+        // 사망 애니메이션보다 먼저 체크해야 합니다.
         if (currentHp > 0)
         {
             if (animator != null)
@@ -76,7 +89,7 @@ public class B_GirlController : CommonEnemyController, IDamageable
         else
         {
             //Debug.Log("--> B_Girl 체력 0 이하! 사망 처리 시작.");
-            Die(); // 사망 처리 함수 호출 (아래에서 추가할 함수)
+            Die(); // 사망 처리 함수 호출
         }
     }
     // --------------------------------------------------------------
@@ -90,8 +103,8 @@ public class B_GirlController : CommonEnemyController, IDamageable
         IsDead = true; // 죽음 상태 플래그 설정
         //Debug.Log("B_Girl 사망!");
 
-        // 사망 애니메이션 재생
-        PlayDeathAnim(); // 이미 있는 사망 애니메이션 재생 함수 호출 (ANIM_TRIGGER_B_DEATH 트리거 발동)
+        // 애니메이션 재생
+        PlayDeathAnim(); // 사망 애니메이션 재생 함수 호출 (ANIM_TRIGGER_B_DEATH 트리거 발동)
 
         // TODO: 사망 후 필요한 추가 로직 구현
         // - Collider 비활성화 (피격 및 공격 판정 방지)
@@ -102,7 +115,8 @@ public class B_GirlController : CommonEnemyController, IDamageable
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.linearVelocity = Vector2.zero; // 움직임 즉시 정지
+            rb.linearVelocity = Vector2.zero; // 움직임 즉시 정지 (Unity 2019.3+ 권장)
+            // rb.velocity = Vector2.zero; // 이전 버전
             rb.isKinematic = true; // 물리 효과 비활성화 (애니메이션이 움직임을 제어할 경우)
         }
 
@@ -123,10 +137,11 @@ public class B_GirlController : CommonEnemyController, IDamageable
     {
         base.Start(); // CommonEnemyController의 Start 호출 (Animator, Player 참조 설정 등)
 
-        // --- 수정: 히트박스 오브젝트에서 BoxCollider2D 컴포넌트 참조 얻기 ---
+        // --- 수정: 히트박스 오브젝트에서 BoxCollider2D 및 EnemyHitbox 컴포넌트 참조 얻기 ---
         if (attack1HitboxObject != null)
         {
             attack1HitboxCollider = attack1HitboxObject.GetComponent<BoxCollider2D>();
+            attack1EnemyHitbox = attack1HitboxObject.GetComponent<EnemyHitbox>(); // EnemyHitbox 컴포넌트 참조
             if (attack1HitboxCollider != null)
             {
                 attack1HitboxCollider.enabled = false; // 시작 시 콜라이더 비활성화
@@ -134,6 +149,10 @@ public class B_GirlController : CommonEnemyController, IDamageable
             else
             {
                 //Debug.LogWarning("Attack 1 Hitbox Object에 BoxCollider2D 컴포넌트가 없습니다.", this);
+            }
+            if (attack1EnemyHitbox == null)
+            {
+                //Debug.LogWarning("Attack 1 Hitbox Object에 EnemyHitbox 컴포넌트가 없습니다!", this);
             }
         }
         else
@@ -145,6 +164,7 @@ public class B_GirlController : CommonEnemyController, IDamageable
         if (attack2HitboxObject != null)
         {
             attack2HitboxCollider = attack2HitboxObject.GetComponent<BoxCollider2D>();
+            attack2EnemyHitbox = attack2HitboxObject.GetComponent<EnemyHitbox>(); // EnemyHitbox 컴포넌트 참조
             if (attack2HitboxCollider != null)
             {
                 attack2HitboxCollider.enabled = false; // 시작 시 콜라이더 비활성화
@@ -152,6 +172,10 @@ public class B_GirlController : CommonEnemyController, IDamageable
             else
             {
                 //Debug.LogWarning("Attack 2 Hitbox Object에 BoxCollider2D 컴포넌트가 없습니다.", this);
+            }
+            if (attack2EnemyHitbox == null)
+            {
+                //Debug.LogWarning("Attack 2 Hitbox Object에 EnemyHitbox 컴포넌트가 없습니다!", this);
             }
         }
         else
@@ -176,13 +200,18 @@ public class B_GirlController : CommonEnemyController, IDamageable
 
     // Update는 Base 클래스의 것을 사용하되, 필요하면 override 후 base.Update() 호출 가능
     // Base 클래스의 Update에서 isDead 상태를 체크하여 AI 로직을 스킵하도록 구현하는 것이 좋습니다.
-    /* protected override void Update()
-     {
-         if (IsDead) return; // 죽었으면 Update 로직 실행 안함
+    protected override void Update()
+    {
+        if (IsDead)
+        {
+            // 죽었으면 Update 로직 실행 안함
+            // 하지만 데스 애니메이션 중 이동이나 다른 처리가 필요하다면 여기에 추가
+            return;
+        }
 
-         base.Update(); // CommonEnemyController의 Update 호출
-     }
-    */
+        base.Update(); // CommonEnemyController의 Update 호출 (이동, 상태 전환 등)
+    }
+
 
 
     // ===== 애니메이션 관련 함수들 (Base 클래스의 virtual 메소드를 오버라이드하여 실제 애니메이션 재생) =====
@@ -208,14 +237,17 @@ public class B_GirlController : CommonEnemyController, IDamageable
     }
 
     // --- 추가: 피격 애니메이션 재생 함수 ---
-    protected void PlayHurtAnim() // Protected로 선언하여 상속받은 클래스에서도 접근 가능하게 할 수 있습니다.
+    // TakeDamage 함수에서 직접 호출하고 있지만, 필요에 따라 별도 함수로 분리 가능
+    /*
+    protected void PlayHurtAnim()
     {
         if (animator != null)
         {
-            animator.SetTrigger(ANIM_TRIGGER_B_HURT);
-            //Debug.Log("PlayHurtAnim 호출");
+             animator.SetTrigger(ANIM_TRIGGER_B_HURT);
+             //Debug.Log("PlayHurtAnim 호출");
         }
     }
+    */
     // -----------------------------------
 
 
@@ -263,29 +295,25 @@ public class B_GirlController : CommonEnemyController, IDamageable
 
         isPerformingAttackAnimation = true; // <-- 공격 애니메이션 시작 전 위치 고정 플래그 켬 (Base Class 변수 사용)
 
-        // --- 공격별 데미지/값을 여기서 바로 사용하거나, 히트박스 활성화 시 넘겨줄 수 있습니다. ---
-        float currentAttackValue;
+        // PerformAttackLogic에서는 애니메이션만 발동하고, 실제 값 적용은 Hitbox 활성화 시점에 Animation Event에서 처리합니다.
+
         if (nextAttackIndex == 1)
         {
             //Debug.Log("--> B_Attack1 발동!");
-            PlayAttack1Anim(); // B_Attack1 애니메이션 발동            
+            PlayAttack1Anim(); // B_Attack1 애니메이션 발동
             // nextAttackTime 설정은 OnAttackAnimationEnd에서 수행
             nextAttackIndex = 2; // 다음 공격은 Attack 2
         }
         else // nextAttackIndex == 2
         {
             //Debug.Log("--> B_Attack2 발동!");
-            PlayAttack2Anim(); // B_Attack2 애니메이션 발동            
+            PlayAttack2Anim(); // B_Attack2 애니메이션 발동
             // nextAttackTime 설정은 OnAttackAnimationEnd에서 수행
             nextAttackIndex = 1; // 다음 공격은 Attack 1
         }
 
-        // TODO: 만약 공격 시점(히트박스 활성화 시점)에 damageAmount를 히트박스에 전달해야 한다면,
-        // EnableAttack1Hitbox/EnableAttack2Hitbox 함수를 수정하여 값을 전달해야 합니다.
-        // 예: EnableAttack1Hitbox(attack1Value); -> public void EnableAttack1Hitbox(float damage) { ... }
-        // 그리고 히트박스 스크립트에서 이 값을 받아 처리해야 합니다.
-        // 현재 코드는 Animation Event에서 매개변수 없이 호출하므로, 값을 전달하는 방식은 추가적인 작업이 필요합니다.
-        // 간단하게는 히트박스 스크립트가 B_GirlController를 참조하여 currentAttackValue를 읽어가게 할 수도 있습니다.
+        // 공격 시점(히트박스 활성화 시점)에 Animation Event가 EnableAttack1Hitbox/EnableAttack2Hitbox를 호출합니다.
+        // 이 함수들에서 해당 히트박스 스크립트의 attackDamage 값을 설정해 줍니다.
     }
 
     // ===== Animation Event Callbacks (BoxCollider2D 제어 방식) =====
@@ -317,23 +345,31 @@ public class B_GirlController : CommonEnemyController, IDamageable
     }
     // ----------------------------------------------------------
 
-    // --- Attack 1 히트박스 (Collider) 활성화/비활성 메소드 (유지) ---
+    // --- Attack 1 히트박스 (Collider) 활성화/비활성 메소드 수정 (값 전달 로직 추가) ---
     // Animation Event에서 호출됩니다.
     public void EnableAttack1Hitbox() // <-- 매개변수 없음 (Animation Event 시그니처와 일치)
     {
-        if (attack1HitboxCollider != null)
+        if (attack1HitboxObject != null && attack1HitboxCollider != null)
         {
-            // TODO: 여기서 attack1Value (1.5)를 히트박스 스크립트에 전달해야 합니다.
-            // 예시: 히트박스 오브젝트에 DamageDealer 스크립트가 있고, SetDamage 메소드가 있다면
-            // DamageDealer damageDealer = attack1HitboxObject.GetComponent<DamageDealer>();
-            // if (damageDealer != null) damageDealer.SetDamage(attack1Value); // 1.5 전달
+            // --- 추가: 히트박스 오브젝트의 EnemyHitbox 스크립트에 공격력 값 설정 ---
+            // 이 줄에서 'attackDamage' 정의를 찾고 있습니다. -> EnemyHitbox.cs 파일에 public float attackDamage; 가 있는지 확인! (이 라인 주변)
+            if (attack1EnemyHitbox != null)
+            {
+                attack1EnemyHitbox.attackDamage = attack1Value; // EnemyHitbox의 attackDamage 변수에 값 설정
+                //Debug.Log("Attack 1 Hitbox에 데미지 값 설정됨: " + attack1Value);
+            }
+            else
+            {
+                //Debug.LogWarning("Attack 1 Hitbox Object에 EnemyHitbox 컴포넌트가 할당되지 않았습니다!", this);
+            }
+            // -----------------------------------------------------------------------
 
             attack1HitboxCollider.enabled = true; // 콜라이더 활성화
-            //Debug.Log(attack1HitboxObject.name + " Collider 활성화됨 (Value: " + attack1Value + ")"); // 디버그 로그 수정
+            //Debug.Log(attack1HitboxObject.name + " Collider 활성화됨");
         }
         else
         {
-            //Debug.LogWarning("Attack 1 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
+            //Debug.LogWarning("Attack 1 Hitbox Object 또는 Collider가 할당되지 않았습니다.", this);
         }
     }
 
@@ -342,7 +378,7 @@ public class B_GirlController : CommonEnemyController, IDamageable
         if (attack1HitboxCollider != null)
         {
             attack1HitboxCollider.enabled = false; // 콜라이더 비활성화
-            //Debug.Log(attack1HitboxObject.name + " Collider 비활성화됨"); // 디버그 로그 수정
+            //Debug.Log(attack1HitboxObject.name + " Collider 비활성화됨");
         }
         else
         {
@@ -351,23 +387,31 @@ public class B_GirlController : CommonEnemyController, IDamageable
     }
     // ----------------------------------------------------------
 
-    // --- Attack 2 히트박스 (Collider) 활성화/비활성 메소드 (유지) ---
+    // --- Attack 2 히트박스 (Collider) 활성화/비활성 메소드 수정 (값 전달 로직 추가) ---
     // Animation Event에서 호출됩니다.
     public void EnableAttack2Hitbox() // <-- 매개변수 없음 (Animation Event 시그니처와 일치)
     {
-        if (attack2HitboxCollider != null)
+        if (attack2HitboxObject != null && attack2HitboxCollider != null)
         {
-            // TODO: 여기서 attack2Value (2.5)를 히트박스 스크립트에 전달해야 합니다.
-            // 예시: 히트박스 오브젝트에 DamageDealer 스크립트가 있고, SetDamage 메소드가 있다면
-            // DamageDealer damageDealer = attack2HitboxObject.GetComponent<DamageDealer>();
-            // if (damageDealer != null) damageDealer.SetDamage(attack2Value); // 2.5 전달
+            // --- 추가: 히트박스 오브젝트의 EnemyHitbox 스크립트에 공격력 값 설정 ---
+            // 이 줄에서 'attackDamage' 정의를 찾고 있습니다. -> EnemyHitbox.cs 파일에 public float attackDamage; 가 있는지 확인! (이 라인 주변)
+            if (attack2EnemyHitbox != null)
+            {
+                attack2EnemyHitbox.attackDamage = attack2Value; // EnemyHitbox의 attackDamage 변수에 값 설정
+                //Debug.Log("Attack 2 Hitbox에 데미지 값 설정됨: " + attack2Value);
+            }
+            else
+            {
+                //Debug.LogWarning("Attack 2 Hitbox Object에 EnemyHitbox 컴포넌트가 할당되지 않았습니다!", this);
+            }
+            // -----------------------------------------------------------------------
 
             attack2HitboxCollider.enabled = true; // 콜라이더 활성화
-            //Debug.Log(attack2HitboxObject.name + " Collider 활성화됨 (Value: " + attack2Value + ")"); // 디버그 로그 수정
+            //Debug.Log(attack2HitboxObject.name + " Collider 활성화됨");
         }
         else
         {
-            //Debug.LogWarning("Attack 2 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
+            //Debug.LogWarning("Attack 2 Hitbox Object 또는 Collider가 할당되지 않았습니다.", this);
         }
     }
 
@@ -376,7 +420,7 @@ public class B_GirlController : CommonEnemyController, IDamageable
         if (attack2HitboxCollider != null)
         {
             attack2HitboxCollider.enabled = false; // 콜라이더 비활성화
-            //Debug.Log(attack2HitboxObject.name + " Collider 비활성화됨"); // 디버그 로그 수정
+            //Debug.Log(attack2HitboxObject.name + " Collider 비활성화됨");
         }
         else
         {
