@@ -21,10 +21,8 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 2079041691, guid: 190b914b64b22d14e8eb7e2f7c9c7c42, type: 3}
-    - time: 0.083333336
       value: {fileID: 1619167011, guid: 190b914b64b22d14e8eb7e2f7c9c7c42, type: 3}
-    - time: 0.16666667
+    - time: 0.25
       value: {fileID: 490081886, guid: 190b914b64b22d14e8eb7e2f7c9c7c42, type: 3}
     attribute: m_Sprite
     path: 
@@ -48,7 +46,6 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 2079041691, guid: 190b914b64b22d14e8eb7e2f7c9c7c42, type: 3}
     - {fileID: 1619167011, guid: 190b914b64b22d14e8eb7e2f7c9c7c42, type: 3}
     - {fileID: 490081886, guid: 190b914b64b22d14e8eb7e2f7c9c7c42, type: 3}
   m_AnimationClipSettings:
@@ -56,7 +53,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.25
+    m_StopTime: 0.33333334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -77,6 +74,20 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.25
+    functionName: EnableHitbox
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: DisableHitbox
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
     functionName: OnAttackAnimationEnd
     data: 
     objectReferenceParameter: {fileID: 0}

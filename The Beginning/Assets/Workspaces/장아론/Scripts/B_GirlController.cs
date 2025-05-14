@@ -1,72 +1,112 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 
-// B_Girl Ä³¸¯ÅÍÀÇ °íÀ¯ µ¿ÀÛ ¹× ÆĞÅÏÀ» °ü¸®ÇÏ´Â ÄÁÆ®·Ñ·¯ (Derived Class)
-// CommonEnemyController¸¦ »ó¼Ó¹Ş½À´Ï´Ù.
+// B_Girl ìºë¦­í„°ì˜ ê³ ìœ  ë™ì‘ ë° íŒ¨í„´ì„ ê´€ë¦¬í•˜ëŠ” ì»¨íŠ¸ë¡¤ëŸ¬ (Derived Class)
+// CommonEnemyControllerë¥¼ ìƒì†ë°›ìŠµë‹ˆë‹¤.
 public class B_GirlController : CommonEnemyController
 {
-    // B_Girl Ä³¸¯ÅÍ °íÀ¯ÀÇ ¾Ö´Ï¸ŞÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ÀÌ¸§ (Inspector¿¡ ¼³Á¤µÈ ÀÌ¸§°ú ÀÏÄ¡ÇØ¾ß ÇÔ)
-    // CommonEnemyControllerÀÇ °øÅë ÆÄ¶ó¹ÌÅÍ ÀÌ¸§°ú ´Ù¸¦ ¼ö ÀÖ½À´Ï´Ù.
+    // B_Girl ìºë¦­í„° ê³ ìœ ì˜ ì• ë‹ˆë©”ì´ì…˜ íŒŒë¼ë¯¸í„° ì´ë¦„ (Inspectorì— ì„¤ì •ëœ ì´ë¦„ê³¼ ì¼ì¹˜í•´ì•¼ í•¨)
+    // CommonEnemyControllerì˜ ê³µí†µ íŒŒë¼ë¯¸í„° ì´ë¦„ê³¼ ë‹¤ë¥¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤.
     private const string ANIM_BOOL_B_WALK = "B_Walk";
-    private const string ANIM_TRIGGER_B_JUMP = "B_Jump";
+    private const string ANIM_TRIGGER_B_JUMP = "B_Jump"; // ì í”„ íŠ¸ë¦¬ê±°ê°€ ìˆë‹¤ë©´ ì‚¬ìš©
     private const string ANIM_TRIGGER_B_ATTACK1 = "B_Attack1";
     private const string ANIM_TRIGGER_B_ATTACK2 = "B_Attack2";
     private const string ANIM_TRIGGER_B_DEATH = "B_Death";
 
     [Header("B_Girl Hitboxes")]
-    public GameObject attack1HitboxObject; // Inspector¿¡¼­ ÇÒ´ç
-    public GameObject attack2HitboxObject; // Inspector¿¡¼­ ÇÒ´ç
+    public GameObject attack1HitboxObject; // Inspectorì—ì„œ í• ë‹¹ (ì˜¤ë¸Œì íŠ¸ ì°¸ì¡° ìœ ì§€)
+    public GameObject attack2HitboxObject; // Inspectorì—ì„œ í• ë‹¹ (ì˜¤ë¸Œì íŠ¸ ì°¸ì¡° ìœ ì§€)
 
-    // B_Girl Ä³¸¯ÅÍÀÇ ½ºÅÈ
+    // --- ìƒˆë¡œ ì¶”ê°€: íˆíŠ¸ë°•ìŠ¤ ì˜¤ë¸Œì íŠ¸ì— ë¶™ì–´ìˆëŠ” BoxCollider2D ì»´í¬ë„ŒíŠ¸ ì°¸ì¡° ---
+    private BoxCollider2D attack1HitboxCollider;
+    private BoxCollider2D attack2HitboxCollider;
+    // ----------------------------------------------------------
+
+
+    // B_Girl ìºë¦­í„°ì˜ ìŠ¤íƒ¯ (CommonEnemyControllerì— attackDamageê°€ ì •ì˜ë˜ì–´ ìˆìœ¼ë¯€ë¡œ ì—¬ê¸°ì„œ ë‹¤ì‹œ ì„ ì–¸í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.)
     /*[Header("B_Girl Stats")]
-    public float attackDamage = 15f; // <--- ¿©±â¿¡ B_GirlÀÇ °ø°İ·Â ¼³Á¤*/
+    public float attackDamage = 15f; // <--- ì—¬ê¸°ì— B_Girlì˜ ê³µê²©ë ¥ ì„¤ì •*/
 
-    // B_GirlÀÇ °ø°İ ÆĞÅÏ °ü¸®¸¦ À§ÇÑ º¯¼ö
-    private int nextAttackIndex = 1; // ´ÙÀ½¿¡ ½ÇÇàÇÒ °ø°İ (1: Attack1, 2: Attack2)
+    // B_Girlì˜ ê³µê²© íŒ¨í„´ ê´€ë¦¬ë¥¼ ìœ„í•œ ë³€ìˆ˜
+    private int nextAttackIndex = 1; // ë‹¤ìŒì— ì‹¤í–‰í•  ê³µê²© (1: Attack1, 2: Attack2)
 
-    // B_GirlÀÇ °³º° °ø°İ ÄğÅ¸ÀÓ
+    // B_Girlì˜ ê°œë³„ ê³µê²© ì¿¨íƒ€ì„
     [Header("B_Girl Attack")]
-    public float attack1Cooldown = 3f; // Attack1 ÄğÅ¸ÀÓ
-    public float attack2Cooldown = 4f; // Attack2 ÄğÅ¸ÀÓ
-    private float lastAttack1Time = -Mathf.Infinity; // ¸¶Áö¸· Attack1 ¹ßµ¿ ½Ã°£
-    private float lastAttack2Time = -Mathf.Infinity; // ¸¶Áö¸· Attack2 ¹ßµ¿ ½Ã°£
+    public float attack1Cooldown = 3f; // Attack1 ì¿¨íƒ€ì„ (ì´ ì‹œê°„ë§Œí¼ ë‹¤ìŒ ê³µê²©ê¹Œì§€ ëŒ€ê¸°)
+    public float attack2Cooldown = 4f; // Attack2 ì¿¨íƒ€ì„ (ì´ ì‹œê°„ë§Œí¼ ë‹¤ìŒ ê³µê²©ê¹Œì§€ ëŒ€ê¸°)
+
+    // --- ìˆ˜ì •: ì¿¨íƒ€ì„ ì²´í¬ë¥¼ ìœ„í•œ ë³€ìˆ˜ ë³€ê²½ ---
+    // private float lastAttack1Time = -Mathf.Infinity; // ì‚­ì œ
+    // private float lastAttack2Time = -Mathf.Infinity; // ì‚­ì œ
+    private float nextAttackTime = 0f; // ë‹¤ìŒ ê³µê²©ì´ ê°€ëŠ¥í•´ì§€ëŠ” ì‹œê°„
+    // ------------------------------------------
+
 
     protected override void Start()
     {
-        base.Start(); // CommonEnemyControllerÀÇ Start È£Ãâ (Animator, Player ÂüÁ¶ ¼³Á¤ µî)
+        base.Start(); // CommonEnemyControllerì˜ Start í˜¸ì¶œ (Animator, Player ì°¸ì¡° ì„¤ì • ë“±)
 
-        // B_Girl °íÀ¯ÀÇ ÃÊ±â ¼³Á¤
-        // ÃÊ±â ÄğÅ¸ÀÓ ¼³Á¤ (°ÔÀÓ ½ÃÀÛ ½Ã ¹Ù·Î °ø°İ °¡´ÉÇÏµµ·Ï)
-        lastAttack1Time = Time.time - attack1Cooldown;
-        lastAttack2Time = Time.time - attack2Cooldown;
-        nextAttackIndex = 1; // ¼ø¼­´Â Attack1ºÎÅÍ ½ÃÀÛ
-
-        // ½ÃÀÛ ½Ã ¸ğµç È÷Æ®¹Ú½º ºñÈ°¼ºÈ­
+        // --- ìˆ˜ì •: íˆíŠ¸ë°•ìŠ¤ ì˜¤ë¸Œì íŠ¸ì—ì„œ BoxCollider2D ì»´í¬ë„ŒíŠ¸ ì°¸ì¡° ì–»ê¸° ---
         if (attack1HitboxObject != null)
         {
-            attack1HitboxObject.SetActive(false);
+            attack1HitboxCollider = attack1HitboxObject.GetComponent<BoxCollider2D>();
+            if (attack1HitboxCollider != null)
+            {
+                attack1HitboxCollider.enabled = false; // ì‹œì‘ ì‹œ ì½œë¼ì´ë” ë¹„í™œì„±í™”
+            }
+            else
+            {
+                Debug.LogWarning("Attack 1 Hitbox Objectì— BoxCollider2D ì»´í¬ë„ŒíŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤.", this);
+            }
         }
+        else
+        {
+            Debug.LogWarning("Attack 1 Hitbox Objectê°€ B_GirlController ì¸ìŠ¤í™í„°ì— í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", this);
+        }
+
+
         if (attack2HitboxObject != null)
         {
-            attack2HitboxObject.SetActive(false);
+            attack2HitboxCollider = attack2HitboxObject.GetComponent<BoxCollider2D>();
+            if (attack2HitboxCollider != null)
+            {
+                attack2HitboxCollider.enabled = false; // ì‹œì‘ ì‹œ ì½œë¼ì´ë” ë¹„í™œì„±í™”
+            }
+            else
+            {
+                Debug.LogWarning("Attack 2 Hitbox Objectì— BoxCollider2D ì»´í¬ë„ŒíŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤.", this);
+            }
         }
+        else
+        {
+            Debug.LogWarning("Attack 2 Hitbox Objectê°€ B_GirlController ì¸ìŠ¤í™í„°ì— í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", this);
+        }
+        // ----------------------------------------------------------
 
+
+        // B_Girl ê³ ìœ ì˜ ì´ˆê¸° ì„¤ì •
+        // ì´ˆê¸° ì¿¨íƒ€ì„ ì„¤ì • -> ê²Œì„ ì‹œì‘ ì‹œ ë°”ë¡œ ê³µê²© ê°€ëŠ¥í•˜ê²Œ nextAttackTime ì´ˆê¸°í™”
+        nextAttackTime = Time.time; // ë˜ëŠ” 0f;
+        nextAttackIndex = 1; // ìˆœì„œëŠ” Attack1ë¶€í„° ì‹œì‘
+
+        // ì´ì „ì˜ GameObject.SetActive(false) ëŒ€ì‹  BoxCollider2D.enabled = false ì‚¬ìš©
+        // ì´ ë¡œì§ì€ ìœ„ì—ì„œ BoxCollider2D ì°¸ì¡°ë¥¼ ì–»ì€ í›„ ë°”ë¡œ ìˆ˜í–‰í–ˆìŠµë‹ˆë‹¤.
     }
 
-    // Update´Â Base Å¬·¡½ºÀÇ °ÍÀ» »ç¿ëÇÏµÇ, ÇÊ¿äÇÏ¸é override ÈÄ base.Update() È£Ãâ °¡´É
+    // UpdateëŠ” Base í´ë˜ìŠ¤ì˜ ê²ƒì„ ì‚¬ìš©í•˜ë˜, í•„ìš”í•˜ë©´ override í›„ base.Update() í˜¸ì¶œ ê°€ëŠ¥
     // protected override void Update() { base.Update(); }
 
 
-    // ===== ¾Ö´Ï¸ŞÀÌ¼Ç °ü·Ã ÇÔ¼öµé (Base Å¬·¡½ºÀÇ virtual ¸Ş¼Òµå¸¦ ¿À¹ö¶óÀÌµåÇÏ¿© ½ÇÁ¦ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı) =====
+    // ===== ì• ë‹ˆë©”ì´ì…˜ ê´€ë ¨ í•¨ìˆ˜ë“¤ (Base í´ë˜ìŠ¤ì˜ virtual ë©”ì†Œë“œë¥¼ ì˜¤ë²„ë¼ì´ë“œí•˜ì—¬ ì‹¤ì œ ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ) =====
 
     protected override void PlayIdleAnim()
     {
-        // animator.SetBool(ANIM_BOOL_B_WALK, false); // SetState¿¡¼­ ÀÌ¹Ì Ã³¸®
+        animator.SetBool(ANIM_BOOL_B_WALK, false);
     }
 
     protected override void PlayWalkAnim()
     {
-        // animator.SetBool(ANIM_BOOL_B_WALK, true); // SetState¿¡¼­ ÀÌ¹Ì Ã³¸®
+        animator.SetBool(ANIM_BOOL_B_WALK, true);
     }
 
     protected override void PlayJumpAnim()
@@ -82,91 +122,143 @@ public class B_GirlController : CommonEnemyController
     protected override void PlayAttack1Anim()
     {
         animator.SetTrigger(ANIM_TRIGGER_B_ATTACK1);
-        // Note: Hitbox activation/deactivation will be handled by Animation Events
     }
 
     protected override void PlayAttack2Anim()
     {
         animator.SetTrigger(ANIM_TRIGGER_B_ATTACK2);
-        // Note: Hitbox activation/deactivation will be handled by Animation Events
     }
 
     protected override void ResetAttackTriggers()
     {
         animator.ResetTrigger(ANIM_TRIGGER_B_ATTACK1);
         animator.ResetTrigger(ANIM_TRIGGER_B_ATTACK2);
-        // B_Attack3 Æ®¸®°Åµµ ÀÖ´Ù¸é Ãß°¡
-        // animator.ResetTrigger("B_Attack3");
     }
 
-    // ===== AI °ø°İ ·ÎÁ÷ (Base Å¬·¡½ºÀÇ virtual PerformAttackLogic ¿À¹ö¶óÀÌµå) =====
-    // B_GirlÀÇ ±³Â÷ °ø°İ ÆĞÅÏ ¹× °³º° ÄğÅ¸ÀÓ ·ÎÁ÷ ±¸Çö
+    // ===== AI ê³µê²© ë¡œì§ (Base í´ë˜ìŠ¤ì˜ virtual PerformAttackLogic ì˜¤ë²„ë¼ì´ë“œ) =====
 
     protected override void PerformAttackLogic()
     {
-        // ÀÌ¹Ì °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç ÁßÀÌ¶ó¸é Áßº¹ ¹ßµ¿ ¾ÈÇÔ (Base Å¬·¡½º Update¿¡¼­ ½ºÅµµÇÁö¸¸ ¾ÈÀü ÀåÄ¡)
+        // ì´ë¯¸ ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì´ë¼ë©´ ì¤‘ë³µ ë°œë™ ì•ˆí•¨ (Base í´ë˜ìŠ¤ Updateì—ì„œ ìŠ¤í‚µë˜ì§€ë§Œ ì•ˆì „ ì¥ì¹˜)
         if (isPerformingAttackAnimation) return;
 
-        float cooldownEndTime = (nextAttackIndex == 1) ? (lastAttack1Time + attack1Cooldown) : (lastAttack2Time + attack2Cooldown);
-
-        // Debug.Log("B_Girl PerformAttackLogic - ´ÙÀ½ °ø°İ: " + nextAttackIndex + ", Ready at: " + cooldownEndTime.ToString("F2") + ", ÇöÀç Time: " + Time.time.ToString("F2") + ", ÄğÅ¸ÀÓ ¿Ï·á ¿©ºÎ: " + (Time.time >= cooldownEndTime)); // µğ¹ö±×
-
-        if (Time.time < cooldownEndTime)
+        // --- ìˆ˜ì •: ë‹¤ìŒ ê³µê²© ê°€ëŠ¥ ì‹œê°„ ì²´í¬ ---
+        // lastAttackTime ë³€ìˆ˜ì™€ cooldownEndTime ê³„ì‚° ë¡œì§ ì‚­ì œ
+        if (Time.time < nextAttackTime)
         {
-            // Debug.Log("B_Girl °ø°İ ÄğÅ¸ÀÓ ´ë±â Áß. ³²Àº ½Ã°£: " + (cooldownEndTime - Time.time).ToString("F2")); // µğ¹ö±×
-            return; // ÄğÅ¸ÀÓ Áö³ªÁö ¾Ê¾ÒÀ¸¸é ´ë±â
+            // Debug.Log("B_Girl ê³µê²© ì¿¨íƒ€ì„ ëŒ€ê¸° ì¤‘. ë‚¨ì€ ì‹œê°„: " + (nextAttackTime - Time.time).ToString("F2")); // ëŒ€ê¸° ì¤‘ ë””ë²„ê·¸ (ì„ íƒ ì‚¬í•­)
+            return; // ë‹¤ìŒ ê³µê²© ê°€ëŠ¥ ì‹œê°„ ì „ì´ë©´ ëŒ€ê¸°
         }
+        // --- ì¿¨íƒ€ì„ ì²´í¬ ë¡œì§ ìˆ˜ì • ë ---
 
-        // ÄğÅ¸ÀÓÀÌ Áö³µ´Ù¸é °ø°İ ½ÇÇà
-        Debug.Log("B_Girl °ø°İ ÄğÅ¸ÀÓ ¿Ï·á! ´ÙÀ½ °ø°İ: B_Attack" + nextAttackIndex + " ¹ßµ¿ ½Ãµµ.");
 
-        isPerformingAttackAnimation = true; // <-- °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç ½ÃÀÛ Àü À§Ä¡ °íÁ¤ ÇÃ·¡±× ÄÔ (Base Class º¯¼ö »ç¿ë)
+        // ì¿¨íƒ€ì„ì´ ì§€ë‚¬ë‹¤ë©´ ê³µê²© ì‹¤í–‰
+        Debug.Log("B_Girl ê³µê²© ê°€ëŠ¥! ë‹¤ìŒ ê³µê²©: B_Attack" + nextAttackIndex + " ë°œë™ ì‹œë„."); // ë¡œê·¸ ìˆ˜ì •
+
+        isPerformingAttackAnimation = true; // <-- ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘ ì „ ìœ„ì¹˜ ê³ ì • í”Œë˜ê·¸ ì¼¬ (Base Class ë³€ìˆ˜ ì‚¬ìš©)
 
         if (nextAttackIndex == 1)
         {
-            Debug.Log("--> B_Attack1 ¹ßµ¿!");
-            PlayAttack1Anim(); // B_Attack1 ¾Ö´Ï¸ŞÀÌ¼Ç ¹ßµ¿
-            lastAttack1Time = Time.time; // Attack 1 ¸¶Áö¸· ¹ßµ¿ ½Ã°£ ±â·Ï
-            nextAttackIndex = 2; // ´ÙÀ½ °ø°İÀº Attack 2
+            Debug.Log("--> B_Attack1 ë°œë™!");
+            PlayAttack1Anim(); // B_Attack1 ì• ë‹ˆë©”ì´ì…˜ ë°œë™
+            // nextAttackTime ì„¤ì •ì€ OnAttackAnimationEndì—ì„œ ìˆ˜í–‰
+            nextAttackIndex = 2; // ë‹¤ìŒ ê³µê²©ì€ Attack 2
         }
         else // nextAttackIndex == 2
         {
-            Debug.Log("--> B_Attack2 ¹ßµ¿!");
-            PlayAttack2Anim(); // B_Attack2 ¾Ö´Ï¸ŞÀÌ¼Ç ¹ßµ¿
-            lastAttack2Time = Time.time; // Attack 2 ¸¶Áö¸· ¹ßµ¿ ½Ã°£ ±â·Ï
-            nextAttackIndex = 1; // ´ÙÀ½ °ø°İÀº Attack 1
+            Debug.Log("--> B_Attack2 ë°œë™!");
+            PlayAttack2Anim(); // B_Attack2 ì• ë‹ˆë©”ì´ì…˜ ë°œë™
+            // nextAttackTime ì„¤ì •ì€ OnAttackAnimationEndì—ì„œ ìˆ˜í–‰
+            nextAttackIndex = 1; // ë‹¤ìŒ ê³µê²©ì€ Attack 1
         }
     }
 
-    // ===== Animation Event Callbacks =====
+    // ===== Animation Event Callbacks (BoxCollider2D ì œì–´ ë°©ì‹) =====
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®¿¡¼­ È£ÃâµÉ ÇÔ¼ö: È÷Æ®¹Ú½º È°¼ºÈ­
-    // attackObject ¸Å°³º¯¼ö´Â Animation Event¿¡¼­ ¾î¶² GameObject¸¦ È°¼ºÈ­ÇÒÁö ÁöÁ¤ÇÕ´Ï´Ù.
-    public void EnableHitbox()
+    // --- ìˆ˜ì •: CommonEnemyControllerì˜ OnAttackAnimationEnd ë©”ì†Œë“œë¥¼ ì˜¤ë²„ë¼ì´ë“œ ---
+    protected override void OnAttackAnimationEnd()
     {
-        if (attack1HitboxObject != null)
-        {
-            attack1HitboxObject.SetActive(true);
-            Debug.Log(attack1HitboxObject.name + " È°¼ºÈ­µÊ"); // µğ¹ö±×
-        }
-    }
+        // ê¸°ë³¸ í´ë˜ìŠ¤ì˜ ë¡œì§ í˜¸ì¶œ (isPerformingAttackAnimation = false ì„¤ì •)
+        base.OnAttackAnimationEnd();
+        Debug.Log("B_Girl ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ! ë‹¤ìŒ ê³µê²© ê°€ëŠ¥ ì‹œê°„ ê³„ì‚°."); // ë¡œê·¸ ì¶”ê°€
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®¿¡¼­ È£ÃâµÉ ÇÔ¼ö: È÷Æ®¹Ú½º ºñÈ°¼ºÈ­
-    public void DisableHitbox()
+        // ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚¬ì„ ë•Œ, ë‹¤ìŒ ê³µê²©ì´ ê°€ëŠ¥í•´ì§€ëŠ” ì‹œê°„ì„ ê³„ì‚°í•˜ì—¬ ì„¤ì •
+        // ë°©ê¸ˆ ëë‚œ ì• ë‹ˆë©”ì´ì…˜ì˜ ì¸ë±ìŠ¤ë¥¼ ì•Œì•„ì•¼ í•¨ (nextAttackIndexë¥¼ í™œìš©)
+        // nextAttackIndexê°€ 2ì´ë©´ Attack 1ì´ ë°©ê¸ˆ ëë‚œ ê²ƒ, 1ì´ë©´ Attack 2ê°€ ë°©ê¸ˆ ëë‚œ ê²ƒ.
+        if (nextAttackIndex == 2) // Attack 1ì´ ë°©ê¸ˆ ëë‚¨
+        {
+            nextAttackTime = Time.time + attack1Cooldown; // Attack 1 ì¿¨íƒ€ì„ ì ìš©
+            Debug.Log("--> Attack 1 ì¢…ë£Œ. ë‹¤ìŒ ê³µê²©ì€ " + attack1Cooldown.ToString("F2") + "ì´ˆ í›„ (" + nextAttackTime.ToString("F2") + "ì— ê°€ëŠ¥).");
+        }
+        else // nextAttackIndex == 1 (Attack 2ê°€ ë°©ê¸ˆ ëë‚¨)
+        {
+            nextAttackTime = Time.time + attack2Cooldown; // Attack 2 ì¿¨íƒ€ì„ ì ìš©
+            Debug.Log("--> Attack 2 ì¢…ë£Œ. ë‹¤ìŒ ê³µê²©ì€ " + attack2Cooldown.ToString("F2") + "ì´ˆ í›„ (" + nextAttackTime.ToString("F2") + "ì— ê°€ëŠ¥).");
+        }
+
+        // TODO: ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ í›„ ë°”ë¡œ Chase ìƒíƒœë¡œ ì „í™˜ë˜ì–´ì•¼ í•˜ëŠ” ê²½ìš° ì²˜ë¦¬
+        // ì˜ˆ: í”Œë ˆì´ì–´ê°€ ê³µê²© ë²”ìœ„ ë°–ìœ¼ë¡œ ë²—ì–´ë‚¬ëŠ”ì§€ ì—¬ê¸°ì„œ ë‹¤ì‹œ ì²´í¬í•˜ê³  SetState(EnemyState.Chase);
+        // ì´ ë¶€ë¶„ì€ AI ë¡œì§ ìš”êµ¬ì‚¬í•­ì— ë”°ë¼ ì¶”ê°€í•´ì•¼ í•©ë‹ˆë‹¤.
+    }
+    // ----------------------------------------------------------
+
+    // --- Attack 1 íˆíŠ¸ë°•ìŠ¤ (Collider) í™œì„±í™”/ë¹„í™œì„± ë©”ì†Œë“œ (ìœ ì§€) ---
+    public void EnableAttack1Hitbox() // <-- ë§¤ê°œë³€ìˆ˜ ì—†ìŒ
     {
-        if (attack1HitboxObject != null)
+        if (attack1HitboxCollider != null)
         {
-            attack1HitboxObject.SetActive(false);
-            Debug.Log(attack1HitboxObject.name + " ºñÈ°¼ºÈ­µÊ"); // µğ¹ö±×
+            attack1HitboxCollider.enabled = true; // ì½œë¼ì´ë” í™œì„±í™”
+            Debug.Log(attack1HitboxObject.name + " Collider í™œì„±í™”ë¨"); // ë””ë²„ê·¸ ë¡œê·¸ ìˆ˜ì •
+        }
+        else
+        {
+            Debug.LogWarning("Attack 1 Hitbox Colliderê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ê±°ë‚˜ ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", this);
         }
     }
 
+    public void DisableAttack1Hitbox() // <-- ë§¤ê°œë³€ìˆ˜ ì—†ìŒ
+    {
+        if (attack1HitboxCollider != null)
+        {
+            attack1HitboxCollider.enabled = false; // ì½œë¼ì´ë” ë¹„í™œì„±í™”
+            Debug.Log(attack1HitboxObject.name + " Collider ë¹„í™œì„±í™”ë¨"); // ë””ë²„ê·¸ ë¡œê·¸ ìˆ˜ì •
+        }
+        else
+        {
+            Debug.LogWarning("Attack 1 Hitbox Colliderê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ê±°ë‚˜ ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", this);
+        }
+    }
+    // ----------------------------------------------------------
 
-    // TODO: Attack1.¿¡¼­ ÇÃ·¹ÀÌ¾î°¡ ¹ş¾î³ª¸é Attack2·Î °ø°İÇÏ°Ô ÇÏ´Â ·ÎÁ÷ ±¸Çö (¿ä±¸»çÇ× Áß ÇÏ³ª)
-    // ÀÌ ·ÎÁ÷Àº ¾à°£ º¹ÀâÇÏ¸ç, Attack »óÅÂ¿¡¼­ Chase·Î ÀüÈ¯µÇ´Â ±âº» ·ÎÁ÷À» ÀçÁ¤ÀÇÇØ¾ß ÇÒ ¼ö ÀÖ½À´Ï´Ù.
-    // ¿¹¸¦ µé¾î, Update ÇÔ¼ö³ª SetState ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÏ¿© °Å¸® Ã¼Å© ÈÄ Æ¯Á¤ Á¶°ÇÀ» Ãß°¡ÇÏ°Å³ª,
-    // Attack ¾Ö´Ï¸ŞÀÌ¼Ç µµÁß °Å¸®¸¦ Áö¼ÓÀûÀ¸·Î Ã¼Å©ÇÏ´Â º°µµÀÇ ÄÚ·çÆ¾ ¶Ç´Â ·ÎÁ÷ÀÌ ÇÊ¿äÇÒ ¼ö ÀÖ½À´Ï´Ù.
-    // ÇöÀç´Â ÇÃ·¹ÀÌ¾î°¡ °ø°İ ¹üÀ§ ¹ş¾î³ª¸é ¹Ù·Î Chase »óÅÂ·Î ÀüÈ¯µË´Ï´Ù.
-    // ÀÌ Æ¯Á¤ ¿ä±¸»çÇ×Àº Base Å¬·¡½ºÀÇ AI ·ÎÁ÷À» »ó´çÈ÷ º¯°æÇØ¾ß ÇÏ¹Ç·Î,
-    // ¿ì¼± ±âº» ±³Â÷ °ø°İ ÆĞÅÏÀÌ Àß ÀÛµ¿ÇÏ´ÂÁö È®ÀÎ ÈÄ ´Ù½Ã ³íÀÇÇÏ´Â °ÍÀ» ÃßÃµÇÕ´Ï´Ù.
+    // --- Attack 2 íˆíŠ¸ë°•ìŠ¤ (Collider) í™œì„±í™”/ë¹„í™œì„± ë©”ì†Œë“œ (ìœ ì§€) ---
+    public void EnableAttack2Hitbox() // <-- ë§¤ê°œë³€ìˆ˜ ì—†ìŒ
+    {
+        if (attack2HitboxCollider != null)
+        {
+            attack2HitboxCollider.enabled = true; // ì½œë¼ì´ë” í™œì„±í™”
+            Debug.Log(attack2HitboxObject.name + " Collider í™œì„±í™”ë¨"); // ë””ë²„ê·¸ ë¡œê·¸ ìˆ˜ì •
+        }
+        else
+        {
+            Debug.LogWarning("Attack 2 Hitbox Colliderê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ê±°ë‚˜ ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", this);
+        }
+    }
+
+    public void DisableAttack2Hitbox() // <-- ë§¤ê°œë³€ìˆ˜ ì—†ìŒ
+    {
+        if (attack2HitboxCollider != null)
+        {
+            attack2HitboxCollider.enabled = false; // ì½œë¼ì´ë” ë¹„í™œì„±í™”
+            Debug.Log(attack2HitboxObject.name + " Collider ë¹„í™œì„±í™”ë¨"); // ë””ë²„ê·¸ ë¡œê·¸ ìˆ˜ì •
+        }
+        else
+        {
+            Debug.LogWarning("Attack 2 Hitbox Colliderê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ê±°ë‚˜ ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", this);
+        }
+    }
+    // ----------------------------------------------------------
+
+
+    // TODO: Attack1.ì—ì„œ í”Œë ˆì´ì–´ê°€ ë²—ì–´ë‚˜ë©´ Attack2ë¡œ ê³µê²©í•˜ê²Œ í•˜ëŠ” ë¡œì§ êµ¬í˜„ (ìš”êµ¬ì‚¬í•­ ì¤‘ í•˜ë‚˜)
+    // ì´ ë¡œì§ì€ PerformAttackLogic ì´ë‚˜ Update, SetState ë“±ì„ ì˜¤ë²„ë¼ì´ë“œí•˜ì—¬ êµ¬í˜„í•´ì•¼ í•©ë‹ˆë‹¤.
 }

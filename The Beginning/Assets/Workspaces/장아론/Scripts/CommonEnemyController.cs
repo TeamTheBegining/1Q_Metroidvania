@@ -148,7 +148,6 @@ public class CommonEnemyController : MonoBehaviour
         if (currentState == newState) return;
 
         // 이전 상태 종료 로직 (필요시 파생 클래스에서 오버라이드)
-        // 예: case EnemyState.Attack: isPerformingAttackAnimation = false; break;
 
         currentState = newState; // 상태 변경
 
@@ -156,37 +155,37 @@ public class CommonEnemyController : MonoBehaviour
         switch (currentState)
         {
             case EnemyState.Idle:
-                PlayIdleAnim(); // Idle 애니메이션 재생 (파생 클래스에서 오버라이드)
-                animator.SetBool("IsWalking", false); // <-- 공통적인 걷기 Bool 파라미터 (애니메이터에 "IsWalking" Bool 필요)
-                isPerformingAttackAnimation = false; // 공격 애니메이션 중 상태 해제
-                ResetAttackTriggers(); // 공격 트리거 초기화
+                PlayIdleAnim(); // <-- 파생 클래스의 오버라이드 메소드 호출 (여기서 파생 클래스가 애니메이션 파라미터 설정)
+                // animator.SetBool("IsWalking", false); // <-- 이 줄들(IsWalking/B_Walk 설정)은 파생 클래스의 PlayAnim 메소드로 옮겨졌습니다. 이 위치에서는 삭제되어야 합니다.
+                isPerformingAttackAnimation = false;
+                ResetAttackTriggers(); // 파생 클래스에서 공격 트리거 리셋을 오버라이드함
+                // animator.ResetTrigger("Jump"); // 이 트리거 이름이 공통적이지 않다면 파생 클래스로 옮기세요.
                 break;
 
             case EnemyState.Chase:
-                PlayWalkAnim(); // Walk 애니메이션 재생 (파생 클래스에서 오버라이드)
-                animator.SetBool("IsWalking", true); // <-- 공통적인 걷기 Bool 파라미터
-                isPerformingAttackAnimation = false; // 공격 애니메이션 중 상태 해제
-                ResetAttackTriggers(); // 공격 트리거 초기화
-                // 점프 트리거도 초기화 (필요하다면)
-                animator.ResetTrigger("Jump"); // <-- 공통적인 Jump 트리거 (애니메이터에 "Jump" Trigger 필요)
+                PlayWalkAnim(); // <-- 파생 클래스의 오버라이드 메소드 호출 (여기서 파생 클래스가 애니메이션 파라미터 설정)
+                // animator.SetBool("IsWalking", true);  // <-- 이 줄들(IsWalking/B_Walk 설정)은 파생 클래스의 PlayAnim 메소드로 옮겨졌습니다. 이 위치에서는 삭제되어야 합니다.
+                isPerformingAttackAnimation = false;
+                ResetAttackTriggers(); // 파생 클래스에서 공격 트리거 리셋을 오버라이드함
+                // animator.ResetTrigger("Jump"); // 이 트리거 이름이 공통적이지 않다면 파생 클래스로 옮기세요.
                 break;
 
             case EnemyState.Attack:
-                PlayIdleAnim(); // 공격 준비 중에는 Idle 상태 (파생 클래스에서 오버라이드)
-                animator.SetBool("IsWalking", false); // <-- 공통적인 걷기 Bool 파라미터
-                                                      // isPerformingAttackAnimation는 PerformAttackLogic에서 설정
-                                                      // 공격 상태 진입 시 다른 트리거 초기화
-                animator.ResetTrigger("Jump"); // <-- 공통적인 Jump 트리거
-                ResetAttackTriggers(); // 공격 트리거 초기화
+                PlayIdleAnim(); // <-- 공격 준비 중에는 Idle 모션 (여기서 파생 클래스가 애니메이션 파라미터 설정)
+                                // animator.SetBool("IsWalking", false); // <-- 이 줄들(IsWalking/B_Walk 설정)은 파생 클래스의 PlayAnim 메소드로 옮겨졌습니다. 이 위치에서는 삭제되어야 합니다.
+                                // isPerformingAttackAnimation는 PerformAttackLogic에서 설정
+                                // 공격 상태 진입 시 다른 트리거 초기화
+                                // animator.ResetTrigger("Jump"); // 이 트리거 이름이 공통적이지 않다면 파생 클래스로 옮기세요.
+                ResetAttackTriggers(); // 파생 클래스에서 공격 트리거 리셋을 오버라이드함
                 break;
 
             case EnemyState.Dead:
-                isDead = true; // 사망 플래그
-                isPerformingAttackAnimation = false; // 공격 애니메이션 중 상태 해제
-                animator.SetBool("IsWalking", false); // 걷기 멈춤
-                ResetAttackTriggers(); // 공격 트리거 초기화
-                animator.ResetTrigger("Jump"); // 점프 트리거 초기화
-                PlayDeathAnim(); // 사망 애니메이션 재생 (파생 클래스에서 오버라이드)
+                isDead = true;
+                isPerformingAttackAnimation = false;
+                // animator.SetBool("IsWalking", false); // <-- 이 줄들(IsWalking/B_Walk 설정)은 파생 클래스의 PlayAnim 메소드로 옮겨졌습니다. 이 위치에서는 삭제되어야 합니다.
+                ResetAttackTriggers(); // 파생 클래스에서 공격 트리거 리셋을 오버라이드함
+                // animator.ResetTrigger("Jump"); // 이 트리거 이름이 공통적이지 않다면 파생 클래스로 옮기세요.
+                PlayDeathAnim(); // <-- 파생 클래스의 오버라이드 메소드 호출
                 // TODO: 사망 후 추가 처리 (오브젝트 비활성화/파괴 등)
                 break;
         }
@@ -276,7 +275,7 @@ public class CommonEnemyController : MonoBehaviour
 
     // ===== 애니메이션 이벤트에서 호출될 함수 (공통) =====
     // Animator의 공격 애니메이션 클립 끝에 이 이벤트를 추가해야 합니다.
-    public void OnAttackAnimationEnd()
+    protected virtual void OnAttackAnimationEnd()
     {
         Debug.Log("공격 애니메이션 종료 이벤트 발생 (Base Class).");
         isPerformingAttackAnimation = false; // 공격 애니메이션 종료 시 위치 고정 플래그 끔
