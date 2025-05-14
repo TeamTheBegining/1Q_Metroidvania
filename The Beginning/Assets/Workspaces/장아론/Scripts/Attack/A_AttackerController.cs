@@ -41,7 +41,9 @@ public class A_AttackerController : CommonEnemyController, IDamageable
     // 상태 관리 플래그 (CommonEnemyController의 상태와 별개로 관리될 수 있는 경직 상태)
     private bool isStunned = false;
     // 경직 시간 변수 (필요시)
-    // public float stunDuration = 2f;
+    private float stunDuration = 2f;
+    public float StunDuration { get => stunDuration; set => stunDuration = value; }
+
     public Action OnDead { get; set; }
 
     // Damageable 인터페이스 구현
@@ -83,7 +85,7 @@ public class A_AttackerController : CommonEnemyController, IDamageable
 
     // --- 추가: 경직 상태 처리 함수 ---
     // 플레이어의 패링 성공 로직 등 외부에서 호출될 수 있습니다.
-    public void Stun(float stunDuration)
+    public void Stun()
     {
         // 이미 죽었거나 경직 중이면 다시 경직되지 않음
         if (IsDead || isStunned) return;

@@ -370,7 +370,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8211484488126950810, guid: 8dcfb0b284135ec4d8162775a80261a2, type: 3}
+      propertyPath: maxHealth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211484488126950810, guid: 8dcfb0b284135ec4d8162775a80261a2, type: 3}
       propertyPath: attackRange
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211484488126950810, guid: 8dcfb0b284135ec4d8162775a80261a2, type: 3}
+      propertyPath: attackDamage
       value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
