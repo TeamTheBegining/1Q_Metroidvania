@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class TestBase : MonoBehaviour
 {
 #if UNITY_EDITOR
+    // TestCode Input
     TestInputActions inputActions;
 
     private void Awake()
