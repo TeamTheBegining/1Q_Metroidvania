@@ -182,11 +182,6 @@ public class Player : MonoBehaviour, IDamageable
     {
         return Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
     }
-    public void TakeDamage(float damage)
-    {
-        if(!isparrysuccess) CurrentHp -= damage;
-        PlayerHit();
-    }
 
     private void PlayerHit()
     {
@@ -408,14 +403,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //패링
-        IDamageable coll = collision.gameObject.GetComponent<IDamageable>();
-        if (coll != null)
-        {
-            coll.TakeDamage(damage);
-        }
         
-        //공격 받는 함수
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -443,5 +431,10 @@ public class Player : MonoBehaviour, IDamageable
 #endif
     }
 
-   
+    public void TakeDamage(float damage)
+    {
+        if (!isparrysuccess) CurrentHp -= damage;
+        PlayerHit();
+    }
+
 }
