@@ -18,8 +18,8 @@ public class B_GirlController : CommonEnemyController
     public GameObject attack2HitboxObject; // Inspector에서 할당
 
     // B_Girl 캐릭터의 스탯
-    [Header("B_Girl Stats")]
-    public float attackDamage = 15f; // <--- 여기에 B_Girl의 공격력 설정
+    /*[Header("B_Girl Stats")]
+    public float attackDamage = 15f; // <--- 여기에 B_Girl의 공격력 설정*/
 
     // B_Girl의 공격 패턴 관리를 위한 변수
     private int nextAttackIndex = 1; // 다음에 실행할 공격 (1: Attack1, 2: Attack2)
