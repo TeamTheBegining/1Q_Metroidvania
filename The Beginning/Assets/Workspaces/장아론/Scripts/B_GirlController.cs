@@ -23,9 +23,9 @@ public class B_GirlController : CommonEnemyController , IDamageable
     // ----------------------------------------------------------
 
 
-    // B_Girl 캐릭터의 스탯 (CommonEnemyController에 attackDamage가 정의되어 있으므로 여기서 다시 선언하지 않습니다.)
+    // B_Girl 캐릭터의 스탯 (CommonEnemyController에 //Debug.Log가 정의되어 있으므로 여기서 다시 선언하지 않습니다.)
     /*[Header("B_Girl Stats")]
-    public float attackDamage = 15f; // <--- 여기에 B_Girl의 공격력 설정*/
+    public float //Debug.Log = 15f; // <--- 여기에 B_Girl의 공격력 설정*/
 
     // B_Girl의 공격 패턴 관리를 위한 변수
     private int nextAttackIndex = 1; // 다음에 실행할 공격 (1: Attack1, 2: Attack2)
