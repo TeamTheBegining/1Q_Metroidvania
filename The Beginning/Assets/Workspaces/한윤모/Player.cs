@@ -25,8 +25,8 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float maxHp = 10f;
     [SerializeField] float maxMp = 25f;
     [SerializeField] float damage = 2f;
-    [SerializeField] float currentHp = 3f;
-    [SerializeField] float currentMp = 0f;
+    public float currentHp = 3f;
+    public float currentMp = 0f;
     //private float ladderInputHoldTime = 0;
     //[SerializeField] private float ladderEnterDelay = 0.2f;
 
@@ -82,14 +82,12 @@ public class Player : MonoBehaviour, IDamageable
     public PlayerInput Input { get => input; }
     public float CurrentHp { get => currentHp; set => currentHp = value; }
     public float MaxHp { get => maxHp; set => maxHp = value; }
-    public float CurrentMp { get => currentMp; set => currentMp = value; }
-    public float MaxMp { get => maxMp; set => maxMp = value; }
     public bool IsDead => currentHp <= 0;
 
     private void Awake()
     {
-        rb           = GetComponent<Rigidbody2D>();
-        input        = GetComponent<PlayerInput>();
+        rb = GetComponent<Rigidbody2D>();
+        input = GetComponent<PlayerInput>();
         animatorCtrl = GetComponent<PlayerAnimation>();
         spriternderer = gameObject.GetComponent<SpriteRenderer>();
         groundCheckTransform = transform.GetChild(0).transform;
