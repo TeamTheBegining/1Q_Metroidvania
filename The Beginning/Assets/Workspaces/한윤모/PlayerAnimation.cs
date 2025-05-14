@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Windows;
@@ -9,6 +10,8 @@ public class PlayerAnimation : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private float aniSpeed;
+    AnimatorStateInfo stateInfo;
+        
     public float AniSpeed
     {
         get => aniSpeed; 
@@ -34,6 +37,7 @@ public class PlayerAnimation : MonoBehaviour
     private void PlayAnimation()
     {
         animator.speed = aniSpeed;
+        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         switch (player.CurrentState)
         {
             case Player.PlayerState.Idle:
@@ -53,6 +57,9 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Attack2:
                 animator.Play("Attack2");
+                break;
+            case Player.PlayerState.Attack3:
+                animator.Play("Attack3");
                 break;
             case Player.PlayerState.Skill1:
                 //animator.Play("Skill1");

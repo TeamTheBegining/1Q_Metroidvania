@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Attack
+  m_Name: Attack1
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -24,6 +24,8 @@ AnimationClip:
       value: {fileID: 3374966729978855806, guid: e58f1b236cdb3104dae02e58f0b765ad, type: 3}
     - time: 0.083333336
       value: {fileID: 8521717351194371342, guid: 69ee1b53daba0324fb5e06cf83b2a131, type: 3}
+    - time: 0.25
+      value: {fileID: -7692832073243969665, guid: 6918687f9f8877a4ea92b9ea645b39d9, type: 3}
     - time: 0.5833333
       value: {fileID: 8521717351194371342, guid: 69ee1b53daba0324fb5e06cf83b2a131, type: 3}
     attribute: m_Sprite
@@ -50,6 +52,7 @@ AnimationClip:
     pptrCurveMapping:
     - {fileID: 3374966729978855806, guid: e58f1b236cdb3104dae02e58f0b765ad, type: 3}
     - {fileID: 8521717351194371342, guid: 69ee1b53daba0324fb5e06cf83b2a131, type: 3}
+    - {fileID: -7692832073243969665, guid: 6918687f9f8877a4ea92b9ea645b39d9, type: 3}
     - {fileID: 8521717351194371342, guid: 69ee1b53daba0324fb5e06cf83b2a131, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -78,6 +81,13 @@ AnimationClip:
   m_Events:
   - time: 0.083333336
     functionName: AttackCollider
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: 2df5d07b8e3298347a974d8b7ab5a287, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.25
+    functionName: Attack2Check
     data: 
     objectReferenceParameter: {fileID: 11500000, guid: 2df5d07b8e3298347a974d8b7ab5a287, type: 3}
     floatParameter: 0

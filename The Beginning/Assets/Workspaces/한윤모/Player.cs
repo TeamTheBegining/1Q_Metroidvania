@@ -22,8 +22,11 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float jumpTimer = 0f;
     [SerializeField] float parryTimer = 0f;
     [SerializeField] float parryDelay = 0.5f;
-    [SerializeField] float maxHp = 3f;
+    [SerializeField] float maxHp = 10f;
+    [SerializeField] float maxMp = 25f;
+    [SerializeField] float damage = 2f;
     public float currentHp = 3f;
+    public float currentMp = 0f;
     //private float ladderInputHoldTime = 0;
     //[SerializeField] private float ladderEnterDelay = 0.2f;
 
@@ -34,10 +37,19 @@ public class Player : MonoBehaviour, IDamageable
     private LayerMask groundLayer;
     private SpriteRenderer spriternderer;
     private Collider2D attackcoll;
+    private Collider2D attackcoll2;
+    private Collider2D attackcoll3;
     bool isGround = false;
     bool isparrying = false;
     bool isparrysuccess = false;
     bool attack2able = false;
+    bool attack3able = false;
+
+    public float Damage
+    {
+        get => damage;
+        set => damage = value;
+    }
 
     [SerializeField] private PlayerState currentState;
     public PlayerState CurrentState
@@ -53,6 +65,7 @@ public class Player : MonoBehaviour, IDamageable
         Landing,
         Attack1,
         Attack2,
+        Attack3,
         Skill1,
         Skill2,
         Skill3,
@@ -79,9 +92,12 @@ public class Player : MonoBehaviour, IDamageable
         spriternderer = gameObject.GetComponent<SpriteRenderer>();
         groundCheckTransform = transform.GetChild(0).transform;
         attackcoll = transform.GetChild(1).GetComponent<Collider2D>();
+        attackcoll2 = transform.GetChild(2).GetComponent<Collider2D>();
+        attackcoll3 = transform.GetChild(3).GetComponent<Collider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
         maxHp = 3;
+        maxMp = 0;
     }
 
     void Start()
@@ -111,7 +127,10 @@ public class Player : MonoBehaviour, IDamageable
                 PlayerAttack1Update();
                 break;
             case PlayerState.Attack2:
-                //PlayerAttack2Update(); //이벤트 함수로 조절
+                PlayerAttack2Update();
+                break;
+            case PlayerState.Attack3:
+                //PlayerAttack2Update();
                 break;
             case PlayerState.Skill1:
                 //PlayerSkillk1();
@@ -237,6 +256,7 @@ public class Player : MonoBehaviour, IDamageable
         }
 
         Movable();
+        Attackable();
     }
     private void PlayerLandingUpdate()
     {
@@ -248,6 +268,21 @@ public class Player : MonoBehaviour, IDamageable
         if(attack2able&& input.IsAttack)
         {
             attack2able = false;
+            input.IsAttack = false;
+            attackcoll.enabled = false;
+            attackcoll2.enabled = true;
+            currentState = PlayerState.Attack2;
+        }
+    }
+    private void PlayerAttack2Update()
+    {
+        if(attack3able&& input.IsAttack)
+        {
+            attack3able = false;
+            input.IsAttack = false;
+            attackcoll2.enabled = false;
+            attackcoll3.enabled = true;
+            currentState = PlayerState.Attack3;
         }
     }
 
@@ -281,9 +316,11 @@ public class Player : MonoBehaviour, IDamageable
     {
         if (input.IsAttack)
         {
-            currentState = PlayerState.Attack1;
-            rb.linearVelocity = Vector2.zero;
             input.IsAttack = false;
+            currentState = PlayerState.Attack1;
+            attackcoll.enabled = true;
+            if (currentState != PlayerState.Jump) 
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         }
     }
     void Parryable()
@@ -324,7 +361,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void AttackCollider()
     {
-        attackcoll.enabled = true;
+        //attackcoll.enabled = true;
     }
     private void AttackFinish()
     {
@@ -332,10 +369,26 @@ public class Player : MonoBehaviour, IDamageable
         attackcoll.enabled = false;
         attack2able = false;
     }
+    private void Attack2Finish()
+    {
+        currentState = PlayerState.Idle;
+        attackcoll2.enabled = false;
+        attack3able = false;
+    }
+    private void Attack3Finish()
+    {
+        attackcoll3.enabled = false;
+        currentState = PlayerState.Idle;
+    }
 
     private void Attack2Check()
     {
         attack2able = true;
+    }
+
+    private void Attack３Check()
+    {
+        attack3able = true;
     }
 
     #endregion
@@ -355,7 +408,13 @@ public class Player : MonoBehaviour, IDamageable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        collision.gameObject.GetComponent<IDamageable>();
+        //패링
+        IDamageable coll = collision.gameObject.GetComponent<IDamageable>();
+        if (coll != null)
+        {
+            coll.TakeDamage(damage);
+        }
+        
         //공격 받는 함수
     }
 
