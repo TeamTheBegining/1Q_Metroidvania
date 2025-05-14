@@ -2,6 +2,9 @@
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+    private int spawnSceneBuildIndex = 0;
+    private Vector2 respawnPosition = Vector2.zero;
+
     private int coin;
 
     /// <summary>
@@ -64,5 +67,16 @@ public class PlayerManager : Singleton<PlayerManager>
     public void UnlockPlayerSkill(PlayerSkillType type)
     {
         isSkillUnlock[(int)type] = true;
+    }
+
+    /// <summary>
+    /// 스폰 설정 함수
+    /// </summary>
+    /// <param name="buildIndex">스폰할 씬 빌드 인덱스</param>
+    /// <param name="spawnVector">스폰할 위치 벡터</param>
+    public void SetSpawn(int buildIndex, Vector2 spawnVector)
+    {
+        spawnSceneBuildIndex = buildIndex;
+        respawnPosition = spawnVector;  
     }
 }
