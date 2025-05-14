@@ -209,7 +209,7 @@ public class PlayerInput : MonoBehaviour
 
     private void DashLeft_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if (obj.performed) //Debug.Log("mtap");
+        if (obj.performed) Debug.Log("mtap");
 
         isDashLeft = true;
         //print("왼쪽 대쉬 시작");
@@ -223,7 +223,7 @@ public class PlayerInput : MonoBehaviour
 
     private void DashRight_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if (obj.performed) //Debug.Log("mtap");
+        if (obj.performed) Debug.Log("mtap");
 
         isDashRight = true;
         //print("대쉬 시작");

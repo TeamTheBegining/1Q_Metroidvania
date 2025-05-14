@@ -71,7 +71,7 @@ public class AnimatorSetup : MonoBehaviour
         var blockToIdle = blockState.AddTransition(idleState);
         blockToIdle.hasExitTime = true;
 
-        //Debug.Log("Enemy Animator Controller 설정 완료!");
+        Debug.Log("Enemy Animator Controller 설정 완료!");
     }
 #endif
 }

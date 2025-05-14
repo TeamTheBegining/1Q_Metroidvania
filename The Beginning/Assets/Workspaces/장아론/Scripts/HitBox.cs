@@ -17,7 +17,7 @@ public class EnemyHitbox : MonoBehaviour
 
         if (enemyController == null)
         {
-            //Debug.LogError("EnemyHitbox 스크립트는 부모 오브젝트에 B_GirlController(또는 상속받은 클래스)가 필요합니다.", this);
+            Debug.LogError("EnemyHitbox 스크립트는 부모 오브젝트에 B_GirlController(또는 상속받은 클래스)가 필요합니다.", this);
             // 컨트롤러를 찾지 못하면 스크립트 비활성화 (에러 방지)
             enabled = false;
             return; // 더 이상 진행하지 않음
@@ -28,7 +28,7 @@ public class EnemyHitbox : MonoBehaviour
         if (col != null && !col.isTrigger)
         {
             // Warning을 띄워 설정 오류를 알려줌
-            //Debug.LogWarning(gameObject.name + "의 콜라이더가 Trigger로 설정되어 있지 않습니다. OnTriggerEnter를 사용하려면 Trigger여야 합니다.", this);
+            Debug.LogWarning(gameObject.name + "의 콜라이더가 Trigger로 설정되어 있지 않습니다. OnTriggerEnter를 사용하려면 Trigger여야 합니다.", this);
         }
 
         // 중요: 이 히트박스 게임오브젝트 자체는 처음에 비활성화 상태여야 합니다.

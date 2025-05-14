@@ -36,7 +36,7 @@ public class CommonEnemyController : MonoBehaviour
     {
         // Start보다 먼저 호출될 수 있도록 Awake 사용 (참조 설정 등에 유리)
         animator = GetComponent<Animator>();
-        if (animator == null) //Debug.LogError("Animator component not found on " + gameObject.name);
+        if (animator == null) Debug.LogError("Animator component not found on " + gameObject.name);
 
         currentHealth = maxHealth; // 체력 초기화
     }
@@ -48,7 +48,7 @@ public class CommonEnemyController : MonoBehaviour
         player = GameObject.Find(playerObjectName);
         if (player == null)
         {
-            //Debug.LogError("Player GameObject with name '" + playerObjectName + "' not found! Check name/scene.");
+            Debug.LogError("Player GameObject with name '" + playerObjectName + "' not found! Check name/scene.");
         }
     }
 
@@ -68,7 +68,7 @@ public class CommonEnemyController : MonoBehaviour
         // 공격 애니메이션 중이면 AI 판단 및 이동 로직 스킵
         if (isPerformingAttackAnimation)
         {
-            // //Debug.Log("공격 애니메이션 중. AI 판단 스킵.");
+            // Debug.Log("공격 애니메이션 중. AI 판단 스킵.");
             return;
         }
 
@@ -82,7 +82,7 @@ public class CommonEnemyController : MonoBehaviour
                 // 플레이어가 감지 범위에 들어오면 추적
                 if (distanceToPlayer <= detectionRange)
                 {
-                    //Debug.Log("Idle -> Chase (Distance: " + distanceToPlayer.ToString("F2") + ")");
+                    Debug.Log("Idle -> Chase (Distance: " + distanceToPlayer.ToString("F2") + ")");
                     SetState(EnemyState.Chase);
                 }
                 break;
@@ -91,13 +91,13 @@ public class CommonEnemyController : MonoBehaviour
                 // 플레이어가 공격 범위에 들어오면 공격
                 if (distanceToPlayer <= attackRange)
                 {
-                    //Debug.Log("Chase -> Attack (Distance: " + distanceToPlayer.ToString("F2") + ")");
+                    Debug.Log("Chase -> Attack (Distance: " + distanceToPlayer.ToString("F2") + ")");
                     SetState(EnemyState.Attack);
                 }
                 // 플레이어가 감지 범위를 벗어나면 Idle
                 else if (distanceToPlayer > detectionRange)
                 {
-                    //Debug.Log("Chase -> Idle (Distance: " + distanceToPlayer.ToString("F2") + ")");
+                    Debug.Log("Chase -> Idle (Distance: " + distanceToPlayer.ToString("F2") + ")");
                     SetState(EnemyState.Idle);
                 }
                 // 감지 범위 내, 공격 범위 밖 -> 계속 추적
@@ -111,7 +111,7 @@ public class CommonEnemyController : MonoBehaviour
                 // 플레이어가 공격 범위를 벗어나면 추적
                 if (distanceToPlayer > attackRange)
                 {
-                    //Debug.Log("Attack -> Chase (Distance: " + distanceToPlayer.ToString("F2") + ")");
+                    Debug.Log("Attack -> Chase (Distance: " + distanceToPlayer.ToString("F2") + ")");
                     SetState(EnemyState.Chase);
                 }
                 // 플레이어 공격 범위 내
@@ -120,13 +120,13 @@ public class CommonEnemyController : MonoBehaviour
                     // 간격 유지
                     if (distanceToPlayer < attackRange - maintainBuffer)
                     {
-                        //Debug.Log("Too close, retreating.");
+                        Debug.Log("Too close, retreating.");
                         MoveAwayFromPlayer();
                     }
                     // 적절한 공격 거리 -> 공격 로직 수행 (PerformAttackLogic은 파생 클래스에서 구현)
                     else
                     {
-                        // //Debug.Log("Attempting attack logic.");
+                        // Debug.Log("Attempting attack logic.");
                         PerformAttackLogic(); // <-- 파생 클래스에서 오버라이드하여 공격 패턴 구현
                     }
                 }
@@ -144,7 +144,7 @@ public class CommonEnemyController : MonoBehaviour
     // AI 상태를 설정하고 애니메이션 및 변수 업데이트
     protected virtual void SetState(EnemyState newState)
     {
-        //Debug.Log(">>> SetState: " + currentState.ToString() + " -> " + newState.ToString());
+        Debug.Log(">>> SetState: " + currentState.ToString() + " -> " + newState.ToString());
         if (currentState == newState) return;
 
         // 이전 상태 종료 로직 (필요시 파생 클래스에서 오버라이드)
@@ -230,7 +230,7 @@ public class CommonEnemyController : MonoBehaviour
         // 기본 클래스에서는 특별한 공격 로직 없음.
         // 파생 클래스에서 이 메소드를 오버라이드하여
         // 쿨타임 체크, 공격 애니메이션 트리거 발동, isPerformingAttackAnimation = true 설정 등을 구현
-        //Debug.Log("Base PerformAttackLogic called. Override this in derived class.");
+        Debug.Log("Base PerformAttackLogic called. Override this in derived class.");
     }
 
     // 플레이어 방향으로 캐릭터 좌우 반전
@@ -277,7 +277,7 @@ public class CommonEnemyController : MonoBehaviour
     // Animator의 공격 애니메이션 클립 끝에 이 이벤트를 추가해야 합니다.
     protected virtual void OnAttackAnimationEnd()
     {
-        //Debug.Log("공격 애니메이션 종료 이벤트 발생 (Base Class).");
+        Debug.Log("공격 애니메이션 종료 이벤트 발생 (Base Class).");
         isPerformingAttackAnimation = false; // 공격 애니메이션 종료 시 위치 고정 플래그 끔
         // Note: 애니메이션 종료 후 AI 상태는 다음 Update 프레임에서 자동으로 판단됩니다.
     }
@@ -288,7 +288,7 @@ public class CommonEnemyController : MonoBehaviour
         if (isDead) return;
 
         currentHealth -= damageAmount;
-        //Debug.Log(gameObject.name + " took " + damageAmount + " damage. Current Health: " + currentHealth);
+        Debug.Log(gameObject.name + " took " + damageAmount + " damage. Current Health: " + currentHealth);
 
         if (currentHealth <= 0)
         {

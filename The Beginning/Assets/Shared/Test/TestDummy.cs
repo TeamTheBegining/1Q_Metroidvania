@@ -14,7 +14,7 @@ public class TestDummy : MonoBehaviour, IDamageable
             if(currentHp <= 0f)
             {
                 // 사망
-                //Debug.Log($"Dummy dead");
+                Debug.Log($"Dummy dead");
                  
                 isDead = true;
             }
@@ -41,7 +41,7 @@ public class TestDummy : MonoBehaviour, IDamageable
     {
         if (IsDead) return;
 
-        //Debug.Log($"Dummy take damage {damage}");
+        Debug.Log($"Dummy take damage {damage}");
         CurrentHp -= damage;
     }
 
