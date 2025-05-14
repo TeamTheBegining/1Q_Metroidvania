@@ -45,7 +45,7 @@ public class CommonEnemyController : MonoBehaviour
     {
         SetState(EnemyState.Idle); // 초기 상태 설정
 
-        player = GameObject.Find(playerObjectName);
+        player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
             //Debug.LogError("Player GameObject with name '" + playerObjectName + "' not found! Check name/scene.");
