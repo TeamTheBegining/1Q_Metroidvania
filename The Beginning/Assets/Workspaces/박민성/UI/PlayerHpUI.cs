@@ -13,7 +13,7 @@ public class PlayerHpUI : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
-        hpSlider.value = player.MaxHp;
+        hpSlider.value = player.MaxHp; // 
         mpSlider.value = player.CurrentMp;
     }
     void LateUpdate()
