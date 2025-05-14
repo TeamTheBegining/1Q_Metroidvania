@@ -3,7 +3,7 @@ using System.Collections;
 
 // B_Girl 캐릭터의 고유 동작 및 패턴을 관리하는 컨트롤러 (Derived Class)
 // CommonEnemyController를 상속받습니다.
-public class B_GirlController : CommonEnemyController
+public class B_GirlController : CommonEnemyController , IDamageable
 {
     // B_Girl 캐릭터 고유의 애니메이션 파라미터 이름 (Inspector에 설정된 이름과 일치해야 함)
     // CommonEnemyController의 공통 파라미터 이름과 다를 수 있습니다.
@@ -41,6 +41,17 @@ public class B_GirlController : CommonEnemyController
     private float nextAttackTime = 0f; // 다음 공격이 가능해지는 시간
     // ------------------------------------------
 
+    //Damageable 인터페이스 구현  
+    private float maxhp = 30f; // 최대 체력   
+    [SerializeField]private float currentHp = 30f; // 현재 체력   
+    public float CurrentHp { get=>currentHp; set=>currentHp = value; }
+    public float MaxHp { get => maxhp; set=> maxhp = value; }
+    public bool IsDead { get => CurrentHp <=0; }
+    public void TakeDamage(float damage)
+    {
+        if(!IsDead)
+            currentHp -= damage; // 체력 감소   
+    }
 
     protected override void Start()
     {
@@ -261,4 +272,5 @@ public class B_GirlController : CommonEnemyController
 
     // TODO: Attack1.에서 플레이어가 벗어나면 Attack2로 공격하게 하는 로직 구현 (요구사항 중 하나)
     // 이 로직은 PerformAttackLogic 이나 Update, SetState 등을 오버라이드하여 구현해야 합니다.
+
 }

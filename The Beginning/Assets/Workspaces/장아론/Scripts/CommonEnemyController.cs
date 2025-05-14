@@ -9,7 +9,7 @@ public class CommonEnemyController : MonoBehaviour
     public int maxHealth = 100;
     protected int currentHealth;
     public float moveSpeed = 3f; // 걷기/물러나기 속도
-    public float attackDamage = 10f; // 기본 공격 데미지 (실제 적용은 파생 클래스나 애니메이션 이벤트에서)
+    public float attackDamage = 2f; // 기본 공격 데미지 (실제 적용은 파생 클래스나 애니메이션 이벤트에서)
 
     // ===== AI 파라미터 =====
     [Header("AI Parameters")]
