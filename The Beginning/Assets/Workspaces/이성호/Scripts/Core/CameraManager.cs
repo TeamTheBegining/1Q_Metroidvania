@@ -15,7 +15,7 @@ public class CameraManager : Singleton<CameraManager>
         }
         else
         {
-            Debug.LogWarning($"Invaild GameObject {objectName}");
+            //Debug.LogWarning($"Invaild GameObject {objectName}");
         }
     }
 }

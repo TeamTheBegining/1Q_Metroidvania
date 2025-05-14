@@ -39,7 +39,7 @@ public class PoolManager : Singleton<PoolManager>
     {
         if(poolDictionary.ContainsKey(key))
         {
-            Debug.LogWarning($"Pool with key '{key}' already registered.");
+            //Debug.LogWarning($"Pool with key '{key}' already registered.");
             return;
         }
 
@@ -63,7 +63,7 @@ public class PoolManager : Singleton<PoolManager>
     {
         if (!poolDictionary.TryGetValue(key, out var data))
         {
-            Debug.LogError($"Pool with key '{key}' not found.");
+            //Debug.LogError($"Pool with key '{key}' not found.");
             return null;
         }
 
@@ -96,7 +96,7 @@ public class PoolManager : Singleton<PoolManager>
     {
         if (!poolDictionary.TryGetValue(key, out var data))
         {
-            Debug.LogError($"Trying to return object to nonexistent pool '{key}'.");
+            //Debug.LogError($"Trying to return object to nonexistent pool '{key}'.");
             Destroy(obj);
             return;
         }
@@ -114,13 +114,13 @@ public class PoolManager : Singleton<PoolManager>
     {
         if (!poolDictionary.TryGetValue(key, out var data))
         {
-            Debug.LogError($"Trying to expand pool to nonexistent pool '{key}'.");
+            //Debug.LogError($"Trying to expand pool to nonexistent pool '{key}'.");
             return;
         }
 
         int prevCapacity = data.capacity;
         data.capacity *= 2;
-        Debug.LogWarning($"{gameObject.name} 풀 매니저 크기 확장 | {prevCapacity} -> {data.capacity}");
+        //Debug.LogWarning($"{gameObject.name} 풀 매니저 크기 확장 | {prevCapacity} -> {data.capacity}");
 
         // 새로운 풀 등록
         data.objectList = new List<GameObject>(data.capacity);

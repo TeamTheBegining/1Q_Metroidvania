@@ -67,12 +67,12 @@ public class B_GirlController : CommonEnemyController , IDamageable
             }
             else
             {
-                Debug.LogWarning("Attack 1 Hitbox Object에 BoxCollider2D 컴포넌트가 없습니다.", this);
+                //Debug.LogWarning("Attack 1 Hitbox Object에 BoxCollider2D 컴포넌트가 없습니다.", this);
             }
         }
         else
         {
-            Debug.LogWarning("Attack 1 Hitbox Object가 B_GirlController 인스펙터에 할당되지 않았습니다.", this);
+            //Debug.LogWarning("Attack 1 Hitbox Object가 B_GirlController 인스펙터에 할당되지 않았습니다.", this);
         }
 
 
@@ -85,12 +85,12 @@ public class B_GirlController : CommonEnemyController , IDamageable
             }
             else
             {
-                Debug.LogWarning("Attack 2 Hitbox Object에 BoxCollider2D 컴포넌트가 없습니다.", this);
+                //Debug.LogWarning("Attack 2 Hitbox Object에 BoxCollider2D 컴포넌트가 없습니다.", this);
             }
         }
         else
         {
-            Debug.LogWarning("Attack 2 Hitbox Object가 B_GirlController 인스펙터에 할당되지 않았습니다.", this);
+            //Debug.LogWarning("Attack 2 Hitbox Object가 B_GirlController 인스펙터에 할당되지 않았습니다.", this);
         }
         // ----------------------------------------------------------
 
@@ -157,27 +157,27 @@ public class B_GirlController : CommonEnemyController , IDamageable
         // lastAttackTime 변수와 cooldownEndTime 계산 로직 삭제
         if (Time.time < nextAttackTime)
         {
-            // Debug.Log("B_Girl 공격 쿨타임 대기 중. 남은 시간: " + (nextAttackTime - Time.time).ToString("F2")); // 대기 중 디버그 (선택 사항)
+            // //Debug.Log("B_Girl 공격 쿨타임 대기 중. 남은 시간: " + (nextAttackTime - Time.time).ToString("F2")); // 대기 중 디버그 (선택 사항)
             return; // 다음 공격 가능 시간 전이면 대기
         }
         // --- 쿨타임 체크 로직 수정 끝 ---
 
 
         // 쿨타임이 지났다면 공격 실행
-        Debug.Log("B_Girl 공격 가능! 다음 공격: B_Attack" + nextAttackIndex + " 발동 시도."); // 로그 수정
+        //Debug.Log("B_Girl 공격 가능! 다음 공격: B_Attack" + nextAttackIndex + " 발동 시도."); // 로그 수정
 
         isPerformingAttackAnimation = true; // <-- 공격 애니메이션 시작 전 위치 고정 플래그 켬 (Base Class 변수 사용)
 
         if (nextAttackIndex == 1)
         {
-            Debug.Log("--> B_Attack1 발동!");
+            //Debug.Log("--> B_Attack1 발동!");
             PlayAttack1Anim(); // B_Attack1 애니메이션 발동
             // nextAttackTime 설정은 OnAttackAnimationEnd에서 수행
             nextAttackIndex = 2; // 다음 공격은 Attack 2
         }
         else // nextAttackIndex == 2
         {
-            Debug.Log("--> B_Attack2 발동!");
+            //Debug.Log("--> B_Attack2 발동!");
             PlayAttack2Anim(); // B_Attack2 애니메이션 발동
             // nextAttackTime 설정은 OnAttackAnimationEnd에서 수행
             nextAttackIndex = 1; // 다음 공격은 Attack 1
@@ -191,7 +191,7 @@ public class B_GirlController : CommonEnemyController , IDamageable
     {
         // 기본 클래스의 로직 호출 (isPerformingAttackAnimation = false 설정)
         base.OnAttackAnimationEnd();
-        Debug.Log("B_Girl 공격 애니메이션 종료! 다음 공격 가능 시간 계산."); // 로그 추가
+        //Debug.Log("B_Girl 공격 애니메이션 종료! 다음 공격 가능 시간 계산."); // 로그 추가
 
         // 애니메이션이 끝났을 때, 다음 공격이 가능해지는 시간을 계산하여 설정
         // 방금 끝난 애니메이션의 인덱스를 알아야 함 (nextAttackIndex를 활용)
@@ -199,12 +199,12 @@ public class B_GirlController : CommonEnemyController , IDamageable
         if (nextAttackIndex == 2) // Attack 1이 방금 끝남
         {
             nextAttackTime = Time.time + attack1Cooldown; // Attack 1 쿨타임 적용
-            Debug.Log("--> Attack 1 종료. 다음 공격은 " + attack1Cooldown.ToString("F2") + "초 후 (" + nextAttackTime.ToString("F2") + "에 가능).");
+            //Debug.Log("--> Attack 1 종료. 다음 공격은 " + attack1Cooldown.ToString("F2") + "초 후 (" + nextAttackTime.ToString("F2") + "에 가능).");
         }
         else // nextAttackIndex == 1 (Attack 2가 방금 끝남)
         {
             nextAttackTime = Time.time + attack2Cooldown; // Attack 2 쿨타임 적용
-            Debug.Log("--> Attack 2 종료. 다음 공격은 " + attack2Cooldown.ToString("F2") + "초 후 (" + nextAttackTime.ToString("F2") + "에 가능).");
+            //Debug.Log("--> Attack 2 종료. 다음 공격은 " + attack2Cooldown.ToString("F2") + "초 후 (" + nextAttackTime.ToString("F2") + "에 가능).");
         }
 
         // TODO: 애니메이션 종료 후 바로 Chase 상태로 전환되어야 하는 경우 처리
@@ -219,11 +219,11 @@ public class B_GirlController : CommonEnemyController , IDamageable
         if (attack1HitboxCollider != null)
         {
             attack1HitboxCollider.enabled = true; // 콜라이더 활성화
-            Debug.Log(attack1HitboxObject.name + " Collider 활성화됨"); // 디버그 로그 수정
+            //Debug.Log(attack1HitboxObject.name + " Collider 활성화됨"); // 디버그 로그 수정
         }
         else
         {
-            Debug.LogWarning("Attack 1 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
+            //Debug.LogWarning("Attack 1 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
         }
     }
 
@@ -232,11 +232,11 @@ public class B_GirlController : CommonEnemyController , IDamageable
         if (attack1HitboxCollider != null)
         {
             attack1HitboxCollider.enabled = false; // 콜라이더 비활성화
-            Debug.Log(attack1HitboxObject.name + " Collider 비활성화됨"); // 디버그 로그 수정
+            //Debug.Log(attack1HitboxObject.name + " Collider 비활성화됨"); // 디버그 로그 수정
         }
         else
         {
-            Debug.LogWarning("Attack 1 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
+            //Debug.LogWarning("Attack 1 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
         }
     }
     // ----------------------------------------------------------
@@ -247,11 +247,11 @@ public class B_GirlController : CommonEnemyController , IDamageable
         if (attack2HitboxCollider != null)
         {
             attack2HitboxCollider.enabled = true; // 콜라이더 활성화
-            Debug.Log(attack2HitboxObject.name + " Collider 활성화됨"); // 디버그 로그 수정
+            //Debug.Log(attack2HitboxObject.name + " Collider 활성화됨"); // 디버그 로그 수정
         }
         else
         {
-            Debug.LogWarning("Attack 2 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
+            //Debug.LogWarning("Attack 2 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
         }
     }
 
@@ -260,11 +260,11 @@ public class B_GirlController : CommonEnemyController , IDamageable
         if (attack2HitboxCollider != null)
         {
             attack2HitboxCollider.enabled = false; // 콜라이더 비활성화
-            Debug.Log(attack2HitboxObject.name + " Collider 비활성화됨"); // 디버그 로그 수정
+            //Debug.Log(attack2HitboxObject.name + " Collider 비활성화됨"); // 디버그 로그 수정
         }
         else
         {
-            Debug.LogWarning("Attack 2 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
+            //Debug.LogWarning("Attack 2 Hitbox Collider가 할당되지 않았거나 컴포넌트를 찾을 수 없습니다.", this);
         }
     }
     // ----------------------------------------------------------

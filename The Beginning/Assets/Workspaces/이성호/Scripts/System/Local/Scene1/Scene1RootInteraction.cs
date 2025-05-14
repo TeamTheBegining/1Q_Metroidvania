@@ -56,7 +56,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
 
     private void Click_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        Debug.Log("click");
+        //Debug.Log("click");
         OnClick();
     }
 

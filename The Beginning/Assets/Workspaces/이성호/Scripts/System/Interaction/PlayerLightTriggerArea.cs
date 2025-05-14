@@ -35,7 +35,7 @@ public class PlayerLightTriggerArea : MonoBehaviour
 
         while (timeElapsed < targetDuration)
         {
-            Debug.Log($"{timeElapsed} triggered");
+            //Debug.Log($"{timeElapsed} triggered");
             timeElapsed += Time.deltaTime;
             LightManager.Instance.PlayerSpotlihgt.SetSpotlight(targetRadius * (timeElapsed / targetDuration));
             yield return null;

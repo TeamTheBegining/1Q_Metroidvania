@@ -9,7 +9,7 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth; // 게임 시작 시 체력 최대치로 설정
-        Debug.Log("플레이어 체력 초기화: " + currentHealth);
+        //Debug.Log("플레이어 체력 초기화: " + currentHealth);
     }
 
     // 외부(예: 에너미 히트박스 스크립트)에서 호출하여 데미지를 주는 메소드
@@ -20,7 +20,7 @@ public class PlayerHealth : MonoBehaviour
 
         // 받은 데미지만큼 체력 감소
         currentHealth -= amount;
-        Debug.Log("플레이어가 " + amount + "만큼 데미지를 받았습니다. 현재 체력: " + currentHealth);
+        //Debug.Log("플레이어가 " + amount + "만큼 데미지를 받았습니다. 현재 체력: " + currentHealth);
 
         // 체력이 0 이하가 되면 사망 처리
         if (currentHealth <= 0)
@@ -34,7 +34,7 @@ public class PlayerHealth : MonoBehaviour
     // 플레이어가 사망했을 때 호출될 메소드
     void Die()
     {
-        Debug.Log("플레이어 사망!");
+        //Debug.Log("플레이어 사망!");
         // TODO: 플레이어 사망 애니메이션 재생, 게임 오버 처리, 씬 재시작 등의 로직 구현
         gameObject.SetActive(false); // 간단한 예시: 플레이어 게임오브젝트 비활성화
     }
