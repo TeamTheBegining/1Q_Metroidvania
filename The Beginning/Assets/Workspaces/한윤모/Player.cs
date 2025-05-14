@@ -83,6 +83,8 @@ public class Player : MonoBehaviour, IDamageable
     public PlayerInput Input { get => input; }
     public float CurrentHp { get => currentHp; set => currentHp = value; }
     public float MaxHp { get => maxHp; set => maxHp = value; }
+    public float CurrentMp { get => currentMp; set => currentMp = value; }
+    public float MaxMp { get => maxMp; set => maxMp = value; }
     public bool IsDead => currentHp <= 0;
 
     private void Awake()
