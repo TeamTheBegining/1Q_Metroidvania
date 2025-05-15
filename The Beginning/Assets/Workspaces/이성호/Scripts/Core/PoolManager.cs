@@ -93,10 +93,35 @@ public class PoolManager : Singleton<PoolManager>
         return obj;
     }
 
+    public T Pop<T>(string key, Vector3? position = null, Quaternion? rotation = null) where T : Component
+    {
+        var obj = Pop(key, position, rotation);
+        if (obj == null)
+        {
+            Debug.LogError($"Pop<{typeof(T).Name}> failed: object is null.");
+            return null;
+        }
+
+        if (obj.TryGetComponent<T>(out var component))
+        {
+            return component;
+        }
+
+        Debug.LogError($"Pop<{typeof(T).Name}> failed: component not found on object.");
+        return null;
+    }
+
     public GameObject Pop(PoolType type, Vector3? position = null, Quaternion? rotataion = null)
     {
         return Pop(type.ToString(), position, rotataion);
     }
+
+    public T Pop<T>(PoolType type, Vector3? position = null, Quaternion? rotation = null) where T : Component
+    {
+        return Pop<T>(type.ToString(), position, rotation);
+    }
+
+
 
     private void ReturnToPool(string key, GameObject obj)
     {

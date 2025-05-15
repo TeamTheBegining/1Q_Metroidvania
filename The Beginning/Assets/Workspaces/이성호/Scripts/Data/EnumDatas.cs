@@ -8,6 +8,7 @@ using UnityEngine;
 public enum PoolType
 {
     Hit1 = 0,
+    PlayerSlideAfterImage,
     PoolTypeCount
 }
 

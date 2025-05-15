@@ -133,6 +133,7 @@ public class GameManager : Singleton<GameManager>
     private void LoadPoolObjects()
     {
         poolPrefabs[0] = Resources.Load<GameObject>("Prefabs/Pool/Hit1");
+        poolPrefabs[1] = Resources.Load<GameObject>("Prefabs/Pool/PlayerSlideAfterImage");
     }
 
 #if UNITY_EDITOR
