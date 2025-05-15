@@ -14,7 +14,7 @@ GameObject:
   m_Layer: 0
   m_Name: InterfactionObject
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -68,7 +68,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 2.25
+  m_Radius: 1
 --- !u!114 &4912730693040153440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,6 +81,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43856d949c7c8bd41a5e015e0af2a39f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetRadius: 200
+  textData: {fileID: 11400000, guid: a624a423361bea344bbb6929780a51ab, type: 2}
+  targetRadius: 0
   targetIntensity: 1
   targetDuration: 4
+  DisableDelay: 3

@@ -133,13 +133,13 @@ public class GameManager : Singleton<GameManager>
     private void PageDown_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         GameSceneManager.Instance.ChangeScene(1, true);
-        LightManager.Instance.SetGlobalLight(Color.white);
+        LightManager.Instance.SetPlayerLightValue(200f);
     }
 
     private void PageUp_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         GameSceneManager.Instance.ChangeScene(nextSceneIndex);
-        LightManager.Instance.SetGlobalLight(Color.white);
+        LightManager.Instance.SetPlayerLightValue(200f);
     }
 
 

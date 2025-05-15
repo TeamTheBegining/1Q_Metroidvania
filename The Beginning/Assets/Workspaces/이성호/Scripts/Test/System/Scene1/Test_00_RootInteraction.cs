@@ -9,7 +9,6 @@ public class Test_00_RootInteraction : TestBase
 
     private void Start()
     {
-        LightManager.Instance.SetGlobalLight(Color.black);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

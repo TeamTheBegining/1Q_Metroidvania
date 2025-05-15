@@ -8,7 +8,7 @@ public class Test_04_LightTriggerArea : TestBase
 
     private void Start()
     {
-        LightManager.Instance.SetGlobalLight(Color.black);
+        LightManager.Instance.SetPlayerLightValue(20f);
     }
 #endif
 }

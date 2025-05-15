@@ -10,9 +10,9 @@ public class CameraRegistrar : MonoBehaviour
         CameraManager.Instance.Register(type, GetComponent<CinemachineCamera>());
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        if (CameraManager.Instance != null)
+        if (Application.isPlaying && CameraManager.Instance != null)
         {
             CameraManager.Instance.Unregister(type);
         }

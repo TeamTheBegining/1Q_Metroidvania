@@ -9,9 +9,6 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     [Tooltip("트리거 되었을 때 바뀔 반지름 값")]
     public float targetRadius;
 
-    [Tooltip("트리거 되었을 때 바뀔 빛 강도")]
-    public float targetIntensity;
-
     [Tooltip("트리거 되었을 때 빛의 크기가 변하는 시간")]
     public float targetDuration;
 
@@ -31,29 +28,6 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
         actions.UI.Click.performed += Click_performed;        
     }
 
-    private IEnumerator SpreadSpot()
-    {
-        GameManager.Instance.MiddleMessagePanel.FadeOutClose();
-
-        yield return new WaitForSeconds(3f); // 빛 퍼짐 딜레이
-
-        float timeElapsed = 0f;
-
-        while (timeElapsed < targetDuration)
-        {
-            timeElapsed += Time.deltaTime;
-            LightManager.Instance.PlayerSpotlihgt.SetSpotlight(targetRadius * (timeElapsed / targetDuration));
-            yield return null;
-        }
-
-        LightManager.Instance.PlayerSpotlihgt.SetSpotlight(0f, 0f);
-        LightManager.Instance.SetGlobalLight(Color.white);
-
-        yield return new WaitForSeconds(1f);
-
-        StartCoroutine(DisableProecess());
-    }
-
     private void Click_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         Debug.Log("click");
@@ -65,7 +39,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
         GameManager.Instance.MiddleMessagePanel.AddText(" ;");
         actions.UI.Click.performed -= Click_performed;
         actions.UI.Disable();
-        StartCoroutine(SpreadSpot());
+        LightManager.Instance.SpreadPlayerLight(targetDuration, targetRadius, 1f);
     }
 
     private IEnumerator DisableProecess()

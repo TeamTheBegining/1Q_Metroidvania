@@ -5,11 +5,11 @@ using UnityEngine.InputSystem;
 public class Test_03_PlayerSpotLight : TestBase
 {
 #if UNITY_EDITOR
-    public PlayerSpotLight playerSpotLight;
+    public PlayerShaderLight playerSpotLight;
 
     private void Start()
     {
-        LightManager.Instance.SetGlobalLight(Color.black);
+        LightManager.Instance.SetPlayerLightValue(0f);
     }
 
     protected override void OnTest1(InputAction.CallbackContext context)
@@ -19,12 +19,11 @@ public class Test_03_PlayerSpotLight : TestBase
 
     protected override void OnTest2(InputAction.CallbackContext context)
     {
-        playerSpotLight.SetSpotlight(1f);
+        playerSpotLight.SetRange(1f);
     }
 
     protected override void OnTest3(InputAction.CallbackContext context)
     {
-        LightManager.Instance.SetGlobalLight(Color.white);
     }
 
     private IEnumerator SpreadSpot()
@@ -36,7 +35,7 @@ public class Test_03_PlayerSpotLight : TestBase
         while(timeElapsed < duration)
         {
             timeElapsed += Time.deltaTime;
-            playerSpotLight.SetSpotlight(targetRadius * (timeElapsed / duration));
+            playerSpotLight.SetRange(targetRadius * (timeElapsed / duration));
             yield return null;
         }    
     }
