@@ -1,9 +1,11 @@
 using System;
+using TMPro;
 using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Windows;
 using static PlayerAnimation;
+using static Unity.Burst.Intrinsics.X86.Sse4_2;
 
 //해당 스크립트가 없다면 추가
 [RequireComponent(typeof(PlayerInput))]
@@ -20,7 +22,7 @@ public class Player : MonoBehaviour, IDamageable
 
 
     [SerializeField] float jumpPower = 5f;
-    [SerializeField] float ljumpPower = 2f;
+    [SerializeField] float ljumpPower = 4f;
     [SerializeField] float groundCheckRadius = 0.2f;
 
 
@@ -35,10 +37,19 @@ public class Player : MonoBehaviour, IDamageable
 
 
     float jumpTimer = 0f;
-    float parryTimer = 0f;
+    float parryDelayTimer = 0f;
+    float slidingTimer = 0f;
+    float slidingDelayTimer = 0f;
+    float attackDelayTimer = 0f;
+    float climbDir = 0f;
+
     [SerializeField] float jumpDisableGroundCheckTime = 0.1f; // 점프 후 이 시간만큼 땅 체크 무시
     [SerializeField] float parryDelayTime = 0.5f;
+    [SerializeField] float slidingTime = 0.1f;
+    [SerializeField] float slidingDelayTime = 1f;
+    [SerializeField] float attackDelayTime = 1f;
 
+    int sidx = 0;//슬라이딩 인덱스
     //private float ladderInputHoldTime = 0;
     //[SerializeField] private float ladderEnterDelay = 0.2f;
 
@@ -48,16 +59,25 @@ public class Player : MonoBehaviour, IDamageable
     private Transform groundCheckTransform;
     private LayerMask groundLayer;
     private SpriteRenderer spriternderer;
-    private Collider2D attackcoll;
-    private Collider2D attackcoll2;
-    private Collider2D attackcoll3;
+    private Collider2D attackColl;
+    private Collider2D attackColl2;
+    private Collider2D attackColl3;
+    private Collider2D slidingColl;
+    private Collider2D playerColl;
     bool isGround = false;
     bool isparrying = false;
+    bool issliding = false;
     bool isparrysuccess = false; 
     bool isLadder = false;
     bool ishit = false;
+    bool isattack = false;
     bool attack2able = false;
     bool attack3able = false;
+    bool isWallClimbable = false;
+
+    //벽타기 체크 변수
+    private WallSensor m_wallSensor1;
+    private WallSensor m_wallSensor2;
 
     public float Damage
     {
@@ -90,6 +110,7 @@ public class Player : MonoBehaviour, IDamageable
         ParryKnockback,         //패링 - 밀림
         Ladder,
         Sliding,
+        Climbing,
         Dash,
         Hit,
         Dead,
@@ -99,6 +120,7 @@ public class Player : MonoBehaviour, IDamageable
     PlayerFlipState curflip= PlayerFlipState.Right;//현재 플립 상태
     PlayerFlipState preflip= PlayerFlipState.Right;//이전 플립 상태
     private bool isDead;
+    [SerializeField]private float spawnDelay = 0.2f;
 
     enum PlayerFlipState
     {
@@ -125,7 +147,6 @@ public class Player : MonoBehaviour, IDamageable
     public float MaxMp { get => maxMp; set => maxMp = value; }
     public bool IsDead => isDead;
     public Action OnDead { get; set; }
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -133,9 +154,13 @@ public class Player : MonoBehaviour, IDamageable
         animatorCtrl = GetComponent<PlayerAnimation>();
         spriternderer = gameObject.GetComponent<SpriteRenderer>();
         groundCheckTransform = transform.GetChild(0).transform;
-        attackcoll = transform.GetChild(1).GetComponent<Collider2D>();
-        attackcoll2 = transform.GetChild(2).GetComponent<Collider2D>();
-        attackcoll3 = transform.GetChild(3).GetComponent<Collider2D>();
+        attackColl = transform.GetChild(1).GetComponent<Collider2D>();
+        attackColl2 = transform.GetChild(2).GetComponent<Collider2D>();
+        attackColl3 = transform.GetChild(3).GetComponent<Collider2D>();
+        slidingColl = transform.GetChild(4).GetComponent<Collider2D>();
+        m_wallSensor1 = transform.GetChild(5).GetComponent<WallSensor>();
+        m_wallSensor2 = transform.GetChild(6).GetComponent<WallSensor>();
+        playerColl = transform.GetComponent<Collider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
     }
@@ -147,8 +172,9 @@ public class Player : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
+        wallCheck();
         DeadCheck();
-        ParryingDelayCheck();
+        DelayCheck();
         FlipCheck();
         EnergyOverCheck();
         isGround = CheckIsGround();
@@ -205,6 +231,9 @@ public class Player : MonoBehaviour, IDamageable
             case PlayerState.Sliding:
                 PlayerSlidingUpdate();
                 break;
+            case PlayerState.Climbing:
+                PlayerClimbingUpdate();
+                break;
             case PlayerState.Dash:
                 //PlayerDash();
                 break;
@@ -234,14 +263,28 @@ public class Player : MonoBehaviour, IDamageable
         currentMp = currentMp > MaxMp ? MaxHp : currentMp;
     }
 
-    private void ParryingDelayCheck()
+    private void DelayCheck()
     {
         if (isparrying)
-            parryTimer += Time.deltaTime;
-        if (parryTimer > parryDelayTime)
+            parryDelayTimer += Time.deltaTime;
+        if (parryDelayTimer > parryDelayTime)
         {
             isparrying = false;
-            parryTimer = 0;
+            parryDelayTimer = 0;
+        }
+        if (issliding)
+            slidingDelayTimer += Time.deltaTime;
+        if (slidingDelayTimer > slidingDelayTime)
+        {
+            issliding = false;
+            slidingDelayTimer = 0;
+        }
+        if (isattack)
+            attackDelayTimer += Time.deltaTime;
+        if (attackDelayTimer > attackDelayTime)
+        {
+            isattack = false;
+            attackDelayTimer = 0;
         }
     }
 
@@ -253,6 +296,16 @@ public class Player : MonoBehaviour, IDamageable
             preflip = curflip;
         }
     }
+    void wallCheck()
+    {
+        if (m_wallSensor1.State() && m_wallSensor2.State())
+        {
+            isWallClimbable = true;
+            climbDir = (float)curflip;
+        }
+        else
+            isWallClimbable = false;
+    }
 
 
     private bool CheckIsGround()
@@ -263,6 +316,7 @@ public class Player : MonoBehaviour, IDamageable
     #region Update 모음
     private void PlayerIdleUpdate()
     {
+        //혹시 모를 초기화
         rb.linearVelocity = Vector2.zero;
         if (input.InputVec.x != 0)
             currentState = PlayerState.Move;
@@ -274,6 +328,8 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void PlayerMoveUpdate()
     {
+        if (!isGround)
+            currentState = PlayerState.Jump;
         Movable();
         Jumpable();
         Parryable();
@@ -324,6 +380,7 @@ public class Player : MonoBehaviour, IDamageable
 
         Movable();
         Attackable();
+        Climbingable();
     }
     private void PlayerLandingUpdate()
     {
@@ -336,8 +393,8 @@ public class Player : MonoBehaviour, IDamageable
         {
             attack2able = false;
             input.IsAttack = false;
-            attackcoll.enabled = false;
-            attackcoll2.enabled = true;
+            attackColl.enabled = false;
+            attackColl2.enabled = true;
             currentState = PlayerState.Attack2;
         }
     }
@@ -347,8 +404,8 @@ public class Player : MonoBehaviour, IDamageable
         {
             attack3able = false;
             input.IsAttack = false;
-            attackcoll2.enabled = false;
-            attackcoll3.enabled = true;
+            attackColl2.enabled = false;
+            attackColl3.enabled = true;
             currentState = PlayerState.Attack3;
         }
     }
@@ -377,7 +434,50 @@ public class Player : MonoBehaviour, IDamageable
 
     private void PlayerSlidingUpdate()
     {
+        slidingTimer += Time.deltaTime;
         rb.linearVelocity = new Vector2((float)curflip * slideSpeed, rb.linearVelocity.y);
+        if (slidingTimer > slidingTime)
+        {
+            sidx = Mathf.Min(sidx++, 2);
+            PoolManager.Instance.Pop<PlayerSlideAfterImage>(PoolType.PlayerSlideAfterImage, transform.position).Init(sidx, (int)curflip == -1 ? true : false);
+            slidingTimer = 0;
+        }
+    }
+    private void PlayerClimbingUpdate()
+    {
+
+        //슬라이딩키와 동일
+        if (input.IsSliding)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = 0f;
+        }
+        else
+        {
+            rb.gravityScale = 0.1f;
+        }
+
+        if(input.IsJump)
+        {
+            curflip = (int)curflip == -1 ? PlayerFlipState.Right : PlayerFlipState.Left;
+            rb.gravityScale = 1f;
+            rb.AddForce(new Vector2((int)curflip,1) * ljumpPower, ForceMode2D.Impulse);
+            currentState = PlayerState.Jump;
+        }
+
+        if (isGround || !isWallClimbable || climbDir != input.InputVec.x)
+        {
+            if (isGround)
+            {
+                rb.gravityScale = 1f;
+                currentState = PlayerState.Idle;
+            }
+            else
+            {
+                rb.gravityScale = 1f;
+                currentState = PlayerState.Jump;
+            }
+        }
     }
 
     #endregion
@@ -401,13 +501,14 @@ public class Player : MonoBehaviour, IDamageable
 
     void Attackable()
     {
-        if (input.IsAttack)
+        if (input.IsAttack && !isattack)
         {
             if (currentState != PlayerState.Jump)
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
             input.IsAttack = false;
             currentState = PlayerState.Attack1;
-            attackcoll.enabled = true;
+            attackColl.enabled = true;
+            isattack = true;
         }
     }
     void Parryable()
@@ -440,13 +541,31 @@ public class Player : MonoBehaviour, IDamageable
     }
     void Slidingable()
     {
-        if (input.IsSliding&& isGround)
+        if (input.IsSliding&& isGround && !issliding)
         {
             rb.linearVelocity = Vector2.zero;//슬라이딩 Velocity 적용을 위한 초기화
             currentState = PlayerState.Sliding;
             Input.IsSliding = false;
+            issliding = true;
+            slidingTimer = 0;
+            sidx = 1;
+            slidingDelayTimer = 0;
+            PoolManager.Instance.Pop<PlayerSlideAfterImage>(PoolType.PlayerSlideAfterImage, transform.position).Init(0, (int)curflip == -1 ? true : false);
+            playerColl.enabled = false;
+            slidingColl.enabled = true;
+            gameObject.layer = LayerMask.NameToLayer("Invincibility");
         }
     }
+    void Climbingable()
+    {
+        if (input.InputVec.x!=0 && isWallClimbable && currentState == PlayerState.Jump)//감지 되었을때
+        {
+            currentState = PlayerState.Climbing;
+            rb.linearVelocity = Vector2.zero;//초기화
+            rb.gravityScale = 0.1f;
+        }
+    }
+
     #endregion
 
     #region 이벤트 함수
@@ -468,27 +587,30 @@ public class Player : MonoBehaviour, IDamageable
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         isparrysuccess = false;
+        playerColl.enabled = true;
+        slidingColl.enabled = false;
+        gameObject.layer = LayerMask.NameToLayer("Player");
     }
     private void AttackCollider()
     {
-        //attackcoll.enabled = true;
+        //attackColl.enabled = true;
     }
     private void AttackFinish()
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
-        attackcoll.enabled = false;
+        attackColl.enabled = false;
         attack2able = false;
     }
     private void Attack2Finish()
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
-        attackcoll2.enabled = false;
+        attackColl2.enabled = false;
         attack3able = false;
     }
     private void Attack3Finish()
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
-        attackcoll3.enabled = false;
+        attackColl3.enabled = false;
     }
 
     private void Attack2Check()
@@ -523,7 +645,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Ladder")
+        if (collision.tag == "Ladder"&&!issliding)
         {
             rb.gravityScale = 1;
             if(CheckIsGround())

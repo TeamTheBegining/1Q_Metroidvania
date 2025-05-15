@@ -93,6 +93,9 @@ public class PlayerAnimation : MonoBehaviour
             case Player.PlayerState.Sliding:
                 animator.Play("Sliding");
                 break;
+            case Player.PlayerState.Climbing:
+                animator.Play("Climbing");
+                break;
             case Player.PlayerState.Dash:
                 //animator.Play("Dash");
                 break;
@@ -108,7 +111,7 @@ public class PlayerAnimation : MonoBehaviour
                 break;
         }
         //슬라이딩 딜레이 없어서 나오는 예외사항 발생 시 Idle로 초기화
-        if (stateInfo.IsName("Sliding") &&stateInfo.normalizedTime > 1) player.CurrentState = Player.PlayerState.Idle;
+        //if (stateInfo.IsName("Sliding") &&stateInfo.normalizedTime > 1) player.CurrentState = Player.PlayerState.Idle;
     }
 
     private void UpdateState()
