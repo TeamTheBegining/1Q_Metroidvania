@@ -20,6 +20,7 @@ public class PopUpPanel : MonoBehaviour
     TextMeshProUGUI descriptionText;
 
     public AnimationCurve curve;
+    private IEnumerator processCourutine;
 
     private void Awake()
     {
@@ -39,9 +40,12 @@ public class PopUpPanel : MonoBehaviour
         titleText.text = title;
         descriptionText.text = description;
 
-        Vector3 screenVector = Camera.main.ViewportToScreenPoint(viewportVector);       
+        Vector3 screenVector = Camera.main.ViewportToScreenPoint(viewportVector);
 
-        StartCoroutine(ShowProcess(duration));
+        rect.position = screenVector;
+
+        StopAllCoroutines();
+        StartCoroutine(ShowProcess(duration, type));
     }
 
     public void Show()
@@ -58,18 +62,36 @@ public class PopUpPanel : MonoBehaviour
         cg.interactable = false;
     }
 
-
-    private IEnumerator ShowProcess(float duration)
+    private IEnumerator ShowProcess(float duration, PopUpShowtype type)
     {
         float timeElapsed = 0.0f;
+
+        Vector2 startPos = rect.anchoredPosition;
+
+        // 이동 방향 설정
+        Vector2 direction = type switch
+        {
+            PopUpShowtype.Up => Vector2.up,
+            PopUpShowtype.Down => Vector2.down,
+            PopUpShowtype.Left => Vector2.left,
+            PopUpShowtype.Right => Vector2.right,
+            _ => Vector2.up,
+        };
+
+        float moveDistance = 100f; // 이동 거리 크기 (원하는 대로 조절 가능)
+
+        Show(); // UI 보이도록 설정
 
         while (timeElapsed < duration)
         {
             timeElapsed += Time.deltaTime;
-            cg.alpha = timeElapsed / duration;
-            curve.Evaluate(timeElapsed / duration);
+            float t = Mathf.Clamp01(timeElapsed / duration);
+            float delta = curve.Evaluate(t); // 0 ~ 1 사이의 곡선 값
 
-            rect.position += new Vector3(0f, curve.Evaluate(timeElapsed / duration), 0f);
+            // 절대 위치 계산 방식
+            rect.anchoredPosition = startPos + direction * delta * moveDistance;
+
+            cg.alpha = t;
 
             yield return null;
         }

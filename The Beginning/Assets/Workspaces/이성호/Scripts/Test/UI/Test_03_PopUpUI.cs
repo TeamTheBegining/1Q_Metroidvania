@@ -13,9 +13,10 @@ public class Test_03_PopUpUI : TestBase
 
     public string titleName;
     public string description;
+    public PopUpShowtype type;
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
-        //popUI.ShowPopUp(titleName, description, 3f);
+        popUI.ShowPopUp(new Vector2(posX, posY), titleName, description, 2f, type);
     }
 } 
