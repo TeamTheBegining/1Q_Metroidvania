@@ -6,7 +6,7 @@ public class Scene1Manager : MonoBehaviour
     private bool isFirstGameStart = false;
 
     float duration = 3f;
-    float targetRadius = 2f;
+    float targetRadius = 20f;
 
     private void Start()
     {

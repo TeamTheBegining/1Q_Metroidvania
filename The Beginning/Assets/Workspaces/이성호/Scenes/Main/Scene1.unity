@@ -6013,6 +6013,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerShadow
       objectReference: {fileID: 0}
+    - target: {fileID: 2523313686827821726, guid: 85a53b89fa8250642993ea26f82b487e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7790276473028783619, guid: 85a53b89fa8250642993ea26f82b487e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.6158347

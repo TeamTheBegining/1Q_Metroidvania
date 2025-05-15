@@ -40,6 +40,8 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
         actions.UI.Click.performed -= Click_performed;
         actions.UI.Disable();
         LightManager.Instance.SpreadPlayerLight(targetDuration, targetRadius, 1f);
+
+        StartCoroutine(DisableProecess());
     }
 
     private IEnumerator DisableProecess()
@@ -51,8 +53,8 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
             yield return null;
         }
 
+        GameManager.Instance.MiddleMessagePanel.FadeOutClose();
         //GameSceneManager.Instance.ChangeScene(1);
-
         //gameObject.SetActive(false);
     }
 }
