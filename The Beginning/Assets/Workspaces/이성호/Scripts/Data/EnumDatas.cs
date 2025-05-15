@@ -7,7 +7,7 @@ using UnityEngine;
 
 public enum PoolType
 {
-    HitFx = 0,
+    Hit1 = 0,
     PoolTypeCount
 }
 
@@ -21,9 +21,6 @@ public enum BGMType
 public enum SFXType
 { 
     Hit = 0,
-    Attack,
-    Jump,
-    Step,
     SoundTypeCount
 }
 

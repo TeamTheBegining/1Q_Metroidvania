@@ -25,6 +25,14 @@ public class TitlePanel : MonoBehaviour
     private void Start()
     {
         InitInput();
+
+#if UNITY_EDITOR
+        if(GameManager.Instance.isDebug)
+        {
+            isIntroStart = true;
+            gameObject.SetActive(false);
+        }
+#endif
     }
 
     private void Update()

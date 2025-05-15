@@ -6,11 +6,18 @@ using UnityEngine.InputSystem;
 
 public interface IPoolable
 {
+    /// <summary>
+    /// 스폰 시 호출되는 함수 ( 풀 매니저에서 호출됨 )
+    /// </summary>
     public void OnSpawn();
+
+    /// <summary>
+    /// 디스폰 시 호출되는 함수 ( 풀 매니저에서 스폰됨 )
+    /// </summary>
     public void OnDespawn();
 
     /// <summary>
-    /// PoolManager Queue에 돌아가기 위한 델리게이트
+    /// PoolManager Queue에 돌아가기 위한 델리게이트 (OnDespawn에서 실행됨)
     /// </summary>
     Action ReturnAction { get; set; }
 }
@@ -74,8 +81,7 @@ public class PoolManager : Singleton<PoolManager>
 
         GameObject obj = data.readyQueue.Dequeue();
 
-        obj.transform.position = position.GetValueOrDefault(Vector3.zero);
-        obj.transform.rotation = rotataion.GetValueOrDefault(Quaternion.identity);
+        obj.transform.SetPositionAndRotation(position.GetValueOrDefault(Vector3.zero), rotataion.GetValueOrDefault(Quaternion.identity));
 
         obj.SetActive(true);
 

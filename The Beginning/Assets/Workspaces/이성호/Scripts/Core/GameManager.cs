@@ -68,6 +68,7 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {      
         State = GameState.BeforeStart;
+        SetPoolManager();
 #if UNITY_EDITOR
         TestInit();
 #endif
@@ -106,6 +107,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     private void SetPoolManager()
     {
+        LoadPoolObjects();
+
         for (int i = 0; i < (int)PoolType.PoolTypeCount; i++)
         {
             PoolManager.Instance.Register(((PoolType)i).ToString(), poolPrefabs[i]);
@@ -127,10 +130,16 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = 1f;
     }
 
+    private void LoadPoolObjects()
+    {
+        poolPrefabs[0] = Resources.Load<GameObject>("Prefabs/Pool/Hit1");
+    }
+
 #if UNITY_EDITOR
 
     [Space(20f)]
     [Header("Test Section")]
+    public bool isDebug = false;
     public int nextSceneIndex = 0;
     private TestInputActions testActions;
 
