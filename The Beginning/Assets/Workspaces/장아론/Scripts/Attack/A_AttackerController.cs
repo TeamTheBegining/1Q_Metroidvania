@@ -1,413 +1,387 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using System.Collections;
 
-// A_Attacker (Àâ¸÷ - ±Ù°Å¸®) Ä³¸¯ÅÍÀÇ µ¿ÀÛÀ» °ü¸®ÇÏ´Â ÄÁÆ®·Ñ·¯
-// CommonEnemyController¸¦ »ó¼Ó¹Ş½À´Ï´Ù.
-public class A_AttackerController : CommonEnemyController, IDamageable
+// A_Attacker (grunt - melee) character controller
+// Inherits from CommonEnemyController.
+// IDamageable interface implementation is handled by the Base class.
+public class A_AttackerController : CommonEnemyController
 {
-    // A_Attacker °íÀ¯ÀÇ ¾Ö´Ï¸ŞÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ÀÌ¸§
+    // A_Attacker specific animation parameter names
     private const string ANIM_BOOL_A_WALK = "A_Walk";
-    //private const string ANIM_TRIGGER_A_JUMP = "A_Jump"; // Á¡ÇÁ ¾ø´Ù°í °¡Á¤
-    private const string ANIM_TRIGGER_A_ATTACK_A = "A_AttackA"; // A °ø°İ (º£±â)
-    // --- Ãß°¡: ÇÇ°İ ¾Ö´Ï¸ŞÀÌ¼Ç Æ®¸®°Å ---
-    private const string ANIM_TRIGGER_A_HURT = "A_Hurt"; // ÇÇ°İ ¾Ö´Ï¸ŞÀÌ¼Ç
-    // ------------------------------------
-    private const string ANIM_TRIGGER_A_STUN = "A_Stun"; // °æÁ÷ ¾Ö´Ï¸ŞÀÌ¼Ç
-    private const string ANIM_TRIGGER_A_DEATH = "A_Death"; // »ç¸Á ¾Ö´Ï¸ŞÀÌ¼Ç (ÇÊ¿ä½Ã)
+    private const string ANIM_TRIGGER_A_ATTACK_A = "A_AttackA"; // A Attack (slash)
+    private const string ANIM_TRIGGER_A_HURT = "A_Hurt"; // Hit animation
+    private const string ANIM_TRIGGER_A_STUN = "A_Stun"; // Stun animation
+    private const string ANIM_TRIGGER_A_DEATH = "A_Death"; // Death animation
 
     [Header("A_Attacker Hitbox")]
-    public GameObject attackAHitboxObject; // A °ø°İ È÷Æ®¹Ú½º ¿ÀºêÁ§Æ®
+    public GameObject attackAHitboxObject; // A attack hitbox object
 
-    // È÷Æ®¹Ú½º ¿ÀºêÁ§Æ®¿¡ ºÙ¾îÀÖ´Â ÄÄÆ÷³ÍÆ® ÂüÁ¶
+    // Hitbox component references
     private BoxCollider2D attackAHitboxCollider;
-    private EnemyHitbox attackAEnemyHitbox; // EnemyHitbox ½ºÅ©¸³Æ® »ç¿ë °¡Á¤
+    private EnemyHitbox attackAEnemyHitbox; // Assumes EnemyHitbox script exists
 
-    // A_Attacker ½ºÅÈ (ÀÌ¹ÌÁö ±â¹İ)
     [Header("A_Attacker Stats")]
-    private float maxhp = 5f; // ÃÖ´ë Ã¼·Â 5
-    [SerializeField] private float currentHp = 5f; // ÇöÀç Ã¼·Â 5
-    public float CurrentHp { get => currentHp; set => currentHp = value; }
-    public float MaxHp { get => maxhp; set => maxhp = value; }
-    public bool IsDead { get; private set; } = false; // »ç¸Á ÇÃ·¡±×
+    // Health and other stats are managed by the Base class (maxHealth, currentHealth)
 
     [Header("A_Attacker Combat")]
-    public float attackAValue = 0.5f; // A °ø°İ·Â 0.5
-    public float attackACooldown = 3f; // A °ø°İ ÄğÅ¸ÀÓ 3ÃÊ
+    public float attackAValue = 0.5f; // A Attack damage
+    public float attackACooldown = 3f; // A Attack cooldown
 
-    // ÄğÅ¸ÀÓ Ã¼Å©
-    private float nextAttackTime = 0f; // ´ÙÀ½ °ø°İ °¡´É ½Ã°£
+    private float nextAttackTime = 0f; // Time when next attack is possible
 
-    // »óÅÂ °ü¸® ÇÃ·¡±× (CommonEnemyControllerÀÇ »óÅÂ¿Í º°°³·Î °ü¸®µÉ ¼ö ÀÖ´Â °æÁ÷ »óÅÂ)
+    // Stun state flag (managed in derived class as it's specific to A_Attacker)
     private bool isStunned = false;
-    // °æÁ÷ ½Ã°£ º¯¼ö (ÇÊ¿ä½Ã)
-    private float stunDuration = 2f;
-    public float StunDuration { get => stunDuration; set => stunDuration = value; }
+    [Header("A_Attacker Stun")]
+    public float stunDuration = 2f; // Stun duration
 
-    public Action OnDead { get; set; }
+    private Coroutine stunCoroutine; // To hold reference to the running stun coroutine
 
-    // Damageable ÀÎÅÍÆäÀÌ½º ±¸Çö
-    public void TakeDamage(float damage , GameObject player)
+
+    // Override TakeDamage from Base class
+    // ì‹œê·¸ë‹ˆì²˜ë¥¼ Base í´ë˜ìŠ¤ ë° ì¸í„°í˜ì´ìŠ¤ì™€ ë™ì¼í•˜ê²Œ ìœ ì§€
+    public override void TakeDamage(float damage, GameObject attackObject) // GameObject attackObject ì¶”ê°€
     {
-        // ÀÌ¹Ì Á×¾úÀ¸¸é Ã³¸® ¾ÈÇÔ
-        if (IsDead) return;
+        Debug.Log("A_Attacker TakeDamage called! Damage: " + damage + " from " + (attackObject != null ? attackObject.name : "unknown")); //Â  í”¼ê²© ë¡œì§ ì‹œì‘ ë¡œê·¸Â 
 
-        // °æÁ÷ Áß¿¡´Â µ¥¹ÌÁö´Â ¹ŞÁö¸¸, Ãß°¡ °æÁ÷/ÇÇ°İ ¹İÀÀÀº ¸·À½ (ÇÊ¿ä½Ã ·ÎÁ÷ ¼öÁ¤)
+        // Base class checks if already dead
+        if (isDead) // protected isDead ì‚¬ìš©
+        {
+            Debug.Log("A_Attacker is already dead, skipping damage."); //Â  ì´ë¯¸ ì£½ì—ˆëŠ”ì§€ ë¡œê·¸Â 
+            return;
+        }
+
+        // If stunned, apply damage but skip hit reaction (optional logic)
         if (isStunned)
         {
-            currentHp -= damage; // °æÁ÷ Áß¿¡µµ µ¥¹ÌÁö´Â µé¾î°¨
-                                 //Debug.Log("A_Attacker °æÁ÷ Áß ÇÇ°İ! Ã¼·Â: " + currentHp);
-            if (currentHp <= 0) Die(); // °æÁ÷ Áß¿¡ ¸Â¾Æµµ Ã¼·Â 0 ÀÌÇÏ¸é »ç¸Á
-            return; // Ãß°¡ ÇÇ°İ ¾Ö´Ï¸ŞÀÌ¼Ç/°æÁ÷ Æ®¸®°Å ¸·À½
+            Debug.Log("A_Attacker is stunned, applying damage but skipping hit reaction."); //Â  ê²½ì§ ìƒíƒœì¸ì§€ ë¡œê·¸Â 
+            // Apply damage in Base class (updates currentHealth, checks for death, calls SetState(Dead))
+            // Base TakeDamage í˜¸ì¶œ ì‹œ attackObject í•¨ê»˜ ì „ë‹¬
+            base.TakeDamage(damage, attackObject);
+            // If Base TakeDamage resulted in death, the Base SetState(Dead) will handle death animation/cleanup.
+            // If still alive, just skip hit reaction animations.
+            return; // Skip additional hit/stun reactions
         }
 
-        // °æÁ÷ »óÅÂ°¡ ¾Æ´Ò ¶§ µ¥¹ÌÁö Ã³¸®
-        currentHp -= damage; // Ã¼·Â °¨¼Ò
-        //Debug.Log("A_Attacker ÇÇ°İ! Ã¼·Â: " + currentHp);
+        // Apply damage in Base class (updates currentHealth, checks for death, calls SetState(Dead))
+        base.TakeDamage(damage, attackObject);
 
-        // TODO: ÆĞ¸µ °¨Áö ·ÎÁ÷ Ãß°¡ ÇÊ¿ä - ÇöÀç TakeDamage ÇÔ¼ö¸¸À¸·Î´Â ÆĞ¸µ ¿©ºÎ ÆÇ´Ü ºÒ°¡.
-        // ÆĞ¸µ ¼º°ø ½Ã È£ÃâµÉ ¿ÜºÎ ÇÔ¼ö(¿¹: PlayerCombat ½ºÅ©¸³Æ®)¿¡¼­ Stun()À» È£ÃâÇÏ´Â °ÍÀÌ ÀÏ¹İÀûÀÔ´Ï´Ù.
-        // È¤Àº µ¥¹ÌÁö Á¤º¸¿¡ 'isParryAttack' µîÀÇ bool °ªÀ» Ãß°¡ÇÏ¿© Àü´Ş¹Ş´Â ¹æ½Äµµ ÀÖ½À´Ï´Ù.
-        // ¿¹½Ã: if (damageInfo.isParryAttack) { Stun(stunDuration); return; } // ÆĞ¸µ °ø°İÀÌ¸é ½ºÅÏ °É°í ÇÔ¼ö Á¾·á
-
-        // Ã¼·ÂÀÌ 0 ÀÌÇÏ ½Ã »ç¸Á Ã³¸®
-        if (currentHp <= 0)
+        // If not dead and not stunned, play hit animation
+        // Check currentHealth AFTER calling base.TakeDamage
+        // currentHealthëŠ” Base í´ë˜ìŠ¤ì—ì„œ ì—…ë°ì´íŠ¸ë©ë‹ˆë‹¤.
+        if (currentHealth > 0) // Using Base class currentHealth
         {
-            //Debug.Log("A_Attacker Ã¼·Â 0 ÀÌÇÏ! »ç¸Á Ã³¸® ½ÃÀÛ.");
-            Die();
+            // isDead í”Œë˜ê·¸ëŠ” Base.TakeDamage í˜¸ì¶œ í›„ SetState(Dead)ì—ì„œ ì—…ë°ì´íŠ¸ë©ë‹ˆë‹¤.
+            // isStunnedëŠ” ì´ ë©”ì„œë“œ ì§„ì… ì „ ì²´í¬í–ˆìŠµë‹ˆë‹¤.
+            Debug.Log("A_Attacker not dead and not stunned. Current Health: " + currentHealth.ToString("F2") + ". Calling PlayHurtAnim."); //Â  PlayHurtAnim í˜¸ì¶œ ì¡°ê±´ ë§Œì¡± ë¡œê·¸Â 
+            PlayHurtAnim(); // Play hit animation (includes isDead/isStunned check inside PlayHurtAnim)
         }
-        // Ã¼·ÂÀÌ 0º¸´Ù Å©°í, °æÁ÷ »óÅÂ°¡ ¾Æ´Ï¶ó¸é ÀÏ¹İ ÇÇ°İ ¾Ö´Ï¸ŞÀÌ¼Ç ¹ßµ¿
-        else // currentHp > 0 && !isStunned
+        else
         {
-            PlayHurtAnim(); // ÇÇ°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ÇÔ¼ö È£Ãâ
+            Debug.Log("A_Attacker died from damage. Current Health: " + currentHealth.ToString("F2") + ". Death handled by base."); //Â  ë°ë¯¸ì§€ë¡œ ì‚¬ë§ ë¡œê·¸Â 
+                                                                                                                                    // Death is handled by base.TakeDamage calling SetState(Dead)
         }
     }
 
-    // --- Ãß°¡: °æÁ÷ »óÅÂ Ã³¸® ÇÔ¼ö ---
-    // ÇÃ·¹ÀÌ¾îÀÇ ÆĞ¸µ ¼º°ø ·ÎÁ÷ µî ¿ÜºÎ¿¡¼­ È£ÃâµÉ ¼ö ÀÖ½À´Ï´Ù.
-    public void Stun()
+    // Handle Stun state
+    public void Stun() // Can be called externally (e.g., Player parry)
     {
-        // ÀÌ¹Ì Á×¾ú°Å³ª °æÁ÷ ÁßÀÌ¸é ´Ù½Ã °æÁ÷µÇÁö ¾ÊÀ½
-        if (IsDead || isStunned) return;
+        // Do not stun if already dead or stunned
+        if (isDead || isStunned) return; // protected isDead ì‚¬ìš©
 
         isStunned = true;
-        //Debug.Log("A_Attacker °æÁ÷ »óÅÂ ÁøÀÔ!");
+        //Debug.Log("A_Attacker entering Stun state!");
+        PlayStunAnim(); // Play stun animation (includes isDead check)
 
-        // TODO: °æÁ÷ Áß AI ·ÎÁ÷ ¹× ÀÌµ¿ ÁßÁö
-        // CommonEnemyControllerÀÇ AI »óÅÂ¸¦ Stun »óÅÂ·Î º¯°æÇÏ°Å³ª, Update µî¿¡¼­ isStunned Ã¼Å©
-        // ¿¹: SetState(EnemyState.Stunned); // CommonEnemyController¿¡ Stunned »óÅÂ°¡ Á¤ÀÇµÇ¾î ÀÖ´Ù¸é
-        // ³×ºñ°ÔÀÌ¼Ç ¿¡ÀÌÀüÆ® »ç¿ë ½Ã: navMeshAgent.isStopped = true;
-        // ÇöÀç ¾Ö´Ï¸ŞÀÌ¼Ç ÁßÀÌ¶ó¸é Áß´ÜÇÏ°í °æÁ÷ ¾Ö´Ï¸ŞÀÌ¼ÇÀ¸·Î ÀüÈ¯
-        if (animator != null) animator.SetTrigger(ANIM_TRIGGER_A_STUN);
+        // Stop any existing stun coroutine and start a new one
+        if (stunCoroutine != null)
+            StopCoroutine(stunCoroutine);
+        stunCoroutine = StartCoroutine(ReleaseStunCoroutine(stunDuration));
 
-        // ÀÏÁ¤ ½Ã°£ ÈÄ °æÁ÷ ÇØÁ¦ ÄÚ·çÆ¾ ½ÃÀÛ
-        StartCoroutine(ReleaseStunCoroutine(stunDuration));
+        // TODO: Stop AI movement (handled by Update override and Base checks)
+        // TODO: Disable colliders if needed during stun
     }
 
     IEnumerator ReleaseStunCoroutine(float duration)
     {
-        // °æÁ÷ ¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ¸¸Å­ ±â´Ù¸° ÈÄ Ãß°¡ ´ë±â (ÇÊ¿ä½Ã)
-        // yield return new WaitForSeconds(GetStunAnimationLength()); // ¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ¸¦ ¾Ë¸é
-        yield return new WaitForSeconds(duration); // ´Ü¼øÈ÷ ÁöÁ¤µÈ ½Ã°£¸¸Å­ ´ë±â
+        yield return new WaitForSeconds(duration); // Wait for specified duration
 
-        // Á×Àº »óÅÂ°¡ ¾Æ´Ï¸é °æÁ÷ ÇØÁ¦
-        if (!IsDead)
+        // Release stun if not dead
+        if (!isDead) // protected isDead ì‚¬ìš©
         {
             isStunned = false;
-            //Debug.Log("A_Attacker °æÁ÷ »óÅÂ ÇØÁ¦!");
-
-            // TODO: °æÁ÷ ÇØÁ¦ ÈÄ AI ·ÎÁ÷ Àç°³
-            // ¿¹: SetState(EnemyState.Chase); // CommonEnemyControllerÀÇ ±âº» »óÅÂ·Î º¹±Í
-            // ³×ºñ°ÔÀÌ¼Ç ¿¡ÀÌÀüÆ® »ç¿ë ½Ã: navMeshAgent.isStopped = false;
-
-            // TODO: ¾Ö´Ï¸ŞÀÌÅÍ »óÅÂ ÀüÈ¯ (°æÁ÷ ÇØÁ¦ ÈÄ Idle/Walk µîÀ¸·Î)
-            // Animator Controller¿¡¼­ Stun -> Idle/Walk µîÀ¸·Î °¡´Â TransitionÀ» ¼³Á¤ÇÏ´Â °ÍÀÌ ÀÏ¹İÀûÀÔ´Ï´Ù.
+            //Debug.Log("A_Attacker exiting Stun state!");
+            // Return to appropriate state (e.g., Chase) - Use Base SetState
+            SetState(EnemyState.Chase); // Using Base class SetState
+            // TODO: Reset animator state if needed (Animator Controller setup is key)
         }
     }
-    // ------------------------------
 
-
-    // --- Ãß°¡: »ç¸Á Ã³¸® ÇÔ¼ö (IDamageable ±¸Çö ÀÏºÎ) ---
-    void Die()
-    {
-        if (IsDead) return; // ÀÌ¹Ì Á×À½ Ã³¸® ÁßÀÌ¸é Áßº¹ ¹æÁö
-
-        IsDead = true; // Á×À½ »óÅÂ ÇÃ·¡±× ¼³Á¤
-        //Debug.Log("A_Attacker »ç¸Á!");
-
-        // °æÁ÷ ÄÚ·çÆ¾ ÁßÁö (»ç¸Á ½Ã °æÁ÷ ÇØÁ¦ ·ÎÁ÷ÀÌ ½ÇÇàµÇÁö ¾Êµµ·Ï)
-        StopAllCoroutines();
-        isStunned = false; // »ç¸ÁÇßÀ¸´Ï °æÁ÷ »óÅÂµµ ÇØÁ¦
-
-        // »ç¸Á ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
-        PlayDeathAnim();
-
-        // TODO: »ç¸Á ÈÄ ÇÊ¿äÇÑ Ãß°¡ ·ÎÁ÷ ±¸Çö (B_GirlController¿Í À¯»ç)
-        // - Collider ºñÈ°¼ºÈ­ (ÇÇ°İ ¹× °ø°İ ÆÇÁ¤ ¹æÁö)
-        Collider2D mainCollider = GetComponent<Collider2D>();
-        if (mainCollider != null) mainCollider.enabled = false;
-
-        // - Rigidbody ¼³Á¤ º¯°æ (¿òÁ÷ÀÓ ¸ØÃã µî)
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector2.zero; // ¿òÁ÷ÀÓ Áï½Ã Á¤Áö (Unity 2019.3+ ±ÇÀå)
-            // rb.velocity = Vector2.zero; // ÀÌÀü ¹öÀü
-            rb.isKinematic = true; // ¹°¸® È¿°ú ºñÈ°¼ºÈ­ (¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¿òÁ÷ÀÓÀ» Á¦¾îÇÒ °æ¿ì)
-        }
-
-        // - AI ½ºÅ©¸³Æ® ºñÈ°¼ºÈ­ (´õ ÀÌ»ó ÃßÀû/°ø°İ µîÀ» ÇÏÁö ¾Êµµ·Ï)
-        // ¿¹: this.enabled = false; // ½ºÅ©¸³Æ® ÀüÃ¼ ºñÈ°¼ºÈ­ (Update µî ¸ØÃã)
-        // CommonEnemyController¿¡ AI °ü·Ã º°µµ ÄÄÆ÷³ÍÆ®°¡ ÀÖ´Ù¸é ±×°ÍÀ» ºñÈ°¼ºÈ­
-
-        // TODO: °ÔÀÓ ¸Å´ÏÀú µî¿¡ ¿¡³Ê¹Ì »ç¸ÁÀ» ¾Ë¸®´Â ÀÌº¥Æ® È£Ãâ ¶Ç´Â Ã³¸®
-        // ¿¹: GameManager.Instance.EnemyDied(this);
-
-        // - ÀÏÁ¤ ½Ã°£ ÈÄ °ÔÀÓ ¿ÀºêÁ§Æ® Á¦°Å ¶Ç´Â ¿ÀºêÁ§Æ® Ç® ¹İÈ¯
-        // ¿¹: Destroy(gameObject, 3f); // 3ÃÊ ÈÄ ÆÄ±« (µ¥½º ¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ¿¡ ¸Â°Ô Á¶Àı)
-    }
-    // --------------------------------------------
-
-
+    // Override Start from Base class
     protected override void Start()
     {
-        base.Start(); // CommonEnemyControllerÀÇ Start È£Ãâ (Animator, Player ÂüÁ¶ ¼³Á¤ µî)
+        base.Start(); // Call Base CommonEnemyController Start
 
-        // È÷Æ®¹Ú½º ¿ÀºêÁ§Æ® ¹× ½ºÅ©¸³Æ® ÂüÁ¶ ÃÊ±âÈ­
+        // Initialize hitbox object and component references
         if (attackAHitboxObject != null)
         {
             attackAHitboxCollider = attackAHitboxObject.GetComponent<BoxCollider2D>();
-            attackAEnemyHitbox = attackAHitboxObject.GetComponent<EnemyHitbox>(); // EnemyHitbox ÄÄÆ÷³ÍÆ® ÂüÁ¶
+            attackAEnemyHitbox = attackAHitboxObject.GetComponent<EnemyHitbox>(); // Assumes EnemyHitbox component
             if (attackAHitboxCollider != null)
             {
-                attackAHitboxCollider.enabled = false; // ½ÃÀÛ ½Ã Äİ¶óÀÌ´õ ºñÈ°¼ºÈ­
+                attackAHitboxCollider.enabled = false; // Disable collider at start
             }
             else
             {
-                //Debug.LogWarning("Attack A Hitbox Object¿¡ BoxCollider2D ÄÄÆ÷³ÍÆ®°¡ ¾ø½À´Ï´Ù.", this);
+                Debug.LogWarning("BoxCollider2D component not found on Attack A Hitbox Object.", this);
             }
             if (attackAEnemyHitbox == null)
             {
-                //Debug.LogWarning("Attack A Hitbox Object¿¡ EnemyHitbox ÄÄÆ÷³ÍÆ®°¡ ¾ø½À´Ï´Ù!", this);
+                Debug.LogWarning("EnemyHitbox component not found on Attack A Hitbox Object!", this);
             }
         }
         else
         {
-            //Debug.LogWarning("Attack A Hitbox Object°¡ A_AttackerController ÀÎ½ºÆåÅÍ¿¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.", this);
+            Debug.LogWarning("Attack A Hitbox Object is not assigned in the Inspector.", this);
         }
 
-        // »óÅÂ ÃÊ±âÈ­
-        currentHp = maxhp; // Ã¼·Â ÃÊ±âÈ­
-        IsDead = false;
-        isStunned = false; // °æÁ÷ »óÅÂ ÃÊ±âÈ­
-        nextAttackTime = Time.time; // ¶Ç´Â 0f; // ÄğÅ¸ÀÓ ÃÊ±âÈ­
+        // Initialize A_Attacker specific state
+        // Health is initialized in Base Start, isDead is handled by Base, isPerformingHurtAnimation is Base
+        isStunned = false; // Initialize stun state
+        nextAttackTime = Time.time; // Or 0f; Initialize attack cooldown
     }
 
-    // Update ¿À¹ö¶óÀÌµå: Á×°Å³ª °æÁ÷ »óÅÂÀÏ ¶§ ±âº» AI ·ÎÁ÷ ½ºÅµ
+    // Override Update: Skip Base AI logic if stunned or performing hurt animation
     protected override void Update()
     {
-        if (IsDead || isStunned)
+        //  í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì¼ ë•Œë„ Base Update ìŠ¤í‚µ (CommonEnemyControllerì—ì„œ ì´ë¯¸ ì²˜ë¦¬) 
+        // A_AttackerControllerì˜ Update ì˜¤ë²„ë¼ì´ë“œëŠ” isStunnedë§Œ ì¶”ê°€ë¡œ ì²´í¬í•˜ì—¬ Base.Update() í˜¸ì¶œ ì—¬ë¶€ë¥¼ ê²°ì •í•©ë‹ˆë‹¤.
+        // isPerformingHurtAnimation ì²´í¬ëŠ” Base CommonEnemyController.Update() ì‹œì‘ ë¶€ë¶„ì—ì„œ ì „ì²´ Update ë‚´ìš©ì„ ìŠ¤í‚µí•˜ë„ë¡ ì²˜ë¦¬í–ˆìŠµë‹ˆë‹¤.
+        if (isDead || isStunned) // protected isDead ì‚¬ìš©, isStunned ì‚¬ìš©
         {
-            // Á×¾ú°Å³ª °æÁ÷ ÁßÀÌ¸é AI ·ÎÁ÷ ½ÇÇà ¾ÈÇÔ
-            // °æÁ÷ Áß ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı µî ´Ù¸¥ Ã³¸®°¡ ÇÊ¿äÇÏ¸é ¿©±â¿¡ Ãß°¡
-            // °æÁ÷ ¾Ö´Ï¸ŞÀÌ¼ÇÀº Stun()¿¡¼­ ÀÌ¹Ì Æ®¸®°ÅÇÏ¹Ç·Î ¿©±â¼­ Æ¯º°È÷ ÇÒ ÀÏ ¾øÀ» ¼ö ÀÖÀ½
+            // If dead, stunned, or performing hurt animation (handled in Base Update), skip Base AI logic and movement
             return;
         }
 
-        base.Update(); // CommonEnemyControllerÀÇ Update È£Ãâ (ÀÌµ¿, »óÅÂ ÀüÈ¯ µî)
+        // Call Base class Update for AI state machine, movement, etc.
+        base.Update();
     }
 
 
-    // ===== ¾Ö´Ï¸ŞÀÌ¼Ç °ü·Ã ÇÔ¼öµé (Base Å¬·¡½ºÀÇ virtual ¸Ş¼Òµå¸¦ ¿À¹ö¶óÀÌµå) =====
+    // ===== Animation related functions (Override virtual methods from Base class) =====
+    // Called by Base CommonEnemyController's state/logic. These trigger the specific animations.
+    // isPerformingHurtAnimation ì²´í¬ ì¡°ê±´ì€ Base CommonEnemyControllerì˜ PlayAnim ë©”ì„œë“œì— ì¶”ê°€í•´ì•¼ í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+    // í˜„ì¬ êµ¬ì¡°ì—ì„œëŠ” Base Update ì‹œì‘ì—ì„œ isPerformingHurtAnimation ì‹œ ì „ì²´ ìŠ¤í‚µí•˜ë¯€ë¡œ,
+    // PlayAnim ë©”ì„œë“œ ë‚´ë¶€ì—ì„œëŠ” ë‹¤ì‹œ ì²´í¬í•˜ì§€ ì•Šì•„ë„ ë  ìˆ˜ ìˆìŠµë‹ˆë‹¤. (ì• ë‹ˆë©”ì´í„° ì„¤ì •ì— ë”°ë¼ ë‹¤ë¦„)
 
     protected override void PlayIdleAnim()
     {
-        // Á×°Å³ª °æÁ÷ ÁßÀÌ ¾Æ´Ò ¶§¸¸ Àç»ı
-        if (!IsDead && !isStunned && animator != null) animator.SetBool(ANIM_BOOL_A_WALK, false);
+        // Check Base isDead and local isStunned/isPerformingHurtAnimation flags
+        if (!isDead && !isStunned && !isPerformingHurtAnimation && animator != null) // protected isDead ì‚¬ìš©
+            animator.SetBool(ANIM_BOOL_A_WALK, false);
     }
 
     protected override void PlayWalkAnim()
     {
-        // Á×°Å³ª °æÁ÷ ÁßÀÌ ¾Æ´Ò ¶§¸¸ Àç»ı
-        if (!IsDead && !isStunned && animator != null) animator.SetBool(ANIM_BOOL_A_WALK, true);
+        // Check Base isDead and local isStunned/isPerformingHurtAnimation flags
+        if (!isDead && !isStunned && !isPerformingHurtAnimation && animator != null) // protected isDead ì‚¬ìš©
+            animator.SetBool(ANIM_BOOL_A_WALK, true);
     }
 
+    // A_Attacker does not have a Jump animation, override if Base calls it
     protected override void PlayJumpAnim()
     {
-        // A_Attacker´Â Á¡ÇÁ ¾ø´Ù°í °¡Á¤
-        // base.PlayJumpAnim(); // CommonEnemyController¿¡ Á¡ÇÁ °ü·ÃÀÌ ÀÖ´Ù¸é ÁÖ¼® ÇØÁ¦
-        // if (!IsDead && !isStunned && animator != null) animator.SetTrigger(ANIM_TRIGGER_A_JUMP); // Á¡ÇÁ Æ®¸®°Å ÀÖ´Ù¸é
+        // Leave empty or add debug if Base calls this unexpectedly
+        // Debug.LogWarning("PlayJumpAnim called on A_AttackerController, but it has no jump.");
     }
 
     protected override void PlayDeathAnim()
     {
-        if (animator != null) animator.SetTrigger(ANIM_TRIGGER_A_DEATH);
+        // Trigger Death animation
+        // Base SetState(Dead) calls this after setting isDead = true.
+        if (animator != null) // isDead ì²´í¬ëŠ” Base SetStateì—ì„œ ì´ë¯¸ í•¨
+            animator.SetTrigger(ANIM_TRIGGER_A_DEATH);
+        // TODO: Add A_Attacker specific death effects if any
+        // Object destruction and GameManager notification are handled in Base SetState(Dead)
     }
 
-    // --- Ãß°¡: ÇÇ°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ÇÔ¼ö ---
-    // TakeDamage ÇÔ¼ö¿¡¼­ È£ÃâµË´Ï´Ù.
-    protected void PlayHurtAnim()
+    // Play hit animation (called from TakeDamage)
+    protected void PlayHurtAnim() // Protected access level
     {
-        // Á×°Å³ª °æÁ÷ ÁßÀÌ ¾Æ´Ò ¶§¸¸ Àç»ı
-        if (!IsDead && !isStunned && animator != null)
+        Debug.Log("PlayHurtAnim called. isDead=" + isDead + ", isStunned=" + isStunned + ", animator=" + (animator != null)); //Â  PlayHurtAnim ì§„ì… ë¡œê·¸Â 
+        // Check Base isDead and local isStunned flags
+        //  isPerformingHurtAnimationì€ ì—¬ê¸°ì„œ ì„¤ì •í•˜ë¯€ë¡œ ì´ ì¡°ê±´ì—ëŠ” í¬í•¨ì‹œí‚¤ì§€ ì•ŠìŒ 
+        if (!isDead && !isStunned && animator != null) // protected isDead ì‚¬ìš©
         {
-            animator.SetTrigger(ANIM_TRIGGER_A_HURT); // ÇÇ°İ ¾Ö´Ï¸ŞÀÌ¼Ç Æ®¸®°Å ¹ßµ¿!
-                                                      //Debug.Log("PlayHurtAnim È£Ãâ");
+            Debug.Log("PlayHurtAnim conditions met. Setting trigger: " + ANIM_TRIGGER_A_HURT); //Â  íŠ¸ë¦¬ê±° ì„¤ì • ì§ì „ ë¡œê·¸Â 
+            isPerformingHurtAnimation = true; //  í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘ í”Œë˜ê·¸ ì„¤ì • 
+            animator.SetTrigger(ANIM_TRIGGER_A_HURT); // Trigger hit animation
+            //Debug.Log("PlayHurtAnim triggered.");
+        }
+        else
+        {
+            Debug.Log("PlayHurtAnim conditions NOT met. Skipping trigger. isDead=" + isDead + ", isStunned=" + isStunned); //Â  íŠ¸ë¦¬ê±° ì„¤ì • ìŠ¤í‚µ ë¡œê·¸Â 
         }
     }
-    // -----------------------------------
 
-    // --- Ãß°¡: °æÁ÷ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ÇÔ¼ö (Stun()¿¡¼­ È£Ãâ) ---
-    // Protected·Î ¼±¾ğÇÏ¿© »ó¼Ó¹ŞÀº Å¬·¡½º¿¡¼­µµ Á¢±Ù °¡´ÉÇÏ°Ô ÇÒ ¼ö ÀÖ½À´Ï´Ù.
-    protected void PlayStunAnim()
+    // Play stun animation (called from Stun)
+    protected void PlayStunAnim() // Protected access level
     {
-        // ÀÌ¹Ì Á×¾ú´Ù¸é Àç»ı ¾ÈÇÔ (Stun()¿¡¼­ ÀÌ¹Ì Ã¼Å©ÇÏÁö¸¸ ¾ÈÀü ÀåÄ¡)
-        if (IsDead) return;
-        if (animator != null)
+        // Check Base isDead flag
+        // Stun() method already checks isDead before calling this.
+        if (animator != null) // isDead ì²´í¬ëŠ” ì´ë¯¸ Stun í•¨ìˆ˜ì—ì„œ í•¨
         {
+            //  isPerformingHurtAnimation í”Œë˜ê·¸ëŠ” Stunì—ì„œëŠ” ì‚¬ìš©í•˜ì§€ ì•ŠìŒ 
             animator.SetTrigger(ANIM_TRIGGER_A_STUN);
-            //Debug.Log("PlayStunAnim È£Ãâ");
+            //Debug.Log("PlayStunAnim triggered.");
         }
     }
-    // ----------------------------------------------------
 
 
-    // --- A °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ÇÔ¼ö ¿À¹ö¶óÀÌµå ---
-    // CommonEnemyControllerÀÇ PlayAttack1Anim, PlayAttack2Anim µî Áß ÇÏ³ª¸¦ ¿À¹ö¶óÀÌµåÇÕ´Ï´Ù.
-    // ¿©±â¼­´Â PlayAttack1AnimÀ» »ç¿ëÇÏ¿© A °ø°İ ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ¹ßµ¿½ÃÅµ´Ï´Ù.
-    protected override void PlayAttack1Anim() // CommonEnemyController¿¡ PlayAttack1Anim °¡»ó ÇÔ¼ö°¡ ÀÖ´Ù°í °¡Á¤
+    // Override PlayAttack1Anim from Base (used for A Attack)
+    protected override void PlayAttack1Anim() // Base CommonEnemyController has PlayAttack1Anim virtual
     {
-        // Á×°Å³ª °æÁ÷ ÁßÀÌ ¾Æ´Ò ¶§¸¸ °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ½Ãµµ
-        if (!IsDead && !isStunned && animator != null)
+        // Check Base isDead and local isStunned/isPerformingHurtAnimation flags
+        if (!isDead && !isStunned && !isPerformingHurtAnimation && animator != null) // protected isDead ì‚¬ìš©
         {
-            animator.SetTrigger(ANIM_TRIGGER_A_ATTACK_A);
-            //Debug.Log("A_AttackA ¾Ö´Ï¸ŞÀÌ¼Ç ¹ßµ¿!");
+            animator.SetTrigger(ANIM_TRIGGER_A_ATTACK_A); // Trigger A Attack animation
+            //Debug.Log("A_AttackA animation triggered!");
         }
     }
 
-    // CommonEnemyControllerÀÇ PlayAttack2Anim µî ´Ù¸¥ °ø°İ ÇÔ¼ö´Â A_Attacker¿¡¼­ »ç¿ëÇÏÁö ¾ÊÀ¸¹Ç·Î ¿À¹ö¶óÀÌµåÇÏÁö ¾Ê°Å³ª ±âº» ±¸ÇöÀ» µÓ´Ï´Ù.
-    /*
-    protected override void PlayAttack2Anim()
-    {
-        // A_Attacker´Â Attack 2°¡ ¾øÀ¸¹Ç·Î ºñ¿öµÎ°Å³ª base È£Ãâ
-        // base.PlayAttack2Anim();
-    }
-    */
-
-
-    // Attack Æ®¸®°Å ¸®¼Â ÇÔ¼ö
+    // Override ResetAttackTriggers from Base
     protected override void ResetAttackTriggers()
     {
         if (animator != null)
         {
-            animator.ResetTrigger(ANIM_TRIGGER_A_ATTACK_A); // A °ø°İ Æ®¸®°Å ¸®¼Â
-            animator.ResetTrigger(ANIM_TRIGGER_A_HURT); // ÇÇ°İ Æ®¸®°Å ¸®¼Â
-            animator.ResetTrigger(ANIM_TRIGGER_A_STUN); // °æÁ÷ Æ®¸®°Å ¸®¼Â
-                                                        // CommonEnemyControllerÀÇ ResetAttackTriggers¿¡ ´Ù¸¥ Æ®¸®°Å ¸®¼ÂÀÌ ÀÖ´Ù¸é base È£Ãâ
-                                                        // base.ResetAttackTriggers();
+            // Reset specific attack, hit, and stun triggers
+            animator.ResetTrigger(ANIM_TRIGGER_A_ATTACK_A);
+            animator.ResetTrigger(ANIM_TRIGGER_A_HURT); // í”¼ê²© íŠ¸ë¦¬ê±°ë„ ë¦¬ì…‹
+            animator.ResetTrigger(ANIM_TRIGGER_A_STUN);
+            // Call Base ResetAttackTriggers if it resets other common triggers
+            // base.ResetTriggers(); // Example: if Base has a common trigger
         }
     }
 
-    // ===== AI °ø°İ ·ÎÁ÷ (Base Å¬·¡½ºÀÇ virtual PerformAttackLogic ¿À¹ö¶óÀÌµå) =====
-
+    // ===== AI Attack Logic (Override virtual PerformAttackLogic from Base) =====
+    // Called by CommonEnemyController's Attack state when pre-attack pause is over.
     protected override void PerformAttackLogic()
     {
-        // ÀÌ¹Ì °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç ÁßÀÌ°Å³ª Á×°Å³ª °æÁ÷ ÁßÀÌ¶ó¸é Áßº¹ ¹ßµ¿ ¾ÈÇÔ
-        if (isPerformingAttackAnimation || IsDead || isStunned) return;
+        Debug.Log("A_Attacker PerformAttackLogic override called."); //Â  ë””ë²„ê·¸ ë¡œê·¸ ìœ ì§€Â 
+        // Base class already checks isPerformingAttackAnimation, isDead, isWaitingForAttack, isWaitingAfterAttack before calling this.
+        //  isStunned, isPerformingHurtAnimation ì¤‘ì´ë©´ PerformAttackLogicì´ í˜¸ì¶œë˜ì§€ ì•Šë„ë¡ Base Updateì—ì„œ ìŠ¤í‚µí•©ë‹ˆë‹¤. 
 
-        // ÄğÅ¸ÀÓÀÌ Áö³µ´ÂÁö Ã¼Å©
-        if (Time.time < nextAttackTime)
+        // Check A_Attacker's specific cooldown
+        bool cooldownReady = Time.time >= nextAttackTime;
+        Debug.Log("A_Attacker checking cooldown. Current Time: " + Time.time.ToString("F2") + ", Next Attack Time: " + nextAttackTime.ToString("F2") + ". Cooldown Ready: " + cooldownReady); //Â  ë””ë²„ê·¸ ë¡œê·¸ ìœ ì§€Â 
+
+        if (!cooldownReady)
         {
-            // ÄğÅ¸ÀÓ ´ë±â Áß
-            return;
+            return; // Skip attack logic if cooldown is active
         }
 
-        // ÄğÅ¸ÀÓÀÌ Áö³µ´Ù¸é °ø°İ ½ÇÇà
-        //Debug.Log("A_Attacker °ø°İ °¡´É! A_AttackA ¹ßµ¿ ½Ãµµ.");
+        // If cooldown is ready, perform attack
+        Debug.Log("A_Attacker cooldown READY! Triggering A_AttackA animation."); //Â  ë””ë²„ê·¸ ë¡œê·¸ ìœ ì§€Â 
 
-        isPerformingAttackAnimation = true; // °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç ½ÃÀÛ ÇÃ·¡±× ÄÔ (Base Class º¯¼ö)
+        isPerformingAttackAnimation = true; // Set Base class flag
+        // isPerformingHurtAnimationëŠ” Hurt ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸ì—ì„œ í•´ì œë©ë‹ˆë‹¤.
 
-        // A °ø°İ ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ¹ßµ¿½ÃÅ°±â À§ÇØ PlayAttack1Anim ÇÔ¼ö¸¦ È£ÃâÇÕ´Ï´Ù.
-        PlayAttack1Anim(); // <-- PlayAttackAnim() ´ë½Å PlayAttack1Anim() È£Ãâ
+        PlayAttack1Anim(); // <-- Call the overridden animation method
 
-        // nextAttackTime ¼³Á¤Àº Animation Event Äİ¹é ÇÔ¼ö(OnAttackAnimationEnd)¿¡¼­ ¼öÇà
+        // Cooldown calculation happens in OnAttackAnimationEnd
     }
 
-    // ===== Animation Event Callbacks (Base Å¬·¡½ºÀÇ virtual ¸Ş¼Òµå ¿À¹ö¶óÀÌµå) =====
+    // ===== Animation Event Callbacks (Override virtual methods or public methods called by Animator) =====
 
-    // --- °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ½Ã È£ÃâµÉ Äİ¹é ÇÔ¼ö ¿À¹ö¶óÀÌµå ---
+    // Override OnAttackAnimationEnd from Base
     protected override void OnAttackAnimationEnd()
     {
-        // ±âº» Å¬·¡½ºÀÇ ·ÎÁ÷ È£Ãâ (isPerformingAttackAnimation = false ¼³Á¤ µî)
+        Debug.Log("A_Attacker Attack Animation End Event (Override)."); //Â  ë””ë²„ê·¸ ë¡œê·¸ ìœ ì§€Â 
+        // Call Base class logic (sets isPerformingAttackAnimation = false, starts post-attack pause coroutine)
         base.OnAttackAnimationEnd();
-        //Debug.Log("A_Attacker °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á! ´ÙÀ½ °ø°İ °¡´É ½Ã°£ °è»ê.");
 
-        // A °ø°İ ÄğÅ¸ÀÓ °è»ê (¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ½ÃÁ¡ºÎÅÍ ½ÃÀÛ)
+        // Calculate A_Attacker's specific next attack time based on its cooldown
         nextAttackTime = Time.time + attackACooldown;
-        //Debug.Log("--> A_AttackA Á¾·á. ´ÙÀ½ °ø°İÀº " + attackACooldown.ToString("F2") + "ÃÊ ÈÄ (" + nextAttackTime.ToString("F2") + "¿¡ °¡´É).");
+        Debug.Log("--> A_AttackA finished. Next attack possible in " + attackACooldown.ToString("F2") + "s (at " + nextAttackTime.ToString("F2") + ")."); //Â  ë””ë²„ê·¸ ë¡œê·¸ ìœ ì§€Â 
 
-        // TODO: ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ÈÄ AI »óÅÂ ÀüÈ¯ ·ÎÁ÷ Ãß°¡ (¿¹: Chase »óÅÂ·Î µ¹¾Æ°¡±â)
-        // ¿¹: SetState(EnemyState.Chase); // CommonEnemyController¿¡ Chase »óÅÂ°¡ ÀÖ´Ù¸é
+        // Returning to Chase state is handled by the Base class PostAttackPauseRoutine after the delay.
     }
 
-    // --- A °ø°İ È÷Æ®¹Ú½º È°¼ºÈ­ ¸Ş¼Òµå (Animation Event¿¡¼­ È£Ãâ) ---
-    // Animation Event¿¡¼­ EnableAttack1Hitbox ¶Ç´Â EnableAttack2Hitbox µîÀ» È£ÃâÇÏµµ·Ï ¼³Á¤µÇ¾î ÀÖÀ» °ÍÀÔ´Ï´Ù.
-    // A_Attacker´Â °ø°İÀÌ ÇÏ³ªÀÌ¹Ç·Î, A °ø°İ ¾Ö´Ï¸ŞÀÌ¼ÇÀÇ Animation Event¿¡¼­ ÀÌ ÇÔ¼ö¸¦ È£ÃâÇÏµµ·Ï ¼³Á¤ÇÕ´Ï´Ù.
-    // ÇÔ¼ö ÀÌ¸§Àº ±âÁ¸ B_GirlControllerÀÇ ¸íÄªÀ» µû¸£Áö¸¸, A_AttackerÀÇ È÷Æ®¹Ú½º ·ÎÁ÷À» ¼öÇàÇÕ´Ï´Ù.
-    // (¸¸¾à Animation Event¿¡¼­ PlayAttack1Anim ÇÔ¼öÃ³·³ EnableAttack1Hitbox¸¦ È£ÃâÇÏµµ·Ï ¼³Á¤µÇ¾î ÀÖ´Ù¸é ÀÌ ÇÔ¼ö¸¦ »ç¿ë)
-    public void EnableAttackAHitbox() // Animation Event ½Ã±×´ÏÃ³¿Í ÀÏÄ¡ (¸Å°³º¯¼ö ¾øÀ½)
+    //  í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ ì‹œ í˜¸ì¶œë  Animation Event ë©”ì„œë“œ ì˜¤ë²„ë¼ì´ë“œ 
+    // A_Hurt ì• ë‹ˆë©”ì´ì…˜ í´ë¦½ ëì— ì´ ì´ë¦„ì˜ Animation Eventë¥¼ ì¶”ê°€í•´ì•¼ í•©ë‹ˆë‹¤.
+    public override void OnHurtAnimationEnd() // Base í´ë˜ìŠ¤ì˜ virtual ë©”ì„œë“œ ì˜¤ë²„ë¼ì´ë“œ
     {
-        // B_GirlControllerÀÇ EnableAttack1Hitbox ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÏ´Â °ÍÀº ¾Æ´Ï¹Ç·Î,
-        // Animation Event ¼³Á¤ ½Ã ÇÔ¼ö ÀÌ¸§À» ÀÌ ÀÌ¸§(EnableAttackAHitbox)À¸·Î Á÷Á¢ ¿¬°áÇØ¾ß ÇÒ ¼ö ÀÖ½À´Ï´Ù.
-        // È¤Àº CommonEnemyController¿¡ virtual public void EnableAttackHitbox(int attackIndex) °°Àº ÇÔ¼ö°¡ ÀÖ´Ù¸é
-        // ÇØ´ç ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÏ¿© attackIndex¿¡ µû¶ó ´Ù¸¥ ·ÎÁ÷À» ¼öÇàÇÏµµ·Ï ±¸ÇöÇÒ ¼öµµ ÀÖ½À´Ï´Ù.
-        // ¿©±â¼­´Â µ¶¸³ÀûÀÎ public ÇÔ¼ö·Î ±¸ÇöÇÕ´Ï´Ù.
+        Debug.Log("A_Attacker OnHurtAnimationEnd called."); //  ë””ë²„ê·¸ ë¡œê·¸ ì¶”ê°€ 
+        isPerformingHurtAnimation = false; //  í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ ë í”Œë˜ê·¸ í•´ì œ 
+        Debug.Log("isPerformingHurtAnimation set to false in OnHurtAnimationEnd."); //  í”Œë˜ê·¸ í•´ì œ í™•ì¸ ë¡œê·¸ 
+
+
+        // í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ í›„ ì ì´ ì£½ì§€ ì•Šì•˜ë‹¤ë©´ AI ìƒíƒœë¥¼ ì¬í‰ê°€í•˜ë„ë¡ í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+        // SetState(EnemyState.Chase); ì™€ ê°™ì´ ìƒíƒœë¥¼ ì§ì ‘ ì„¤ì •í•˜ê±°ë‚˜,
+        // ì•„ë‹ˆë©´ í”Œë˜ê·¸ë§Œ í•´ì œí•˜ë©´ Update()ì—ì„œ ê±°ë¦¬ì— ë”°ë¼ ì•Œì•„ì„œ ë‹¤ìŒ ìƒíƒœë¡œ ì „í™˜ë©ë‹ˆë‹¤.
+        // ì—¬ê¸°ì„œëŠ” í”Œë˜ê·¸ë§Œ í•´ì œí•˜ê³  Updateì—ì„œ ìì—°ìŠ¤ëŸ½ê²Œ ìƒíƒœ ì „í™˜ë˜ë„ë¡ í•©ë‹ˆë‹¤.
+        if (!isDead)
+        {
+            // í”¼ê²© ì¢…ë£Œ í›„ ë°”ë¡œ Idleë¡œ ë³´ë‚¼ ìˆ˜ë„ ìˆìŠµë‹ˆë‹¤ (ì„ íƒ ì‚¬í•­)
+            // SetState(EnemyState.Idle);
+            // ë˜ëŠ” í˜„ì¬ ê±°ë¦¬ì— ë”°ë¼ Updateì—ì„œ ì•Œì•„ì„œ Chase/Attack/Idle ê²°ì • (ê¸°ë³¸ ë™ì‘)
+        }
+    }
+
+
+    // Enable A Attack Hitbox (Called by Animation Event on A_AttackA clip)
+    // Keep public for Animation Events. Signature must match Animation Event setup.
+    public void EnableAttackHitbox() // ìˆ˜ì •ëœ ì´ë¦„ ìœ ì§€
+    {
+        // Check Base isDead flag
+        if (isDead) return; // protected isDead ì‚¬ìš© // Do not enable hitbox if dead
 
         if (attackAHitboxObject != null && attackAHitboxCollider != null)
         {
-            // --- È÷Æ®¹Ú½º ¿ÀºêÁ§Æ®ÀÇ EnemyHitbox ½ºÅ©¸³Æ®¿¡ °ø°İ·Â °ª ¼³Á¤ ---
-            // ÀÌ ·ÎÁ÷Àº EnemyHitbox.cs ÆÄÀÏ¿¡ public float attackDamage; º¯¼ö°¡ ÀÖÀ» ¶§ ÀÛµ¿ÇÕ´Ï´Ù.
+            // Set damage value on the EnemyHitbox component
+            // Assumes EnemyHitbox.cs has a public float attackDamage; variable.
             if (attackAEnemyHitbox != null)
             {
-                attackAEnemyHitbox.attackDamage = attackAValue; // EnemyHitboxÀÇ attackDamage º¯¼ö¿¡ °ª ¼³Á¤ (0.5)
-                //Debug.Log("Attack A Hitbox¿¡ µ¥¹ÌÁö °ª ¼³Á¤µÊ: " + attackAValue);
+                attackAEnemyHitbox.attackDamage = attackAValue; // Set damage from A_Attacker's value
+                //Debug.Log("Attack A Hitbox damage set to: " + attackAValue);
             }
             else
             {
-                //Debug.LogWarning("Attack A Hitbox Object¿¡ EnemyHitbox ÄÄÆ÷³ÍÆ®°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù!", attackAHitboxObject);
+                Debug.LogWarning("EnemyHitbox component not found on Attack A Hitbox Object!", attackAHitboxObject);
             }
-            // -----------------------------------------------------------------
 
-            attackAHitboxCollider.enabled = true; // Äİ¶óÀÌ´õ È°¼ºÈ­
-            //Debug.Log(attackAHitboxObject.name + " Collider È°¼ºÈ­µÊ");
+            attackAHitboxCollider.enabled = true; // Enable collider
+            //Debug.Log(attackAHitboxObject.name + " Collider enabled.");
 
-            // TODO: ÇÊ¿äÇÏ´Ù¸é ¿©±â¼­ ResetHitFlag() È£ÃâÇÏ¿© °°Àº ½ºÀ® Áß Áßº¹ È÷Æ® ¹æÁö
+            // TODO: Reset hit flag on EnemyHitbox if needed to prevent hitting the same target multiple times per swing
             // if (attackAEnemyHitbox != null) attackAEnemyHitbox.ResetHitFlag();
         }
         else
         {
-            //Debug.LogWarning("Attack A Hitbox Object ¶Ç´Â Collider°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.", this);
+            Debug.LogWarning("Attack A Hitbox Object or Collider not assigned or found.", this);
         }
     }
 
-    // --- A °ø°İ È÷Æ®¹Ú½º ºñÈ°¼ºÈ­ ¸Ş¼Òµå (Animation Event¿¡¼­ È£Ãâ) ---
-    // Animation Event ¼³Á¤ ½Ã ÇÔ¼ö ÀÌ¸§À» ÀÌ ÀÌ¸§(DisableAttackAHitbox)À¸·Î Á÷Á¢ ¿¬°áÇØ¾ß ÇÒ ¼ö ÀÖ½À´Ï´Ù.
-    public void DisableAttackAHitbox() // Animation Event ½Ã±×´ÏÃ³¿Í ÀÏÄ¡ (¸Å°³º¯¼ö ¾øÀ½)
+    // Disable A Attack Hitbox (Called by Animation Event on A_AttackA clip)
+    // Keep public for Animation Events. Signature must match Animation Event setup.
+    public void DisableAttackHitbox() // ìˆ˜ì •ëœ ì´ë¦„ ìœ ì§€
     {
+        // Check Base isDead flag
+        if (isDead) return; // protected isDead ì‚¬ìš© // Do not disable hitbox if dead (already disabled in Base SetState(Dead))
+
         if (attackAHitboxCollider != null)
         {
-            attackAHitboxCollider.enabled = false; // Äİ¶óÀÌ´õ ºñÈ°¼ºÈ­
-            //Debug.Log(attackAHitboxObject.name + " Collider ºñÈ°¼ºÈ­µÊ");
+            attackAHitboxCollider.enabled = false; // Disable collider
+            //Debug.Log("Attack A Hitbox Collider disabled.");
         }
         else
         {
-            //Debug.LogWarning("Attack A Hitbox Collider°¡ ÇÒ´çµÇÁö ¾Ê¾Ò°Å³ª ÄÄÆ÷³ÍÆ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.", this);
+            Debug.LogWarning("Attack A Hitbox Collider not assigned or found.", this);
         }
     }
 
-
-    // TODO: ±âÅ¸ ÇÊ¿äÇÑ AI ·ÎÁ÷ ¶Ç´Â »óÅÂ ÀüÈ¯ ±¸Çö (¿¹: ÇÃ·¹ÀÌ¾î ÃßÀû, °ø°İ ¹üÀ§ Ã¼Å© µî)
-    // CommonEnemyControllerÀÇ virtual ¸Ş¼Òµå¸¦ ¿À¹ö¶óÀÌµåÇÏ¿© ±¸ÇöÇÕ´Ï´Ù.
-    // ¿¹: protected override void CheckForPlayer() { ... }
-    // ¿¹: protected override void MoveTowardsPlayer() { ... }
+    // TODO: Override other virtual methods from CommonEnemyController if needed for specific A_Attacker behavior.
+    // For example, if A_Attacker needs different movement logic:
+    // protected override void MoveTowardsPlayer() { base.MoveTowardsPlayer(); }
+    // protected override void MoveAwayFromPlayer() { base.MoveAwayFromPlayer(); }
 }

@@ -103,12 +103,12 @@ TextureImporter:
       name: silverblue_monster_run_1_0
       rect:
         serializedVersion: 2
-        x: 16
-        y: 13
-        width: 41
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 70
+        height: 80
+      alignment: 9
+      pivot: {x: 0.48, y: 0.65}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 88cbe97622e271c4aa400ccbc6a86aff
     internalID: 0
     vertices: []
     indices: 

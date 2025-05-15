@@ -1,204 +1,336 @@
 using UnityEngine;
-using System.Collections;
+using System; // Action ì‚¬ìš© ì‹œ í•„ìš”
+using System.Collections; // ì½”ë£¨í‹´ ì‚¬ìš© ì‹œ í•„ìš”
 
-// ±âº»ÀûÀÎ Àû Ä³¸¯ÅÍÀÇ µ¿ÀÛ ¹× ¼Ó¼ºÀ» °ü¸®ÇÏ´Â °øÅë ÄÁÆ®·Ñ·¯ (Base Class)
-public class CommonEnemyController : MonoBehaviour
+// IDamageable ì¸í„°í˜ì´ìŠ¤ êµ¬í˜„ ëª…ì‹œ
+public class CommonEnemyController : MonoBehaviour, IDamageable
 {
-    // ===== ±âº» ¼Ó¼º =====
+    // ===== ê¸°ë³¸ ì†ì„± =====
     [Header("Base Stats")]
-    public int maxHealth = 100;
-    protected int currentHealth;
-    public float moveSpeed = 3f; // °È±â/¹°·¯³ª±â ¼Óµµ
-    public float attackDamage = 2f; // ±âº» °ø°İ µ¥¹ÌÁö (½ÇÁ¦ Àû¿ëÀº ÆÄ»ı Å¬·¡½º³ª ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®¿¡¼­)
+    [SerializeField] protected float maxHealth = 100f; // float
+    [SerializeField] protected float currentHealth; // float
+    public float moveSpeed = 3f; // ê±·ê¸°/ë¬¼ëŸ¬ë‚˜ê¸° ì†ë„
+    // public float attackDamage = 2f; // ê¸°ë³¸ ê³µê²© ë°ë¯¸ì§€ (íŒŒìƒ í´ë˜ìŠ¤ë‚˜ ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸ì—ì„œ ì„¤ì •)
 
-    // ===== AI ÆÄ¶ó¹ÌÅÍ =====
+    // ===== AI íŒŒë¼ë¯¸í„° =====
     [Header("AI Parameters")]
-    public float detectionRange = 10f; // ÇÃ·¹ÀÌ¾î °¨Áö °Å¸®
-    public float attackRange = 2f; // °ø°İ ½ÃÀÛ ¹× À¯Áö °Å¸®
-    public float maintainBuffer = 0.5f; // attackRangeº¸´Ù ¾ó¸¶³ª ´õ °¡±î¿öÁ®¾ß ¹°·¯³¯Áö °áÁ¤
-    public string playerObjectName = "Player"; // ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ® ÀÌ¸§
+    public float detectionRange = 10f; // í”Œë ˆì´ì–´ ê°ì§€ ê±°ë¦¬
+    public float attackRange = 2f; // ê³µê²© ì‹œì‘ ë° ìœ ì§€ ê±°ë¦¬
+    public float maintainBuffer = 0.5f; // attackRangeë³´ë‹¤ ì–¼ë§ˆë‚˜ ë” ê°€ê¹Œì›Œì ¸ì•¼ ë¬¼ëŸ¬ë‚ ì§€ ê²°ì •
 
-    // ===== ¾Ö´Ï¸ŞÀÌÅÍ ¹× ¾Ö´Ï¸ŞÀÌ¼Ç »óÅÂ =====
+    // ê³µê²© ì‹œì‘ ì „/í›„ ëŒ€ê¸° ì‹œê°„ íŒŒë¼ë¯¸í„°
+    public float preAttackPauseDuration = 0.5f; // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘ ì „ ëŒ€ê¸° ì‹œê°„
+    public float postAttackPauseDuration = 1.0f; // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ í›„ ëŒ€ê¸° ì‹œê°„
+
+    public string playerObjectName = "Player"; // í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸ ì´ë¦„
+
+    // ===== ì• ë‹ˆë©”ì´í„° ë° ì• ë‹ˆë©”ì´ì…˜ ìƒíƒœ =====
     protected Animator animator;
     protected GameObject player;
-    protected bool isDead = false; // »ç¸Á »óÅÂ
-    protected bool isPerformingAttackAnimation = false; // <-- °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ÁßÀÎÁö ¿©ºÎ (À§Ä¡ °íÁ¤¿ë)
+    // protected bool isDead (ìˆ˜ì • ìœ ì§€)
+    protected bool isDead = false; // ì‚¬ë§ ìƒíƒœ
 
-    // ÀûÀÇ ÇöÀç AI »óÅÂ
-    protected enum EnemyState { Idle, Chase, Attack, Dead } // Enum ÀÌ¸§Àº °øÅëÀûÀ¸·Î »ç¿ë
-    protected EnemyState currentState = EnemyState.Idle; // ÃÊ±â »óÅÂ
+    // isPerformingAttackAnimationëŠ” ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ ì¤‘ + ì´ë™ ë° AI íŒë‹¨ ìŠ¤í‚µ í”Œë˜ê·¸
+    protected bool isPerformingAttackAnimation = false;
+    //  í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ ì¤‘ í”Œë˜ê·¸ ì¶”ê°€ 
+    protected bool isPerformingHurtAnimation = false;
 
-    // Àû Ä³¸¯ÅÍÀÇ ÃÊ±â ¹æÇâ (ÁÂ¿ì ¹İÀü¿¡ »ç¿ë)
-    public float initialFacingDirection = 1f; // ¿À¸¥ÂÊÀ» º¸¸é 1, ¿ŞÂÊÀ» º¸¸é -1
+
+    // ê³µê²© ì‹œì‘ ì „ ëŒ€ê¸° ìƒíƒœë¥¼ ìœ„í•œ í”Œë˜ê·¸ ë˜ëŠ” íƒ€ì´ë¨¸
+    private bool isWaitingForAttack = false; // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘ ì „ ëŒ€ê¸° ì¤‘ì¸ì§€ ì—¬ë¶€
+    private float attackWaitTimer = 0f; // ê³µê²© ì‹œì‘ ì „ ëŒ€ê¸° íƒ€ì´ë¨¸
+
+    // ê³µê²© í›„ ëŒ€ê¸° ìƒíƒœë¥¼ ìœ„í•œ í”Œë˜ê·¸ ë˜ëŠ” íƒ€ì´ë¨¸
+    private bool isWaitingAfterAttack = false; // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ í›„ ëŒ€ê¸° ì¤‘ì¸ì§€ ì—¬ë¶€
+
+
+    // ì ì˜ í˜„ì¬ AI ìƒíƒœ
+    protected enum EnemyState { Idle, Chase, Attack, Dead } // TODO: í•„ìš”ì‹œ Stunned ìƒíƒœ ì¶”ê°€
+    protected EnemyState currentState = EnemyState.Idle; // ì´ˆê¸° ìƒíƒœ
+
+    // ì  ìºë¦­í„°ì˜ ì´ˆê¸° ë°©í–¥ (ì¢Œìš° ë°˜ì „ì— ì‚¬ìš©)
+    public float initialFacingDirection = 1f; // ì˜¤ë¥¸ìª½ì„ ë³´ë©´ 1, ì™¼ìª½ì„ ë³´ë©´ -1
+
+    // IDamageable ì¸í„°í˜ì´ìŠ¤ ë©¤ë²„ ëª…ì‹œì  êµ¬í˜„ (ìˆ˜ì • ìœ ì§€)
+    // ì¸í„°í˜ì´ìŠ¤ëŠ” public setì„ ìš”êµ¬í•˜ì§€ë§Œ, í´ë˜ìŠ¤ ë‚´ë¶€ì—ì„œëŠ” protected setì„ ìœ ì§€í•˜ê¸° ìœ„í•¨
+    float IDamageable.CurrentHp { get => currentHealth; set => currentHealth = value; }
+    float IDamageable.MaxHp { get => maxHealth; set => maxHealth = value; }
+    bool IDamageable.IsDead { get => isDead; } // protected isDead í•„ë“œ ì‚¬ìš©
+    Action IDamageable.OnDead { get => OnDead; set => OnDead = value; } // í´ë˜ìŠ¤ì˜ OnDead ë©¤ë²„ë¥¼ ì‚¬ìš©
+
+
+    // ì‚¬ë§ ì‹œ í˜¸ì¶œë  ì´ë²¤íŠ¸ ì•¡ì…˜ (í´ë˜ìŠ¤ ë©¤ë²„, ìˆ˜ì • ìœ ì§€)
+    public Action OnDead { get; set; }
 
 
     protected virtual void Awake()
     {
-        // Startº¸´Ù ¸ÕÀú È£ÃâµÉ ¼ö ÀÖµµ·Ï Awake »ç¿ë (ÂüÁ¶ ¼³Á¤ µî¿¡ À¯¸®)
         animator = GetComponent<Animator>();
-        if (animator == null) //Debug.LogError("Animator component not found on " + gameObject.name);
+        if (animator == null) Debug.LogError("Animator component not found on " + gameObject.name);
 
-        currentHealth = maxHealth; // Ã¼·Â ÃÊ±âÈ­
+        // currentHealthëŠ” Startì—ì„œ maxHealthë¡œ ì´ˆê¸°í™”
     }
 
     protected virtual void Start()
     {
-        SetState(EnemyState.Idle); // ÃÊ±â »óÅÂ ¼³Á¤
-
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player"); // "Player" íƒœê·¸ë¡œ í”Œë ˆì´ì–´ ì°¾ìŒ
         if (player == null)
         {
-            //Debug.LogError("Player GameObject with name '" + playerObjectName + "' not found! Check name/scene.");
+            Debug.LogError("Player GameObject with Tag 'Player' not found! Ensure Player has the 'Player' tag.");
         }
+
+        currentHealth = maxHealth; // ì²´ë ¥ ì´ˆê¸°í™”
+
+        SetState(EnemyState.Idle); // ì´ˆê¸° ìƒíƒœ ì„¤ì •
+
+        // ì´ˆê¸° ëŒ€ê¸° ìƒíƒœ ë³€ìˆ˜ ì´ˆê¸°í™”
+        isWaitingForAttack = false;
+        attackWaitTimer = 0f;
+        isWaitingAfterAttack = false;
+        isDead = false; // protected isDead ì´ˆê¸°í™”
+        isPerformingHurtAnimation = false; //  í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ í”Œë˜ê·¸ ì´ˆê¸°í™” 
+        OnDead = null; // OnDead ì´ë²¤íŠ¸ ì´ˆê¸°í™” (ì¤‘ìš”!)
     }
 
     protected virtual void Update()
     {
-        if (isDead) return; // Á×Àº »óÅÂ¸é ¾Æ¹«°Íµµ ¾ÈÇÔ
+        // ì£½ì—ˆê±°ë‚˜ í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì´ë©´ Update ì „ì²´ ë¡œì§ ìŠ¤í‚µ
+        if (isDead) return; // ì£½ì—ˆìœ¼ë©´ ì•„ë¬´ê²ƒë„ ì•ˆ í•¨
 
-        // ÇÃ·¹ÀÌ¾î ¾øÀ¸¸é Idle »óÅÂ À¯Áö
+        //  isPerformingHurtAnimation ì¤‘ì¼ ë•Œ Update ë¡œì§ ìŠ¤í‚µ 
+        if (isPerformingHurtAnimation)
+        {
+            Debug.Log(gameObject.name + ": Update skipped due to isPerformingHurtAnimation being true."); //  Update ìŠ¤í‚µ ë¡œê·¸ 
+            return; // í”¼ê²© ì¤‘ì¼ ë•ŒëŠ” Updateì˜ ë‚˜ë¨¸ì§€ AI/ì´ë™ ë¡œì§ ê±´ë„ˆë›°ê¸°
+        }
+
+        //  isPerformingHurtAnimationê°€ falseì¼ ë•Œë§Œ ì´ ì•„ë˜ ë¡œì§ ì‹¤í–‰ 
+        Debug.Log(gameObject.name + ": Update loop is running. isPerformingHurtAnimation=" + isPerformingHurtAnimation + ", CurrentState=" + currentState); //  Update ì¬ê°œ ë¡œê·¸ 
+
         if (player == null)
         {
             if (currentState != EnemyState.Idle) SetState(EnemyState.Idle);
+            PlayIdleAnim();
             return;
         }
 
-        UpdateFacingDirection(); // ÇÃ·¹ÀÌ¾î ¹æÇâ ¹Ù¶óº¸±â
+        UpdateFacingDirection(); // í”Œë ˆì´ì–´ ë°©í–¥ ë°”ë¼ë³´ê¸°ëŠ” í•­ìƒ ìˆ˜í–‰ (ì£½ê±°ë‚˜ í”¼ê²© ì¤‘ì´ ì•„ë‹ˆë¼ë©´)
 
-        // °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç ÁßÀÌ¸é AI ÆÇ´Ü ¹× ÀÌµ¿ ·ÎÁ÷ ½ºÅµ
-        if (isPerformingAttackAnimation)
-        {
-            // //Debug.Log("°ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Áß. AI ÆÇ´Ü ½ºÅµ.");
-            return;
-        }
-
-        // ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸® °è»ê
-        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-
-        // ===== AI »óÅÂ ÀüÈ¯ ·ÎÁ÷ (°øÅë) =====
+        //  AI ìƒíƒœ ë¨¸ì‹  ì‹¤í–‰ 
         switch (currentState)
         {
             case EnemyState.Idle:
-                // ÇÃ·¹ÀÌ¾î°¡ °¨Áö ¹üÀ§¿¡ µé¾î¿À¸é ÃßÀû
-                if (distanceToPlayer <= detectionRange)
+                //  ìƒì„¸ ë””ë²„ê·¸ ë¡œê·¸ ì¶”ê°€
+                //Debug.Log(gameObject.name + ": State=Idle. Distance=" + Vector3.Distance(transform.position, player.transform.position).ToString("F2"));
+                // í”Œë ˆì´ì–´ê°€ ê°ì§€ ë²”ìœ„ì— ë“¤ì–´ì˜¤ë©´ ì¶”ì 
+                if (Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
                 {
-                    //Debug.Log("Idle -> Chase (Distance: " + distanceToPlayer.ToString("F2") + ")");
                     SetState(EnemyState.Chase);
                 }
+                // PlayIdleAnim(); // ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì€ SetStateì—ì„œ ê´€ë¦¬
                 break;
 
             case EnemyState.Chase:
-                // ÇÃ·¹ÀÌ¾î°¡ °ø°İ ¹üÀ§¿¡ µé¾î¿À¸é °ø°İ
-                if (distanceToPlayer <= attackRange)
+                //  Chase ìƒíƒœ ì§„ì… ë¡œê·¸ (ì¶”ì  ì¤‘ Update ë§¤ í”„ë ˆì„ ì‹¤í–‰ í™•ì¸) 
+                Debug.Log(gameObject.name + ": In Chase State Update. Distance=" + Vector3.Distance(transform.position, player.transform.position).ToString("F2"));
+                float distanceToPlayerChase = Vector3.Distance(transform.position, player.transform.position);
+                // í”Œë ˆì´ì–´ê°€ ê³µê²© ë²”ìœ„ì— ë“¤ì–´ì˜¤ë©´ ê³µê²© ìƒíƒœë¡œ ì „í™˜
+                if (distanceToPlayerChase <= attackRange)
                 {
-                    //Debug.Log("Chase -> Attack (Distance: " + distanceToPlayer.ToString("F2") + ")");
                     SetState(EnemyState.Attack);
                 }
-                // ÇÃ·¹ÀÌ¾î°¡ °¨Áö ¹üÀ§¸¦ ¹ş¾î³ª¸é Idle
-                else if (distanceToPlayer > detectionRange)
+                // í”Œë ˆì´ì–´ê°€ ê°ì§€ ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ë©´ Idle
+                else if (distanceToPlayerChase > detectionRange)
                 {
-                    //Debug.Log("Chase -> Idle (Distance: " + distanceToPlayer.ToString("F2") + ")");
                     SetState(EnemyState.Idle);
                 }
-                // °¨Áö ¹üÀ§ ³», °ø°İ ¹üÀ§ ¹Û -> °è¼Ó ÃßÀû
+                // ê°ì§€ ë²”ìœ„ ë‚´, ê³µê²© ë²”ìœ„ ë°– -> ê³„ì† ì¶”ì 
+                //  ì´ë™ì€ ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì´ê±°ë‚˜ ëŒ€ê¸° ì¤‘ì´ ì•„ë‹ ë•Œë§Œ í—ˆìš© 
+                //  ì´ë™ í—ˆìš© ì¡°ê±´ ìƒì„¸ ë¡œê·¸ 
+                bool canChaseMove = !(isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation); // isPerformingHurtAnimationëŠ” Update ì§„ì… ì‹œ ì´ë¯¸ ì²´í¬
+                Debug.Log(gameObject.name + ": Checking Chase Move Condition. Result: " + canChaseMove +
+                          " (isPerformingAttackAnim=" + isPerformingAttackAnimation +
+                          ", isWaitingForAttack=" + isWaitingForAttack +
+                          ", isWaitingAfterAttack=" + isWaitingAfterAttack + ")"); // isPerformingHurtAnimationëŠ” ì—¬ê¸°ì„œ ì´ë¯¸ false
+
+                if (canChaseMove)
+                {
+                    Debug.Log(gameObject.name + ": Chase Move Condition Met. Calling MoveTowardsPlayer and PlayWalkAnim."); //  ì´ë™ ë©”ì„œë“œ í˜¸ì¶œ ì§ì „ ë¡œê·¸ 
+                    MoveTowardsPlayer(); // <-- ì´ë™ í—ˆìš© ì‹œì—ë§Œ ì´ë™ ë©”ì„œë“œ í˜¸ì¶œ
+                    PlayWalkAnim(); // ì´ë™ ì‹œ ê±·ê¸° ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
+                }
+                //  ì´ë™ì´ í—ˆìš©ë˜ì§€ ì•ŠëŠ” Chase ìƒíƒœ (ëŒ€ê¸°/ì• ë‹ˆë©”ì´ì…˜ ì¤‘) 
                 else
                 {
-                    MoveTowardsPlayer();
+                    Debug.Log(gameObject.name + ": Chase Move Condition NOT Met. Remaining Idle/Waiting."); //  ì´ë™ ìŠ¤í‚µ ë¡œê·¸ 
+                    // ì´ ê²½ìš° Idle ì• ë‹ˆë©”ì´ì…˜ì„ ì¬ìƒí•˜ëŠ” ê²ƒì´ ìì—°ìŠ¤ëŸ¬ìš¸ ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+                    PlayIdleAnim();
                 }
+                // ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì€ SetState ë˜ëŠ” ìœ„ ì´ë™/ëŒ€ê¸° ë¡œì§ì—ì„œ ê´€ë¦¬
+                // PlayWalkAnim(); // ë¬´ì¡°ê±´ Walk ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ ëŒ€ì‹  ì¡°ê±´ë¶€ ì¬ìƒ
                 break;
 
             case EnemyState.Attack:
-                // ÇÃ·¹ÀÌ¾î°¡ °ø°İ ¹üÀ§¸¦ ¹ş¾î³ª¸é ÃßÀû
-                if (distanceToPlayer > attackRange)
+                float distanceToPlayerAttack = Vector3.Distance(transform.position, player.transform.position);
+                // í”Œë ˆì´ì–´ê°€ ê³µê²© ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ë©´ ì¶”ì  ìƒíƒœë¡œ ì „í™˜
+                if (distanceToPlayerAttack > attackRange)
                 {
-                    //Debug.Log("Attack -> Chase (Distance: " + distanceToPlayer.ToString("F2") + ")");
                     SetState(EnemyState.Chase);
                 }
-                // ÇÃ·¹ÀÌ¾î °ø°İ ¹üÀ§ ³»
-                else
+                else // í”Œë ˆì´ì–´ ê³µê²© ë²”ìœ„ ë‚´
                 {
-                    // °£°İ À¯Áö
-                    if (distanceToPlayer < attackRange - maintainBuffer)
+                    // ê°„ê²© ìœ ì§€ (ë„ˆë¬´ ê°€ê¹Œìš°ë©´ ë¬¼ëŸ¬ë‚˜ê¸°)
+                    //  ë¬¼ëŸ¬ë‚˜ê¸°ë„ ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì´ê±°ë‚˜ ëŒ€ê¸° ì¤‘ì´ ì•„ë‹ ë•Œë§Œ í—ˆìš© 
+                    //  ë¬¼ëŸ¬ë‚˜ê¸° í—ˆìš© ì¡°ê±´ ìƒì„¸ ë¡œê·¸ 
+                    bool canAttackMove = !(isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation); // isPerformingHurtAnimationëŠ” Update ì§„ì… ì‹œ ì´ë¯¸ ì²´í¬
+                    Debug.Log(gameObject.name + ": Checking Attack Move Condition. Result: " + canAttackMove +
+                              " (isPerformingAttackAnim=" + isPerformingAttackAnimation +
+                              ", isWaitingForAttack=" + isWaitingForAttack +
+                              ", isWaitingAfterAttack=" + isWaitingAfterAttack + ")"); // isPerformingHurtAnimationëŠ” ì—¬ê¸°ì„œ ì´ë¯¸ false
+
+
+                    if (canAttackMove && distanceToPlayerAttack < attackRange - maintainBuffer)
                     {
-                        //Debug.Log("Too close, retreating.");
-                        MoveAwayFromPlayer();
+                        //  ìƒì„¸ ë””ë²„ê·¸ ë¡œê·¸ ì¶”ê°€
+                        Debug.Log(gameObject.name + ": Too close (" + distanceToPlayerAttack.ToString("F2") + "), retreating. Resetting attack wait.");
+                        MoveAwayFromPlayer(); // <-- ë¬¼ëŸ¬ë‚˜ê¸° í—ˆìš© ì‹œì—ë§Œ ì´ë™
+                        PlayWalkAnim(); // ë¬¼ëŸ¬ë‚  ë•ŒëŠ” ê±·ê¸° ì• ë‹ˆë©”ì´ì…˜
+                        isWaitingForAttack = false; // ë¬¼ëŸ¬ë‚˜ëŠ” ì¤‘ ê³µê²© ì¤€ë¹„ ìƒíƒœ í•´ì œ
+                        attackWaitTimer = preAttackPauseDuration; // íƒ€ì´ë¨¸ ë¦¬ì…‹ (ë¬¼ëŸ¬ë‚œ í›„ ë‹¤ì‹œ ê³µê²© ì¤€ë¹„ ì‹œì‘)
                     }
-                    // ÀûÀıÇÑ °ø°İ °Å¸® -> °ø°İ ·ÎÁ÷ ¼öÇà (PerformAttackLogicÀº ÆÄ»ı Å¬·¡½º¿¡¼­ ±¸Çö)
-                    else
+                    else // ì ì ˆí•œ ê³µê²© ê±°ë¦¬ ë˜ëŠ” ì´ë™ì´ í—ˆìš©ë˜ì§€ ì•ŠëŠ” ìƒíƒœ (ëŒ€ê¸°/ì• ë‹ˆë©”ì´ì…˜ ì¤‘)
                     {
-                        // //Debug.Log("Attempting attack logic.");
-                        PerformAttackLogic(); // <-- ÆÄ»ı Å¬·¡½º¿¡¼­ ¿À¹ö¶óÀÌµåÇÏ¿© °ø°İ ÆĞÅÏ ±¸Çö
+                        //  ê³µê²© ì¤€ë¹„ ì‹œì‘ ì¡°ê±´: ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì´ê±°ë‚˜ ê³µê²© í›„ ëŒ€ê¸° ì¤‘ì´ ì•„ë‹ ë•Œ 
+                        //  ê³µê²© ì‹œì‘ ì¡°ê±´ ìƒì„¸ ë¡œê·¸ 
+                        bool canStartAttackPrep = !(isPerformingAttackAnimation || isWaitingAfterAttack); // isPerformingHurtAnimationëŠ” Update ì§„ì… ì‹œ ì´ë¯¸ ì²´í¬
+                        Debug.Log(gameObject.name + ": Checking Attack Start Prep Condition. Result: " + canStartAttackPrep +
+                                  " (isPerformingAttackAnim=" + isPerformingAttackAnimation +
+                                  ", isWaitingAfterAttack=" + isWaitingAfterAttack + ")");
+
+                        if (canStartAttackPrep)
+                        {
+                            //  ì•„ì§ ê³µê²© ì¤€ë¹„ ëŒ€ê¸° ìƒíƒœê°€ ì•„ë‹ˆë¼ë©´ ì‹œì‘ 
+                            if (!isWaitingForAttack)
+                            {
+                                Debug.Log(gameObject.name + ": Within attack range (" + distanceToPlayerAttack.ToString("F2") + "). Condition met. Starting attack wait (" + preAttackPauseDuration.ToString("F2") + "s).");
+                                isWaitingForAttack = true; // ê³µê²© ì¤€ë¹„ ìƒíƒœ ì§„ì…
+                                attackWaitTimer = preAttackPauseDuration; // ê³µê²© ì¤€ë¹„ íƒ€ì´ë¨¸ ì‹œì‘
+                                PlayIdleAnim(); // ê³µê²© ì¤€ë¹„ ì¤‘ì—ëŠ” Idle ëª¨ì…˜
+                            }
+                            // else: ì´ë¯¸ isWaitingForAttack ìƒíƒœì´ë©´ íƒ€ì´ë¨¸ ê°ì†Œ ë¡œì§ìœ¼ë¡œ ì´ë™ (ì•„ë˜ if ë¸”ë¡)
+                        }
+                        // else: isPerformingAttackAnimation ë˜ëŠ” isWaitingAfterAttack ìƒíƒœì´ë©´ ê³µê²© ì¤€ë¹„ ì‹œì‘ ì•ˆ í•¨.
+
+                        //  íƒ€ì´ë¨¸ ê°ì†Œ ë° PerformAttackLogic í˜¸ì¶œ 
+                        // isWaitingForAttack ìƒíƒœì¼ ë•Œë§Œ íƒ€ì´ë¨¸ ê°ì†Œ ë° PerformAttackLogic í˜¸ì¶œ
+                        if (isWaitingForAttack)
+                        {
+                            //Debug.Log(gameObject.name + ": Currently in Attack Wait state. Timer: " + attackWaitTimer.ToString("F2"));
+                            attackWaitTimer -= Time.deltaTime;
+                            if (attackWaitTimer <= 0)
+                            {
+                                Debug.Log(gameObject.name + ": Attack wait finished. Timer <= 0. Calling PerformAttackLogic.");
+                                isWaitingForAttack = false; // ê³µê²© ì¤€ë¹„ ìƒíƒœ í•´ì œ
+                                PerformAttackLogic(); // <-- íŒŒìƒ í´ë˜ìŠ¤ì˜ ì˜¤ë²„ë¼ì´ë“œ ë©”ì„œë“œ í˜¸ì¶œ
+                            }
+                        }
+                        // Animation: PlayIdleAnim while waiting/paused, PlayAttackAnim while isPerformingAttackAnimation
+                        // ì• ë‹ˆë©”ì´ì…˜ì€ ì£¼ë¡œ SetStateì™€ ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸ì—ì„œ ê´€ë¦¬
                     }
                 }
                 break;
 
             case EnemyState.Dead:
-                // Á×Àº »óÅÂ¿¡¼­´Â AI ·ÎÁ÷ ¾øÀ½
+                // ì£½ì€ ìƒíƒœì—ì„œëŠ” AI ë¡œì§ ì—†ìŒ
                 break;
         }
-        // ===== AI »óÅÂ ÀüÈ¯ ·ÎÁ÷ ³¡ =====
     }
 
-    // ===== AI »óÅÂ ¹× µ¿ÀÛ °ü·Ã ÇÔ¼öµé (°øÅë) =====
-
-    // AI »óÅÂ¸¦ ¼³Á¤ÇÏ°í ¾Ö´Ï¸ŞÀÌ¼Ç ¹× º¯¼ö ¾÷µ¥ÀÌÆ®
+    // AI ìƒíƒœë¥¼ ì„¤ì •í•˜ê³  ì• ë‹ˆë©”ì´ì…˜ ë° ë³€ìˆ˜ ì—…ë°ì´íŠ¸
     protected virtual void SetState(EnemyState newState)
     {
-        //Debug.Log(">>> SetState: " + currentState.ToString() + " -> " + newState.ToString());
+        Debug.Log(">>> " + gameObject.name + " SetState: " + currentState.ToString() + " -> " + newState.ToString()); //  ìƒíƒœ ì „í™˜ ë¡œê·¸ (ìœ ì§€) 
         if (currentState == newState) return;
+        if (isDead && newState != EnemyState.Dead) return; // protected isDead ì‚¬ìš©
 
-        // ÀÌÀü »óÅÂ Á¾·á ·ÎÁ÷ (ÇÊ¿ä½Ã ÆÄ»ı Å¬·¡½º¿¡¼­ ¿À¹ö¶óÀÌµå)
+        currentState = newState;
 
-        currentState = newState; // »óÅÂ º¯°æ
-
-        // »õ »óÅÂ ÁøÀÔ ·ÎÁ÷
+        // ìƒíƒœ ì „í™˜ ì‹œ ì´ˆê¸°í™” ë° ì• ë‹ˆë©”ì´ì…˜ ì„¤ì •
         switch (currentState)
         {
             case EnemyState.Idle:
-                PlayIdleAnim(); // <-- ÆÄ»ı Å¬·¡½ºÀÇ ¿À¹ö¶óÀÌµå ¸Ş¼Òµå È£Ãâ (¿©±â¼­ ÆÄ»ı Å¬·¡½º°¡ ¾Ö´Ï¸ŞÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ¼³Á¤)
-                // animator.SetBool("IsWalking", false); // <-- ÀÌ ÁÙµé(IsWalking/B_Walk ¼³Á¤)Àº ÆÄ»ı Å¬·¡½ºÀÇ PlayAnim ¸Ş¼Òµå·Î ¿Å°ÜÁ³½À´Ï´Ù. ÀÌ À§Ä¡¿¡¼­´Â »èÁ¦µÇ¾î¾ß ÇÕ´Ï´Ù.
+                PlayIdleAnim(); // Idle ì• ë‹ˆë©”ì´ì…˜
                 isPerformingAttackAnimation = false;
-                ResetAttackTriggers(); // ÆÄ»ı Å¬·¡½º¿¡¼­ °ø°İ Æ®¸®°Å ¸®¼ÂÀ» ¿À¹ö¶óÀÌµåÇÔ
-                // animator.ResetTrigger("Jump"); // ÀÌ Æ®¸®°Å ÀÌ¸§ÀÌ °øÅëÀûÀÌÁö ¾Ê´Ù¸é ÆÄ»ı Å¬·¡½º·Î ¿Å±â¼¼¿ä.
+                // isPerformingHurtAnimation = false; // Idle ì§„ì… ì‹œ í”¼ê²© ìƒíƒœ í•´ì œ (ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸ì—ì„œë„ í•¨)
+                isWaitingForAttack = false; // ê³µê²© ì¤€ë¹„ ìƒíƒœ í•´ì œ
+                attackWaitTimer = 0f;
+                isWaitingAfterAttack = false; // ê³µê²© í›„ ëŒ€ê¸° ìƒíƒœ í•´ì œ
+                ResetAttackTriggers(); // ê³µê²© íŠ¸ë¦¬ê±° ë¦¬ì…‹
                 break;
 
             case EnemyState.Chase:
-                PlayWalkAnim(); // <-- ÆÄ»ı Å¬·¡½ºÀÇ ¿À¹ö¶óÀÌµå ¸Ş¼Òµå È£Ãâ (¿©±â¼­ ÆÄ»ı Å¬·¡½º°¡ ¾Ö´Ï¸ŞÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ¼³Á¤)
-                // animator.SetBool("IsWalking", true);  // <-- ÀÌ ÁÙµé(IsWalking/B_Walk ¼³Á¤)Àº ÆÄ»ı Å¬·¡½ºÀÇ PlayAnim ¸Ş¼Òµå·Î ¿Å°ÜÁ³½À´Ï´Ù. ÀÌ À§Ä¡¿¡¼­´Â »èÁ¦µÇ¾î¾ß ÇÕ´Ï´Ù.
+                PlayWalkAnim(); // ê±·ê¸° ì• ë‹ˆë©”ì´ì…˜
                 isPerformingAttackAnimation = false;
-                ResetAttackTriggers(); // ÆÄ»ı Å¬·¡½º¿¡¼­ °ø°İ Æ®¸®°Å ¸®¼ÂÀ» ¿À¹ö¶óÀÌµåÇÔ
-                // animator.ResetTrigger("Jump"); // ÀÌ Æ®¸®°Å ÀÌ¸§ÀÌ °øÅëÀûÀÌÁö ¾Ê´Ù¸é ÆÄ»ı Å¬·¡½º·Î ¿Å±â¼¼¿ä.
+                // isPerformingHurtAnimation = false; // Chase ì§„ì… ì‹œ í”¼ê²© ìƒíƒœ í•´ì œ
+                isWaitingForAttack = false; // ê³µê²© ì¤€ë¹„ ìƒíƒœ í•´ì œ
+                attackWaitTimer = 0f;
+                isWaitingAfterAttack = false; // ê³µê²© í›„ ëŒ€ê¸° ìƒíƒœ í•´ì œ
+                ResetAttackTriggers(); // ê³µê²© íŠ¸ë¦¬ê±° ë¦¬ì…‹
                 break;
 
             case EnemyState.Attack:
-                PlayIdleAnim(); // <-- °ø°İ ÁØºñ Áß¿¡´Â Idle ¸ğ¼Ç (¿©±â¼­ ÆÄ»ı Å¬·¡½º°¡ ¾Ö´Ï¸ŞÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ¼³Á¤)
-                                // animator.SetBool("IsWalking", false); // <-- ÀÌ ÁÙµé(IsWalking/B_Walk ¼³Á¤)Àº ÆÄ»ı Å¬·¡½ºÀÇ PlayAnim ¸Ş¼Òµå·Î ¿Å°ÜÁ³½À´Ï´Ù. ÀÌ À§Ä¡¿¡¼­´Â »èÁ¦µÇ¾î¾ß ÇÕ´Ï´Ù.
-                                // isPerformingAttackAnimation´Â PerformAttackLogic¿¡¼­ ¼³Á¤
-                                // °ø°İ »óÅÂ ÁøÀÔ ½Ã ´Ù¸¥ Æ®¸®°Å ÃÊ±âÈ­
-                                // animator.ResetTrigger("Jump"); // ÀÌ Æ®¸®°Å ÀÌ¸§ÀÌ °øÅëÀûÀÌÁö ¾Ê´Ù¸é ÆÄ»ı Å¬·¡½º·Î ¿Å±â¼¼¿ä.
-                ResetAttackTriggers(); // ÆÄ»ı Å¬·¡½º¿¡¼­ °ø°İ Æ®¸®°Å ¸®¼ÂÀ» ¿À¹ö¶óÀÌµåÇÔ
+                PlayIdleAnim(); // ê³µê²© ì¤€ë¹„ ì¤‘ì—ëŠ” Idle ëª¨ì…˜
+                isWaitingAfterAttack = false; // ê³µê²© í›„ ëŒ€ê¸° ìƒíƒœ í•´ì œ
+                ResetAttackTriggers(); // ê³µê²© íŠ¸ë¦¬ê±° ë¦¬ì…‹
+                isWaitingForAttack = true; //  ê³µê²© ì¤€ë¹„ ìƒíƒœ ì§„ì… 
+                attackWaitTimer = preAttackPauseDuration; // ê³µê²© ì¤€ë¹„ íƒ€ì´ë¨¸ ì‹œì‘
+                isPerformingAttackAnimation = false; // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘ ì „ì´ë¯€ë¡œ false
+                // isPerformingHurtAnimation = false; // Attack ì§„ì… ì‹œ í”¼ê²© ìƒíƒœ í•´ì œ
+                //  ìƒì„¸ ë””ë²„ê·¸ ë¡œê·¸ ì¶”ê°€
+                Debug.Log(gameObject.name + ": Entered Attack state. Initializing attack wait timer (" + preAttackPauseDuration.ToString("F2") + "s).");
                 break;
 
             case EnemyState.Dead:
-                isDead = true;
+                isDead = true; // protected isDead ì„¤ì •
                 isPerformingAttackAnimation = false;
-                // animator.SetBool("IsWalking", false); // <-- ÀÌ ÁÙµé(IsWalking/B_Walk ¼³Á¤)Àº ÆÄ»ı Å¬·¡½ºÀÇ PlayAnim ¸Ş¼Òµå·Î ¿Å°ÜÁ³½À´Ï´Ù. ÀÌ À§Ä¡¿¡¼­´Â »èÁ¦µÇ¾î¾ß ÇÕ´Ï´Ù.
-                ResetAttackTriggers(); // ÆÄ»ı Å¬·¡½º¿¡¼­ °ø°İ Æ®¸®°Å ¸®¼ÂÀ» ¿À¹ö¶óÀÌµåÇÔ
-                // animator.ResetTrigger("Jump"); // ÀÌ Æ®¸®°Å ÀÌ¸§ÀÌ °øÅëÀûÀÌÁö ¾Ê´Ù¸é ÆÄ»ı Å¬·¡½º·Î ¿Å±â¼¼¿ä.
-                PlayDeathAnim(); // <-- ÆÄ»ı Å¬·¡½ºÀÇ ¿À¹ö¶óÀÌµå ¸Ş¼Òµå È£Ãâ
-                // TODO: »ç¸Á ÈÄ Ãß°¡ Ã³¸® (¿ÀºêÁ§Æ® ºñÈ°¼ºÈ­/ÆÄ±« µî)
+                isPerformingHurtAnimation = false; //  ì‚¬ë§ ì‹œ í”¼ê²© ìƒíƒœ í•´ì œ 
+                isWaitingForAttack = false;
+                attackWaitTimer = 0f;
+                isWaitingAfterAttack = false;
+                ResetAttackTriggers(); // ê³µê²© íŠ¸ë¦¬ê±° ë¦¬ì…‹
+                PlayDeathAnim(); // ì‚¬ë§ ì• ë‹ˆë©”ì´ì…˜
+
+                // OnDead ì´ë²¤íŠ¸ í˜¸ì¶œ
+                OnDead?.Invoke(); // êµ¬ë…ìê°€ ìˆë‹¤ë©´ í˜¸ì¶œ (null ì²´í¬)
+
+                // ì‚¬ë§ í›„ ì²˜ë¦¬
+                Collider2D mainCollider = GetComponent<Collider2D>();
+                if (mainCollider != null) mainCollider.enabled = false;
+                Rigidbody2D rb = GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    rb.linearVelocity = Vector2.zero;
+                    rb.isKinematic = true;
+                }
+                // GameManagerì— ì‚¬ë§ ì•Œë¦¼ (í•„ìš” ì—†ëŠ” ê²½ìš° ì£¼ì„ ì²˜ë¦¬ ë˜ëŠ” ì‚­ì œ)
+                /* if (GameManager.Instance != null) { ... } */
+                Destroy(gameObject, 1f);
                 break;
         }
     }
 
-    // ÇÃ·¹ÀÌ¾î ¹æÇâÀ¸·Î ÀÌµ¿ (Chase »óÅÂ)
+    //  ì´ë™ ê´€ë ¨ í•¨ìˆ˜ë“¤: isPerformingHurtAnimation ì¤‘ì¼ ë•Œë„ ì´ë™ ë§‰ë„ë¡ ì¡°ê±´ ì¶”ê°€ 
     protected virtual void MoveTowardsPlayer()
     {
-        if (player == null || currentState != EnemyState.Chase || isPerformingAttackAnimation) return;
-
+        //  ì´ë™ì€ ê³µê²© ì• ë‹ˆë©”ì´ì…˜/ëŒ€ê¸° ì¤‘ì´ê±°ë‚˜ í”¼ê²© ì¤‘, ì£½ì—ˆì„ ë•Œ ìŠ¤í‚µ 
+        if (player == null || currentState != EnemyState.Chase || isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)
+        {
+            Debug.Log(gameObject.name + ": MoveTowardsPlayer skipped. Reason: State=" + currentState + ", Paused/Hurt/Dead=" + (isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)); //  ì´ë™ ìŠ¤í‚µ ìƒì„¸ ë¡œê·¸ 
+            return;
+        }
+        Debug.Log(gameObject.name + ": MoveTowardsPlayer executing."); //  ì´ë™ ì‹¤í–‰ ë¡œê·¸ 
         Vector3 directionToPlayer = (player.transform.position - transform.position);
-        directionToPlayer.y = 0; // YÃà ¹«½Ã (2D³ª ÆòÁö 3D)
-
+        directionToPlayer.z = 0;
         if (directionToPlayer.sqrMagnitude > 0.0001f)
         {
             Vector3 moveDirection = directionToPlayer.normalized;
@@ -207,93 +339,99 @@ public class CommonEnemyController : MonoBehaviour
         }
     }
 
-    // ÇÃ·¹ÀÌ¾î ¹İ´ë ¹æÇâÀ¸·Î ÀÌµ¿ (Attack »óÅÂ¿¡¼­ ³Ê¹« °¡±î¿ï ¶§)
     protected virtual void MoveAwayFromPlayer()
     {
-        if (player == null || currentState != EnemyState.Attack || isPerformingAttackAnimation) return;
-
+        //  ì´ë™ì€ ê³µê²© ì• ë‹ˆë©”ì´ì…˜/ëŒ€ê¸° ì¤‘ì´ê±°ë‚˜ í”¼ê²© ì¤‘, ì£½ì—ˆì„ ë•Œ ìŠ¤í‚µ 
+        if (player == null || currentState != EnemyState.Attack || isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)
+        {
+            Debug.Log(gameObject.name + ": MoveAwayFromPlayer skipped. Reason: State=" + currentState + ", Paused/Hurt/Dead=" + (isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)); //  ì´ë™ ìŠ¤í‚µ ìƒì„¸ ë¡œê·¸ 
+            return;
+        }
+        Debug.Log(gameObject.name + ": MoveAwayFromPlayer executing."); //  ì´ë™ ì‹¤í–‰ ë¡œê·¸ 
         Vector3 directionAwayFromPlayer = (transform.position - player.transform.position);
-        directionAwayFromPlayer.y = 0; // YÃà ¹«½Ã
+        directionAwayFromPlayer.z = 0;
 
         if (directionAwayFromPlayer.sqrMagnitude > 0.0001f)
         {
             Vector3 moveDirection = directionAwayFromPlayer.normalized;
             Vector3 movement = moveDirection * moveSpeed * Time.deltaTime;
-
             transform.position += movement;
         }
     }
 
-    // ÆÄ»ı Å¬·¡½º¿¡¼­ ¿À¹ö¶óÀÌµåÇÏ¿© ½ÇÁ¦ °ø°İ ·ÎÁ÷ ±¸Çö (ÄğÅ¸ÀÓ, ÆĞÅÏ µî)
     protected virtual void PerformAttackLogic()
     {
-        // ±âº» Å¬·¡½º¿¡¼­´Â Æ¯º°ÇÑ °ø°İ ·ÎÁ÷ ¾øÀ½.
-        // ÆÄ»ı Å¬·¡½º¿¡¼­ ÀÌ ¸Ş¼Òµå¸¦ ¿À¹ö¶óÀÌµåÇÏ¿©
-        // ÄğÅ¸ÀÓ Ã¼Å©, °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Æ®¸®°Å ¹ßµ¿, isPerformingAttackAnimation = true ¼³Á¤ µîÀ» ±¸Çö
-        //Debug.Log("Base PerformAttackLogic called. Override this in derived class.");
+        // Overridden in derived class
     }
 
-    // ÇÃ·¹ÀÌ¾î ¹æÇâÀ¸·Î Ä³¸¯ÅÍ ÁÂ¿ì ¹İÀü
     protected virtual void UpdateFacingDirection()
     {
-        if (player == null) return;
+        //  í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì—ëŠ” ë°©í–¥ ì „í™˜ë„ ë§‰ì„ ìˆ˜ ìˆìŒ (ì„ íƒ ì‚¬í•­) 
+        if (player == null || isPerformingHurtAnimation || isDead)
+        {
+            // Debug.Log(gameObject.name + ": UpdateFacingDirection skipped due to Hurt/Dead state."); // ë””ë²„ê·¸ ì¶”ê°€
+            return;
+        }
+        // Debug.Log(gameObject.name + ": UpdateFacingDirection executing."); // ë””ë²„ê·¸ ì¶”ê°€
 
         float directionX = player.transform.position.x - transform.position.x;
         Vector3 currentScale = transform.localScale;
-
         if (directionX > 0.01f)
         {
-            // ÇÃ·¹ÀÌ¾î°¡ ¿À¸¥ÂÊ¿¡ ÀÖÀ» ¶§ (Ä³¸¯ÅÍ°¡ ¿À¸¥ÂÊÀ» ¹Ù¶óº¸µµ·Ï ½ºÄÉÀÏ Á¶Á¤)
-            // Mathf.Sign(initialFacingDirection)ÀÌ 1ÀÌ¸é -Scale.x, -1ÀÌ¸é +Scale.x
-            transform.localScale = new Vector3(Mathf.Abs(currentScale.x) * -Mathf.Sign(initialFacingDirection), currentScale.y, currentScale.z);
+            transform.localScale = new Vector3(Mathf.Abs(currentScale.x) * Mathf.Sign(initialFacingDirection) * -1f, currentScale.y, currentScale.z);
         }
         else if (directionX < -0.01f)
         {
-            // ÇÃ·¹ÀÌ¾î°¡ ¿ŞÂÊ¿¡ ÀÖÀ» ¶§ (Ä³¸¯ÅÍ°¡ ¿ŞÂÊÀ» ¹Ù¶óº¸µµ·Ï ½ºÄÉÀÏ Á¶Á¤)
-            // Mathf.Sign(initialFacingDirection)ÀÌ 1ÀÌ¸é +Scale.x, -1ÀÌ¸é -Scale.x
-            transform.localScale = new Vector3(Mathf.Abs(currentScale.x) * +Mathf.Sign(initialFacingDirection), currentScale.y, currentScale.z);
+            transform.localScale = new Vector3(Mathf.Abs(currentScale.x) * Mathf.Sign(initialFacingDirection) * +1f, currentScale.y, currentScale.z);
         }
     }
 
-    // ===== ¾Ö´Ï¸ŞÀÌ¼Ç °ü·Ã ÇÔ¼öµé (ÆÄ»ı Å¬·¡½º¿¡¼­ ¿À¹ö¶óÀÌµå) =====
-    // °¢ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ÇÔ¼ö´Â ÆÄ»ı Å¬·¡½º¿¡¼­ ½ÇÁ¦·Î ÇØ´ç ¾Ö´Ï¸ŞÀÌ¼Ç Æ®¸®°Å¸¦ ¹ßµ¿½ÃÅµ´Ï´Ù.
+    // ... (ë‚˜ë¨¸ì§€ ì• ë‹ˆë©”ì´ì…˜ ê´€ë ¨, TakeDamage ì½”ë“œ) ...
+    // PlayIdleAnim, PlayWalkAnim, PlayDeathAnim, PlayAttack1Anim, PlayAttack2Anim, ResetAttackTriggers
+    // OnAttackAnimationEnd, PostAttackPauseRoutine, TakeDamage ë©”ì„œë“œëŠ” ì´ì „ ì½”ë“œì™€ ë™ì¼í•©ë‹ˆë‹¤.
+    // isPerformingHurtAnimation ì²´í¬ ì¡°ê±´ì´ ì´ë¯¸ Update ìƒë‹¨ì—ì„œ ì „ì²´ ë¡œì§ì„ ìŠ¤í‚µí•˜ë„ë¡ ë³€ê²½ë˜ì—ˆìœ¼ë¯€ë¡œ,
+    // ì—¬ê¸°ì„œ ë‹¤ì‹œ isPerformingHurtAnimation ì²´í¬ ì¡°ê±´ì„ ì¶”ê°€í•  í•„ìš”ëŠ” ì—†ìŠµë‹ˆë‹¤.
 
-    protected virtual void PlayIdleAnim() { } // ÆÄ»ı Å¬·¡½º¿¡¼­ ±¸Çö (¿¹: animator.SetBool("B_Walk", false);)
-    protected virtual void PlayWalkAnim() { } // ÆÄ»ı Å¬·¡½º¿¡¼­ ±¸Çö (¿¹: animator.SetBool("B_Walk", true);)
-    protected virtual void PlayJumpAnim() { } // ÆÄ»ı Å¬·¡½º¿¡¼­ ±¸Çö (¿¹: animator.SetTrigger("B_Jump");)
-    protected virtual void PlayDeathAnim() { } // ÆÄ»ı Å¬·¡½º¿¡¼­ ±¸Çö (¿¹: animator.SetTrigger("B_Death");)
-    protected virtual void PlayAttack1Anim() { } // ÆÄ»ı Å¬·¡½º¿¡¼­ ±¸Çö (¿¹: animator.SetTrigger("B_Attack1");)
-    protected virtual void PlayAttack2Anim() { } // ÆÄ»ı Å¬·¡½º¿¡¼­ ±¸Çö (¿¹: animator.SetTrigger("B_Attack2");)
-    // ... ´Ù¸¥ °ø°İ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ÀÖ´Ù¸é Ãß°¡ ...
-
-    // ¸ğµç °ø°İ Æ®¸®°Å ÃÊ±âÈ­ (¾Ö´Ï¸ŞÀÌ¼Ç ÀüÈ¯ÀÌ ²¿ÀÌ´Â °ÍÀ» ¹æÁö)
-    protected virtual void ResetAttackTriggers()
-    {
-        // ÆÄ»ı Å¬·¡½º¿¡¼­ »ç¿ëÇÏ´Â ½ÇÁ¦ °ø°İ Æ®¸®°Å ÀÌ¸§À» ¸®¼Â
-        // ¿¹: animator.ResetTrigger("B_Attack1"); animator.ResetTrigger("B_Attack2");
-    }
-
-    // ===== ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®¿¡¼­ È£ÃâµÉ ÇÔ¼ö (°øÅë) =====
-    // AnimatorÀÇ °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Å¬¸³ ³¡¿¡ ÀÌ ÀÌº¥Æ®¸¦ Ãß°¡ÇØ¾ß ÇÕ´Ï´Ù.
+    protected virtual void PlayIdleAnim() { /* ì˜¤ë²„ë¼ì´ë“œì—ì„œ êµ¬í˜„ */ }
+    protected virtual void PlayWalkAnim() { /* ì˜¤ë²„ë¼ì´ë“œì—ì„œ êµ¬í˜„ */ }
+    protected virtual void PlayJumpAnim() { /* ì˜¤ë²„ë¼ì´ë“œì—ì„œ êµ¬í˜„ */ }
+    protected virtual void PlayDeathAnim() { /* ì˜¤ë²„ë¼ì´ë“œì—ì„œ êµ¬í˜„ */ }
+    protected virtual void PlayAttack1Anim() { /* ì˜¤ë²„ë¼ì´ë“œì—ì„œ êµ¬í˜„ */ }
+    protected virtual void PlayAttack2Anim() { /* ì˜¤ë²„ë¼ì´ë“œì—ì„œ êµ¬í˜„ */ }
+    protected virtual void ResetAttackTriggers() { /* ì˜¤ë²„ë¼ì´ë“œì—ì„œ êµ¬í˜„ */ }
     protected virtual void OnAttackAnimationEnd()
     {
-        //Debug.Log("°ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ÀÌº¥Æ® ¹ß»ı (Base Class).");
-        isPerformingAttackAnimation = false; // °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ½Ã À§Ä¡ °íÁ¤ ÇÃ·¡±× ²û
-        // Note: ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ÈÄ AI »óÅÂ´Â ´ÙÀ½ Update ÇÁ·¹ÀÓ¿¡¼­ ÀÚµ¿À¸·Î ÆÇ´ÜµË´Ï´Ù.
+        isPerformingAttackAnimation = false;
+        StartCoroutine(PostAttackPauseRoutine(postAttackPauseDuration));
     }
 
-    // ===== µ¥¹ÌÁö Ã³¸® ¿¹½Ã =====
-    public virtual void TakeDamage(int damageAmount)
+    protected IEnumerator PostAttackPauseRoutine(float duration)
+    {
+        isWaitingAfterAttack = true;
+        PlayIdleAnim();
+        yield return new WaitForSeconds(duration);
+        isWaitingAfterAttack = false;
+        if (!isDead)
+        {
+            SetState(EnemyState.Chase);
+        }
+    }
+
+    public virtual void TakeDamage(float damage, GameObject attackObject)
     {
         if (isDead) return;
-
-        currentHealth -= damageAmount;
-        //Debug.Log(gameObject.name + " took " + damageAmount + " damage. Current Health: " + currentHealth);
-
+        currentHealth -= damage;
+        Debug.Log(gameObject.name + " took " + damage + " damage. Current Health: " + currentHealth);
         if (currentHealth <= 0)
         {
-            SetState(EnemyState.Dead); // Ã¼·ÂÀÌ 0 ÀÌÇÏ¸é »ç¸Á »óÅÂ·Î ÀüÈ¯
+            SetState(EnemyState.Dead);
         }
-        // TODO: µ¥¹ÌÁö ÇÇ°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı µî Ãß°¡
+        // PlayHurtAnim() í˜¸ì¶œì€ íŒŒìƒ í´ë˜ìŠ¤ì˜ TakeDamage ì˜¤ë²„ë¼ì´ë“œì—ì„œ ë‹´ë‹¹í•©ë‹ˆë‹¤.
+    }
+
+    // í”¼ê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ ì‹œ í˜¸ì¶œë  Animation Event ë©”ì„œë“œ (ê°€ìƒ ë©”ì„œë“œë¡œ ì„ ì–¸)
+    public virtual void OnHurtAnimationEnd() // Base í´ë˜ìŠ¤ì—ì„œ virtualë¡œ ì„ ì–¸
+    {
+        Debug.Log(gameObject.name + ": Base OnHurtAnimationEnd called. Override this in derived class.");
     }
 }
