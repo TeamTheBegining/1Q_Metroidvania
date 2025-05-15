@@ -23,8 +23,6 @@ public class GameManager : Singleton<GameManager>
     private MessagePanel bottomMessagePanel;
     public MessagePanel BottomMessagePanel => bottomMessagePanel;
 
-    [Tooltip("PoolType 순서대로 오브젝트를 배치 할 것")]
-    public GameObject[] poolPrefabs = new GameObject[(int)PoolType.PoolTypeCount];
     public AudioClip[] audioClips; 
 
     [SerializeField] private GameState state;
@@ -68,7 +66,6 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {      
         State = GameState.BeforeStart;
-        SetPoolManager();
 #if UNITY_EDITOR
         TestInit();
 #endif
@@ -102,19 +99,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    /// <summary>
-    /// 풀링 매니저 오브젝트 생성 함수
-    /// </summary>
-    private void SetPoolManager()
-    {
-        LoadPoolObjects();
-
-        for (int i = 0; i < (int)PoolType.PoolTypeCount; i++)
-        {
-            PoolManager.Instance.Register(((PoolType)i).ToString(), poolPrefabs[i]);
-        }
-    }
-
     public void ExitGame()
     {
         Application.Quit();
@@ -128,12 +112,6 @@ public class GameManager : Singleton<GameManager>
     private void OnUnpause()
     {
         Time.timeScale = 1f;
-    }
-
-    private void LoadPoolObjects()
-    {
-        poolPrefabs[0] = Resources.Load<GameObject>("Prefabs/Pool/Hit1");
-        poolPrefabs[1] = Resources.Load<GameObject>("Prefabs/Pool/PlayerSlideAfterImage");
     }
 
 #if UNITY_EDITOR

@@ -32,6 +32,9 @@ public interface IPoolable
 /// </summary>
 public class PoolManager : Singleton<PoolManager>
 {
+    [Tooltip("PoolType 순서대로 오브젝트를 배치 할 것")]
+    public GameObject[] poolPrefabs = new GameObject[(int)PoolType.PoolTypeCount];
+
     private class PoolData
     {
         public GameObject prefab;
@@ -41,6 +44,13 @@ public class PoolManager : Singleton<PoolManager>
     }
 
     Dictionary<string, PoolData> poolDictionary = new();
+
+    protected override void Awake()
+    {
+        base.Awake();
+        LoadPoolObjects();
+        SpawnPoolObjects();
+    } 
 
     public void Register(string key, GameObject prefab, int capacity = 8)
     {
@@ -121,8 +131,6 @@ public class PoolManager : Singleton<PoolManager>
         return Pop<T>(type.ToString(), position, rotation);
     }
 
-
-
     private void ReturnToPool(string key, GameObject obj)
     {
         if (!poolDictionary.TryGetValue(key, out var data))
@@ -199,5 +207,23 @@ public class PoolManager : Singleton<PoolManager>
         }
 
         poolDictionary.Remove(key);
+    }
+
+    /// <summary>
+    /// 풀링 매니저 오브젝트 생성 함수
+    /// </summary>
+    private void SpawnPoolObjects()
+    {
+        LoadPoolObjects();
+
+        for (int i = 0; i < (int)PoolType.PoolTypeCount; i++)
+        {
+            PoolManager.Instance.Register(((PoolType)i).ToString(), poolPrefabs[i]);
+        }
+    }
+    private void LoadPoolObjects()
+    {
+        poolPrefabs[0] = Resources.Load<GameObject>("Prefabs/Pool/Hit1");
+        poolPrefabs[1] = Resources.Load<GameObject>("Prefabs/Pool/PlayerSlideAfterImage");
     }
 }

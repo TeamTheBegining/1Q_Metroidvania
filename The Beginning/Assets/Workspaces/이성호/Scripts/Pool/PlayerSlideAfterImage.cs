@@ -69,7 +69,6 @@ public class PlayerSlideAfterImage : MonoBehaviour, IPoolable
         while (timeElapsed < duration)
         {
             timeElapsed += Time.deltaTime;
-            Debug.Log($"{timeElapsed}");
             yield return null;
         }
 
