@@ -31,10 +31,11 @@ public class PlayerSlideAfterImage : MonoBehaviour, IPoolable
         ReturnAction?.Invoke();
     }
 
-    public void Init(int index)
+    public void Init(int index, bool isFilp)
     {
         spriteRenderer.sprite = images[index];
         spriteRenderer.color = color;
+        spriteRenderer.flipX = isFilp;
     }
 
     public void Init(PlayerSlideImageType type)
