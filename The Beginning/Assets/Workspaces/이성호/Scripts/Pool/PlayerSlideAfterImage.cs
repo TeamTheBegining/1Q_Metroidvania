@@ -31,7 +31,7 @@ public class PlayerSlideAfterImage : MonoBehaviour, IPoolable
         ReturnAction?.Invoke();
     }
 
-    public void Init(int index, bool isFilp)
+    public void Init(int index, bool isFilp = false)
     {
         spriteRenderer.sprite = images[index];
         spriteRenderer.color = color;
