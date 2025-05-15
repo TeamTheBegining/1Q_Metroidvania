@@ -7,8 +7,7 @@ using UnityEngine;
 
 public enum PoolType
 {
-    EnemyMelee = 0,
-    HitFx,
+    HitFx = 0,
     PoolTypeCount
 }
 
@@ -40,5 +39,6 @@ public enum CameraType
 public enum PlayerSkillType
 {
     skill1 = 0,
+    skill2,
     PlayerSkillTypeCount,
 }

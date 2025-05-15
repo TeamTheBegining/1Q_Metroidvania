@@ -6,8 +6,18 @@
 public class SceneChangePortal : MonoBehaviour, Interactable
 {
     public int targetBuildIndex = 0;
+
+    public bool isAddive = false;
+
     public void OnInteraction()
     {
-        GameSceneManager.Instance.ChangeScene(targetBuildIndex);
+        if(!isAddive)
+        {
+            GameSceneManager.Instance.ChangeScene(targetBuildIndex);
+        }
+        else
+        {
+            GameSceneManager.Instance.ChangeScene(targetBuildIndex, true);
+        }
     }
 }

@@ -66,7 +66,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     private void Start()
-    {
+    {      
         State = GameState.BeforeStart;
 #if UNITY_EDITOR
         TestInit();
@@ -98,6 +98,17 @@ public class GameManager : Singleton<GameManager>
                 break;
             default:
                 break;
+        }
+    }
+
+    /// <summary>
+    /// 풀링 매니저 오브젝트 생성 함수
+    /// </summary>
+    private void SetPoolManager()
+    {
+        for (int i = 0; i < (int)PoolType.PoolTypeCount; i++)
+        {
+            PoolManager.Instance.Register(((PoolType)i).ToString(), poolPrefabs[i]);
         }
     }
 

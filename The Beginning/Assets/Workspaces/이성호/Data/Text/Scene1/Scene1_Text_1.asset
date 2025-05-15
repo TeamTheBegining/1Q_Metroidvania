@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293dec649e04ae8419b1bd01b629f6d1, type: 3}
-  m_Name: Text_Tutorial2
+  m_Name: Scene1_Text_1
   m_EditorClassIdentifier: 
-  text: '[ Press arrow to move ] '
+  text: '[ Press spacebar to jump ] '
