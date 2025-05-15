@@ -46,6 +46,7 @@ public class Player : MonoBehaviour, IDamageable
     bool isparrysuccess = false;
     bool attack2able = false;
     bool attack3able = false;
+    bool ishit = false;
 
     public float Damage
     {
@@ -86,6 +87,8 @@ public class Player : MonoBehaviour, IDamageable
 
     PlayerFlipState curflip= PlayerFlipState.Right;//현재 플립 상태
     PlayerFlipState preflip= PlayerFlipState.Right;//이전 플립 상태
+    private bool isDead;
+
     enum PlayerFlipState
     {
         Left,
@@ -100,7 +103,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             currentHp = value;
 
-            if(IsDead)
+            if(!IsDead&&currentHp<=0)
             {
                 PlayerDead();
             }
@@ -109,7 +112,7 @@ public class Player : MonoBehaviour, IDamageable
     public float MaxHp { get => maxHp; set => maxHp = value; }
     public float CurrentMp { get => currentMp; set => currentMp = value; }
     public float MaxMp { get => maxMp; set => maxMp = value; }
-    public bool IsDead => currentHp <= 0;
+    public bool IsDead => isDead;
     public Action OnDead { get; set; }
 
     private void Awake()
@@ -133,6 +136,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
+        DeadCheck();
         ParryingDelayCheck();
         FlipCheck();
         EnergyOverCheck();
@@ -205,6 +209,14 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+    private void DeadCheck()
+    {
+        if (IsDead)
+        {
+            PlayerDead();
+        }
+    }
+
     private void EnergyOverCheck()
     {
         currentHp = currentHp > MaxHp ? MaxHp : currentHp;
@@ -240,6 +252,7 @@ public class Player : MonoBehaviour, IDamageable
     #region Update 모음
     private void PlayerIdleUpdate()
     {
+        //rb.linearVelocity = Vector2.zero;
         if (input.InputVec.x != 0)
             currentState = PlayerState.Move;
         Jumpable();
@@ -330,7 +343,11 @@ public class Player : MonoBehaviour, IDamageable
 
     private void PlayerHitUpdate()
     {
-
+        if(isGround&&!ishit)
+        {
+            currentState = PlayerState.Idle;
+            rb.linearVelocity = Vector2.zero;
+        }
     }
 
 
@@ -494,33 +511,53 @@ public class Player : MonoBehaviour, IDamageable
 #endif
     }
 
-    public void TakeDamage(float damage, GameObject enemypos)
+    public void TakeDamage(float damage, GameObject enemy)
     {
+        if (IsDead) return;
+
         if (!isparrysuccess)
         {
-            currentHp -= damage;
+            CurrentHp -= damage;
             currentMp += 5;
-            PlayerHit();
+            currentState = PlayerState.Hit;
+            ishit = true;
+
+            rb.linearVelocity = Vector2.zero;//초기화 후 진행
+            float direction;
+            if (enemy.transform.position.x - transform.position.x > 0)
+            {
+                direction =  -1f;
+                curflip = PlayerFlipState.Right;
+            }
+            else
+            {
+                direction = 1f;
+                curflip = PlayerFlipState.Left;
+            }
+
+            rb.AddForce(new Vector2(0.5f * direction, 1) * flyPower, ForceMode2D.Impulse);
         }
         else
         {
             currentMp += 10;
             currentState = PlayerState.ParrySuccess;
+            enemy.GetComponent<A_AttackerController>().Stun();
         }
+        
 
-
-    }
-    private void PlayerHit()
-    {
-        currentState = PlayerState.Hit;
-        rb.AddForce(new Vector2(0.5f ,1) * flyPower, ForceMode2D.Impulse);
-        //flipState == PlayerFlipState.Left ? -1 : 
     }
 
     private void PlayerDead()
     {
         OnDead?.Invoke();
         currentState = PlayerState.Dead;
+        isDead =true;
+        rb.linearVelocity = Vector2.zero;
+    }
+
+    public void PlayerHitFinish()
+    {
+        ishit = false;
     }
 
 }
