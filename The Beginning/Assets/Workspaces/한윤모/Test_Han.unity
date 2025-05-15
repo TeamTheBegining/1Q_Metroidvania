@@ -185,7 +185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4870427433526720903, guid: 57dc704bab33dcd4ebc653cba34898e6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973997556401238296, guid: 57dc704bab33dcd4ebc653cba34898e6, type: 3}
       propertyPath: m_Layer
@@ -1760,11 +1760,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7766923831768848115, guid: 7deb2b89197bf4b4ea429bfec39f8b5a, type: 3}
       propertyPath: maxHp
-      value: 3
+      value: 9999
       objectReference: {fileID: 0}
     - target: {fileID: 7766923831768848115, guid: 7deb2b89197bf4b4ea429bfec39f8b5a, type: 3}
       propertyPath: currentHp
-      value: 3
+      value: 9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 7766923831768848115, guid: 7deb2b89197bf4b4ea429bfec39f8b5a, type: 3}
+      propertyPath: slideSpeed
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 8650716166065127325, guid: 7deb2b89197bf4b4ea429bfec39f8b5a, type: 3}
       propertyPath: m_Name

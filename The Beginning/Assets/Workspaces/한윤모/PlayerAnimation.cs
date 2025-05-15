@@ -74,7 +74,6 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Parrying:
                 animator.Play("Parrying");
-                if (stateInfo.IsName("Parrying") && stateInfo.normalizedTime >= 1) player.CurrentState = Player.PlayerState.Idle;
                 break;
             case Player.PlayerState.ParrySuccess:
                 animator.Play("ParrySuccess");
@@ -91,8 +90,8 @@ public class PlayerAnimation : MonoBehaviour
             case Player.PlayerState.Ladder:
                 animator.Play("Ladder");
                 break;
-            case Player.PlayerState.Dodging:
-                //animator.Play("Dodge");
+            case Player.PlayerState.Sliding:
+                animator.Play("Sliding");
                 break;
             case Player.PlayerState.Dash:
                 //animator.Play("Dash");
@@ -108,6 +107,8 @@ public class PlayerAnimation : MonoBehaviour
                 animator.Play("Crouch");
                 break;
         }
+        //슬라이딩 딜레이 없어서 나오는 예외사항 발생 시 Idle로 초기화
+        if (stateInfo.IsName("Sliding") &&stateInfo.normalizedTime > 1) player.CurrentState = Player.PlayerState.Idle;
     }
 
     private void UpdateState()

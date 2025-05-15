@@ -40,7 +40,7 @@ public class PlayerInput : MonoBehaviour
 
     bool isSliding = false;
 
-    public bool IsSliding { get => isSliding; }
+    public bool IsSliding { get => isSliding; set => isSliding = value; }
 
 
     bool isDashLeft = false;
@@ -192,13 +192,11 @@ public class PlayerInput : MonoBehaviour
     private void Sliding_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         isSliding = true;
-        print("슬라이딩 시작");
     }
 
     private void Sliding_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         isSliding = false;
-        print("슬라이딩 끝");
     }
 
     private void DashLeft_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
