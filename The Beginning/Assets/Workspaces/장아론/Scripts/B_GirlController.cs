@@ -13,7 +13,7 @@ public class B_GirlController : CommonEnemyController
     private const string ANIM_TRIGGER_B_ATTACK1 = "B_Attack1"; // 공격 1 애니메이션 트리거
     private const string ANIM_TRIGGER_B_ATTACK2 = "B_Attack2"; // 공격 2 애니메이션 트리거
     private const string ANIM_TRIGGER_B_DEATH = "B_Death"; // 사망 애니메이션 트리거
-    private const string ANIM_TRIGGER_B_HURT = "B_Hurt"; // 피격 애니메이션 트리거 이름
+    // private const string ANIM_TRIGGER_B_HURT = "B_Hurt"; // 피격 애니메이션 트리거 이름 (삭제 또는 주석 처리)
 
     [Header("B_Girl Hitboxes")]
     public GameObject attack1HitboxObject; // 인스펙터에서 할당 (공격 1 히트박스 오브젝트)
@@ -39,6 +39,14 @@ public class B_GirlController : CommonEnemyController
     // B_Girl 고유의 공격 패턴 관리 변수
     private int nextAttackIndex = 1; // 다음에 실행할 공격 (1: Attack1, 2: Attack2)
 
+    // 슈퍼 아머를 위한 추가 변수
+    private SpriteRenderer spriteRenderer; // 스프라이트 렌더러 참조
+    private Color originalColor; // 원래 색상
+    [Header("Super Armor Visuals")]
+    public Color hurtColor = Color.red; // 피격 시 변경될 색상
+    public float hurtColorDuration = 0.2f; // 피격 색상이 유지될 시간
+    private Coroutine hurtColorCoroutine; // 색상 변경 코루틴 참조
+
     // 체력 및 사망 관련 변수는 Base 클래스 (currentHealth, maxHealth, isDead, OnDead)를 사용합니다.
 
 
@@ -46,10 +54,38 @@ public class B_GirlController : CommonEnemyController
     public override void TakeDamage(float damage, GameObject attackObject)
     {
         if (isDead) return;
-        base.TakeDamage(damage, attackObject);
+
+        base.TakeDamage(damage, attackObject); // Base 클래스에서 체력 감소 및 사망 처리
+
+        // 체력이 남아있다면 피격 색상 변경
         if (currentHealth > 0)
         {
-            PlayHurtAnim();
+            IndicateDamage(); // 피격 애니메이션 대신 색상 변경 함수 호출
+        }
+    }
+
+    // 피격 시 색상 변경 처리 함수
+    protected void IndicateDamage()
+    {
+        if (spriteRenderer == null) return;
+
+        // 기존에 실행 중인 색상 변경 코루틴이 있다면 중지
+        if (hurtColorCoroutine != null)
+        {
+            StopCoroutine(hurtColorCoroutine);
+        }
+
+        spriteRenderer.color = hurtColor; // 스프라이트 색상을 피격 색상으로 변경
+        hurtColorCoroutine = StartCoroutine(RevertColorCoroutine(hurtColorDuration));
+    }
+
+    // 일정 시간 후 원래 색상으로 되돌리는 코루틴
+    IEnumerator RevertColorCoroutine(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        if (spriteRenderer != null && !isDead) // 죽지 않았다면 원래 색상으로 복귀
+        {
+            spriteRenderer.color = originalColor;
         }
     }
 
@@ -58,6 +94,17 @@ public class B_GirlController : CommonEnemyController
     protected override void Start()
     {
         base.Start(); // Base CommonEnemyController Start 호출 (Animator, Player 참조 설정, 초기 상태 설정 등)
+
+        // SpriteRenderer 컴포넌트 참조 및 원래 색상 저장
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            originalColor = spriteRenderer.color;
+        }
+        else
+        {
+            Debug.LogWarning("B_GirlController: SpriteRenderer 컴포넌트를 찾을 수 없습니다! 피격 시 색상 변경이 동작하지 않습니다.", this);
+        }
 
         // 히트박스 오브젝트 및 컴포넌트 참조 초기화
         if (attack1HitboxObject != null)
@@ -114,6 +161,8 @@ public class B_GirlController : CommonEnemyController
     // ===== 애니메이션 관련 함수들 (Base 클래스의 virtual 메소드 오버라이드) =====
     protected override void PlayIdleAnim()
     {
+        // isPerformingHurtAnimation 체크는 Base CommonEnemyController.Update()에서 처리되므로,
+        // 슈퍼 아머 상태에서는 isPerformingHurtAnimation이 false가 유지되어 자연스럽게 행동을 이어갑니다.
         if (!isDead && animator != null)
             animator.SetBool(ANIM_BOOL_B_WALK, false);
     }
@@ -134,16 +183,20 @@ public class B_GirlController : CommonEnemyController
     {
         if (animator != null)
             animator.SetTrigger(ANIM_TRIGGER_B_DEATH);
-    }
-
-    // 피격 애니메이션 재생
-    protected void PlayHurtAnim()
-    {
-        if (!isDead && animator != null)
+        // 사망 시 색상 원상 복구 및 코루틴 중지
+        if (hurtColorCoroutine != null)
         {
-            animator.SetTrigger(ANIM_TRIGGER_B_HURT);
+            StopCoroutine(hurtColorCoroutine);
+            hurtColorCoroutine = null;
+        }
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = originalColor;
         }
     }
+
+    // 피격 애니메이션 재생 함수 (이제 색상 변경으로 대체되므로 내용이 사라짐)
+    // protected void PlayHurtAnim() { /* 이 함수는 이제 호출되지 않음 */ }
 
     // Base 클래스의 PlayAttack1Anim 오버라이드
     protected override void PlayAttack1Anim()
@@ -166,21 +219,19 @@ public class B_GirlController : CommonEnemyController
         {
             animator.ResetTrigger(ANIM_TRIGGER_B_ATTACK1);
             animator.ResetTrigger(ANIM_TRIGGER_B_ATTACK2);
-            // 필요시 다른 트리거 리셋 추가
+            // B_Hurt 트리거는 삭제했으므로 리셋할 필요 없음
         }
     }
 
     // ===== AI 공격 로직 (Base 클래스의 virtual PerformAttackLogic 오버라이드) =====
     protected override void PerformAttackLogic()
     {
-        //Debug.Log("B_Girl PerformAttackLogic override called.");
         if (Time.time < nextAttackTime)
         {
             return;
         }
 
-        //Debug.Log("B_Girl ready to attack! Triggering B_Attack" + nextAttackIndex);
-        isPerformingAttackAnimation = true;
+        isPerformingAttackAnimation = true; // 공격 애니메이션 중임을 플래그로 표시
 
         if (nextAttackIndex == 1)
         {
@@ -199,131 +250,68 @@ public class B_GirlController : CommonEnemyController
     // Base 클래스의 OnAttackAnimationEnd 오버라이드
     protected override void OnAttackAnimationEnd()
     {
-        base.OnAttackAnimationEnd();
+        base.OnAttackAnimationEnd(); // isPerformingAttackAnimation = false 설정, 공격 후 일시 정지 코루틴 시작
 
         float cooldownToApply;
-        if (nextAttackIndex == 2) // 방금 Attack 1이 끝난 경우
+        if (nextAttackIndex == 2) // 방금 Attack 1이 끝난 경우 (다음 공격은 Attack 2)
         {
             cooldownToApply = attack1Cooldown;
         }
-        else // 방금 Attack 2가 끝난 경우
+        else // 방금 Attack 2가 끝난 경우 (다음 공격은 Attack 1)
         {
             cooldownToApply = attack2Cooldown;
         }
         nextAttackTime = Time.time + cooldownToApply;
     }
 
-    //  공격 1 히트박스 활성화 (Animation Event에서 호출) 
+    // 공격 1 히트박스 활성화 (Animation Event에서 호출)
     public void EnableAttack1Hitbox()
     {
-        Debug.Log("B_Girl: EnableAttack1Hitbox called!"); //  호출 확인 로그 
         if (isDead) return;
-
-        //  히트박스 오브젝트 및 콜라이더 참조 확인 로그 
-        Debug.Log($"B_Girl: EnableAttack1Hitbox - Object null? {attack1HitboxObject == null}, Collider null? {attack1HitboxCollider == null}, EnemyHitbox null? {attack1EnemyHitbox == null}");
-
         if (attack1HitboxObject != null && attack1HitboxCollider != null)
         {
             if (attack1EnemyHitbox != null)
             {
                 attack1EnemyHitbox.attackDamage = attack1Value;
-                Debug.Log($"B_Girl: Attack 1 Hitbox damage set to {attack1Value}, enabling collider."); //  데미지 설정 및 활성화 로그 
-            }
-            else
-            {
-                Debug.LogWarning("B_Girl: EnemyHitbox component not found on Attack 1 Hitbox Object!", attack1HitboxObject);
             }
             attack1HitboxCollider.enabled = true; // 콜라이더 활성화
-            Debug.Log($"B_Girl: Attack 1 Hitbox Collider enabled: {attack1HitboxCollider.enabled}"); //  활성화 결과 로그 
-        }
-        else
-        {
-            Debug.LogWarning("B_Girl: Attack 1 Hitbox Object or Collider not assigned or found.", this);
         }
     }
 
-    //  공격 1 히트박스 비활성화 (Animation Event에서 호출) 
+    // 공격 1 히트박스 비활성화 (Animation Event에서 호출)
     public void DisableAttack1Hitbox()
     {
-        Debug.Log("B_Girl: DisableAttack1Hitbox called!"); //  호출 확인 로그 
         if (isDead) return;
-
-        //  히트박스 콜라이더 참조 확인 로그 
-        Debug.Log($"B_Girl: DisableAttack1Hitbox - Collider null? {attack1HitboxCollider == null}");
-
-
         if (attack1HitboxCollider != null)
         {
-            Debug.Log($"B_Girl: Attack 1 Hitbox Collider enabled state before disabling: {attack1HitboxCollider.enabled}"); //  비활성화 전 상태 로그 
             attack1HitboxCollider.enabled = false; // 콜라이더 비활성화
-            Debug.Log($"B_Girl: Attack 1 Hitbox Collider enabled state after disabling: {attack1HitboxCollider.enabled}"); //  비활성화 후 상태 로그 
-        }
-        else
-        {
-            Debug.LogWarning("B_Girl: Attack 1 Hitbox Collider not assigned or found.", this); //  경고 로그 
         }
     }
 
-    //  공격 2 히트박스 활성화 (Animation Event에서 호출) 
+    // 공격 2 히트박스 활성화 (Animation Event에서 호출)
     public void EnableAttack2Hitbox()
     {
-        Debug.Log("B_Girl: EnableAttack2Hitbox called!"); //  호출 확인 로그 
         if (isDead) return;
-
-        //  히트박스 오브젝트 및 콜라이더 참조 확인 로그 
-        Debug.Log($"B_Girl: EnableAttack2Hitbox - Object null? {attack2HitboxObject == null}, Collider null? {attack2HitboxCollider == null}, EnemyHitbox null? {attack2EnemyHitbox == null}");
-
         if (attack2HitboxObject != null && attack2HitboxCollider != null)
         {
             if (attack2EnemyHitbox != null)
             {
                 attack2EnemyHitbox.attackDamage = attack2Value;
-                Debug.Log($"B_Girl: Attack 2 Hitbox damage set to {attack2Value}, enabling collider."); //  데미지 설정 및 활성화 로그 
-            }
-            else
-            {
-                Debug.LogWarning("B_Girl: EnemyHitbox component not found on Attack 2 Hitbox Object!", attack2HitboxObject);
             }
             attack2HitboxCollider.enabled = true; // 콜라이더 활성화
-            Debug.Log($"B_Girl: Attack 2 Hitbox Collider enabled: {attack2HitboxCollider.enabled}"); //  활성화 결과 로그 
-        }
-        else
-        {
-            Debug.LogWarning("B_Girl: Attack 2 Hitbox Object or Collider not assigned or found.", this); //  경고 로그 
         }
     }
 
-    //  공격 2 히트박스 비활성화 (Animation Event에서 호출) 
+    // 공격 2 히트박스 비활성화 (Animation Event에서 호출)
     public void DisableAttack2Hitbox()
     {
-        Debug.Log("B_Girl: DisableAttack2Hitbox called!"); //  호출 확인 로그 
         if (isDead) return;
-
-        //  히트박스 콜라이더 참조 확인 로그 
-        Debug.Log($"B_Girl: DisableAttack2Hitbox - Collider null? {attack2HitboxCollider == null}");
-
         if (attack2HitboxCollider != null)
         {
-            Debug.Log($"B_Girl: Attack 2 Hitbox Collider enabled state before disabling: {attack2HitboxCollider.enabled}"); //  비활성화 전 상태 로그 
             attack2HitboxCollider.enabled = false; // 콜라이더 비활성화
-            Debug.Log($"B_Girl: Attack 2 Hitbox Collider enabled state after disabling: {attack2HitboxCollider.enabled}"); //  비활성화 후 상태 로그 
-        }
-        else
-        {
-            Debug.LogWarning("B_Girl: Attack 2 Hitbox Collider not assigned or found.", this); //  경고 로그 
         }
     }
 
-    // 피격 애니메이션 종료 시 호출될 Animation Event 메서드 오버라이드
-    public override void OnHurtAnimationEnd()
-    {
-        Debug.Log("B_Girl OnHurtAnimationEnd called.");
-        isPerformingHurtAnimation = false;
-        Debug.Log("isPerformingHurtAnimation set to false in OnHurtAnimationEnd.");
-
-        if (!isDead)
-        {
-            // Update()에서 자연스럽게 상태 전환
-        }
-    }
+    // OnHurtAnimationEnd 함수는 이제 피격 애니메이션을 사용하지 않으므로 필요 없음
+    // public override void OnHurtAnimationEnd() { /* 이 함수는 이제 호출되지 않음 */ }
 }
