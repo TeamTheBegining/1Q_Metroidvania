@@ -43,7 +43,7 @@ public class PopupToggleManager : MonoBehaviour
         {
             popup.SetActive(false);
             currentActivePopup = null;
-            PopupCancel?.Invoke();
+            ClosePopup?.Invoke();
         }
         else // ÄÑÁú ¶§
         {

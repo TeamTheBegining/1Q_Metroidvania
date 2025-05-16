@@ -124,4 +124,40 @@ public class PopupController : MonoBehaviour
 
         Vector2 dir = context.ReadValue<Vector2>();
 
-        if (dir.x <
+        if (dir.x < 0)
+            popupIndex--;
+        else if (dir.x > 0)
+            popupIndex++;
+
+        if (popupIndex < 0) popupIndex = slotList.Count - 1;
+        else if (popupIndex >= slotList.Count) popupIndex = 0;
+
+        MoveHighlightToIndex();
+    }
+
+    private void MoveHighlightToIndex()
+    {
+        if (highlightImage == null) return;
+
+        if (popupIndex >= 0 && popupIndex < slotList.Count)
+        {
+            RectTransform slotRect = slotList[popupIndex].GetComponent<RectTransform>();
+            highlightImage.transform.position = slotRect.position;
+        }
+    }
+
+    private void PopupConfirm_started(InputAction.CallbackContext ctx)
+    {
+        // TODO: 팝업 내 아이템 선택 처리
+        Debug.Log($"Popup {currentPopupType} Confirm at index {popupIndex}");
+    }
+
+    private void ClosePopup_started(InputAction.CallbackContext ctx)
+    {
+        if (currentActivePopup != null)
+        {
+            currentActivePopup.SetActive(false);
+            currentActivePopup = null;
+        }
+    }
+}

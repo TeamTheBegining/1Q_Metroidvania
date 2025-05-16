@@ -1,33 +1,19 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class InventoryController : MonoBehaviour
 {
-    private GameInputActions inputActions;
+    public InventoryManager inventoryManager;
+    public PopupController popupController;
 
-    [Header("인벤토리 매니저 참조")]
-    [SerializeField] private InventoryManager inventoryManager;
-
-    void Awake()
+    private void Start()
     {
-        inputActions = new GameInputActions();
-
-        inputActions.UI.OpenInventory.performed += ctx => inventoryManager.ToggleInventory();
-
-/*        inputActions.UI.Navigate.performed += ctx =>
-        {
-            Vector2 input = ctx.ReadValue<Vector2>();
-            inventoryManager.MoveSelection(input);
-        };*/
+        // 예시: 팝업 타입과 인벤토리 타입 매칭
+        // 실제로 인벤토리 커서 위치에 따라 팝업 타입 세팅 필요
+        popupController.SetCursorType(PopupType.Equip);
     }
 
-    void OnEnable()
+    private void Update()
     {
-        inputActions.UI.Enable();
-    }
-
-    void OnDisable()
-    {
-        inputActions.UI.Disable();
+        // 여기서 필요하면 인벤토리 상태 체크 후 팝업 열기 같은 로직 구현 가능
     }
 }
