@@ -165,14 +165,14 @@ MonoBehaviour:
   detectionRange: 10
   attackRange: 1.7
   maintainBuffer: 0.5
-  preAttackPauseDuration: 0.5
-  postAttackPauseDuration: 1
+  preAttackPauseDuration: 0.3
+  postAttackPauseDuration: 0.5
   playerObjectName: Player
   initialFacingDirection: 1
   attack1HitboxObject: {fileID: 8636349439236697190}
   attack2HitboxObject: {fileID: 7284608179196531827}
-  attack1Cooldown: 3
-  attack2Cooldown: 4
+  attack1Cooldown: 1.5
+  attack2Cooldown: 2
   attack1Value: 1.5
   attack2Value: 2
   hurtColor: {r: 0.6509434, g: 0.17501779, b: 0.17501779, a: 1}
