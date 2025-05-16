@@ -15,13 +15,13 @@ public class Player : MonoBehaviour, IDamageable
 {
     [Header("스피드 조절")]
     [Tooltip("플레이어 이동 속도")]
-    [SerializeField] float moveSpeed = 4.5f;
+    [SerializeField] float moveSpeed = 4f;
     [Tooltip("플레이어 사다리 이동 속도")]
     [SerializeField] float lmoveSpeed = 2f;
     [Tooltip("플레이어 점프중 이동 속도")]
-    [SerializeField] float jumpMoveSpeed = 0.5f;
+    [SerializeField] float jumpMoveSpeed = 0.7f;
     [Tooltip("플레이어 슬라이딩 이동 속도")]
-    [SerializeField] float slideSpeed = 3f;
+    [SerializeField] float slideSpeed = 5f;
     [Space(2)]
     [Header("AddForce 파워 조절")]
     [SerializeField] float jumpPower = 5f;
@@ -57,9 +57,9 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float jumpDisableGroundCheckTime = 0.1f;
     [SerializeField] float MoveDelayTime = 0.2f;
     [SerializeField] float GrabDelayTime = 0.2f;
-    [SerializeField] float attackDelayTime = 1f;
+    [SerializeField] float attackDelayTime = 0f;
     [SerializeField] float slidingDelayTime = 1f;
-    [SerializeField] float parryDelayTime = 0.5f;
+    [SerializeField] float parryDelayTime = 0.8f;
     [SerializeField] float spawnDelayTime = 0.1f;
     [SerializeField] float parryCountTime = 0.3f;
 
@@ -78,6 +78,7 @@ public class Player : MonoBehaviour, IDamageable
     private Collider2D attackColl;
     private Collider2D attackColl2;
     private Collider2D attackColl3;
+    private Collider2D attackColl4;
     private Collider2D slidingColl;
     private Collider2D playerColl;
     private Bounds grabBounds;
@@ -93,6 +94,7 @@ public class Player : MonoBehaviour, IDamageable
     bool isGrapDelay = false;
     bool attack2Able = false;
     bool attack3Able = false;
+    bool attack4Able = false;
     bool isWallClimbable = false;
 
     //벽타기 체크 변수
@@ -124,6 +126,7 @@ public class Player : MonoBehaviour, IDamageable
         Attack1,
         Attack2,
         Attack3,
+        Attack4,
         Skill1,
         Skill2,
         Skill3,
@@ -182,12 +185,13 @@ public class Player : MonoBehaviour, IDamageable
         attackColl = transform.GetChild(1).GetComponent<Collider2D>();
         attackColl2 = transform.GetChild(2).GetComponent<Collider2D>();
         attackColl3 = transform.GetChild(3).GetComponent<Collider2D>();
-        slidingColl = transform.GetChild(4).GetComponent<Collider2D>();
-        m_wallSensor1 = transform.GetChild(5).GetComponent<WallSensor>();
-        m_wallSensor2 = transform.GetChild(6).GetComponent<WallSensor>();
-        m_grabSensor = transform.GetChild(7).GetComponent<GrabSensor>();
-        m_grabColl = transform.GetChild(8).GetComponent<Collider2D>();
-        m_grabTransform = transform.GetChild(8).GetComponent<Transform>();
+        attackColl4 = transform.GetChild(4).GetComponent<Collider2D>();
+        slidingColl = transform.GetChild(5).GetComponent<Collider2D>();
+        m_wallSensor1 = transform.GetChild(6).GetComponent<WallSensor>();
+        m_wallSensor2 = transform.GetChild(7).GetComponent<WallSensor>();
+        m_grabSensor = transform.GetChild(8).GetComponent<GrabSensor>();
+        m_grabColl = transform.GetChild(9).GetComponent<Collider2D>();
+        m_grabTransform = transform.GetChild(9).GetComponent<Transform>();
         playerColl = transform.GetComponent<Collider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
@@ -227,7 +231,10 @@ public class Player : MonoBehaviour, IDamageable
                 PlayerAttack2Update();
                 break;
             case PlayerState.Attack3:
-                //PlayerAttack2Update();
+                PlayerAttack3Update();
+                break;
+            case PlayerState.Attack4:
+                //PlayerAttack4Update();
                 break;
             case PlayerState.Skill1:
                 //PlayerSkillk1();
@@ -495,6 +502,17 @@ public class Player : MonoBehaviour, IDamageable
             currentState = PlayerState.Attack3;
         }
     }
+    private void PlayerAttack3Update()
+    {
+        if(attack4Able&& input.IsAttack)
+        {
+            attack4Able = false;
+            input.IsAttack = false;
+            attackColl3.enabled = false;
+            attackColl4.enabled = true;
+            currentState = PlayerState.Attack4;
+        }
+    }
 
 
     private void PlayerHitUpdate()
@@ -739,17 +757,31 @@ public class Player : MonoBehaviour, IDamageable
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         attackColl3.enabled = false;
+        attack4Able = false;
     }
+    private void Attack4Finish()
+    {
+        currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
+        attackColl4.enabled = false;
+    }
+    
 
     private void Attack2Check()
     {
         attack2Able = true;
     }
 
-    private void Attack３Check()
+    private void Attack3Check()
     {
         attack3Able = true;
     }
+
+    private void Attack4Check()
+    {
+        attack4Able = true;
+    }
+
+   
     public void PlayerHitFinish()
     {
         isHit = false;

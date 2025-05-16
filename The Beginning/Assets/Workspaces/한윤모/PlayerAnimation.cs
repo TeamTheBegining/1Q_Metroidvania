@@ -63,6 +63,9 @@ public class PlayerAnimation : MonoBehaviour
             case Player.PlayerState.Attack3:
                 animator.Play("Attack3");
                 break;
+            case Player.PlayerState.Attack4:
+                animator.Play("Attack4");
+                break;
             case Player.PlayerState.Skill1:
                 //animator.Play("Skill1");
                 break;
