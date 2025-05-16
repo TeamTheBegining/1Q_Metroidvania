@@ -496,6 +496,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PanelInteraction",
+                    "type": "Button",
+                    "id": "82122ac4-50ac-4554-8d9d-3db5759bcb80",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1090,6 +1099,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ClosePopup",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31e4c8a3-7219-47d9-9ece-d56a8fc7f12f",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PanelInteraction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

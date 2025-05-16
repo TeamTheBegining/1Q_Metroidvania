@@ -64,4 +64,9 @@ public class GameSceneManager : Singleton<GameSceneManager>
         Debug.Log("Load done !");
         sceneChangePanel.ClosePanel();
     }
+
+    public void UnloadScene(int buildIndex)
+    {
+        SceneManager.UnloadSceneAsync(buildIndex);
+    }
 }

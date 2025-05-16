@@ -17,6 +17,8 @@ public enum GameState
 
 public class GameManager : Singleton<GameManager>
 {
+    private Canvas globalCanvas;
+
     private MessagePanel middleMessagePanel;
     public MessagePanel MiddleMessagePanel => middleMessagePanel;
 
@@ -61,10 +63,13 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         middleMessagePanel = transform.GetChild(0).GetChild(2).GetComponent<MessagePanel>();
         bottomMessagePanel = transform.GetChild(0).GetChild(3).GetComponent<MessagePanel>();
+        globalCanvas = transform.GetChild(0).GetComponent<Canvas>();
     }
 
     private void Start()
-    {      
+    {
+        globalCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+        globalCanvas.worldCamera = Camera.main;
         State = GameState.BeforeStart;
 #if UNITY_EDITOR
         TestInit();

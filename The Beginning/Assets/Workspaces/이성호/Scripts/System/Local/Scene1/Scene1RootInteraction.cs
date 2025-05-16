@@ -13,6 +13,8 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     public float targetDuration;
 
     public float DisableDelay = 3f;
+
+    private bool isTrigger = false;
     
     private void Awake()
     {
@@ -20,15 +22,15 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     }
     public void OnInteraction()
     {
-        // 임시
+        if (isTrigger) return;
         GameManager.Instance.MiddleMessagePanel.FadeInShow();
         GameManager.Instance.MiddleMessagePanel.SetGlowText(textData.text);
 
         actions.UI.Enable();
-        actions.UI.Click.performed += Click_performed;        
+        actions.UI.PanelInteraction.performed += PanelInteraction_performed;        
     }
 
-    private void Click_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void PanelInteraction_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         Debug.Log("click");
         OnClick();
@@ -36,8 +38,8 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
 
     private void OnClick()
     {
-        GameManager.Instance.MiddleMessagePanel.AddText(" ;");
-        actions.UI.Click.performed -= Click_performed;
+        GameManager.Instance.MiddleMessagePanel.AddGlowText(" ;");
+        actions.UI.PanelInteraction.performed -= PanelInteraction_performed;
         actions.UI.Disable();
         LightManager.Instance.SpreadPlayerLight(targetDuration, targetRadius, 1f);
 
@@ -46,7 +48,8 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
 
     private IEnumerator DisableProecess()
     {
-        GameManager.Instance.MiddleMessagePanel.GlowFadeOutClose(1f);
+        GameManager.Instance.MiddleMessagePanel.GlowFadeInOpen(4f);
+        GameSceneManager.Instance.ChangeScene(1, true);
 
         float timeElapsed = 0f;
         while(timeElapsed < DisableDelay)
@@ -56,7 +59,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
         }
 
         GameManager.Instance.MiddleMessagePanel.FadeOutClose();
-        //GameSceneManager.Instance.ChangeScene(1);
-        //gameObject.SetActive(false);
+        LightManager.Instance.SetPlayerShadowActive(false);
+        isTrigger = true;
     }
 }

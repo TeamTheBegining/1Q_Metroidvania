@@ -74,7 +74,7 @@ Material:
     - _CullMode: 0
     - _Diffuse: 0.3
     - _DissolveThredshold: 0.28
-    - _Dissolve_Thredshold: -1
+    - _Dissolve_Thredshold: 1.0009797
     - _FaceDilate: 0
     - _GradientScale: 10
     - _LightAngle: 0

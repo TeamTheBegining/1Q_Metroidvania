@@ -24,6 +24,7 @@ public class CameraManager : Singleton<CameraManager>
     /// <param name="comp">컴포넌트</param>
     public void Register(CameraType type, CinemachineCamera comp)
     {
+        if (cameraDictionary.ContainsKey(type)) return;
         cameraDictionary.Add(type, comp);
     }
 

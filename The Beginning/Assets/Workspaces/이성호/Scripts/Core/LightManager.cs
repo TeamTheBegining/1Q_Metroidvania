@@ -64,4 +64,9 @@ public class LightManager : Singleton<LightManager>
             yield return null;
         }
     }
+
+    public void SetPlayerShadowActive(bool value)
+    {
+        playerLight.SetShadowActive(value);
+    }
 }

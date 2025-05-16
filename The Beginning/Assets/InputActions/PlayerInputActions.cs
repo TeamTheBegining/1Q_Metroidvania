@@ -582,6 +582,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PanelInteraction"",
+                    ""type"": ""Button"",
+                    ""id"": ""82122ac4-50ac-4554-8d9d-3db5759bcb80"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1178,6 +1187,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""ClosePopup"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31e4c8a3-7219-47d9-9ece-d56a8fc7f12f"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PanelInteraction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1282,6 +1302,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_UI_InventoryClose = m_UI.FindAction("InventoryClose", throwIfNotFound: true);
         m_UI_OpenPopup = m_UI.FindAction("OpenPopup", throwIfNotFound: true);
         m_UI_ClosePopup = m_UI.FindAction("ClosePopup", throwIfNotFound: true);
+        m_UI_PanelInteraction = m_UI.FindAction("PanelInteraction", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -1611,6 +1632,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_InventoryClose;
     private readonly InputAction m_UI_OpenPopup;
     private readonly InputAction m_UI_ClosePopup;
+    private readonly InputAction m_UI_PanelInteraction;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1703,6 +1725,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @ClosePopup => m_Wrapper.m_UI_ClosePopup;
         /// <summary>
+        /// Provides access to the underlying input action "UI/PanelInteraction".
+        /// </summary>
+        public InputAction @PanelInteraction => m_Wrapper.m_UI_PanelInteraction;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_UI; }
@@ -1788,6 +1814,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ClosePopup.started += instance.OnClosePopup;
             @ClosePopup.performed += instance.OnClosePopup;
             @ClosePopup.canceled += instance.OnClosePopup;
+            @PanelInteraction.started += instance.OnPanelInteraction;
+            @PanelInteraction.performed += instance.OnPanelInteraction;
+            @PanelInteraction.canceled += instance.OnPanelInteraction;
         }
 
         /// <summary>
@@ -1859,6 +1888,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ClosePopup.started -= instance.OnClosePopup;
             @ClosePopup.performed -= instance.OnClosePopup;
             @ClosePopup.canceled -= instance.OnClosePopup;
+            @PanelInteraction.started -= instance.OnPanelInteraction;
+            @PanelInteraction.performed -= instance.OnPanelInteraction;
+            @PanelInteraction.canceled -= instance.OnPanelInteraction;
         }
 
         /// <summary>
@@ -2203,5 +2235,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnClosePopup(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PanelInteraction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPanelInteraction(InputAction.CallbackContext context);
     }
 }

@@ -11,6 +11,7 @@ public class Scene1Manager : MonoBehaviour
     private void Start()
     {
         LightManager.Instance.SetPlayerLightValue(200f);
+        CameraManager.Instance.SetTarget(CameraType.Scene1Camera, FindFirstObjectByType<Player>().gameObject.transform);
     }
 
     private void Update()

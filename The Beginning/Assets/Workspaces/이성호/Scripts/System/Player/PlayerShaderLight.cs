@@ -41,4 +41,9 @@ public class PlayerShaderLight : MonoBehaviour
     {
         return material.GetFloat("_DarknessStrength");
     }
+
+    public void SetShadowActive(bool value)
+    {
+        this.gameObject.SetActive(value);
+    }
 }
