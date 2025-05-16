@@ -705,10 +705,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panel: {fileID: 1801417973}
   text: {fileID: 1940308120}
-  value: -0.438
+  value: -1
   data: {fileID: 11400000, guid: a624a423361bea344bbb6929780a51ab, type: 2}
   addData: ;
-  duration: 2
+  duration: 3.5
 --- !u!1001 &1801417971
 PrefabInstance:
   m_ObjectHideFlags: 0

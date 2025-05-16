@@ -22,7 +22,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     {
         // 임시
         GameManager.Instance.MiddleMessagePanel.FadeInShow();
-        GameManager.Instance.MiddleMessagePanel.SetText(textData.text);
+        GameManager.Instance.MiddleMessagePanel.SetGlowText(textData.text);
 
         actions.UI.Enable();
         actions.UI.Click.performed += Click_performed;        
@@ -46,6 +46,8 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
 
     private IEnumerator DisableProecess()
     {
+        GameManager.Instance.MiddleMessagePanel.GlowFadeOutClose(1f);
+
         float timeElapsed = 0f;
         while(timeElapsed < DisableDelay)
         {
