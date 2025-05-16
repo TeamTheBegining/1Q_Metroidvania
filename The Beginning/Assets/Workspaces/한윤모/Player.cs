@@ -384,7 +384,15 @@ public class Player : MonoBehaviour, IDamageable
 
     private bool CheckIsGround()
     {
-        return Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
+       // return Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
+        bool onGround = Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
+
+        // 점프하거나 낙하 중일 때는 착지로 처리하지 않음
+        if (onGround && rb.linearVelocity.y <= 0.1f)
+        {
+            return true;
+        }
+        return false;
     }
 
 
@@ -769,14 +777,15 @@ public class Player : MonoBehaviour, IDamageable
             isLadder = true;
             rb.linearVelocity = Vector2.zero; // 속도 제거
         }
-    }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
         if (collision.gameObject.GetComponent<Interactable>() != null && input.IsInteraction)
         {
             collision.gameObject.GetComponent<Interactable>().OnInteraction();
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
     }
 
     private void OnTriggerExit2D(Collider2D collision)
