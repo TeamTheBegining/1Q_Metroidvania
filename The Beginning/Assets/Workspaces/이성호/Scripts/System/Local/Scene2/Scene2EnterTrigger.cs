@@ -15,6 +15,7 @@ public class Scene2EnterTrigger : MonoBehaviour
         {
             groundCollider.enabled = true;
             isTrigger = true;
+            gameObject.SetActive(false);
         }
 
         CutSceneManager.Instance.ShowCutscene(1);
