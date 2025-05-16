@@ -80,7 +80,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.25
-    functionName: "Attack\uFF13Check"
+    functionName: Attack3Check
     data: 
     objectReferenceParameter: {fileID: 11500000, guid: 2df5d07b8e3298347a974d8b7ab5a287, type: 3}
     floatParameter: 0
