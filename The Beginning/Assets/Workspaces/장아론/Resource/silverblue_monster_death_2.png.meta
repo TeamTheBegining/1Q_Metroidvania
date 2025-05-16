@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      silverblue_monster_death_2_0: 2314250526927053081
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

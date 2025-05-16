@@ -510,6 +510,78 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryOpen"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c470179-45bd-4000-8dde-df0d824eed3c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""db411d16-b52f-4107-bd2b-64224d846b62"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""InventoryConfirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""cc6160c9-bc00-4dc2-9a78-e3071f46d7d9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PopupMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""aee87081-18f4-4193-8a24-387553558cae"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PopupConfirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""103deb2c-e62c-4496-a4e0-2eac0c584934"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryClose"",
+                    ""type"": ""Button"",
+                    ""id"": ""79441b54-49e2-432c-9931-4efa6c48ccd1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenPopup"",
+                    ""type"": ""Button"",
+                    ""id"": ""7640e82e-47f5-4881-a719-2f8ea4169422"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ClosePopup"",
+                    ""type"": ""Button"",
+                    ""id"": ""968ec0e0-8fd5-4b00-b9ac-22016895e244"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -952,6 +1024,160 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a41b90d2-03c8-422e-b32e-731c69d870df"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryOpen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""252c026b-69dd-45e8-b57b-80f9be477c15"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f6165c4a-08eb-4340-9299-e7c9486ab5bb"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""bb4a8978-b344-44e1-b260-34ee3d566fcb"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""e2ab94e4-4e48-4a4f-b57a-d1bcc4c0a56f"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""a85d6f18-d936-44dd-97b6-8009e8cee3b4"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""56f4150f-4fac-4eba-b8e7-73746bcd1f96"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""c8cb4293-638c-4607-a1d3-af7a8d1b59b6"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PopupMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""f671bb12-7207-4ce8-abbd-fd950fdff2a4"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PopupMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""350f5ffd-8461-4763-93ef-602678be512a"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PopupMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8cc1e24a-21f7-4d23-b736-4de7d21f0130"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PopupConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a29cc4b-e5d7-4e1b-a357-22b5bf757b95"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryClose"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""289d7da7-2b6a-4a54-a9ac-b10ed71fe465"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenPopup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ef545e5-b9c5-4a2f-86fc-2eb9ca27656d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClosePopup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1048,6 +1274,14 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_GameStart = m_UI.FindAction("GameStart", throwIfNotFound: true);
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+        m_UI_InventoryOpen = m_UI.FindAction("InventoryOpen", throwIfNotFound: true);
+        m_UI_InventoryMove = m_UI.FindAction("InventoryMove", throwIfNotFound: true);
+        m_UI_InventoryConfirm = m_UI.FindAction("InventoryConfirm", throwIfNotFound: true);
+        m_UI_PopupMove = m_UI.FindAction("PopupMove", throwIfNotFound: true);
+        m_UI_PopupConfirm = m_UI.FindAction("PopupConfirm", throwIfNotFound: true);
+        m_UI_InventoryClose = m_UI.FindAction("InventoryClose", throwIfNotFound: true);
+        m_UI_OpenPopup = m_UI.FindAction("OpenPopup", throwIfNotFound: true);
+        m_UI_ClosePopup = m_UI.FindAction("ClosePopup", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -1369,6 +1603,14 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_GameStart;
     private readonly InputAction m_UI_Pause;
+    private readonly InputAction m_UI_InventoryOpen;
+    private readonly InputAction m_UI_InventoryMove;
+    private readonly InputAction m_UI_InventoryConfirm;
+    private readonly InputAction m_UI_PopupMove;
+    private readonly InputAction m_UI_PopupConfirm;
+    private readonly InputAction m_UI_InventoryClose;
+    private readonly InputAction m_UI_OpenPopup;
+    private readonly InputAction m_UI_ClosePopup;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1428,6 +1670,38 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/Pause".
         /// </summary>
         public InputAction @Pause => m_Wrapper.m_UI_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/InventoryOpen".
+        /// </summary>
+        public InputAction @InventoryOpen => m_Wrapper.m_UI_InventoryOpen;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/InventoryMove".
+        /// </summary>
+        public InputAction @InventoryMove => m_Wrapper.m_UI_InventoryMove;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/InventoryConfirm".
+        /// </summary>
+        public InputAction @InventoryConfirm => m_Wrapper.m_UI_InventoryConfirm;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/PopupMove".
+        /// </summary>
+        public InputAction @PopupMove => m_Wrapper.m_UI_PopupMove;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/PopupConfirm".
+        /// </summary>
+        public InputAction @PopupConfirm => m_Wrapper.m_UI_PopupConfirm;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/InventoryClose".
+        /// </summary>
+        public InputAction @InventoryClose => m_Wrapper.m_UI_InventoryClose;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/OpenPopup".
+        /// </summary>
+        public InputAction @OpenPopup => m_Wrapper.m_UI_OpenPopup;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/ClosePopup".
+        /// </summary>
+        public InputAction @ClosePopup => m_Wrapper.m_UI_ClosePopup;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1490,6 +1764,30 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @InventoryOpen.started += instance.OnInventoryOpen;
+            @InventoryOpen.performed += instance.OnInventoryOpen;
+            @InventoryOpen.canceled += instance.OnInventoryOpen;
+            @InventoryMove.started += instance.OnInventoryMove;
+            @InventoryMove.performed += instance.OnInventoryMove;
+            @InventoryMove.canceled += instance.OnInventoryMove;
+            @InventoryConfirm.started += instance.OnInventoryConfirm;
+            @InventoryConfirm.performed += instance.OnInventoryConfirm;
+            @InventoryConfirm.canceled += instance.OnInventoryConfirm;
+            @PopupMove.started += instance.OnPopupMove;
+            @PopupMove.performed += instance.OnPopupMove;
+            @PopupMove.canceled += instance.OnPopupMove;
+            @PopupConfirm.started += instance.OnPopupConfirm;
+            @PopupConfirm.performed += instance.OnPopupConfirm;
+            @PopupConfirm.canceled += instance.OnPopupConfirm;
+            @InventoryClose.started += instance.OnInventoryClose;
+            @InventoryClose.performed += instance.OnInventoryClose;
+            @InventoryClose.canceled += instance.OnInventoryClose;
+            @OpenPopup.started += instance.OnOpenPopup;
+            @OpenPopup.performed += instance.OnOpenPopup;
+            @OpenPopup.canceled += instance.OnOpenPopup;
+            @ClosePopup.started += instance.OnClosePopup;
+            @ClosePopup.performed += instance.OnClosePopup;
+            @ClosePopup.canceled += instance.OnClosePopup;
         }
 
         /// <summary>
@@ -1537,6 +1835,30 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @InventoryOpen.started -= instance.OnInventoryOpen;
+            @InventoryOpen.performed -= instance.OnInventoryOpen;
+            @InventoryOpen.canceled -= instance.OnInventoryOpen;
+            @InventoryMove.started -= instance.OnInventoryMove;
+            @InventoryMove.performed -= instance.OnInventoryMove;
+            @InventoryMove.canceled -= instance.OnInventoryMove;
+            @InventoryConfirm.started -= instance.OnInventoryConfirm;
+            @InventoryConfirm.performed -= instance.OnInventoryConfirm;
+            @InventoryConfirm.canceled -= instance.OnInventoryConfirm;
+            @PopupMove.started -= instance.OnPopupMove;
+            @PopupMove.performed -= instance.OnPopupMove;
+            @PopupMove.canceled -= instance.OnPopupMove;
+            @PopupConfirm.started -= instance.OnPopupConfirm;
+            @PopupConfirm.performed -= instance.OnPopupConfirm;
+            @PopupConfirm.canceled -= instance.OnPopupConfirm;
+            @InventoryClose.started -= instance.OnInventoryClose;
+            @InventoryClose.performed -= instance.OnInventoryClose;
+            @InventoryClose.canceled -= instance.OnInventoryClose;
+            @OpenPopup.started -= instance.OnOpenPopup;
+            @OpenPopup.performed -= instance.OnOpenPopup;
+            @OpenPopup.canceled -= instance.OnOpenPopup;
+            @ClosePopup.started -= instance.OnClosePopup;
+            @ClosePopup.performed -= instance.OnClosePopup;
+            @ClosePopup.canceled -= instance.OnClosePopup;
         }
 
         /// <summary>
@@ -1825,5 +2147,61 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InventoryOpen" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryOpen(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InventoryMove" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InventoryConfirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryConfirm(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PopupMove" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPopupMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PopupConfirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPopupConfirm(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InventoryClose" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryClose(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OpenPopup" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOpenPopup(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ClosePopup" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnClosePopup(InputAction.CallbackContext context);
     }
 }

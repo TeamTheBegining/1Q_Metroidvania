@@ -259,7 +259,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gatekeeper_monster_attack_2_0: -2565773771084442975
+      gatekeeper_monster_attack_2_1: 7610797424806198581
+      gatekeeper_monster_attack_2_2: 7917996571835079985
+      gatekeeper_monster_attack_2_3: -8181650646839486963
+      gatekeeper_monster_attack_2_4: -4165246495659256843
+      gatekeeper_monster_attack_2_5: -1748253548753828016
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
