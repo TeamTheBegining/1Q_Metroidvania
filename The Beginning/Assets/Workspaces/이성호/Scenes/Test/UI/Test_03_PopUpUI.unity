@@ -176,7 +176,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '02. Test MessageBox
+  m_text: '03. Test PopUpUI
+
 
 '
   m_isRightToLeft: 0
@@ -473,7 +474,6 @@ GameObject:
   - component: {fileID: 514223489}
   - component: {fileID: 514223488}
   - component: {fileID: 514223487}
-  - component: {fileID: 514223486}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -481,14 +481,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!33 &514223486
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 514223485}
-  m_Mesh: {fileID: 0}
 --- !u!114 &514223487
 MonoBehaviour:
   m_ObjectHideFlags: 0

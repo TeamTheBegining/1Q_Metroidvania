@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 /// 메세지 패널 관리 클래스
@@ -9,13 +10,17 @@ public class MessagePanel : MonoBehaviour
 {
     private CanvasGroup cg;
     private TextMeshProUGUI messageText;
-
-    private float duration = 0.5f;
+    private TextMeshProUGUI glowMessageText;
+    private Material glowMaterial; // -1 에서 1 사이값 조절하기 mat.SetFloat("_Dissolve_Thredshold", value);
 
     private void Awake()
     {
         cg = GetComponent<CanvasGroup>();
         messageText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        glowMessageText = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        glowMaterial = glowMessageText.materialForRendering;
+
+        glowMaterial.SetFloat("_Dissolve_Thredshold", -1f);
     }
 
     private void Start()
@@ -28,23 +33,10 @@ public class MessagePanel : MonoBehaviour
         cg.alpha = 1f;
         cg.blocksRaycasts = true;
         cg.interactable = true;
-    }
 
-    public void FadeInShow()
-    {
-        StartCoroutine(FadeInProcess());
+        messageText.gameObject.SetActive(false);
+        glowMessageText.gameObject.SetActive(false);
     }
-
-    public void SetText(string str)
-    {
-        messageText.text = $"{str}";
-    }
-
-    public void AddText(string str)
-    {
-        messageText.text += $"{str}";
-    }
-
     public void Close()
     {
         cg.alpha = 0f;
@@ -52,12 +44,32 @@ public class MessagePanel : MonoBehaviour
         cg.interactable = false;
     }
 
-    public void FadeOutClose()
+    #region Normal Text
+    public void FadeInShow(float duration = 0.5f)
     {
-        StartCoroutine(FadeOutProcess());
+        StartCoroutine(FadeInProcess(duration));
     }
 
-    private IEnumerator FadeInProcess()
+    public void SetText(string str)
+    {
+        messageText.gameObject.SetActive(true);
+        glowMessageText.gameObject.SetActive(false);
+        messageText.text = $"{str}";
+    }
+
+    public void AddText(string str)
+    {
+        messageText.gameObject.SetActive(true);
+        glowMessageText.gameObject.SetActive(false);
+        messageText.text += $"{str}";
+    }
+
+    public void FadeOutClose(float duration = 0.5f)
+    {
+        StartCoroutine(FadeOutProcess(duration));
+    }
+
+    private IEnumerator FadeInProcess(float duration)
     {
         float elpasedTime = 0f;
         while(elpasedTime < duration)
@@ -68,7 +80,7 @@ public class MessagePanel : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeOutProcess()
+    private IEnumerator FadeOutProcess(float duration)
     {
         float elpasedTime = 0f;
         while (elpasedTime < duration)
@@ -78,4 +90,55 @@ public class MessagePanel : MonoBehaviour
             yield return null;
         }
     }
+    #endregion
+
+    #region GlowText
+    public void SetGlowText(string str)
+    {
+        messageText.gameObject.SetActive(false);
+        glowMessageText.gameObject.SetActive(true);
+        glowMessageText.text = $"{str}";
+    }
+    public void AddGlowText(string str)
+    {
+        messageText.gameObject.SetActive(false);
+        glowMessageText.gameObject.SetActive(true);
+        glowMessageText.text += $"{str}";
+    }
+
+    public void GlowFadeOutClose(float duration)
+    {
+        StartCoroutine(GlowTextFadeOutProcess(duration));
+    }
+
+    public void GlowFadeInOpen(float duration)
+    {
+        StartCoroutine(GlowTextFadeInProcess(duration));
+    }
+
+    private IEnumerator GlowTextFadeInProcess(float duration)
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float mapped = (2.0f * elapsedTime / duration) - 1.0f;
+            glowMaterial.SetFloat("_Dissolve_Thredshold", mapped);
+            yield return null;
+        }
+    }
+
+    private IEnumerator GlowTextFadeOutProcess(float duration)
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float mapped = 1.0f - 2.0f * (elapsedTime / duration);
+            glowMaterial.SetFloat("_Dissolve_Thredshold", mapped);
+            yield return null;
+        }
+    }
+
+    #endregion
 }
