@@ -100,6 +100,9 @@ public class PlayerAnimation : MonoBehaviour
             case Player.PlayerState.Grab:
                 animator.Play("Grab");
                 break;
+            case Player.PlayerState.GrabSuccess:
+                animator.Play("GrabSuccess");
+                break;
             case Player.PlayerState.Dash:
                 //animator.Play("Dash");
                 break;

@@ -102,6 +102,7 @@ public class Player : MonoBehaviour, IDamageable
     private Collider2D m_grabColl;
     private Transform m_grabTransform;
     private Vector3 m_grabPos;
+    Vector3 playerleftdown;
 
     public float Damage
     {
@@ -135,6 +136,7 @@ public class Player : MonoBehaviour, IDamageable
         Sliding,
         Climbing,
         Grab,
+        GrabSuccess,
         Dash,
         Hit,
         Dead,
@@ -262,6 +264,9 @@ public class Player : MonoBehaviour, IDamageable
                 break;
             case PlayerState.Grab:
                 PlayerGrabUpdate();
+                break;
+            case PlayerState.GrabSuccess:
+                //PlayerGrabSuccessUpdate();
                 break;
             case PlayerState.Dash:
                 //PlayerDash();
@@ -567,6 +572,11 @@ public class Player : MonoBehaviour, IDamageable
             isGrapDelay = true;
             transform.position += m_grabPos;
         }
+        if(input.InputVec.y>0)
+        {
+            currentState = PlayerState.GrabSuccess;
+            m_grabColl.enabled = false;
+        }
     }
 
     #endregion
@@ -666,6 +676,7 @@ public class Player : MonoBehaviour, IDamageable
             currentState = PlayerState.Grab;
             rb.linearVelocity = Vector2.zero;
             rb.gravityScale = 0;
+            playerleftdown = new Vector3((int)curDir == 1 ? playerColl.bounds.min.x : playerColl.bounds.max.x, playerColl.bounds.min.y, 0);
             m_grabColl.enabled = true;
             playerColl.enabled = false;
             grabBounds = m_grabSensor.GetColliderBounds();
@@ -736,6 +747,15 @@ public class Player : MonoBehaviour, IDamageable
         isHit = false;
     }
 
+    public void GrabSuccessFinish()
+    {
+        transform.position += m_grabTransform.position - playerleftdown;
+
+        playerColl.enabled = true;
+        currentState = PlayerState.Idle;
+        rb.gravityScale = 1;
+    }
+
     #endregion
 
     #region Æ®¸®°Å
@@ -753,7 +773,10 @@ public class Player : MonoBehaviour, IDamageable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.gameObject.GetComponent<Interactable>() != null && input.IsInteraction)
+        {
+            collision.gameObject.GetComponent<Interactable>().OnInteraction();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
