@@ -13,46 +13,62 @@ using static Unity.Burst.Intrinsics.X86.Sse4_2;
 
 public class Player : MonoBehaviour, IDamageable
 {
-
-
+    [Header("스피드 조절")]
+    [Tooltip("플레이어 이동 속도")]
     [SerializeField] float moveSpeed = 4.5f;
+    [Tooltip("플레이어 사다리 이동 속도")]
     [SerializeField] float lmoveSpeed = 2f;
+    [Tooltip("플레이어 점프중 이동 속도")]
     [SerializeField] float jumpMoveSpeed = 0.5f;
+    [Tooltip("플레이어 슬라이딩 이동 속도")]
     [SerializeField] float slideSpeed = 3f;
-
-
+    [Space(2)]
+    [Header("AddForce 파워 조절")]
     [SerializeField] float jumpPower = 5f;
+    [Tooltip("사다리에서 점프하는 힘")]
     [SerializeField] float ljumpPower = 4f;
-    [SerializeField] float groundCheckRadius = 0.2f;
-
-
+    [Tooltip("벽타기 중 점프하는 힘")]
+    [SerializeField] float cjumpPower = 4f;
+    [Tooltip("피격시 날아가는 힘")]
+    [SerializeField] float flyPower = 3f;
+    [Space(2)]
+    [Header("HP,MP 수치 조정")]
     [SerializeField] float maxHp = 10f;
     [SerializeField] float maxMp = 25f;
-    public float currentHp = 10f;
-    public float currentMp = 0f;
-
-
+    [SerializeField] float currentHp = 10f;
+    [SerializeField] float currentMp = 0f;
+    [Space(2)]
+    [Header("플레이어 공격력")]
     [SerializeField] float damage = 2f;
-    [SerializeField] float flyPower = 3f;
 
-
+    float groundCheckRadius = 0.2f;//바닥 체크 거리
     float jumpTimer = 0f;
     float parryDelayTimer = 0f;
     float slidingTimer = 0f;
     float slidingDelayTimer = 0f;
     float attackDelayTimer = 0f;
-    float climbDir = 0f;
+    float MoveDelayTimer = 0f;
+    float GrabDelayTimer = 0f;
+    float ParryCounterTimer = 0;
 
-    [SerializeField] float jumpDisableGroundCheckTime = 0.1f; // 점프 후 이 시간만큼 땅 체크 무시
-    [SerializeField] float parryDelayTime = 0.5f;
-    [SerializeField] float slidingTime = 0.1f;
-    [SerializeField] float slidingDelayTime = 1f;
+    [Space(2)]
+    [Header("딜레이 시간")]
+    [Tooltip("점프 후 시간만큼 땅 체크 무시")]
+    [SerializeField] float jumpDisableGroundCheckTime = 0.1f;
+    [SerializeField] float MoveDelayTime = 0.2f;
+    [SerializeField] float GrabDelayTime = 0.2f;
     [SerializeField] float attackDelayTime = 1f;
+    [SerializeField] float slidingDelayTime = 1f;
+    [SerializeField] float parryDelayTime = 0.5f;
+    [SerializeField] float spawnDelayTime = 0.1f;
+    [SerializeField] float parryCountTime = 0.3f;
+
+    [Space(2)]
+    [Header("현재 상태 - 애니메이션 비교 확인")]
+    [SerializeField] private PlayerState currentState;
 
     int sidx = 0;//슬라이딩 인덱스
-    //private float ladderInputHoldTime = 0;
-    //[SerializeField] private float ladderEnterDelay = 0.2f;
-
+    float climbDir = 0f;
     private PlayerInput input;
     private PlayerAnimation animatorCtrl;
     private Rigidbody2D rb;
@@ -64,20 +80,28 @@ public class Player : MonoBehaviour, IDamageable
     private Collider2D attackColl3;
     private Collider2D slidingColl;
     private Collider2D playerColl;
+    private Bounds grabBounds;
     bool isGround = false;
-    bool isparrying = false;
-    bool issliding = false;
-    bool isparrysuccess = false; 
+    bool isParrying = false;
+    bool isSliding = false;
+    bool isParryAble = false; 
+    bool isParrySuccess = false; 
     bool isLadder = false;
-    bool ishit = false;
-    bool isattack = false;
-    bool attack2able = false;
-    bool attack3able = false;
+    bool isHit = false;
+    bool isAttack = false;
+    bool isMoveDelay = false;
+    bool isGrapDelay = false;
+    bool attack2Able = false;
+    bool attack3Able = false;
     bool isWallClimbable = false;
 
     //벽타기 체크 변수
     private WallSensor m_wallSensor1;
     private WallSensor m_wallSensor2;
+    private GrabSensor m_grabSensor;
+    private Collider2D m_grabColl;
+    private Transform m_grabTransform;
+    private Vector3 m_grabPos;
 
     public float Damage
     {
@@ -85,7 +109,6 @@ public class Player : MonoBehaviour, IDamageable
         set => damage = value;
     }
 
-    [SerializeField] private PlayerState currentState;
     public PlayerState CurrentState
     {
         get => currentState;
@@ -111,18 +134,17 @@ public class Player : MonoBehaviour, IDamageable
         Ladder,
         Sliding,
         Climbing,
+        Grab,
         Dash,
         Hit,
         Dead,
         Crouch
     }
 
-    PlayerFlipState curflip= PlayerFlipState.Right;//현재 플립 상태
-    PlayerFlipState preflip= PlayerFlipState.Right;//이전 플립 상태
+    PlayerDirectionState curDir = PlayerDirectionState.Right;//현재 방향
     private bool isDead;
-    [SerializeField]private float spawnDelay = 0.2f;
 
-    enum PlayerFlipState
+    enum PlayerDirectionState
     {
         Left = -1,
         Right = 1
@@ -147,6 +169,7 @@ public class Player : MonoBehaviour, IDamageable
     public float MaxMp { get => maxMp; set => maxMp = value; }
     public bool IsDead => isDead;
     public Action OnDead { get; set; }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -160,6 +183,9 @@ public class Player : MonoBehaviour, IDamageable
         slidingColl = transform.GetChild(4).GetComponent<Collider2D>();
         m_wallSensor1 = transform.GetChild(5).GetComponent<WallSensor>();
         m_wallSensor2 = transform.GetChild(6).GetComponent<WallSensor>();
+        m_grabSensor = transform.GetChild(7).GetComponent<GrabSensor>();
+        m_grabColl = transform.GetChild(8).GetComponent<Collider2D>();
+        m_grabTransform = transform.GetChild(8).GetComponent<Transform>();
         playerColl = transform.GetComponent<Collider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
@@ -175,8 +201,8 @@ public class Player : MonoBehaviour, IDamageable
         wallCheck();
         DeadCheck();
         DelayCheck();
-        FlipCheck();
         EnergyOverCheck();
+        ParryingCounterCheck();
         isGround = CheckIsGround();
         switch (currentState)
         {
@@ -214,7 +240,7 @@ public class Player : MonoBehaviour, IDamageable
                 //PlayerParryingUpdate();
                 break;
             case PlayerState.ParrySuccess:
-                //ParrySuccessUpdate();
+                ParrySuccessUpdate();
                 break;
             case PlayerState.ParryCounterAttack:
                 //PlayerParryingCounterAttackUpdate();
@@ -233,6 +259,9 @@ public class Player : MonoBehaviour, IDamageable
                 break;
             case PlayerState.Climbing:
                 PlayerClimbingUpdate();
+                break;
+            case PlayerState.Grab:
+                PlayerGrabUpdate();
                 break;
             case PlayerState.Dash:
                 //PlayerDash();
@@ -265,35 +294,75 @@ public class Player : MonoBehaviour, IDamageable
 
     private void DelayCheck()
     {
-        if (isparrying)
+        if (isParrying)
             parryDelayTimer += Time.deltaTime;
+
         if (parryDelayTimer > parryDelayTime)
         {
-            isparrying = false;
+            isParrying = false;
             parryDelayTimer = 0;
         }
-        if (issliding)
+        if (isSliding)
             slidingDelayTimer += Time.deltaTime;
+
         if (slidingDelayTimer > slidingDelayTime)
         {
-            issliding = false;
+            isSliding = false;
             slidingDelayTimer = 0;
         }
-        if (isattack)
+        if (isAttack)
             attackDelayTimer += Time.deltaTime;
+
         if (attackDelayTimer > attackDelayTime)
         {
-            isattack = false;
+            isAttack = false;
             attackDelayTimer = 0;
+        }
+        if (isMoveDelay)
+            MoveDelayTimer += Time.deltaTime;
+
+        if (MoveDelayTimer > MoveDelayTime)
+        {
+            isMoveDelay = false;
+            MoveDelayTimer = 0;
+        }
+
+        if (isGrapDelay)
+            GrabDelayTimer += Time.deltaTime;
+
+        if (GrabDelayTimer > GrabDelayTime)
+        {
+            isGrapDelay = false;
+            GrabDelayTimer = 0;
         }
     }
 
-    void FlipCheck()
+    void Flip()
     {
-        if (curflip != preflip)
+        curDir = (int)curDir == 1 ? PlayerDirectionState.Left : PlayerDirectionState.Right;
+        transform.eulerAngles = (int)curDir == 1 ? Vector3.zero : new Vector3(0, -180, 0);
+    }
+    private void ParryingCounterCheck()
+    {
+        if (isParrySuccess)
         {
-            transform.eulerAngles = curflip == PlayerFlipState.Right ? Vector3.zero : new Vector3(0, -180, 0);
-            preflip = curflip;
+
+            ParryCounterTimer += Time.deltaTime;
+            //추후 방향 및 거리 추가해야함
+            if (ParryCounterTimer < parryCountTime)
+            {
+                if (input.IsAttack)
+                {
+                    currentState = PlayerState.ParryCounterAttack;
+                    isParrySuccess = false;
+                    ParryCounterTimer = 0;
+                }
+            }
+            else
+            {
+                isParrySuccess = false;
+                ParryCounterTimer = 0;
+            }
         }
     }
     void wallCheck()
@@ -301,7 +370,7 @@ public class Player : MonoBehaviour, IDamageable
         if (m_wallSensor1.State() && m_wallSensor2.State())
         {
             isWallClimbable = true;
-            climbDir = (float)curflip;
+            climbDir = (float)curDir;
         }
         else
             isWallClimbable = false;
@@ -313,6 +382,8 @@ public class Player : MonoBehaviour, IDamageable
         return Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
     }
 
+
+
     #region Update 모음
     private void PlayerIdleUpdate()
     {
@@ -320,22 +391,23 @@ public class Player : MonoBehaviour, IDamageable
         rb.linearVelocity = Vector2.zero;
         if (input.InputVec.x != 0)
             currentState = PlayerState.Move;
-        Jumpable();
-        Attackable();
-        Parryable();
-        Ｃrouchable(); 
-        Slidingable();
+        JumpAble();
+        AttackAble();
+        ParryAble();
+        ＣrouchAble(); 
+        SlidingAble();
     }
+
     private void PlayerMoveUpdate()
     {
         if (!isGround)
             currentState = PlayerState.Jump;
-        Movable();
-        Jumpable();
-        Parryable();
-        Attackable();
-        Ｃrouchable();
-        Slidingable();
+        MoveAble();
+        JumpAble();
+        ParryAble();
+        AttackAble();
+        ＣrouchAble();
+        SlidingAble();
     }
 
     private void PlayerLadderUpdate()
@@ -378,9 +450,10 @@ public class Player : MonoBehaviour, IDamageable
             jumpTimer = 0;
         }
 
-        Movable();
-        Attackable();
-        Climbingable();
+        MoveAble();
+        AttackAble();
+        ClimbingAble();
+        GrabAble();
     }
     private void PlayerLandingUpdate()
     {
@@ -389,9 +462,9 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void PlayerAttack1Update()
     {
-        if(attack2able&& input.IsAttack)
+        if(attack2Able&& input.IsAttack)
         {
-            attack2able = false;
+            attack2Able = false;
             input.IsAttack = false;
             attackColl.enabled = false;
             attackColl2.enabled = true;
@@ -400,9 +473,9 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void PlayerAttack2Update()
     {
-        if(attack3able&& input.IsAttack)
+        if(attack3Able&& input.IsAttack)
         {
-            attack3able = false;
+            attack3Able = false;
             input.IsAttack = false;
             attackColl2.enabled = false;
             attackColl3.enabled = true;
@@ -413,10 +486,10 @@ public class Player : MonoBehaviour, IDamageable
 
     private void PlayerHitUpdate()
     {
-        if(isGround&&!ishit)
+        if(isGround&&!isHit)
         {
             currentState = PlayerState.Idle;
-            rb.linearVelocity = Vector2.zero;
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
     }
 
@@ -435,17 +508,16 @@ public class Player : MonoBehaviour, IDamageable
     private void PlayerSlidingUpdate()
     {
         slidingTimer += Time.deltaTime;
-        rb.linearVelocity = new Vector2((float)curflip * slideSpeed, rb.linearVelocity.y);
-        if (slidingTimer > slidingTime)
+        rb.linearVelocity = new Vector2((float)curDir * slideSpeed, rb.linearVelocity.y);
+        if (slidingTimer > spawnDelayTime)
         {
             sidx = Mathf.Min(sidx++, 2);
-            PoolManager.Instance.Pop<PlayerSlideAfterImage>(PoolType.PlayerSlideAfterImage, transform.position).Init(sidx, (int)curflip == -1 ? true : false);
+            PoolManager.Instance.Pop<PlayerSlideAfterImage>(PoolType.PlayerSlideAfterImage, transform.position).Init(sidx, (int)curDir == -1 ? true : false);
             slidingTimer = 0;
         }
     }
     private void PlayerClimbingUpdate()
     {
-
         //슬라이딩키와 동일
         if (input.IsSliding)
         {
@@ -459,13 +531,14 @@ public class Player : MonoBehaviour, IDamageable
 
         if(input.IsJump)
         {
-            curflip = (int)curflip == -1 ? PlayerFlipState.Right : PlayerFlipState.Left;
+            Flip();
             rb.gravityScale = 1f;
-            rb.AddForce(new Vector2((int)curflip,1) * ljumpPower, ForceMode2D.Impulse);
+            rb.AddForce(new Vector2((int)curDir*0.5f,1) * cjumpPower, ForceMode2D.Impulse);
             currentState = PlayerState.Jump;
+            isMoveDelay = true;
         }
 
-        if (isGround || !isWallClimbable || climbDir != input.InputVec.x)
+        if (isGround || !isWallClimbable || climbDir!= Mathf.RoundToInt(input.InputVec.x))
         {
             if (isGround)
             {
@@ -479,17 +552,35 @@ public class Player : MonoBehaviour, IDamageable
             }
         }
     }
+    private void ParrySuccessUpdate()
+    {
+        //패링 성공시 할 행동 추가
+    }
+    private void PlayerGrabUpdate()
+    {
+        if(input.InputVec.y <0)
+        {
+            currentState = PlayerState.Jump;
+            rb.gravityScale = 1;
+            m_grabColl.enabled = false;
+            playerColl.enabled = true;
+            isGrapDelay = true;
+            transform.position += m_grabPos;
+        }
+    }
 
     #endregion
 
     #region 움직임 가능 함수
-    void Movable()
+    void MoveAble()
     {
+        if (isMoveDelay) return;
+
         if (input.InputVec.x != 0)
         {
             float jumpmove = currentState == PlayerState.Jump ? jumpMoveSpeed : 1f;//점프중에는 좌우로 이동 느리게
             rb.linearVelocity = new Vector2(input.InputVec.x * jumpmove * moveSpeed, rb.linearVelocity.y);
-            curflip = input.InputVec.x  < 0? PlayerFlipState.Left :PlayerFlipState.Right;
+            if ((int)curDir != Mathf.RoundToInt(input.InputVec.x)) Flip();
         }
         else
         {
@@ -499,30 +590,31 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    void Attackable()
+    void AttackAble()
     {
-        if (input.IsAttack && !isattack)
+        if (isParrySuccess) return;
+        if (input.IsAttack && !isAttack)
         {
             if (currentState != PlayerState.Jump)
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
             input.IsAttack = false;
             currentState = PlayerState.Attack1;
             attackColl.enabled = true;
-            isattack = true;
+            isAttack = true;
         }
     }
-    void Parryable()
+    void ParryAble()
     {
-        if (input.IsParrying && !isparrying)
+        if (input.IsParrying && !isParrying)
         {
             currentState = PlayerState.Parrying;
             rb.linearVelocity = Vector2.zero;
             input.IsParrying = false;   // 패링 입력 종료
-            isparrying = true;          // 패링중 확인
-            isparrysuccess = true;      // 패링성공 확인 변수
+            isParrying = true;          // 패링중 확인
+            isParryAble = true;         // 패링 적용 확인 변수
         }
     }
-    void Jumpable()
+    void JumpAble()
     {
         if (input.IsJump && isGround)
         {
@@ -531,7 +623,7 @@ public class Player : MonoBehaviour, IDamageable
             input.IsJump = false;
         }
     }
-    void Ｃrouchable()
+    void ＣrouchAble()
     {
         if (input.InputVec.y<0 && isGround)
         {
@@ -539,32 +631,49 @@ public class Player : MonoBehaviour, IDamageable
             currentState = PlayerState.Crouch;
         }
     }
-    void Slidingable()
+    void SlidingAble()
     {
-        if (input.IsSliding&& isGround && !issliding)
+        if (input.IsSliding&& isGround && !isSliding)
         {
             rb.linearVelocity = Vector2.zero;//슬라이딩 Velocity 적용을 위한 초기화
             currentState = PlayerState.Sliding;
             Input.IsSliding = false;
-            issliding = true;
+            isSliding = true;
             slidingTimer = 0;
             sidx = 1;
             slidingDelayTimer = 0;
-            PoolManager.Instance.Pop<PlayerSlideAfterImage>(PoolType.PlayerSlideAfterImage, transform.position).Init(0, (int)curflip == -1 ? true : false);
+            PoolManager.Instance.Pop<PlayerSlideAfterImage>(PoolType.PlayerSlideAfterImage, transform.position).Init(0, (int)curDir == -1 ? true : false);
             playerColl.enabled = false;
             slidingColl.enabled = true;
             gameObject.layer = LayerMask.NameToLayer("Invincibility");
         }
     }
-    void Climbingable()
+    void ClimbingAble()
     {
-        if (input.InputVec.x!=0 && isWallClimbable && currentState == PlayerState.Jump)//감지 되었을때
+        if (input.InputVec.x!=0 && isWallClimbable )//&& currentState == PlayerState.Jump)//감지 되었을때
         {
             currentState = PlayerState.Climbing;
             rb.linearVelocity = Vector2.zero;//초기화
             rb.gravityScale = 0.1f;
         }
     }
+
+    void GrabAble()
+    {
+        if (isGrapDelay) return;
+        if (m_grabSensor.State())
+        {
+            currentState = PlayerState.Grab;
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = 0;
+            m_grabColl.enabled = true;
+            playerColl.enabled = false;
+            grabBounds = m_grabSensor.GetColliderBounds();
+            m_grabPos = new Vector3(m_grabTransform.position.x - ((int)curDir == 1? grabBounds.min.x : grabBounds.max.x), m_grabTransform.position.y - grabBounds.max.y , 0);
+            transform.position -= m_grabPos;
+        }
+    }
+
 
     #endregion
 
@@ -576,17 +685,17 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void ParryingCheck()
     {
-        isparrysuccess = false;
+        isParryAble = false;
     }
     private void ParryingFinish()
     {
         currentState = PlayerState.Idle;
-        isparrysuccess = false;
+        isParryAble = false;
     }
     private void SlidingFinish()
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
-        isparrysuccess = false;
+        //isParryAble = false;
         playerColl.enabled = true;
         slidingColl.enabled = false;
         gameObject.layer = LayerMask.NameToLayer("Player");
@@ -599,13 +708,13 @@ public class Player : MonoBehaviour, IDamageable
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         attackColl.enabled = false;
-        attack2able = false;
+        attack2Able = false;
     }
     private void Attack2Finish()
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         attackColl2.enabled = false;
-        attack3able = false;
+        attack3Able = false;
     }
     private void Attack3Finish()
     {
@@ -615,12 +724,16 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Attack2Check()
     {
-        attack2able = true;
+        attack2Able = true;
     }
 
     private void Attack３Check()
     {
-        attack3able = true;
+        attack3Able = true;
+    }
+    public void PlayerHitFinish()
+    {
+        isHit = false;
     }
 
     #endregion
@@ -645,7 +758,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Ladder"&&!issliding)
+        if (collision.tag == "Ladder"&&isLadder)
         {
             rb.gravityScale = 1;
             if(CheckIsGround())
@@ -670,35 +783,38 @@ public class Player : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage, GameObject enemy)
     {
+        //A_AttackerController enemyscr = enemy.GetComponent<A_AttackerController>();
         if (IsDead) return;
 
-        if (!isparrysuccess)
+        if (!isParryAble)
         {
             CurrentHp -= damage;
             currentMp += 5;
             currentState = PlayerState.Hit;
-            ishit = true;
+            isHit = true;
 
             rb.linearVelocity = Vector2.zero;//초기화 후 진행
             float direction;
             if (enemy.transform.position.x - transform.position.x > 0)
             {
                 direction =  -1f;
-                curflip = PlayerFlipState.Right;
+                if((int)curDir == -1) Flip();
             }
             else
             {
                 direction = 1f;
-                curflip = PlayerFlipState.Left;
+                if ((int)curDir == 1) Flip();
             }
 
             rb.AddForce(new Vector2(0.5f * direction, 1) * flyPower, ForceMode2D.Impulse);
         }
         else
         {
+            isParrySuccess = true;
             currentMp += 10;
             currentState = PlayerState.ParrySuccess;
-            enemy.GetComponent<A_AttackerController>().Stun();
+            //enemyscr.Stun();
+            //counterTime;
         }
         
 
@@ -710,11 +826,7 @@ public class Player : MonoBehaviour, IDamageable
         currentState = PlayerState.Dead;
         isDead =true;
         rb.linearVelocity = Vector2.zero;
-    }
-
-    public void PlayerHitFinish()
-    {
-        ishit = false;
+        rb.gravityScale = 0f;
     }
 
 }

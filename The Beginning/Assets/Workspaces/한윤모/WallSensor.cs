@@ -14,6 +14,11 @@ public class WallSensor : MonoBehaviour
         return m_ColCount > 0;
     }
 
+    public Transform GetTransform()
+    {
+        return this.transform;
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Wall")

@@ -79,7 +79,8 @@ public class PlayerAnimation : MonoBehaviour
                 animator.Play("ParrySuccess");
                 break;
             case Player.PlayerState.ParryCounterAttack:
-                //animator.Play("ParryCounterAttack");
+                animator.Play("ParryCounterAttack");
+                if (stateInfo.normalizedTime >= 1) player.CurrentState = Player.PlayerState.Idle;
                 break;
             case Player.PlayerState.ParryReflect:
                 //animator.Play("ParryReflect");
@@ -95,6 +96,9 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Climbing:
                 animator.Play("Climbing");
+                break;
+            case Player.PlayerState.Grab:
+                animator.Play("Grab");
                 break;
             case Player.PlayerState.Dash:
                 //animator.Play("Dash");

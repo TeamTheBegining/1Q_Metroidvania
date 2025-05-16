@@ -20,7 +20,7 @@ public class PlayerAttackCollider : MonoBehaviour
         if (collision.gameObject.GetComponent<IDamageable>() != null)
         {
             collision.gameObject.GetComponent<IDamageable>().TakeDamage(player.Damage, player.gameObject);
-            player.currentMp += 3;
+            player.CurrentMp += 3;
         }
 
     }
