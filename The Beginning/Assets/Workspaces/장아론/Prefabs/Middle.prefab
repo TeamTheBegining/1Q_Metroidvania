@@ -161,7 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 30
   currentHealth: 0
-  moveSpeed: 3
+  moveSpeed: 1.5
   detectionRange: 10
   attackRange: 1.7
   maintainBuffer: 0.5
@@ -175,6 +175,8 @@ MonoBehaviour:
   attack2Cooldown: 4
   attack1Value: 1.5
   attack2Value: 2
+  hurtColor: {r: 0.6509434, g: 0.17501779, b: 0.17501779, a: 1}
+  hurtColorDuration: 0.2
 --- !u!61 &278362775629190335
 BoxCollider2D:
   m_ObjectHideFlags: 0
