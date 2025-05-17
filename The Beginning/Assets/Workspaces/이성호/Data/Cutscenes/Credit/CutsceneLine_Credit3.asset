@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: CutsceneLine_Credit3
   m_EditorClassIdentifier: 
   CutsceneObject: {fileID: 4833154134387540325, guid: ab5ac39f887241141824a5bff4ab75bb, type: 3}
-  showTime: 3
+  showTime: 1

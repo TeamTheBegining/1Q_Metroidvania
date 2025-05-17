@@ -29,7 +29,8 @@ public enum CameraType
 {
     TitleCamra = 0,
     Scene1Camera,
-    Scene2Camera,
+    Scene2PlayerCamera,
+    Scene2CutSceneCamera,
     Scene3Camera,
     CameraTypeCount
 }

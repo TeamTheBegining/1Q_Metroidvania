@@ -93,6 +93,7 @@ public class GameManager : Singleton<GameManager>
             case GameState.BeforeStart:
                 break;
             case GameState.Play:
+                OnPlay();
                 break;
             case GameState.Pause:
                 OnPause();
@@ -107,6 +108,11 @@ public class GameManager : Singleton<GameManager>
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    private void OnPlay()
+    {
+        globalCanvas.worldCamera = Camera.main;
     }
 
     private void OnPause()

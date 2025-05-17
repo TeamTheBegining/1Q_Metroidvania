@@ -69,4 +69,9 @@ public class LightManager : Singleton<LightManager>
     {
         playerLight.SetShadowActive(value);
     }
+
+    public void SetPlayerShadowTarget(GameObject obj)
+    {
+        playerLight.SetPlayer(obj);
+    }
 }

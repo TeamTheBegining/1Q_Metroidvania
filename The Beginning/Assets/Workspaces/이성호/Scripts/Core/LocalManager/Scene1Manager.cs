@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Scene1Manager : MonoBehaviour
 {
+    public GameObject playerPrefab;
+    public Transform spawnPosition;
     private bool isFirstGameStart = false;
 
     float duration = 3f;
@@ -10,8 +12,10 @@ public class Scene1Manager : MonoBehaviour
 
     private void Start()
     {
-        LightManager.Instance.SetPlayerLightValue(200f);
+        GameObject obj = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
         CameraManager.Instance.SetTarget(CameraType.Scene1Camera, FindFirstObjectByType<Player>().gameObject.transform);
+        LightManager.Instance.SetPlayerShadowTarget(obj);
+        LightManager.Instance.SetPlayerLightValue(200f);
     }
 
     private void Update()

@@ -9,12 +9,37 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class CameraManager : Singleton<CameraManager>
 {
+    private GameObject mainCamera;
     private CinemachineBrain camBrain;
     private Dictionary<CameraType, CinemachineCamera> cameraDictionary = new Dictionary<CameraType, CinemachineCamera>((int)CameraType.CameraTypeCount);
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        GameObject localCam = GameObject.Find("Main Camera");
+        if (localCam != null)
+        {
+            Destroy(localCam);
+        }
+    }
+
     private void Start()
     {
-        camBrain = GameObject.Find("Main Camera").GetComponent<CinemachineBrain>();
+        mainCamera = Resources.Load<GameObject>("Prefabs/Camera/Main Camera");
+        DontDestroyOnLoad(Instantiate(mainCamera));
+        camBrain = mainCamera.GetComponent<CinemachineBrain>();
+
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+    }
+
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        GameObject localCam = GameObject.Find("Main Camera");
+        if (localCam != mainCamera)
+        {
+            Destroy(localCam);
+        }
     }
 
     /// <summary>
@@ -24,7 +49,11 @@ public class CameraManager : Singleton<CameraManager>
     /// <param name="comp">컴포넌트</param>
     public void Register(CameraType type, CinemachineCamera comp)
     {
-        if (cameraDictionary.ContainsKey(type)) return;
+        if (cameraDictionary.ContainsKey(type))
+        {
+            Debug.Log($"{type.ToString()} is already registered");
+            return;
+        }
         cameraDictionary.Add(type, comp);
     }
 
@@ -47,7 +76,7 @@ public class CameraManager : Singleton<CameraManager>
         cameraDictionary.TryGetValue(type, out CinemachineCamera camera);
         if (camera != null)
         {
-            camera.Priority = 20;
+            camera.Priority = priority;
         }
         else
         {

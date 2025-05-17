@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public class CutSceneManager : Singleton<CutSceneManager>
 {
-    public CutsceneSequenceSO[] sequences; // NOTE : 생성시 비어있으므로 씬에서 만들어주기 or 리소스 로드 코드 나중에 추가하기
+    public CutsceneSequenceSO[] sequences;
     private Canvas cutsceneCanvas;
     private GameObject currentCutsceneObject;
 
@@ -18,10 +18,16 @@ public class CutSceneManager : Singleton<CutSceneManager>
 
     public bool isPlay { get; private set; }
 
-    void Start()
+    protected override void Awake()
     {
-        Transform child = transform.GetChild(0);
-        cutsceneCanvas = child.GetComponent<Canvas>();
+        base.Awake();
+
+        cutsceneCanvas = transform.GetChild(0).GetComponent<Canvas>();
+
+        sequences = new CutsceneSequenceSO[2];
+
+        sequences[0] = Resources.Load<CutsceneSequenceSO>("Data/CutScene/CutsceneSequence_Intro");
+        sequences[1] = Resources.Load<CutsceneSequenceSO>("Data/CutScene/CutsceneSequence_Credit");
     }
 
     public void ShowCutscene(int sequenceIndex)
@@ -31,6 +37,17 @@ public class CutSceneManager : Singleton<CutSceneManager>
         currentSceneIndex = 0;
 
         StartCoroutine(ProcessShowCutscene(sequenceIndex, sequences[sequenceIndex].lines[currentSceneIndex].showTime));
+    }
+
+    public float GetSequenceTime(int sequenceIndex)
+    {
+        float result = 0.0f;
+        foreach(var data in sequences[sequenceIndex].lines)
+        {
+            result += data.showTime;
+        }
+
+        return result;
     }
 
     // 컷 씬 자동 넘기기를 위한 코루틴
@@ -71,11 +88,5 @@ public class CutSceneManager : Singleton<CutSceneManager>
         var obj = Instantiate(line.CutsceneObject, cutsceneCanvas.gameObject.transform);
 
         return obj;
-    }
-
-    void EndCutscene()
-    {
-        // 컷씬 종료 처리
-        gameObject.SetActive(false); // 임시
     }
 }

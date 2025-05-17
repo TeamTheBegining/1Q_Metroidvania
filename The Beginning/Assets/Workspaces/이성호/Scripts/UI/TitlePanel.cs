@@ -14,36 +14,29 @@ public class TitlePanel : MonoBehaviour
 
     private bool isIntroStart = false;
 
+    private float cutSceneDelay = 23f;
+
     private void Awake()
     {
-        titleText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        guideText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        titleText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        guideText = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
 
-        titleText.text = "There be light ";
+        titleText.text = "태초에 말씀이 있었다 ";
     }
 
     private void Start()
     {
         InitInput();
 
+        cutSceneDelay = CutSceneManager.Instance.GetSequenceTime(0);
+
 #if UNITY_EDITOR
-        if(GameManager.Instance.isDebug)
+        if (GameManager.Instance.isDebug)
         {
             isIntroStart = true;
             gameObject.SetActive(false);
         }
 #endif
-    }
-
-    private void Update()
-    {
-        if(GameManager.Instance.State == GameState.CutScene && isIntroStart)
-        {
-            if(!CutSceneManager.Instance.isPlay)
-            {
-                GameManager.Instance.State = GameState.Play;
-            }
-        }
     }
 
     public void InitInput()
@@ -58,13 +51,12 @@ public class TitlePanel : MonoBehaviour
         actions.UI.GameStart.Disable();
         titleText.text += ";";
         StartCoroutine(ProcessGameIntro());
-
-        CameraManager.Instance.HideTitleCamera(CameraType.TitleCamra);
-        GameManager.Instance.State = GameState.CutScene;
     }
 
     private IEnumerator ProcessGameIntro()
     {
+        CameraManager.Instance.HideTitleCamera(CameraType.TitleCamra);
+        GameManager.Instance.State = GameState.CutScene;
         CameraManager.Instance.SetCameraBlendingSpeed(5f);
 
         float timeElapsed = 0.0f;
@@ -79,8 +71,13 @@ public class TitlePanel : MonoBehaviour
             yield return null;
         }
 
+        Debug.Log("a");
         CutSceneManager.Instance.ShowCutscene(0);
         CameraManager.Instance.SetCameraBlendingSpeed();
+
+        yield return new WaitForSeconds(cutSceneDelay);
+        GameManager.Instance.State = GameState.Play;
         isIntroStart = true;
+        this.gameObject.SetActive(false);
     }
 }

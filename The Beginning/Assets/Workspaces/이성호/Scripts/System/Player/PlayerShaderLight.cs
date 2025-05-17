@@ -28,6 +28,11 @@ public class PlayerShaderLight : MonoBehaviour
         }
     }
 
+    public void SetPlayer(GameObject obj)
+    {
+        playerObject = obj;
+    }
+
     /// <summary>
     /// 머터리얼의 DarknessStrength 값을 바꾸는 함수 ( 적을 수록 더 많은 빛 -> 머터리얼이 사라짐 ) 
     /// </summary>
