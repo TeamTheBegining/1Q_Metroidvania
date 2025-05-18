@@ -314,6 +314,9 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
                 }
                 // GameManager에 사망 알림 (필요 없는 경우 주석 처리 또는 삭제)
                 /* if (GameManager.Instance != null) { ... } */
+
+                GetComponent<EnemyStatusBridge>()?.MarkAsDead(); // EnemyStateManager에 해당 객체 사망 호출  ( 2025.05.18 - 추가, 작성자 : 이성호 )
+
                 Destroy(gameObject, 1f);
                 break;
         }

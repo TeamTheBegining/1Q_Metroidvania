@@ -85,9 +85,9 @@ public class PlayerManager : Singleton<PlayerManager>
     /// 플레이어 스폰 함수 ( 플레이어 제거 확인 및 씬 전환 후 호출 할 것 )
     /// </summary>
     /// <param name="isSceneChange">씬 전환 스폰 여부</param>
-    public void SpawnPlayer(bool isSceneChange)
+    public Player SpawnPlayer(Vector2 spawnVector, bool isSceneChange = false)
     {
-        Player player = Instantiate(playerPrefab, respawnPosition, Quaternion.identity).GetComponent<Player>();
+        Player player = Instantiate(playerPrefab, spawnVector, Quaternion.identity).GetComponent<Player>();
 
         if(isSceneChange)
         {
@@ -97,5 +97,7 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             player.CurrentHp = player.MaxHp;
         }
+
+        return player;
     }
 }

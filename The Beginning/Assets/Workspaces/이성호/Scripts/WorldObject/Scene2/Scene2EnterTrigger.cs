@@ -5,7 +5,6 @@ using UnityEngine;
 public class Scene2EnterTrigger : MonoBehaviour
 {
     private Scene2Manager manager;
-    public GameObject playerPrefab;
     public Transform spawnPosition;
     public Collider2D groundCollider;
 
@@ -33,7 +32,6 @@ public class Scene2EnterTrigger : MonoBehaviour
 
     private IEnumerator CameraSetProcess()
     {
-
         float elapsedTime = 0.0f;
         float duration = CutSceneManager.Instance.GetSequenceTime(1);
         while(elapsedTime < duration)
@@ -44,7 +42,7 @@ public class Scene2EnterTrigger : MonoBehaviour
 
         GameSceneManager.Instance.UnloadScene(0); // 튜토리얼 씬 로드 해제
 
-        GameObject obj = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
+        GameObject obj = PlayerManager.Instance.SpawnPlayer(spawnPosition.position).gameObject;
         Debug.Log("PlayerSpawn");
 
         // 처음 시작 카메라 설정

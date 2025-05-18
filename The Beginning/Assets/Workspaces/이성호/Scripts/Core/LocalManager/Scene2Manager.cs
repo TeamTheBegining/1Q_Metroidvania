@@ -12,6 +12,11 @@ public class Scene2Manager : MonoBehaviour
         textScroll = transform.GetChild(0).GetChild(0).GetComponent<TextScroll>();
     }
 
+    private void Start()
+    {
+        
+    }
+
     public void PlayText()
     {
         textScroll.PlayScroll();
@@ -32,10 +37,5 @@ public class Scene2Manager : MonoBehaviour
             cg.alpha = 1 - timeElapsed / duration;
             yield return null;
         }
-    }
-
-    public void SpwanEnemy()
-    {
-
     }
 }

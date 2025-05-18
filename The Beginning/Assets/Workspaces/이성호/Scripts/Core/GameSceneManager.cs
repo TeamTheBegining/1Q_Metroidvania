@@ -8,17 +8,17 @@ using UnityEngine.SceneManagement;
 public class GameSceneManager : Singleton<GameSceneManager>
 {
     private SceneChangePanel sceneChangePanel;
-    private float sceneChangeProcessDuration = 1f; // todo : 씬 전환 패널 연결하기
+    private float sceneChangeProcessDuration = 1f; // TODO : 씬 전환 패널 연결하기
 
     private void Start()
     {
-        sceneChangePanel = GetComponentInChildren<SceneChangePanel>();
+        sceneChangePanel = GetComponentInChildren<SceneChangePanel>(); // TODO : 이 코드 제거하고 인스펙터에서 패널 받게 변경
     }
 
     public void ChangeScene(string sceneName)
     {
         StartCoroutine(SceneChangeProcess(sceneName));
-        SceneManager.GetSceneByName(sceneName);
+        SceneManager.LoadScene(sceneName);
     }
 
     public void ChangeScene(int buildIndex, bool isAdditive = false)
@@ -30,7 +30,7 @@ public class GameSceneManager : Singleton<GameSceneManager>
         else
         {
             StartCoroutine(SceneChangeProcess(buildIndex));
-            SceneManager.LoadScene(buildIndex);
+            //SceneManager.LoadScene(buildIndex);
         }
     }
 
@@ -45,7 +45,9 @@ public class GameSceneManager : Singleton<GameSceneManager>
             Debug.Log("Load in process");
             yield return null;
         }
+        yield return new WaitForSeconds(1f);
         Debug.Log("Load done !");
+        sceneChangePanel.ClosePanel();
     }
 
     private IEnumerator SceneChangeProcess(int buildIndex)

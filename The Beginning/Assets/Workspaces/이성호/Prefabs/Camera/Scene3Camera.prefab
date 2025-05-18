@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 242958682845352911}
   - component: {fileID: 8888333322349360768}
   - component: {fileID: -2755125849055476992}
+  - component: {fileID: 305819809537591313}
   m_Layer: 0
   m_Name: Scene3Camera
   m_TagString: Untagged
@@ -57,7 +58,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 34
+    FieldOfView: 15.1
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -89,3 +90,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
+--- !u!114 &305819809537591313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8755023048213635793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BoundingShape2D: {fileID: 0}
+  Damping: 0.5
+  SlowingDistance: 5
+  OversizeWindow:
+    Enabled: 0
+    MaxWindowSize: 0
+    Padding: 0
+  m_LegacyMaxWindowSize: -2

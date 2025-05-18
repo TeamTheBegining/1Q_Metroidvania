@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 2611970721126606598}
   - component: {fileID: 278362775629190335}
   - component: {fileID: 1559088278144273290}
+  - component: {fileID: 5755833673258281902}
   m_Layer: 8
   m_Name: MiddleBoss
   m_TagString: Untagged
@@ -250,6 +251,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &5755833673258281902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6850172266251670349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7f45e0f91af6ea49ae57351415a97d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyID: 
 --- !u!1 &7284608179196531827
 GameObject:
   m_ObjectHideFlags: 0
