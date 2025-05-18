@@ -54,6 +54,7 @@ public class Player : MonoBehaviour, IDamageable
     float attackDelayTimer = 0f;
     float moveDelayTimer = 0f;
     float grabDelayTimer = 0f;
+    float ladderDelayTimer = 0f;
     float parryCounterTimer = 0;
     float healingTimer = 0;
 
@@ -63,6 +64,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float jumpDisableGroundCheckTime = 0.1f;
     [SerializeField] float moveDelayTime = 0.2f;
     [SerializeField] float grabDelayTime = 0.2f;
+    [SerializeField] float ladderDelayTime = 0.2f;
     [SerializeField] float attackDelayTime = 0f;
     [SerializeField] float slidingDelayTime = 1f;
     [SerializeField] float parryDelayTime = 0.8f;
@@ -101,12 +103,14 @@ public class Player : MonoBehaviour, IDamageable
     bool isAttack = false;
     bool isMoveDelay = false;
     bool isGrapDelay = false;
+    bool isLadderDelay = false;
     bool isWallClimbable = false;
     bool isHealing = false;
     bool attack2Able = false;
     bool attack3Able = false;
     bool attack4Able = false;
     bool getAtack4 = false;
+    bool isInteraction = false;
 
     //벽타기 체크 변수
     private WallSensor m_wallSensor1;
@@ -116,6 +120,7 @@ public class Player : MonoBehaviour, IDamageable
     private Transform m_grabTransform;
     private Vector3 m_grabPos;
     Vector3 playerleftdown;
+    Interactable interactable;
 
     public float Damage
     {
@@ -159,6 +164,8 @@ public class Player : MonoBehaviour, IDamageable
 
     PlayerDirectionState curDir = PlayerDirectionState.Right;//현재 방향
     private bool isDead;
+    [SerializeField] private bool isNearLadder = false;
+    [SerializeField] private Collider2D ladderCollision;
 
     enum PlayerDirectionState
     {
@@ -216,6 +223,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
+        //테스트용
         if (input.IsParrying)
         {
             TakeDamage(95,gameObject);
@@ -305,6 +313,8 @@ public class Player : MonoBehaviour, IDamageable
     private void CheckList()
     {
         //FlipCheck();
+        LadderCheck();
+        InteractionCheck();
         WallCheck();
         DeadCheck();
         ParryCountCheck();
@@ -312,6 +322,35 @@ public class Player : MonoBehaviour, IDamageable
         EnergyOverCheck();
         ParryingCounterCheck();
         isGround = CheckIsGround();
+    }
+
+    private void LadderCheck()
+    {
+
+        if (isLadderDelay) return;
+        if (isNearLadder && !isLadder && input.InputVec.y!=0)
+        {
+            float yDiff = transform.position.y - ladderCollision.transform.position.y;
+            if (isGround&&(Mathf.Sign(yDiff) != Mathf.Sign(input.InputVec.y) && Mathf.Abs(yDiff) > 0.1f)||!isGround)
+            {
+                // 사다리 타기 시작
+                rb.gravityScale = 0f;
+                currentState = PlayerState.Ladder;
+                transform.position = new Vector3(ladderCollision.transform.position.x, transform.position.y, transform.position.z);
+                isLadder = true;
+                rb.linearVelocity = Vector2.zero;
+                gameObject.layer = LayerMask.NameToLayer("Ladder");
+                isLadderDelay = true;
+            }
+        }
+    }
+
+    private void InteractionCheck()
+    {
+        if(isInteraction)
+        {
+            interactable.OnInteraction();
+        }
     }
 
     private void ParryCountCheck()
@@ -431,6 +470,15 @@ public class Player : MonoBehaviour, IDamageable
             grabDelayTimer = 0;
         }
 
+        if (isLadderDelay)
+            ladderDelayTimer += Time.deltaTime;
+
+        if (ladderDelayTimer > ladderDelayTime)
+        {
+            isLadderDelay = false;
+            ladderDelayTimer = 0;
+        }
+
         if (isHealing)
             healingTimer += Time.deltaTime;
         if(healingTimer > 1)
@@ -546,10 +594,11 @@ public class Player : MonoBehaviour, IDamageable
             animatorCtrl.AniSpeed = 0f;
         }
 
-
+        if (isLadderDelay) return;
         // 사다리 점프
         if (input.IsJump && !(input.InputVec.y < 0))
         {
+            isLadderDelay = true;
             isLadder = false;
             input.IsJump = false;
             rb.gravityScale = 1;
@@ -910,10 +959,14 @@ public class Player : MonoBehaviour, IDamageable
     #endregion
 
     #region 트리거
-    private void OnTriggerStay2D(Collider2D collision)
+   /* private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.tag == "Ladder" && input.InputVec.y!=0 && !isLadder)
+        if (collision.CompareTag("Ladder") 
+            && ((transform.position.y - collision.transform.position.y > 0) && input.InputVec.y < 0 
+            || (transform.position.y - collision.transform.position.y < 0) && input.InputVec.y > 0) 
+            && !isLadder)
         {
+            
             rb.gravityScale = 0f;
             currentState = PlayerState.Ladder;
             transform.position = new Vector3(collision.transform.position.x, transform.position.y, transform.position.z);
@@ -921,20 +974,26 @@ public class Player : MonoBehaviour, IDamageable
             rb.linearVelocity = Vector2.zero; // 속도 제거
             gameObject.layer = LayerMask.NameToLayer("Ladder");
         }
-
-        if (collision.gameObject.GetComponent<Interactable>() != null && input.IsInteraction)
-        {
-            collision.gameObject.GetComponent<Interactable>().OnInteraction();
-        }
-    }
+    }*/
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("Ladder"))
+        {
+            isNearLadder = true;
+            ladderCollision = collision;
+        }
+
+        if (collision.gameObject.GetComponent<Interactable>() != null)
+        {
+            isInteraction = true;
+            interactable = collision.gameObject.GetComponent<Interactable>();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Ladder"&&isLadder)
+        if (collision.CompareTag("Ladder"))//&&isLadder)
         {
             rb.gravityScale = 1;
             if(CheckIsGround())
@@ -942,8 +1001,17 @@ public class Player : MonoBehaviour, IDamageable
             else
                 currentState = PlayerState.Jump;
             isLadder = false;
+            isLadderDelay = true;
             animatorCtrl.AniSpeed = 1f;
+            isNearLadder = false;
+            ladderCollision = null;
             gameObject.layer = LayerMask.NameToLayer("Player");
+        }
+
+        if(collision.gameObject.GetComponent<Interactable>() != null)
+        {
+            isInteraction = false;
+            interactable = null;
         }
     }
     #endregion
@@ -973,7 +1041,7 @@ public class Player : MonoBehaviour, IDamageable
             gameObject.layer = LayerMask.NameToLayer("Invincibility");//피격 중 무적 레이어
             rb.linearVelocity = Vector2.zero;//초기화 후 진행
             rb.gravityScale = 1;
-            animatorCtrl.AniSpeed = 1f;
+
             float direction;
             if (enemy.transform.position.x - transform.position.x > 0)
             {

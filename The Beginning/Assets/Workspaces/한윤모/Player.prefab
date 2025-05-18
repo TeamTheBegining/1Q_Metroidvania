@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7564144462627185647}
   - component: {fileID: 7969606832145097063}
   - component: {fileID: 8153191691142207903}
-  m_Layer: 7
+  m_Layer: 3
   m_Name: WellSensor1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 5079520944648756395}
   - component: {fileID: 5882940659701902328}
   - component: {fileID: 606246275924896625}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AttackCollider2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9139963352760455483}
   - component: {fileID: 6417936980160800566}
-  m_Layer: 7
+  m_Layer: 3
   m_Name: SlidingCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 470267482505474982}
   - component: {fileID: 3878400435489318478}
   - component: {fileID: 2895127957771167515}
-  m_Layer: 7
+  m_Layer: 3
   m_Name: WellSensor2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 5881204024337264129}
   - component: {fileID: 6256677231847221210}
   - component: {fileID: 2803048659524994908}
-  m_Layer: 7
+  m_Layer: 3
   m_Name: GrabSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -501,7 +501,7 @@ GameObject:
   - component: {fileID: 5390087901500810985}
   - component: {fileID: 7126307752183496154}
   - component: {fileID: 372178548738259193}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AttackCollider3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 4373510788165807312}
   - component: {fileID: 7152383628148896178}
   - component: {fileID: 9189228048039444917}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AttackCollider4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -683,7 +683,7 @@ GameObject:
   - component: {fileID: 3355806688515768245}
   - component: {fileID: 3311277621614225158}
   - component: {fileID: 1626073976378131963}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -909,25 +909,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2df5d07b8e3298347a974d8b7ab5a287, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4.5
+  moveSpeed: 4
+  baseMoveSpeed: 4
   lmoveSpeed: 2
-  jumpMoveSpeed: 0.5
-  slideSpeed: 4.5
+  jumpMoveSpeed: 0.7
+  slideSpeed: 5
+  attackMoveSpeed: 0.5
   jumpPower: 5
+  baseJumpPower: 5
   ljumpPower: 4
   cjumpPower: 4
   flyPower: 3
-  maxHp: 9999
+  maxHp: 1000
   maxMp: 25
-  currentHp: 9999
+  currentHp: 100
   currentMp: 0
+  baseDamage: 2
   damage: 2
   jumpDisableGroundCheckTime: 0.1
-  MoveDelayTime: 0.2
-  GrabDelayTime: 0.2
-  attackDelayTime: 1
+  moveDelayTime: 0.2
+  grabDelayTime: 0.2
+  attackDelayTime: 0
   slidingDelayTime: 1
-  parryDelayTime: 0.5
+  parryDelayTime: 0.8
   spawnDelayTime: 0.1
   parryCountTime: 0.1
   currentState: 0
