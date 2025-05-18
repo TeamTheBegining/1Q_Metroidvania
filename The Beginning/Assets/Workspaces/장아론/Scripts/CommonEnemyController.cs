@@ -27,12 +27,11 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
     // ===== 애니메이터 및 애니메이션 상태 =====
     protected Animator animator;
     protected GameObject player;
-    // protected bool isDead (수정 유지)
     protected bool isDead = false; // 사망 상태
 
     // isPerformingAttackAnimation는 공격 애니메이션 재생 중 + 이동 및 AI 판단 스킵 플래그
     protected bool isPerformingAttackAnimation = false;
-    //  피격 애니메이션 재생 중 플래그 추가 
+    // 피격 애니메이션 재생 중 플래그 추가 
     protected bool isPerformingHurtAnimation = false;
 
 
@@ -51,15 +50,14 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
     // 적 캐릭터의 초기 방향 (좌우 반전에 사용)
     public float initialFacingDirection = 1f; // 오른쪽을 보면 1, 왼쪽을 보면 -1
 
-    // IDamageable 인터페이스 멤버 명시적 구현 (수정 유지)
-    // 인터페이스는 public set을 요구하지만, 클래스 내부에서는 protected set을 유지하기 위함
+    // IDamageable 인터페이스 멤버 명시적 구현
     float IDamageable.CurrentHp { get => currentHealth; set => currentHealth = value; }
     float IDamageable.MaxHp { get => maxHealth; set => maxHealth = value; }
     bool IDamageable.IsDead { get => isDead; } // protected isDead 필드 사용
     Action IDamageable.OnDead { get => OnDead; set => OnDead = value; } // 클래스의 OnDead 멤버를 사용
 
 
-    // 사망 시 호출될 이벤트 액션 (클래스 멤버, 수정 유지)
+    // 사망 시 호출될 이벤트 액션 (클래스 멤버)
     public Action OnDead { get; set; }
 
 
@@ -73,10 +71,12 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
 
     protected virtual void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player"); // "Player" 태그로 플레이어 찾음
+        // Start에서 플레이어 오브젝트를 찾습니다.
+        // 플레이어 오브젝트가 씬에 없거나 아직 활성화되지 않은 경우 null일 수 있습니다.
+        player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
-            Debug.LogError("Player GameObject with Tag 'Player' not found! Ensure Player has the 'Player' tag.");
+            Debug.LogWarning(gameObject.name + ": Player GameObject with Tag 'Player' not found in Start! Will attempt to find in Update.");
         }
 
         currentHealth = maxHealth; // 체력 초기화
@@ -88,51 +88,50 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
         attackWaitTimer = 0f;
         isWaitingAfterAttack = false;
         isDead = false; // protected isDead 초기화
-        isPerformingHurtAnimation = false; //  피격 애니메이션 플래그 초기화 
+        isPerformingHurtAnimation = false; // 피격 애니메이션 플래그 초기화 
         OnDead = null; // OnDead 이벤트 초기화 (중요!)
     }
 
     protected virtual void Update()
     {
         // 죽었거나 피격 애니메이션 중이면 Update 전체 로직 스킵
-        if (isDead) return; // 죽었으면 아무것도 안 함
-
-        //  isPerformingHurtAnimation 중일 때 Update 로직 스킵 
+        if (isDead) return;
         if (isPerformingHurtAnimation)
         {
-            Debug.Log(gameObject.name + ": Update skipped due to isPerformingHurtAnimation being true."); //  Update 스킵 로그 
-            return; // 피격 중일 때는 Update의 나머지 AI/이동 로직 건너뛰기
+            // Debug.Log(gameObject.name + ": Update skipped due to isPerformingHurtAnimation being true."); // 디버그 너무 많을 경우 주석 처리
+            return;
         }
 
-        //  isPerformingHurtAnimation가 false일 때만 이 아래 로직 실행 
-        Debug.Log(gameObject.name + ": Update loop is running. isPerformingHurtAnimation=" + isPerformingHurtAnimation + ", CurrentState=" + currentState); //  Update 재개 로그 
+        // Debug.Log(gameObject.name + ": Update loop is running. isPerformingHurtAnimation=" + isPerformingHurtAnimation + ", CurrentState=" + currentState); // 디버그 너무 많을 경우 주석 처리
 
+        // 플레이어 참조가 없을 경우, 매 Update에서 다시 시도합니다.
+        // 단, player가 null이 아닐 때는 Find 함수를 호출하지 않으므로 성능에 큰 영향은 없습니다.
         if (player == null)
         {
-            if (currentState != EnemyState.Idle) SetState(EnemyState.Idle);
-            PlayIdleAnim();
-            return;
+            player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) // 여전히 플레이어를 찾을 수 없으면 Idle 상태 유지
+            {
+                if (currentState != EnemyState.Idle) SetState(EnemyState.Idle);
+                PlayIdleAnim();
+                return;
+            }
         }
 
         UpdateFacingDirection(); // 플레이어 방향 바라보기는 항상 수행 (죽거나 피격 중이 아니라면)
 
-        //  AI 상태 머신 실행 
+        // AI 상태 머신 실행 
         switch (currentState)
         {
             case EnemyState.Idle:
-                //  상세 디버그 로그 추가
-                //Debug.Log(gameObject.name + ": State=Idle. Distance=" + Vector3.Distance(transform.position, player.transform.position).ToString("F2"));
                 // 플레이어가 감지 범위에 들어오면 추적
                 if (Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
                 {
                     SetState(EnemyState.Chase);
                 }
-                // PlayIdleAnim(); // 애니메이션 재생은 SetState에서 관리
                 break;
 
             case EnemyState.Chase:
-                //  Chase 상태 진입 로그 (추적 중 Update 매 프레임 실행 확인) 
-                Debug.Log(gameObject.name + ": In Chase State Update. Distance=" + Vector3.Distance(transform.position, player.transform.position).ToString("F2"));
+                // Debug.Log(gameObject.name + ": In Chase State Update. Distance=" + Vector3.Distance(transform.position, player.transform.position).ToString("F2")); // 디버그 너무 많을 경우 주석 처리
                 float distanceToPlayerChase = Vector3.Distance(transform.position, player.transform.position);
                 // 플레이어가 공격 범위에 들어오면 공격 상태로 전환
                 if (distanceToPlayerChase <= attackRange)
@@ -145,29 +144,25 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
                     SetState(EnemyState.Idle);
                 }
                 // 감지 범위 내, 공격 범위 밖 -> 계속 추적
-                //  이동은 공격 애니메이션 중이거나 대기 중이 아닐 때만 허용 
-                //  이동 허용 조건 상세 로그 
-                bool canChaseMove = !(isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation); // isPerformingHurtAnimation는 Update 진입 시 이미 체크
-                Debug.Log(gameObject.name + ": Checking Chase Move Condition. Result: " + canChaseMove +
-                          " (isPerformingAttackAnim=" + isPerformingAttackAnimation +
-                          ", isWaitingForAttack=" + isWaitingForAttack +
-                          ", isWaitingAfterAttack=" + isWaitingAfterAttack + ")"); // isPerformingHurtAnimation는 여기서 이미 false
+                // 이동 허용 조건 상세 로그 
+                bool canChaseMove = !(isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation);
+                // Debug.Log(gameObject.name + ": Checking Chase Move Condition. Result: " + canChaseMove +
+                //                   " (isPerformingAttackAnim=" + isPerformingAttackAnimation +
+                //                   ", isWaitingForAttack=" + isWaitingForAttack +
+                //                   ", isWaitingAfterAttack=" + isWaitingAfterAttack + ")"); // 디버그 너무 많을 경우 주석 처리
 
                 if (canChaseMove)
                 {
-                    Debug.Log(gameObject.name + ": Chase Move Condition Met. Calling MoveTowardsPlayer and PlayWalkAnim."); //  이동 메서드 호출 직전 로그 
+                    // Debug.Log(gameObject.name + ": Chase Move Condition Met. Calling MoveTowardsPlayer and PlayWalkAnim."); // 디버그 너무 많을 경우 주석 처리
                     MoveTowardsPlayer(); // <-- 이동 허용 시에만 이동 메서드 호출
                     PlayWalkAnim(); // 이동 시 걷기 애니메이션 재생
                 }
-                //  이동이 허용되지 않는 Chase 상태 (대기/애니메이션 중) 
+                // 이동이 허용되지 않는 Chase 상태 (대기/애니메이션 중) 
                 else
                 {
-                    Debug.Log(gameObject.name + ": Chase Move Condition NOT Met. Remaining Idle/Waiting."); //  이동 스킵 로그 
-                    // 이 경우 Idle 애니메이션을 재생하는 것이 자연스러울 수 있습니다.
+                    // Debug.Log(gameObject.name + ": Chase Move Condition NOT Met. Remaining Idle/Waiting."); // 디버그 너무 많을 경우 주석 처리
                     PlayIdleAnim();
                 }
-                // 애니메이션 재생은 SetState 또는 위 이동/대기 로직에서 관리
-                // PlayWalkAnim(); // 무조건 Walk 애니메이션 재생 대신 조건부 재생
                 break;
 
             case EnemyState.Attack:
@@ -180,19 +175,17 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
                 else // 플레이어 공격 범위 내
                 {
                     // 간격 유지 (너무 가까우면 물러나기)
-                    //  물러나기도 공격 애니메이션 중이거나 대기 중이 아닐 때만 허용 
-                    //  물러나기 허용 조건 상세 로그 
-                    bool canAttackMove = !(isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation); // isPerformingHurtAnimation는 Update 진입 시 이미 체크
-                    Debug.Log(gameObject.name + ": Checking Attack Move Condition. Result: " + canAttackMove +
-                              " (isPerformingAttackAnim=" + isPerformingAttackAnimation +
-                              ", isWaitingForAttack=" + isWaitingForAttack +
-                              ", isWaitingAfterAttack=" + isWaitingAfterAttack + ")"); // isPerformingHurtAnimation는 여기서 이미 false
+                    // 물러나기도 공격 애니메이션 중이거나 대기 중이 아닐 때만 허용 
+                    bool canAttackMove = !(isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation);
+                    // Debug.Log(gameObject.name + ": Checking Attack Move Condition. Result: " + canAttackMove +
+                    //                   " (isPerformingAttackAnim=" + isPerformingAttackAnimation +
+                    //                   ", isWaitingForAttack=" + isWaitingForAttack +
+                    //                   ", isWaitingAfterAttack=" + isWaitingAfterAttack + ")"); // 디버그 너무 많을 경우 주석 처리
 
 
                     if (canAttackMove && distanceToPlayerAttack < attackRange - maintainBuffer)
                     {
-                        //  상세 디버그 로그 추가
-                        Debug.Log(gameObject.name + ": Too close (" + distanceToPlayerAttack.ToString("F2") + "), retreating. Resetting attack wait.");
+                        // Debug.Log(gameObject.name + ": Too close (" + distanceToPlayerAttack.ToString("F2") + "), retreating. Resetting attack wait."); // 디버그 너무 많을 경우 주석 처리
                         MoveAwayFromPlayer(); // <-- 물러나기 허용 시에만 이동
                         PlayWalkAnim(); // 물러날 때는 걷기 애니메이션
                         isWaitingForAttack = false; // 물러나는 중 공격 준비 상태 해제
@@ -200,16 +193,15 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
                     }
                     else // 적절한 공격 거리 또는 이동이 허용되지 않는 상태 (대기/애니메이션 중)
                     {
-                        //  공격 준비 시작 조건: 공격 애니메이션 중이거나 공격 후 대기 중이 아닐 때 
-                        //  공격 시작 조건 상세 로그 
-                        bool canStartAttackPrep = !(isPerformingAttackAnimation || isWaitingAfterAttack); // isPerformingHurtAnimation는 Update 진입 시 이미 체크
-                        Debug.Log(gameObject.name + ": Checking Attack Start Prep Condition. Result: " + canStartAttackPrep +
-                                  " (isPerformingAttackAnim=" + isPerformingAttackAnimation +
-                                  ", isWaitingAfterAttack=" + isWaitingAfterAttack + ")");
+                        // 공격 준비 시작 조건: 공격 애니메이션 중이거나 공격 후 대기 중이 아닐 때 
+                        bool canStartAttackPrep = !(isPerformingAttackAnimation || isWaitingAfterAttack);
+                        // Debug.Log(gameObject.name + ": Checking Attack Start Prep Condition. Result: " + canStartAttackPrep +
+                        //                           " (isPerformingAttackAnim=" + isPerformingAttackAnimation +
+                        //                           ", isWaitingAfterAttack=" + isWaitingAfterAttack + ")"); // 디버그 너무 많을 경우 주석 처리
 
                         if (canStartAttackPrep)
                         {
-                            //  아직 공격 준비 대기 상태가 아니라면 시작 
+                            // 아직 공격 준비 대기 상태가 아니라면 시작 
                             if (!isWaitingForAttack)
                             {
                                 Debug.Log(gameObject.name + ": Within attack range (" + distanceToPlayerAttack.ToString("F2") + "). Condition met. Starting attack wait (" + preAttackPauseDuration.ToString("F2") + "s).");
@@ -217,15 +209,12 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
                                 attackWaitTimer = preAttackPauseDuration; // 공격 준비 타이머 시작
                                 PlayIdleAnim(); // 공격 준비 중에는 Idle 모션
                             }
-                            // else: 이미 isWaitingForAttack 상태이면 타이머 감소 로직으로 이동 (아래 if 블록)
                         }
-                        // else: isPerformingAttackAnimation 또는 isWaitingAfterAttack 상태이면 공격 준비 시작 안 함.
 
-                        //  타이머 감소 및 PerformAttackLogic 호출 
-                        // isWaitingForAttack 상태일 때만 타이머 감소 및 PerformAttackLogic 호출
+                        // 타이머 감소 및 PerformAttackLogic 호출 
                         if (isWaitingForAttack)
                         {
-                            //Debug.Log(gameObject.name + ": Currently in Attack Wait state. Timer: " + attackWaitTimer.ToString("F2"));
+                            // Debug.Log(gameObject.name + ": Currently in Attack Wait state. Timer: " + attackWaitTimer.ToString("F2")); // 디버그 너무 많을 경우 주석 처리
                             attackWaitTimer -= Time.deltaTime;
                             if (attackWaitTimer <= 0)
                             {
@@ -234,8 +223,6 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
                                 PerformAttackLogic(); // <-- 파생 클래스의 오버라이드 메서드 호출
                             }
                         }
-                        // Animation: PlayIdleAnim while waiting/paused, PlayAttackAnim while isPerformingAttackAnimation
-                        // 애니메이션은 주로 SetState와 애니메이션 이벤트에서 관리
                     }
                 }
                 break;
@@ -249,9 +236,9 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
     // AI 상태를 설정하고 애니메이션 및 변수 업데이트
     protected virtual void SetState(EnemyState newState)
     {
-        Debug.Log(">>> " + gameObject.name + " SetState: " + currentState.ToString() + " -> " + newState.ToString()); //  상태 전환 로그 (유지) 
+        Debug.Log(">>> " + gameObject.name + " SetState: " + currentState.ToString() + " -> " + newState.ToString());
         if (currentState == newState) return;
-        if (isDead && newState != EnemyState.Dead) return; // protected isDead 사용
+        if (isDead && newState != EnemyState.Dead) return;
 
         currentState = newState;
 
@@ -261,7 +248,6 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
             case EnemyState.Idle:
                 PlayIdleAnim(); // Idle 애니메이션
                 isPerformingAttackAnimation = false;
-                // isPerformingHurtAnimation = false; // Idle 진입 시 피격 상태 해제 (애니메이션 이벤트에서도 함)
                 isWaitingForAttack = false; // 공격 준비 상태 해제
                 attackWaitTimer = 0f;
                 isWaitingAfterAttack = false; // 공격 후 대기 상태 해제
@@ -271,7 +257,6 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
             case EnemyState.Chase:
                 PlayWalkAnim(); // 걷기 애니메이션
                 isPerformingAttackAnimation = false;
-                // isPerformingHurtAnimation = false; // Chase 진입 시 피격 상태 해제
                 isWaitingForAttack = false; // 공격 준비 상태 해제
                 attackWaitTimer = 0f;
                 isWaitingAfterAttack = false; // 공격 후 대기 상태 해제
@@ -282,56 +267,67 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
                 PlayIdleAnim(); // 공격 준비 중에는 Idle 모션
                 isWaitingAfterAttack = false; // 공격 후 대기 상태 해제
                 ResetAttackTriggers(); // 공격 트리거 리셋
-                isWaitingForAttack = true; //  공격 준비 상태 진입 
+                isWaitingForAttack = true; // 공격 준비 상태 진입 
                 attackWaitTimer = preAttackPauseDuration; // 공격 준비 타이머 시작
                 isPerformingAttackAnimation = false; // 공격 애니메이션 시작 전이므로 false
-                // isPerformingHurtAnimation = false; // Attack 진입 시 피격 상태 해제
-                //  상세 디버그 로그 추가
                 Debug.Log(gameObject.name + ": Entered Attack state. Initializing attack wait timer (" + preAttackPauseDuration.ToString("F2") + "s).");
                 break;
 
             case EnemyState.Dead:
                 isDead = true; // protected isDead 설정
                 isPerformingAttackAnimation = false;
-                isPerformingHurtAnimation = false; //  사망 시 피격 상태 해제 
+                isPerformingHurtAnimation = false; // 사망 시 피격 상태 해제 
                 isWaitingForAttack = false;
                 attackWaitTimer = 0f;
                 isWaitingAfterAttack = false;
                 ResetAttackTriggers(); // 공격 트리거 리셋
                 PlayDeathAnim(); // 사망 애니메이션
 
-                // OnDead 이벤트 호출
-                OnDead?.Invoke(); // 구독자가 있다면 호출 (null 체크)
+                // OnDead 이벤트 호출: 스폰 매니저가 이 이벤트를 구독하여 적의 사망을 인지할 수 있습니다.
+                OnDead?.Invoke();
 
-                // 사망 후 처리
+                // 사망 후 처리: Collider 및 Rigidbody 비활성화
                 Collider2D mainCollider = GetComponent<Collider2D>();
                 if (mainCollider != null) mainCollider.enabled = false;
                 Rigidbody2D rb = GetComponent<Rigidbody2D>();
                 if (rb != null)
                 {
                     rb.linearVelocity = Vector2.zero;
-                    rb.isKinematic = true;
+                    rb.isKinematic = true; // 물리적 영향을 받지 않도록
                 }
+
                 // GameManager에 사망 알림 (필요 없는 경우 주석 처리 또는 삭제)
-                /* if (GameManager.Instance != null) { ... } */
+                // /* if (GameManager.Instance != null) { ... } */
 
-                GetComponent<EnemyStatusBridge>()?.MarkAsDead(); // EnemyStateManager에 해당 객체 사망 호출  ( 2025.05.18 - 추가, 작성자 : 이성호 )
+                // EnemyStatusBridge를 통해 외부 시스템에 사망 알림
+                GetComponent<EnemyStatusBridge>()?.MarkAsDead(); // EnemyStateManager에 해당 객체 사망 호출 (2025.05.18 - 추가, 작성자 : 이성호)
 
-                Destroy(gameObject, 1f);
+                // ===== 사망 처리 (스폰 매니저 연동 고려) =====
+                // 1. 오브젝트 풀링을 사용하는 경우:
+                // Destroy(gameObject, 1f); 대신 오브젝트를 비활성화하고 풀로 반환하는 로직을 사용합니다.
+                // 이 경우, 이 스크립트만으로는 풀로 반환할 수 없으므로, 스폰 매니저가 OnDead 이벤트를 받아서 처리해야 합니다.
+                // GameObject.SetActive(false); 
+                // 예를 들어, SpawnManager.Instance.ReturnEnemyToPool(this); (이 코드는 SpawnManager 구현이 필요합니다)
+
+                // 2. 오브젝트 풀링을 사용하지 않거나, 사망 애니메이션 후 완전히 제거할 경우:
+                // 현재 코드와 동일하게 일정 시간 뒤 오브젝트를 제거합니다.
+                Destroy(gameObject, 1f); // 1초 뒤 오브젝트 제거 (사망 애니메이션 길이 등을 고려)
+                                         // ===========================================
+
                 break;
         }
     }
 
-    //  이동 관련 함수들: isPerformingHurtAnimation 중일 때도 이동 막도록 조건 추가 
+    // 이동 관련 함수들: isPerformingHurtAnimation 중일 때도 이동 막도록 조건 추가 
     protected virtual void MoveTowardsPlayer()
     {
-        //  이동은 공격 애니메이션/대기 중이거나 피격 중, 죽었을 때 스킵 
+        // 이동은 공격 애니메이션/대기 중이거나 피격 중, 죽었을 때 스킵 
         if (player == null || currentState != EnemyState.Chase || isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)
         {
-            Debug.Log(gameObject.name + ": MoveTowardsPlayer skipped. Reason: State=" + currentState + ", Paused/Hurt/Dead=" + (isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)); //  이동 스킵 상세 로그 
+            // Debug.Log(gameObject.name + ": MoveTowardsPlayer skipped. Reason: State=" + currentState + ", Paused/Hurt/Dead=" + (isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)); // 디버그 너무 많을 경우 주석 처리
             return;
         }
-        Debug.Log(gameObject.name + ": MoveTowardsPlayer executing."); //  이동 실행 로그 
+        // Debug.Log(gameObject.name + ": MoveTowardsPlayer executing."); // 디버그 너무 많을 경우 주석 처리
         Vector3 directionToPlayer = (player.transform.position - transform.position);
         directionToPlayer.z = 0;
         if (directionToPlayer.sqrMagnitude > 0.0001f)
@@ -344,13 +340,13 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
 
     protected virtual void MoveAwayFromPlayer()
     {
-        //  이동은 공격 애니메이션/대기 중이거나 피격 중, 죽었을 때 스킵 
+        // 이동은 공격 애니메이션/대기 중이거나 피격 중, 죽었을 때 스킵 
         if (player == null || currentState != EnemyState.Attack || isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)
         {
-            Debug.Log(gameObject.name + ": MoveAwayFromPlayer skipped. Reason: State=" + currentState + ", Paused/Hurt/Dead=" + (isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)); //  이동 스킵 상세 로그 
+            // Debug.Log(gameObject.name + ": MoveAwayFromPlayer skipped. Reason: State=" + currentState + ", Paused/Hurt/Dead=" + (isPerformingAttackAnimation || isWaitingForAttack || isWaitingAfterAttack || isPerformingHurtAnimation || isDead)); // 디버그 너무 많을 경우 주석 처리
             return;
         }
-        Debug.Log(gameObject.name + ": MoveAwayFromPlayer executing."); //  이동 실행 로그 
+        // Debug.Log(gameObject.name + ": MoveAwayFromPlayer executing."); // 디버그 너무 많을 경우 주석 처리
         Vector3 directionAwayFromPlayer = (transform.position - player.transform.position);
         directionAwayFromPlayer.z = 0;
 
@@ -369,13 +365,11 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
 
     protected virtual void UpdateFacingDirection()
     {
-        //  피격 애니메이션 중에는 방향 전환도 막을 수 있음 (선택 사항) 
+        // 피격 애니메이션 중에는 방향 전환도 막을 수 있음 (선택 사항) 
         if (player == null || isPerformingHurtAnimation || isDead)
         {
-            // Debug.Log(gameObject.name + ": UpdateFacingDirection skipped due to Hurt/Dead state."); // 디버그 추가
             return;
         }
-        // Debug.Log(gameObject.name + ": UpdateFacingDirection executing."); // 디버그 추가
 
         float directionX = player.transform.position.x - transform.position.x;
         Vector3 currentScale = transform.localScale;
@@ -392,22 +386,23 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
     // ... (나머지 애니메이션 관련, TakeDamage 코드) ...
     // PlayIdleAnim, PlayWalkAnim, PlayDeathAnim, PlayAttack1Anim, PlayAttack2Anim, ResetAttackTriggers
     // OnAttackAnimationEnd, PostAttackPauseRoutine, TakeDamage 메서드는 이전 코드와 동일합니다.
-    // isPerformingHurtAnimation 체크 조건이 이미 Update 상단에서 전체 로직을 스킵하도록 변경되었으므로,
-    // 여기서 다시 isPerformingHurtAnimation 체크 조건을 추가할 필요는 없습니다.
 
     protected virtual void PlayIdleAnim() { /* 오버라이드에서 구현 */ }
     protected virtual void PlayWalkAnim() { /* 오버라이드에서 구현 */ }
-    protected virtual void PlayJumpAnim() { /* 오버라이드에서 구현 */ }
+    protected virtual void PlayJumpAnim() { /* 오버라이드에서 구현 */ } // 사용되지 않을 경우 삭제 가능
     protected virtual void PlayDeathAnim() { /* 오버라이드에서 구현 */ }
     protected virtual void PlayAttack1Anim() { /* 오버라이드에서 구현 */ }
-    protected virtual void PlayAttack2Anim() { /* 오버라이드에서 구현 */ }
+    protected virtual void PlayAttack2Anim() { /* 오버라이드에서 구현 */ } // 사용되지 않을 경우 삭제 가능
     protected virtual void ResetAttackTriggers() { /* 오버라이드에서 구현 */ }
+
+    // 애니메이션 이벤트에서 호출될 메서드
     protected virtual void OnAttackAnimationEnd()
     {
         isPerformingAttackAnimation = false;
         StartCoroutine(PostAttackPauseRoutine(postAttackPauseDuration));
     }
 
+    // 공격 후 대기 코루틴
     protected IEnumerator PostAttackPauseRoutine(float duration)
     {
         isWaitingAfterAttack = true;
@@ -420,6 +415,7 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
         }
     }
 
+    // 데미지 받는 함수 (IDamageable 인터페이스 구현)
     public virtual void TakeDamage(float damage, GameObject attackObject)
     {
         if (isDead) return;
@@ -436,5 +432,8 @@ public class CommonEnemyController : MonoBehaviour, IDamageable
     public virtual void OnHurtAnimationEnd() // Base 클래스에서 virtual로 선언
     {
         Debug.Log(gameObject.name + ": Base OnHurtAnimationEnd called. Override this in derived class.");
+        // 피격 애니메이션 종료 시 isPerformingHurtAnimation 플래그를 false로 설정하여 AI 로직이 다시 시작되도록 합니다.
+        isPerformingHurtAnimation = false;
+        // 필요한 경우 여기서 상태를 재평가할 수 있습니다 (예: SetState(currentState);)
     }
 }
