@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Scene1Manager : MonoBehaviour
+public class Scene1Manager : LocalSceneManager
 {
     public GameObject playerPrefab;
     public Transform spawnPosition;

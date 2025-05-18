@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class Scene3Manager : MonoBehaviour
+public class Scene3Manager : LocalSceneManager
 {
-    public Transform spawnPoint;
-
-    void Start()
+    public override void Init()
     {
-        PlayerManager.Instance.SpawnPlayer(spawnPoint.position);
+        GameObject playerObject = FindFirstObjectByType<Player>().gameObject;
+        CameraManager.Instance.SetTarget(CameraType.Scene3Camera, playerObject.transform);
+        CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene3Camera, 20);
     }
 }

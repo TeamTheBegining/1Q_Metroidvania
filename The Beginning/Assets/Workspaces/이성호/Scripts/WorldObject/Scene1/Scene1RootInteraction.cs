@@ -69,7 +69,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     private IEnumerator DisableProecess()
     {
         GameManager.Instance.MiddleMessagePanel.GlowFadeInOpen(4f);
-        GameSceneManager.Instance.ChangeScene(1, true);
+        //GameSceneManager.Instance.RequestSceneChange(1, true); ->
 
         float timeElapsed = 0f;
         while(timeElapsed < disableDelay)

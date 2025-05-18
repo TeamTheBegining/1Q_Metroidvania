@@ -131,6 +131,7 @@ public class GameManager : Singleton<GameManager>
     [Header("Test Section")]
     public bool isDebug = false;
     public int nextSceneIndex = 0;
+    public string spawnPointName;
     private TestInputActions testActions;
 
     private void TestInit()
@@ -143,13 +144,13 @@ public class GameManager : Singleton<GameManager>
 
     private void PageDown_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        GameSceneManager.Instance.ChangeScene(1, true);
+        //GameSceneManager.Instance.RequestSceneChange(spawnPointName,)
         LightManager.Instance.SetPlayerLightValue(0f);
     }
 
     private void PageUp_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        GameSceneManager.Instance.ChangeScene(nextSceneIndex);
+        //GameSceneManager.Instance.ChangeScene(nextSceneIndex);
         LightManager.Instance.SetPlayerLightValue(0f);
     }
 

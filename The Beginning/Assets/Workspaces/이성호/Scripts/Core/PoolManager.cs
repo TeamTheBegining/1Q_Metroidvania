@@ -174,6 +174,7 @@ public class PoolManager : Singleton<PoolManager>
     private GameObject CreateInstantiate(string key, PoolData data)
     {
         GameObject obj = Instantiate(data.prefab);
+        DontDestroyOnLoad(obj);
 
         obj.SetActive(false);
         obj.transform.position = Vector3.zero; 

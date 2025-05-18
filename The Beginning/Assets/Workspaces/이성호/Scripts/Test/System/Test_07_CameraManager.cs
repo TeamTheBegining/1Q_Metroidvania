@@ -10,9 +10,9 @@ public class Test_07_CameraManager : TestBase
 
     private void Start()
     {
-        GameSceneManager.Instance.ChangeScene(0, true);
-        GameSceneManager.Instance.ChangeScene(1, true);
-        GameSceneManager.Instance.ChangeScene(2, true);
+        GameSceneManager.Instance.LoadSceneAddive(0);
+        GameSceneManager.Instance.LoadSceneAddive(1);
+        GameSceneManager.Instance.LoadSceneAddive(2);
     }
 
     protected override void OnTest1(InputAction.CallbackContext context)

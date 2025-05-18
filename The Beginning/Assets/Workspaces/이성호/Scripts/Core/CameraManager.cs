@@ -11,7 +11,7 @@ public class CameraManager : Singleton<CameraManager>
 {
     private GameObject mainCamera;
     private CinemachineBrain camBrain;
-    private Dictionary<CameraType, CinemachineCamera> cameraDictionary = new Dictionary<CameraType, CinemachineCamera>((int)CameraType.CameraTypeCount);
+    [SerializeField] private Dictionary<CameraType, CinemachineCamera> cameraDictionary = new Dictionary<CameraType, CinemachineCamera>((int)CameraType.CameraTypeCount);
 
     protected override void Awake()
     {
@@ -52,6 +52,13 @@ public class CameraManager : Singleton<CameraManager>
         if (cameraDictionary.ContainsKey(type))
         {
             Debug.Log($"{type.ToString()} is already registered");
+            cameraDictionary.TryGetValue(type, out CinemachineCamera valueComp);
+            if (valueComp == null)
+            {
+                // 씬 교체시 파괴된 컴포넌트 다시 찾기
+                cameraDictionary[type] = comp;
+            }
+
             return;
         }
         cameraDictionary.Add(type, comp);
@@ -77,6 +84,7 @@ public class CameraManager : Singleton<CameraManager>
         if (camera != null)
         {
             camera.Priority = priority;
+            camera.PreviousStateIsValid = false;
         }
         else
         {

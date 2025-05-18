@@ -1,16 +1,14 @@
 using UnityEngine;
 
-public class MapStateManager : MonoBehaviour
+public class MapStateManager : Singleton<MapStateManager>
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    private bool isScene2FirstEnter = false;
+    public bool IsScene2FirstEnter => isScene2FirstEnter;
 
-    // Update is called once per frame
-    void Update()
+    #region Change Functions
+    public void SetIsScene2FirstEnterTrue() // юс╫ц
     {
-        
+        isScene2FirstEnter = true;
     }
+    #endregion
 }

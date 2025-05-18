@@ -5,19 +5,16 @@
 /// </summary>
 public class SceneChangePortal : MonoBehaviour, Interactable
 {
-    public int targetBuildIndex = 0;
+    public SpawnPointDataSO targetData;
+    public string targetSceneName;
 
-    public bool isAddive = false;
+    private bool isTrigger = false;
 
     public void OnInteraction()
     {
-        if(!isAddive)
-        {
-            GameSceneManager.Instance.ChangeScene(targetBuildIndex);
-        }
-        else
-        {
-            GameSceneManager.Instance.ChangeScene(targetBuildIndex, true);
-        }
+        if (isTrigger) return;
+
+        GameSceneManager.Instance.RequestSceneChange(targetSceneName, targetData);
+        isTrigger = true;
     }
 }

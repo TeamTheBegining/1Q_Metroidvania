@@ -10,7 +10,7 @@ using UnityEngine;
 public class EnemyStatusBridge : MonoBehaviour
 {
     [Tooltip("상태 확인할 적의 고유 아이디 값을 정의")]
-    [SerializeField] private string enemyID;
+    public string enemyID;
 
     private void Awake()
     {

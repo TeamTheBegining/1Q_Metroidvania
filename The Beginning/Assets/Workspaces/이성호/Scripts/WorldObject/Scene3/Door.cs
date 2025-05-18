@@ -11,7 +11,7 @@ public class Door : MonoBehaviour
     public List<GameObject> targetObjects;
     private Animator animator;
 
-    private int remainCount;
+    [SerializeField] private int remainCount;
     private int RemainCount
     {
         get => remainCount;
@@ -21,7 +21,7 @@ public class Door : MonoBehaviour
             if(!isAnimatoinPlay && remainCount == 0)
             {
                 Debug.Log($"-- {gameObject.name} 문 열림 --");
-                animator.Play("Open"); // TODO : 애니메이터에 애니메이션 클립 추가 확인
+                animator.Play("Open");
                 isAnimatoinPlay = true;
             }
         }
@@ -39,8 +39,31 @@ public class Door : MonoBehaviour
     {
         for (int i = 0; i < targetObjects.Count; i++)
         {
-            IDamageable target = targetObjects[i].GetComponent<IDamageable>();
+            IDamageable target = targetObjects[i].GetComponentInChildren<IDamageable>();
             target.OnDead += () => { RemainCount--; };
         }
+#if UNITY_EDITOR
+        TestInit();
+#endif
     }
+
+#if UNITY_EDITOR
+
+    [Space(20f)]
+    [Header("Test Section")]
+    public bool isDebug = false;
+    private TestInputActions testActions;
+
+    private void TestInit()
+    {
+        testActions = new TestInputActions();
+        testActions.Enable();
+        testActions.Test.Test1.performed += Test1_performed;
+    }
+
+    private void Test1_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        animator.Play("Open");
+    }
+#endif
 }

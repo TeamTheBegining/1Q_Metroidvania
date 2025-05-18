@@ -7,64 +7,43 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameSceneManager : Singleton<GameSceneManager>
 {
+    public SpawnPointDataSO[] pointsData;
     private SceneChangePanel sceneChangePanel;
-    private float sceneChangeProcessDuration = 1f; // TODO : 씬 전환 패널 연결하기
+    private SpawnPointDataSO nextSpawnData; // 씬 로드 후 스폰할 위치의 오브젝트 이름
 
     private void Start()
     {
         sceneChangePanel = GetComponentInChildren<SceneChangePanel>(); // TODO : 이 코드 제거하고 인스펙터에서 패널 받게 변경
     }
 
-    public void ChangeScene(string sceneName)
+    public void RequestSceneChange(string sceneName, SpawnPointDataSO data)
     {
-        StartCoroutine(SceneChangeProcess(sceneName));
-        SceneManager.LoadScene(sceneName);
+        nextSpawnData = data;
+        StartCoroutine(LoadSceneAsync(sceneName));
     }
 
-    public void ChangeScene(int buildIndex, bool isAdditive = false)
+    private IEnumerator LoadSceneAsync(string sceneName)
     {
-        if(isAdditive)
+        AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
+        yield return new WaitUntil(() => async.isDone);
+
+        PlayerSpawnPoint[] points = FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
+
+        foreach(var sp in points)
         {
-            SceneManager.LoadScene(buildIndex, LoadSceneMode.Additive);
+            if(sp.data == nextSpawnData)    // 매개변수로 받은 데이터를 찾음
+            {
+                PlayerManager.Instance.SpawnPlayer(sp.transform.position);  // 해당 위치로 스폰
+                break;
+            }
         }
-        else
-        {
-            StartCoroutine(SceneChangeProcess(buildIndex));
-            //SceneManager.LoadScene(buildIndex);
-        }
+
+        FindFirstObjectByType<LocalSceneManager>()?.Init();         // 해당 씬 로컬 매니저 초기화 함수 호출
     }
 
-    private IEnumerator SceneChangeProcess(string sceneName)
+    public void LoadSceneAddive(int buildIndex)
     {
-        sceneChangePanel.ShowPanel();
-
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-
-        while (!operation.isDone)
-        {
-            Debug.Log("Load in process");
-            yield return null;
-        }
-        yield return new WaitForSeconds(1f);
-        Debug.Log("Load done !");
-        sceneChangePanel.ClosePanel();
-    }
-
-    private IEnumerator SceneChangeProcess(int buildIndex)
-    {
-        sceneChangePanel.ForceShowPanel();
-
-        AsyncOperation operation = SceneManager.LoadSceneAsync(buildIndex);
-
-        while(!operation.isDone)
-        {
-            Debug.Log("Load in process");
-            yield return null;
-        }
-
-        yield return new WaitForSeconds(1f);
-        Debug.Log("Load done !");
-        sceneChangePanel.ClosePanel();
+        SceneManager.LoadScene(buildIndex, LoadSceneMode.Additive);
     }
 
     public void UnloadScene(int buildIndex)
