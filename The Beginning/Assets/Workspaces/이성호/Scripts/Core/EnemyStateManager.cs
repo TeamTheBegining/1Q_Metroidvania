@@ -11,6 +11,7 @@ public class EnemyState
 
 public class EnemyStateManager : Singleton<EnemyStateManager>
 {
+    public GameObject[] enemyPrefabs;
     private Dictionary<string, EnemyState> allEnemies = new Dictionary<string, EnemyState>();
 
     /// <summary>
@@ -19,9 +20,13 @@ public class EnemyStateManager : Singleton<EnemyStateManager>
     /// <param name="id">적 고유 아이디 문자열</param>
     public void RegisterEnemy(string id) // 적 처음 시작시 저장
     {
-        if (!allEnemies.ContainsKey(id))  // 중복된 ID는 추가하지 않음
+        if (!allEnemies.ContainsKey(id))
         {
             allEnemies.Add(id, new EnemyState { uniqueID = id, isDead = false });
+        }
+        else
+        {
+            Debug.LogWarning($"Enemy with ID '{id}' is already registered."); // 중복된 아이디
         }
     }
 

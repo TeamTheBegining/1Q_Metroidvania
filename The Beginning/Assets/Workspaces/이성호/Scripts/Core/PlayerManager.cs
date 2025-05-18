@@ -2,6 +2,7 @@
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+    public GameObject playerPrefab;
     private int spawnSceneBuildIndex = 0;
     private Vector2 respawnPosition = Vector2.zero;
 
@@ -70,7 +71,7 @@ public class PlayerManager : Singleton<PlayerManager>
     }
 
     /// <summary>
-    /// 스폰 설정 함수
+    /// 스폰 포인트 정보 저장 함수 
     /// </summary>
     /// <param name="buildIndex">스폰할 씬 빌드 인덱스</param>
     /// <param name="spawnVector">스폰할 위치 벡터</param>
@@ -78,5 +79,23 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         spawnSceneBuildIndex = buildIndex;
         respawnPosition = spawnVector;  
+    }
+
+    /// <summary>
+    /// 플레이어 스폰 함수 ( 플레이어 제거 확인 및 씬 전환 후 호출 할 것 )
+    /// </summary>
+    /// <param name="isSceneChange">씬 전환 스폰 여부</param>
+    public void SpawnPlayer(bool isSceneChange)
+    {
+        Player player = Instantiate(playerPrefab, respawnPosition, Quaternion.identity).GetComponent<Player>();
+
+        if(isSceneChange)
+        {
+            player.CurrentHp = remainHp; // 저장된 hp로 설정
+        }
+        else
+        {
+            player.CurrentHp = player.MaxHp;
+        }
     }
 }

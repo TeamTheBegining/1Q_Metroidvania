@@ -37,7 +37,15 @@ public enum CameraType
 
 public enum PlayerSkillType
 {
-    skill1 = 0,
-    skill2,
+    Skill1 = 0,
+    Skill2,
     PlayerSkillTypeCount,
+}
+
+public enum EnemyType // TODO : 적 이름 정의 명확하게 지정할 것 - [0518] 기준 프리팹에 저장된 이름 기준 작성
+{
+    Attacker = 0,
+    Middle,
+    S_Enemy,
+    EnemyTypeCount
 }

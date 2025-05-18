@@ -33,4 +33,9 @@ public class Scene2Manager : MonoBehaviour
             yield return null;
         }
     }
+
+    public void SpwanEnemy()
+    {
+
+    }
 }
