@@ -17,9 +17,9 @@ TagManager:
   - Ground
   - Player
   - Enemy
-  - 
-  - 
-  - 
+  - PAttack
+  - EAttack
+  - Ladder
   - 
   - 
   - 
