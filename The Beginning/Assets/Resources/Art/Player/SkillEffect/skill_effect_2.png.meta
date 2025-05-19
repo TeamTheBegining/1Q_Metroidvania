@@ -1,10 +1,25 @@
 fileFormatVersion: 2
-guid: 882edd6ef81a6a04385c5e4a2f2b1104
+guid: 838ba09c79dd752439be0241b0646151
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3742826677621002094
-    second: Scene2Background_0
+      213: 1040752969561738105
+    second: skill_effect_2_0
+  - first:
+      213: 1197692317400136655
+    second: skill_effect_2_1
+  - first:
+      213: -1266008523525833705
+    second: skill_effect_2_2
+  - first:
+      213: -7595881629740119726
+    second: skill_effect_2_3
+  - first:
+      213: 7250452648168504715
+    second: skill_effect_2_4
+  - first:
+      213: 7099834232592631054
+    second: skill_effect_2_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +52,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +66,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,23 +115,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Scene2Background_0
+      name: skill_effect_2_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 4000
-        height: 2000
+        y: 4
+        width: 176
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2907b8097fece0cc0800000000000000
-      internalID: -3742826677621002094
+      spriteID: 97b09a9cf4f717e00800000000000000
+      internalID: 1040752969561738105
       vertices: []
       indices: 
       edges: []
@@ -125,7 +140,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f461ac4da3ec6334590c34747fd35dd5
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +150,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Scene2Background_0: -3742826677621002094
+      skill_effect_2_0: 1040752969561738105
+      skill_effect_2_1: 1197692317400136655
+      skill_effect_2_2: -1266008523525833705
+      skill_effect_2_3: -7595881629740119726
+      skill_effect_2_4: 7250452648168504715
+      skill_effect_2_5: 7099834232592631054
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

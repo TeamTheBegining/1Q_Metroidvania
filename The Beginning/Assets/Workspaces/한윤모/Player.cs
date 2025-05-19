@@ -51,7 +51,6 @@ public class Player : MonoBehaviour, IDamageable
     float parryDelayTimer = 0f;
     float slidingTimer = 0f;
     float slidingDelayTimer = 0f;
-    float attackDelayTimer = 0f;
     float moveDelayTimer = 0f;
     float grabDelayTimer = 0f;
     float ladderDelayTimer = 0f;
@@ -65,7 +64,6 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float moveDelayTime = 0.2f;
     [SerializeField] float grabDelayTime = 0.2f;
     [SerializeField] float ladderDelayTime = 0.2f;
-    [SerializeField] float attackDelayTime = 0f;
     [SerializeField] float slidingDelayTime = 1f;
     [SerializeField] float parryDelayTime = 0.8f;
     [SerializeField] float spawnDelayTime = 0.1f;
@@ -77,8 +75,13 @@ public class Player : MonoBehaviour, IDamageable
 
     int sidx = 0;//슬라이딩 인덱스
     int curParryCount;//패링 카운트
+    public int CurParryCount
+    {
+        get { return curParryCount; } 
+    }
     int preParryCount;//패링 카운트
     int healingCount = 0;
+    int jumpCount = 0;
     float climbDir = 0f;
     private PlayerInput input;
     private PlayerAnimation animatorCtrl;
@@ -89,7 +92,7 @@ public class Player : MonoBehaviour, IDamageable
     private Collider2D attackColl;
     private Collider2D attackColl2;
     private Collider2D attackColl3;
-    private Collider2D attackColl4;
+    private Collider2D skillColl1;
     private Collider2D slidingColl;
     private Collider2D playerColl;
     private Bounds grabBounds;
@@ -101,6 +104,7 @@ public class Player : MonoBehaviour, IDamageable
     bool isLadder = false;
     bool isHit = false;
     bool isAttack = false;
+    bool isSkill1 = false;
     bool isMoveDelay = false;
     bool isGrapDelay = false;
     bool isLadderDelay = false;
@@ -108,8 +112,6 @@ public class Player : MonoBehaviour, IDamageable
     bool isHealing = false;
     bool attack2Able = false;
     bool attack3Able = false;
-    bool attack4Able = false;
-    bool getAtack4 = false;
     //bool isInteraction = false;
 
     //벽타기 체크 변수
@@ -142,10 +144,8 @@ public class Player : MonoBehaviour, IDamageable
         Attack1,
         Attack2,
         Attack3,
-        Attack4,
         Skill1,
         Skill2,
-        Skill3,
         Parrying,               //패링 - 패링중
         ParrySuccess,           //패링 - 성공 애니메이션 + 적 경직
         ParryCounterAttack,     //패링 - 반격
@@ -156,7 +156,7 @@ public class Player : MonoBehaviour, IDamageable
         Climbing,
         Grab,
         GrabSuccess,
-        Dash,
+        Dash,//사용 X
         Hit,
         Dead,
         Crouch
@@ -201,7 +201,7 @@ public class Player : MonoBehaviour, IDamageable
         attackColl = transform.GetChild(1).GetComponent<Collider2D>();
         attackColl2 = transform.GetChild(2).GetComponent<Collider2D>();
         attackColl3 = transform.GetChild(3).GetComponent<Collider2D>();
-        attackColl4 = transform.GetChild(4).GetComponent<Collider2D>();
+        skillColl1 = transform.GetChild(4).GetComponent<Collider2D>();
         slidingColl = transform.GetChild(5).GetComponent<Collider2D>();
         m_wallSensor1 = transform.GetChild(6).GetComponent<WallSensor>();
         m_wallSensor2 = transform.GetChild(7).GetComponent<WallSensor>();
@@ -222,7 +222,7 @@ public class Player : MonoBehaviour, IDamageable
     private void FixedUpdate()
     {
         //테스트용
-        if (input.IsParrying)
+        if (input.IsParrying&&input.InputVec.y<0)
         {
             isParryAble = true;
             TakeDamage(95,gameObject);
@@ -250,19 +250,13 @@ public class Player : MonoBehaviour, IDamageable
                 PlayerAttack2Update();
                 break;
             case PlayerState.Attack3:
-                PlayerAttack3Update();
-                break;
-            case PlayerState.Attack4:
-                //PlayerAttack4Update();
+                //PlayerAttack3Update();
                 break;
             case PlayerState.Skill1:
                 //PlayerSkillk1();
                 break;
             case PlayerState.Skill2:
                 //PlayerSkillk2();
-                break;
-            case PlayerState.Skill3:
-                //PlayerSkillk3();
                 break;
             case PlayerState.Parrying:
                 //PlayerParryingUpdate();
@@ -312,6 +306,7 @@ public class Player : MonoBehaviour, IDamageable
     private void CheckList()
     {
         //FlipCheck();
+        JumpCheck();
         WallCheck();
         DeadCheck();
         ParryCountCheck();
@@ -413,14 +408,6 @@ public class Player : MonoBehaviour, IDamageable
             isSliding = false;
             slidingDelayTimer = 0;
         }
-        if (isAttack)
-            attackDelayTimer += Time.deltaTime;
-
-        if (attackDelayTimer > attackDelayTime)
-        {
-            isAttack = false;
-            attackDelayTimer = 0;
-        }
         if (isMoveDelay)
             moveDelayTimer += Time.deltaTime;
 
@@ -502,6 +489,10 @@ public class Player : MonoBehaviour, IDamageable
         else
             isWallClimbable = false;
     }
+    void JumpCheck()
+    {
+        if(currentState!=PlayerState.Jump)jumpCount = 0;
+    }
 
 
     private bool CheckIsGround()
@@ -528,6 +519,7 @@ public class Player : MonoBehaviour, IDamageable
             currentState = PlayerState.Move;
         JumpAble();
         AttackAble();
+        SkillAble();
         ParryAble();
         ＣrouchAble(); 
         SlidingAble();
@@ -541,6 +533,7 @@ public class Player : MonoBehaviour, IDamageable
         JumpAble();
         ParryAble();
         AttackAble();
+        SkillAble();
         ＣrouchAble();
         SlidingAble();
     }
@@ -585,12 +578,14 @@ public class Player : MonoBehaviour, IDamageable
             currentState = PlayerState.Landing;
             jumpTimer = 0;
         }
-
+        if (jumpCount == 0) jumpCount = 1; // 점프 상태일 경우 기본 1로 정의
+        //if (jumpCount < 2) DoubleJumpAble();
         MoveAble(jumpMoveSpeed);
         AttackAble();
         ClimbingAble();
         GrabAble();
     }
+
     private void PlayerLandingUpdate()
     {
         if (input.InputVec.x != 0)
@@ -603,6 +598,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             attack2Able = false;
             input.IsAttack = false;
+            isAttack = true;
             attackColl.enabled = false;
             attackColl2.enabled = true;
             currentState = PlayerState.Attack2;
@@ -618,24 +614,10 @@ public class Player : MonoBehaviour, IDamageable
         {
             attack3Able = false;
             input.IsAttack = false;
+            isAttack = true;
             attackColl2.enabled = false;
             attackColl3.enabled = true;
             currentState = PlayerState.Attack3;
-            if ((int)curDir != Mathf.RoundToInt(input.InputVec.x) && input.InputVec.x != 0) Flip();
-        }
-        if (!isGround)
-            MoveAble(attackMoveSpeed);
-    }
-    private void PlayerAttack3Update()
-    {
-        if (isGround) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-        if (attack4Able&& input.IsAttack)
-        {
-            attack4Able = false;
-            input.IsAttack = false;
-            attackColl3.enabled = false;
-            attackColl4.enabled = true;
-            currentState = PlayerState.Attack4;
             if ((int)curDir != Mathf.RoundToInt(input.InputVec.x) && input.InputVec.x != 0) Flip();
         }
         if (!isGround)
@@ -766,6 +748,21 @@ public class Player : MonoBehaviour, IDamageable
             if (isGround) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
     }
+
+    void SkillAble()
+    {
+        //일단 공격 캔슬 불가 사용
+        if (input.IsSkill1 && !isAttack && currentMp > 10)
+        {
+            input.IsSkill1 = false;
+            isSkill1 = true;
+            currentState = PlayerState.Skill1;
+            attackColl.enabled = true;
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            currentMp -= 10;
+            gameObject.layer = LayerMask.NameToLayer("Invincibility");
+        }
+    }
     void ParryAble()
     {
         if (input.IsParrying && !isParrying)
@@ -786,6 +783,19 @@ public class Player : MonoBehaviour, IDamageable
             input.IsJump = false;
         }
     }
+    void DoubleJumpAble()
+    {
+
+        if (isMoveDelay) return;
+        if (input.IsJump)
+        {
+            float powerValue = rb.linearVelocity.y > 0 ? 0.7f : 1.5f;
+            rb.AddForce(Vector2.up * jumpPower * powerValue, ForceMode2D.Impulse);
+            input.IsJump = false;
+            jumpCount++;
+        }
+    }
+
     void ＣrouchAble()
     {
         if (input.InputVec.y<0 && isGround)
@@ -873,25 +883,27 @@ public class Player : MonoBehaviour, IDamageable
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         attackColl.enabled = false;
         attack2Able = false;
+        isAttack = false;
     }
     private void Attack2Finish()
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         attackColl2.enabled = false;
         attack3Able = false;
+        isAttack = false;
     }
     private void Attack3Finish()
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         attackColl3.enabled = false;
-        attack4Able = false;
+        isAttack = false;
     }
-    private void Attack4Finish()
+    private void Skill1Finish()
     {
-        currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
-        attackColl4.enabled = false;
+        isSkill1 = false;
+        skillColl1.enabled = false;
+        currentState = PlayerState.Idle;
     }
-    
 
     private void Attack2Check()
     {
@@ -901,13 +913,6 @@ public class Player : MonoBehaviour, IDamageable
     private void Attack3Check()
     {
         attack3Able = true;
-    }
-
-    private void Attack4Check()
-    {
-        //기본 공겨 4 얻는 경우 사용 가능
-        if(getAtack4)
-            attack4Able = true;
     }
 
    

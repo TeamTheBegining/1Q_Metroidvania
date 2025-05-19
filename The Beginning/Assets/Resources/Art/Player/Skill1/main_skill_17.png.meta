@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: 882edd6ef81a6a04385c5e4a2f2b1104
+guid: 54f8c9d311349ed469b37480044e6711
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3742826677621002094
-    second: Scene2Background_0
+      213: -4574608997303200666
+    second: main_skill_17_0
+  - first:
+      213: -853191865009154741
+    second: main_skill_17_1
+  - first:
+      213: -8353734870558545915
+    second: main_skill_17_2
+  - first:
+      213: -8327980721963159135
+    second: main_skill_17_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +60,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,23 +109,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Scene2Background_0
+      name: main_skill_17_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 45
         y: 0
-        width: 4000
-        height: 2000
+        width: 45
+        height: 73
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2907b8097fece0cc0800000000000000
-      internalID: -3742826677621002094
+      spriteID: 664df61ba59b380c0800000000000000
+      internalID: -4574608997303200666
       vertices: []
       indices: 
       edges: []
@@ -125,7 +134,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6c5175a6944cdc5428a2ed70843def3f
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +144,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Scene2Background_0: -3742826677621002094
+      main_skill_17_0: -4574608997303200666
+      main_skill_17_1: -853191865009154741
+      main_skill_17_2: -8353734870558545915
+      main_skill_17_3: -8327980721963159135
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

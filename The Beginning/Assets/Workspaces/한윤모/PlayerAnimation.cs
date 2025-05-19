@@ -64,17 +64,12 @@ public class PlayerAnimation : MonoBehaviour
             case Player.PlayerState.Attack3:
                 animator.Play("Attack3");
                 break;
-            case Player.PlayerState.Attack4:
-                animator.Play("Attack4");
-                break;
             case Player.PlayerState.Skill1:
-                //animator.Play("Skill1");
+                animator.Play("Skill1");
+                if (stateInfo.normalizedTime >= 1) player.CurrentState = Player.PlayerState.Idle;
                 break;
             case Player.PlayerState.Skill2:
                 //animator.Play("Skill2");
-                break;
-            case Player.PlayerState.Skill3:
-                //animator.Play("Skill3");
                 break;
             case Player.PlayerState.Parrying:
                 animator.Play("Parrying");
