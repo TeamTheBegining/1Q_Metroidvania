@@ -164,8 +164,6 @@ public class Player : MonoBehaviour, IDamageable
 
     PlayerDirectionState curDir = PlayerDirectionState.Right;//현재 방향
     private bool isDead;
-    [SerializeField] private bool isNearLadder = false;
-    [SerializeField] private Collider2D ladderCollision;
 
     enum PlayerDirectionState
     {
@@ -314,8 +312,6 @@ public class Player : MonoBehaviour, IDamageable
     private void CheckList()
     {
         //FlipCheck();
-        //InteractionCheck();
-        LadderCheck();
         WallCheck();
         DeadCheck();
         ParryCountCheck();
@@ -324,35 +320,6 @@ public class Player : MonoBehaviour, IDamageable
         ParryingCounterCheck();
         isGround = CheckIsGround();
     }
-
-    private void LadderCheck()
-    {
-
-        if (isLadderDelay) return;
-        if (isNearLadder && !isLadder && input.InputVec.y!=0)
-        {
-            float yDiff = transform.position.y - ladderCollision.transform.position.y;
-            if (isGround&&(Mathf.Sign(yDiff) != Mathf.Sign(input.InputVec.y) && Mathf.Abs(yDiff) > 0.1f)||!isGround)
-            {
-                // 사다리 타기 시작
-                rb.gravityScale = 0f;
-                currentState = PlayerState.Ladder;
-                transform.position = new Vector3(ladderCollision.transform.position.x, transform.position.y, transform.position.z);
-                isLadder = true;
-                rb.linearVelocity = Vector2.zero;
-                gameObject.layer = LayerMask.NameToLayer("Ladder");
-                isLadderDelay = true;
-            }
-        }
-    }
-
-    /*private void InteractionCheck()
-    {
-        if(isInteraction)
-        {
-            interactable.OnInteraction();
-        }
-    }*/
 
     private void ParryCountCheck()
     {
@@ -968,15 +935,28 @@ public class Player : MonoBehaviour, IDamageable
             interactable = collision.gameObject.GetComponent<Interactable>();
             interactable.OnInteraction();
         }
+
+        if (isLadderDelay) return;
+        if (collision.CompareTag("Ladder")&&!isLadder && input.InputVec.y != 0)
+        {
+            float yDiff = transform.position.y - collision.transform.position.y;
+            if (isGround && (Mathf.Sign(yDiff) != Mathf.Sign(input.InputVec.y) && Mathf.Abs(yDiff) > 0.1f) || !isGround)
+            {
+                // 사다리 타기 시작
+                rb.gravityScale = 0f;
+                currentState = PlayerState.Ladder;
+                transform.position = new Vector3(collision.transform.position.x, transform.position.y, transform.position.z);
+                isLadder = true;
+                rb.linearVelocity = Vector2.zero;
+                gameObject.layer = LayerMask.NameToLayer("Ladder");
+                isLadderDelay = true;
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ladder"))
-        {
-            isNearLadder = true;
-            ladderCollision = collision;
-        }
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -991,8 +971,6 @@ public class Player : MonoBehaviour, IDamageable
             isLadder = false;
             isLadderDelay = true;
             animatorCtrl.AniSpeed = 1f;
-            isNearLadder = false;
-            ladderCollision = null;
             gameObject.layer = LayerMask.NameToLayer("Player");
         }
     }
