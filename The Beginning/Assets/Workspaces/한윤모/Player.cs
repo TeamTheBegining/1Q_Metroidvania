@@ -375,7 +375,7 @@ public class Player : MonoBehaviour, IDamageable
                     damage = baseDamage * 2.4f;
                     break;
                 case 4:
-                    //RandomBuff(); ÀÏ´Ü ¸·¾Æ
+                    //RandomBuff(); ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
                     break;
             }
             preParryCount = curParryCount;
@@ -966,6 +966,7 @@ public class Player : MonoBehaviour, IDamageable
         if (collision.gameObject.GetComponent<Interactable>() != null && input.IsInteraction)
         {
             interactable = collision.gameObject.GetComponent<Interactable>();
+            interactable.OnInteraction();
         }
     }
 
