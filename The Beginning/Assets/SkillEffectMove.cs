@@ -7,9 +7,10 @@ public class SkillEffectMove : MonoBehaviour//, IPoolable
     public void OnDespawn();
     Action ReturnAction { get; set; }*/
 
-    [SerializeField]float MoveSpeed;
+    float MoveSpeed;
     [SerializeField]AnimationCurve anicurv;
     AnimatorStateInfo stateInfo;
+    float anitimer = 0;
     Animator ani;
     private void Start()
     {

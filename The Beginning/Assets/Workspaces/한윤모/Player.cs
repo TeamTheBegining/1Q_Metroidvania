@@ -308,7 +308,6 @@ public class Player : MonoBehaviour, IDamageable
         //FlipCheck();
         JumpCheck();
         WallCheck();
-        DeadCheck();
         ParryCountCheck();
         DelayCheck();
         EnergyOverCheck();
@@ -374,14 +373,6 @@ public class Player : MonoBehaviour, IDamageable
     {
         if (currentState == PlayerState.Parrying|| currentState == PlayerState.Sliding || currentState == PlayerState.Hit || isMoveDelay || currentState == PlayerState.Grab) return;
         if ((int)curDir != Mathf.RoundToInt(input.InputVec.x)&&input.InputVec.x!=0) Flip();
-    }
-
-    private void DeadCheck()
-    {
-        if (IsDead)
-        {
-            PlayerDead();
-        }
     }
 
     private void EnergyOverCheck()
