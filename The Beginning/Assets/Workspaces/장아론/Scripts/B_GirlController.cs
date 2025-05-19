@@ -108,6 +108,25 @@ public class B_GirlController : CommonEnemyController
         // CommonEnemyController의 Awake에서 Rigidbody2D와 PlayerTransform을 초기화하므로,
         // 여기서는 B_GirlController 고유의 추가 초기화만 수행합니다.
 
+        // =========================================================================
+        // **여기에 플레이어 찾는 코드 추가**
+        // GameObject.FindWithTag("Player")를 사용하여 "Player" 태그를 가진 오브젝트를 찾습니다.
+        // =========================================================================
+        GameObject playerGameObject = GameObject.FindWithTag("Player");
+
+        // 찾은 오브젝트가 null이 아닌지 확인하여 오류를 방지합니다.
+        if (playerGameObject != null)
+        {
+            // SetPlayerTarget은 CommonEnemyController에 정의된 protected 메서드로
+            // playerTransform을 설정하고 관련 초기화 작업을 수행합니다.
+            SetPlayerTarget(playerGameObject.transform);
+            Debug.Log($"A_Attacker: Start()에서 플레이어 '{playerGameObject.name}'를 찾았습니다.", this);
+        }
+        else
+        {
+            Debug.LogWarning("A_Attacker: Start()에서 'Player' 태그를 가진 게임 오브젝트를 찾을 수 없습니다! 플레이어가 씬에 있는지, 태그가 올바른지 확인하세요.", this);
+        }
+        // =========================================================================
         // SpriteRenderer 컴포넌트 참조 및 원래 색상 저장
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)

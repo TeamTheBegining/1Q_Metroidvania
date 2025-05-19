@@ -42,19 +42,19 @@ public class A_AttackerController : CommonEnemyController
     // 시그니처를 Base 클래스 및 인터페이스와 동일하게 유지
     public override void TakeDamage(float damage, GameObject attackObject) // GameObject attackObject 추가
     {
-        Debug.Log("A_Attacker TakeDamage called! Damage: " + damage + " from " + (attackObject != null ? attackObject.name : "unknown")); // 피격 로직 시작 로그 
+        //Debug.Log("A_Attacker TakeDamage called! Damage: " + damage + " from " + (attackObject != null ? attackObject.name : "unknown")); // 피격 로직 시작 로그 
 
         // Base class checks if already dead
         if (IsDead) // isDead -> IsDead 속성 사용
         {
-            Debug.Log("A_Attacker is already dead, skipping damage."); // 이미 죽었는지 로그 
+            //Debug.Log("A_Attacker is already dead, skipping damage."); // 이미 죽었는지 로그 
             return;
         }
 
         // If stunned, apply damage but skip hit reaction (optional logic)
         if (isStunned)
         {
-            Debug.Log("A_Attacker is stunned, applying damage but skipping hit reaction."); // 경직 상태인지 로그 
+            //Debug.Log("A_Attacker is stunned, applying damage but skipping hit reaction."); // 경직 상태인지 로그 
             // Apply damage in Base class (updates CurrentHp, checks for death, calls HandleDeathLogic)
             // Base TakeDamage 호출 시 attackObject 함께 전달
             base.TakeDamage(damage, attackObject);
@@ -73,12 +73,12 @@ public class A_AttackerController : CommonEnemyController
         {
             // IsDead 플래그는 Base.TakeDamage 호출 후 HandleDeathLogic에서 업데이트됩니다.
             // isStunned는 이 메서드 진입 전 체크했습니다.
-            Debug.Log("A_Attacker not dead and not stunned. Current Health: " + CurrentHp.ToString("F2") + ". Calling PlayHurtAnim."); // PlayHurtAnim 호출 조건 만족 로그 
+            //Debug.Log("A_Attacker not dead and not stunned. Current Health: " + CurrentHp.ToString("F2") + ". Calling PlayHurtAnim."); // PlayHurtAnim 호출 조건 만족 로그 
             PlayHurtAnim(); // Play hit animation (includes IsDead/isStunned check inside PlayHurtAnim)
         }
         else
         {
-            Debug.Log("A_Attacker died from damage. Current Health: " + CurrentHp.ToString("F2") + ". Death handled by base."); // 데미지로 사망 로그 
+            //Debug.Log("A_Attacker died from damage. Current Health: " + CurrentHp.ToString("F2") + ". Death handled by base."); // 데미지로 사망 로그 
                                                                                                                                 // Death is handled by base.TakeDamage calling HandleDeathLogic
         }
     }
@@ -90,7 +90,7 @@ public class A_AttackerController : CommonEnemyController
         if (IsDead || isStunned) return; // isDead -> IsDead 속성 사용
 
         isStunned = true;
-        //Debug.Log("A_Attacker entering Stun state!");
+        ////Debug.Log("A_Attacker entering Stun state!");
         PlayStunAnim(); // Play stun animation (includes IsDead check)
 
         // Stop any existing stun coroutine and start a new one
@@ -110,7 +110,7 @@ public class A_AttackerController : CommonEnemyController
         if (!IsDead) // isDead -> IsDead 속성 사용
         {
             isStunned = false;
-            //Debug.Log("A_Attacker exiting Stun state!");
+            ////Debug.Log("A_Attacker exiting Stun state!");
             // TODO: Return to appropriate state (e.g., Chase) - 
             // CommonEnemyController는 이제 EnemyState enum을 사용하지 않으므로,
             // isStunned 플래그가 해제되면 Update() 루프에서 자동으로 플레이어와의 거리에 따라 행동을 결정합니다.
@@ -124,6 +124,25 @@ public class A_AttackerController : CommonEnemyController
     {
         base.Start(); // Call Base CommonEnemyController Start
 
+        // =========================================================================
+        // **여기에 플레이어 찾는 코드 추가**
+        // GameObject.FindWithTag("Player")를 사용하여 "Player" 태그를 가진 오브젝트를 찾습니다.
+        // =========================================================================
+        GameObject playerGameObject = GameObject.FindWithTag("Player");
+
+        // 찾은 오브젝트가 null이 아닌지 확인하여 오류를 방지합니다.
+        if (playerGameObject != null)
+        {
+            // SetPlayerTarget은 CommonEnemyController에 정의된 protected 메서드로
+            // playerTransform을 설정하고 관련 초기화 작업을 수행합니다.
+            SetPlayerTarget(playerGameObject.transform);
+            //Debug.Log($"A_Attacker: Start()에서 플레이어 '{playerGameObject.name}'를 찾았습니다.", this);
+        }
+        else
+        {
+            //Debug.LogWarning("A_Attacker: Start()에서 'Player' 태그를 가진 게임 오브젝트를 찾을 수 없습니다! 플레이어가 씬에 있는지, 태그가 올바른지 확인하세요.", this);
+        }
+        // =========================================================================
         // Initialize hitbox object and component references
         if (attackAHitboxObject != null)
         {
@@ -135,16 +154,16 @@ public class A_AttackerController : CommonEnemyController
             }
             else
             {
-                Debug.LogWarning("BoxCollider2D component not found on Attack A Hitbox Object.", this);
+                //Debug.LogWarning("BoxCollider2D component not found on Attack A Hitbox Object.", this);
             }
             if (attackAEnemyHitbox == null)
             {
-                Debug.LogWarning("EnemyHitbox component not found on Attack A Hitbox Object!", this);
+                //Debug.LogWarning("EnemyHitbox component not found on Attack A Hitbox Object!", this);
             }
         }
         else
         {
-            Debug.LogWarning("Attack A Hitbox Object is not assigned in the Inspector.", this);
+            //Debug.LogWarning("Attack A Hitbox Object is not assigned in the Inspector.", this);
         }
 
         // Initialize A_Attacker specific state
@@ -194,7 +213,7 @@ public class A_AttackerController : CommonEnemyController
     protected override void PlayJumpAnim()
     {
         // Leave empty or add debug if Base calls this unexpectedly
-        // Debug.LogWarning("PlayJumpAnim called on A_AttackerController, but it has no jump.");
+        // //Debug.LogWarning("PlayJumpAnim called on A_AttackerController, but it has no jump.");
     }
 
     protected override void PlayDeathAnim()
@@ -210,19 +229,19 @@ public class A_AttackerController : CommonEnemyController
     // Play hit animation (called from TakeDamage)
     protected override void PlayHurtAnim() // protected -> protected override (Base 클래스에 virtual로 정의됨)
     {
-        Debug.Log("PlayHurtAnim called. IsDead=" + IsDead + ", isStunned=" + isStunned + ", animator=" + (animator != null)); // PlayHurtAnim 진입 로그 
+        //Debug.Log("PlayHurtAnim called. IsDead=" + IsDead + ", isStunned=" + isStunned + ", animator=" + (animator != null)); // PlayHurtAnim 진입 로그 
         // Check Base IsDead and local isStunned flags
         // isPerformingHurtAnimation은 여기서 설정하므로 이 조건에는 포함시키지 않음 
         if (!IsDead && !isStunned && animator != null) // IsDead 속성 사용
         {
-            Debug.Log("PlayHurtAnim conditions met. Setting trigger: " + ANIM_TRIGGER_A_HURT); // 트리거 설정 직전 로그 
+            //Debug.Log("PlayHurtAnim conditions met. Setting trigger: " + ANIM_TRIGGER_A_HURT); // 트리거 설정 직전 로그 
             isPerformingHurtAnimation = true; // 피격 애니메이션 시작 플래그 설정 
             animator.SetTrigger(ANIM_TRIGGER_A_HURT); // Trigger hit animation
-            //Debug.Log("PlayHurtAnim triggered.");
+            ////Debug.Log("PlayHurtAnim triggered.");
         }
         else
         {
-            Debug.Log("PlayHurtAnim conditions NOT met. Skipping trigger. IsDead=" + IsDead + ", isStunned=" + isStunned); // 트리거 설정 스킵 로그 
+            //Debug.Log("PlayHurtAnim conditions NOT met. Skipping trigger. IsDead=" + IsDead + ", isStunned=" + isStunned); // 트리거 설정 스킵 로그 
         }
     }
 
@@ -235,7 +254,7 @@ public class A_AttackerController : CommonEnemyController
         {
             // isPerformingHurtAnimation 플래그는 Stun에서는 사용하지 않음 
             animator.SetTrigger(ANIM_TRIGGER_A_STUN);
-            //Debug.Log("PlayStunAnim triggered.");
+            ////Debug.Log("PlayStunAnim triggered.");
         }
     }
 
@@ -247,7 +266,7 @@ public class A_AttackerController : CommonEnemyController
         if (!IsDead && !isStunned && !isPerformingHurtAnimation && animator != null) // IsDead 속성 사용
         {
             animator.SetTrigger(ANIM_TRIGGER_A_ATTACK_A); // Trigger A Attack animation
-            //Debug.Log("A_AttackA animation triggered!");
+            ////Debug.Log("A_AttackA animation triggered!");
         }
     }
 
@@ -269,13 +288,13 @@ public class A_AttackerController : CommonEnemyController
     // Called by CommonEnemyController's Attack state when pre-attack pause is over.
     protected override void PerformAttackLogic()
     {
-        Debug.Log("A_Attacker PerformAttackLogic override called."); // 디버그 로그 유지 
+        //Debug.Log("A_Attacker PerformAttackLogic override called."); // 디버그 로그 유지 
         // Base class already checks isPerformingAttackAnimation, isDead, isWaitingForAttack, isWaitingAfterAttack before calling this.
         // isStunned, isPerformingHurtAnimation 중이면 PerformAttackLogic이 호출되지 않도록 Base Update에서 스킵합니다. 
 
         // Check A_Attacker's specific cooldown
         bool cooldownReady = Time.time >= nextAttackTime;
-        Debug.Log("A_Attacker checking cooldown. Current Time: " + Time.time.ToString("F2") + ", Next Attack Time: " + nextAttackTime.ToString("F2") + ". Cooldown Ready: " + cooldownReady); // 디버그 로그 유지 
+        //Debug.Log("A_Attacker checking cooldown. Current Time: " + Time.time.ToString("F2") + ", Next Attack Time: " + nextAttackTime.ToString("F2") + ". Cooldown Ready: " + cooldownReady); // 디버그 로그 유지 
 
         if (!cooldownReady)
         {
@@ -283,7 +302,7 @@ public class A_AttackerController : CommonEnemyController
         }
 
         // If cooldown is ready, perform attack
-        Debug.Log("A_Attacker cooldown READY! Triggering A_AttackA animation."); // 디버그 로그 유지 
+        //Debug.Log("A_Attacker cooldown READY! Triggering A_AttackA animation."); // 디버그 로그 유지 
 
         isPerformingAttackAnimation = true; // Set Base class flag
         // isPerformingHurtAnimation는 Hurt 애니메이션 이벤트에서 해제됩니다.
@@ -298,13 +317,13 @@ public class A_AttackerController : CommonEnemyController
     // Override OnAttackAnimationEnd from Base
     public override void OnAttackAnimationEnd()
     {
-        Debug.Log("A_Attacker Attack Animation End Event (Override)."); // 디버그 로그 유지 
+        //Debug.Log("A_Attacker Attack Animation End Event (Override)."); // 디버그 로그 유지 
         // Call Base class logic (sets isPerformingAttackAnimation = false, starts post-attack pause coroutine)
         base.OnAttackAnimationEnd();
 
         // Calculate A_Attacker's specific next attack time based on its cooldown
         nextAttackTime = Time.time + attackACooldown;
-        Debug.Log("--> A_AttackA finished. Next attack possible in " + attackACooldown.ToString("F2") + "s (at " + nextAttackTime.ToString("F2") + ")."); // 디버그 로그 유지 
+        //Debug.Log("--> A_AttackA finished. Next attack possible in " + attackACooldown.ToString("F2") + "s (at " + nextAttackTime.ToString("F2") + ")."); // 디버그 로그 유지 
 
         // Returning to Chase state is handled by the Base class PostAttackPauseRoutine after the delay.
     }
@@ -313,10 +332,10 @@ public class A_AttackerController : CommonEnemyController
     // A_Hurt 애니메이션 클립 끝에 이 이름의 Animation Event를 추가해야 합니다.
     public override void OnHurtAnimationEnd() // Base 클래스의 virtual 메서드 오버라이드
     {
-        Debug.Log("A_Attacker OnHurtAnimationEnd called."); // 디버그 로그 추가 
+        //Debug.Log("A_Attacker OnHurtAnimationEnd called."); // 디버그 로그 추가 
         // Base 클래스의 OnHurtAnimationEnd()를 호출하여 isPerformingHurtAnimation 플래그를 false로 설정합니다.
         base.OnHurtAnimationEnd();
-        Debug.Log("isPerformingHurtAnimation set to false by base.OnHurtAnimationEnd()."); // 플래그 해제 확인 로그 
+        //Debug.Log("isPerformingHurtAnimation set to false by base.OnHurtAnimationEnd()."); // 플래그 해제 확인 로그 
 
 
         // 피격 애니메이션 종료 후 적이 죽지 않았다면 AI 상태를 재평가하도록 할 수 있습니다.
@@ -346,22 +365,22 @@ public class A_AttackerController : CommonEnemyController
             if (attackAEnemyHitbox != null)
             {
                 attackAEnemyHitbox.attackDamage = attackAValue; // Set damage from A_Attacker's value
-                //Debug.Log("Attack A Hitbox damage set to: " + attackAValue);
+                ////Debug.Log("Attack A Hitbox damage set to: " + attackAValue);
             }
             else
             {
-                Debug.LogWarning("EnemyHitbox component not found on Attack A Hitbox Object!", attackAHitboxObject);
+                //Debug.LogWarning("EnemyHitbox component not found on Attack A Hitbox Object!", attackAHitboxObject);
             }
 
             attackAHitboxCollider.enabled = true; // Enable collider
-            //Debug.Log(attackAHitboxObject.name + " Collider enabled.");
+            ////Debug.Log(attackAHitboxObject.name + " Collider enabled.");
 
             // TODO: Reset hit flag on EnemyHitbox if needed to prevent hitting the same target multiple times per swing
             // if (attackAEnemyHitbox != null) attackAEnemyHitbox.ResetHitFlag();
         }
         else
         {
-            Debug.LogWarning("Attack A Hitbox Object or Collider not assigned or found.", this);
+            //Debug.LogWarning("Attack A Hitbox Object or Collider not assigned or found.", this);
         }
     }
 
@@ -375,11 +394,11 @@ public class A_AttackerController : CommonEnemyController
         if (attackAHitboxCollider != null)
         {
             attackAHitboxCollider.enabled = false; // Disable collider
-            //Debug.Log("Attack A Hitbox Collider disabled.");
+            ////Debug.Log("Attack A Hitbox Collider disabled.");
         }
         else
         {
-            Debug.LogWarning("Attack A Hitbox Collider not assigned or found.", this);
+            //Debug.LogWarning("Attack A Hitbox Collider not assigned or found.", this);
         }
     }
 
@@ -396,7 +415,7 @@ public class A_AttackerController : CommonEnemyController
         if (spriteToFlip == null)
         {
             spriteToFlip = transform; // 자식 오브젝트가 없으면 자기 자신(루트 오브젝트)을 사용
-            Debug.LogWarning(gameObject.name + ": 'Sprite' 자식 오브젝트를 찾을 수 없습니다. 메인 오브젝트의 Transform을 사용하여 뒤집기를 시도합니다.", this);
+            //Debug.LogWarning(gameObject.name + ": 'Sprite' 자식 오브젝트를 찾을 수 없습니다. 메인 오브젝트의 Transform을 사용하여 뒤집기를 시도합니다.", this);
         }
 
         Vector3 currentScale = spriteToFlip.localScale;
@@ -408,12 +427,12 @@ public class A_AttackerController : CommonEnemyController
         if (faceLeft) // 왼쪽을 바라봐야 한다고 코드(MoveTowardsPlayer)가 지시할 때
         {
             // 실제로는 오른쪽을 보도록 스케일을 양수로 만듭니다.
-            spriteToFlip.localScale = new Vector3(Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+            spriteToFlip.localScale = new Vector3(-Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
         }
         else // 오른쪽을 바라봐야 한다고 코드(MoveTowardsPlayer)가 지시할 때
         {
             // 실제로는 왼쪽을 보도록 스케일을 음수로 만듭니다.
-            spriteToFlip.localScale = new Vector3(-Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+            spriteToFlip.localScale = new Vector3(+Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
         }
     }
     // ======================================================================
@@ -428,11 +447,11 @@ public class A_AttackerController : CommonEnemyController
         if (newPlayerTransform != null)
         {
             playerTransform = newPlayerTransform;
-            Debug.Log($"{gameObject.name}: 플레이어 타겟이 설정되었습니다: {playerTransform.name}", this);
+            //Debug.Log($"{gameObject.name}: 플레이어 타겟이 설정되었습니다: {playerTransform.name}", this);
         }
         else
         {
-            Debug.LogWarning($"{gameObject.name}: SetPlayerTarget 함수에 전달된 플레이어 Transform이 null입니다. 플레이어를 추적할 수 없습니다.", this);
+            //Debug.LogWarning($"{gameObject.name}: SetPlayerTarget 함수에 전달된 플레이어 Transform이 null입니다. 플레이어를 추적할 수 없습니다.", this);
         }
     }
 }

@@ -5,7 +5,7 @@ public class EnemyHitbox : MonoBehaviour
 {
     // 부모 오브젝트(B_Girl)에 붙어있는 B_GirlController 스크립트 참조
     // GetComponentInParent를 사용하기 위해 히트박스 오브젝트가 B_Girl의 자식이어야 합니다.
-    private B_GirlController enemyController;
+    private CommonEnemyController enemyController;
 
     // --- 추가: 이 히트박스가 줄 공격력 값 ---
     public float attackDamage;
@@ -17,7 +17,7 @@ public class EnemyHitbox : MonoBehaviour
     void Awake()
     {
         // 시작 시 부모(또는 그 위) 오브젝트에서 B_GirlController 컴포넌트를 찾습니다.
-        enemyController = GetComponentInParent<B_GirlController>();
+        enemyController = GetComponentInParent<CommonEnemyController>();
 
         if (enemyController == null)
         {

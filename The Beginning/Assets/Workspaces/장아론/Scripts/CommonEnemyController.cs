@@ -5,176 +5,177 @@ using System.Collections;
 public abstract class CommonEnemyController : MonoBehaviour, IDamageable
 {
     [Header("Base Enemy Stats")]
-    // 이 변수들은 내부적으로 사용하며, IDamageable 인터페이스 속성으로 노출됩니다.
-    protected float _currentHealth; // IDamageable.CurrentHp의 백킹 필드
-    public float _maxHealth = 10f;  // IDamageable.MaxHp의 백킹 필드
-    protected bool _isDead = false; // IDamageable.IsDead의 백킹 필드
+    protected float _currentHealth;
+    public float _maxHealth = 10f;
+    protected bool _isDead = false;
     protected Animator animator;
 
-    // 피격 애니메이션 중인지 나타내는 플래그
     protected bool isPerformingHurtAnimation = false;
 
-    // IDamageable 인터페이스 구현 (속성들)
     public float CurrentHp
     {
         get => _currentHealth;
-        set => _currentHealth = value; // IDamageable.CurrentHp.set 구현
+        set => _currentHealth = value;
     }
 
     public float MaxHp
     {
         get => _maxHealth;
-        set => _maxHealth = value; // IDamageable.MaxHp.set 구현
+        set => _maxHealth = value;
     }
 
-    public bool IsDead => _isDead; // IDamageable.IsDead 구현 (읽기 전용이므로 기존과 동일)
+    public bool IsDead => _isDead;
 
-    // IDamageable.OnDead (Action 타입 속성) 구현
-    private Action _onDeadAction; // OnDead Action 속성의 실제 값을 저장할 필드
-    public Action OnDead // IDamageable.OnDead.get 및 .set 구현
+    private Action _onDeadAction;
+    public Action OnDead
     {
         get => _onDeadAction;
         set => _onDeadAction = value;
     }
 
     [Header("Player Tracking")]
-    [SerializeField]protected Transform playerTransform; // 플레이어의 Transform 참조 (이제 외부에서 설정됨)
-    public float detectionRange = 5f; // 플레이어 감지 범위
-    public float attackRange = 1.5f; // 공격 가능 범위
-    public float moveSpeed = 2f; // 이동 속도
+    [SerializeField] protected Transform playerTransform;
+    public float detectionRange = 5f;
+    public float attackRange = 1.5f;
+    public float moveSpeed = 2f;
+    // ======================================================================
+    // **새로운 변수: 공격 범위 진입 전 이동을 멈출 여유 공간**
+    public float attackStopBuffer = 0.1f; // 0.1 ~ 0.3 정도의 작은 값을 설정해 보세요.
+    // ======================================================================
 
     [Header("Attack State")]
-    protected bool isPerformingAttackAnimation = false; // 공격 애니메이션 재생 중인지 여부
-    protected bool isWaitingAfterAttack = false; // 공격 후 잠시 멈춤 상태인지 여부
-    public float postAttackWaitDuration = 0.5f; // 공격 후 대기 시간
+    protected bool isPerformingAttackAnimation = false;
+    protected bool isWaitingAfterAttack = false;
+    public float postAttackWaitDuration = 0.5f;
 
-    // Rigidbody2D 컴포넌트 참조 (이동 제어용)
     protected Rigidbody2D rb;
 
-    // ============== 적 사망 이벤트 추가 (스폰 매니저용) ===================
     public static event Action<GameObject> OnEnemyDiedGlobal;
-    // =====================================================================
-
 
     protected virtual void Awake()
     {
-        CurrentHp = MaxHp; // 인터페이스 속성 통해 초기 체력 설정
+        CurrentHp = MaxHp;
         animator = GetComponent<Animator>();
 
-        // Rigidbody2D 컴포넌트 참조 얻기
         rb = GetComponent<Rigidbody2D>();
         if (rb == null)
         {
             Debug.LogError(gameObject.name + ": Rigidbody2D 컴포넌트를 찾을 수 없습니다! 이동이 제대로 동작하지 않을 수 있습니다.", this);
         }
-
-        // 이곳에서 플레이어를 직접 찾던 코드는 이제 제거되었습니다.
-        // 플레이어 Transform은 외부(매니저)에서 SetPlayerTarget 함수를 통해 설정됩니다.
     }
 
     protected virtual void Start()
     {
-        // (Awake에서 초기화 했으므로 Start에서는 추가 초기화가 필요 없으면 비워둡니다.)
     }
 
     protected virtual void Update()
     {
-        // 죽은 상태이거나 피격 애니메이션 중이면 아무것도 하지 않음
         if (IsDead || isPerformingHurtAnimation)
         {
-            rb.linearVelocity = Vector2.zero; // 이동 정지
+            rb.linearVelocity = Vector2.zero;
             return;
         }
 
-        // 공격 애니메이션 재생 중이거나 공격 후 대기 중이면 이동 및 공격 로직 스킵
         if (isPerformingAttackAnimation || isWaitingAfterAttack)
         {
-            PlayIdleAnim(); // 이 동안에도 Idle 애니메이션을 유지하거나 특정 상태 애니메이션을 유지할 수 있습니다.
-            rb.linearVelocity = Vector2.zero; // 이동 정지
+            PlayIdleAnim();
+            rb.linearVelocity = Vector2.zero;
             return;
         }
 
-        // 플레이어 추적 및 공격 로직
-        // playerTransform이 null일 수 있으므로 반드시 체크
         if (playerTransform != null)
         {
             float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
+            // ======================================================================
+            // **수정: 플레이어 감지 시 항상 플레이어 방향을 바라보도록**
+            // 이동 로직보다 먼저 실행되어 공격/이동 결정 전 항상 정면을 보게 함.
+            // ======================================================================
+            if (distanceToPlayer <= detectionRange) // 감지 범위 안에 있을 때만 방향 전환 로직 실행
+            {
+                float directionX = playerTransform.position.x - transform.position.x;
+                if (directionX > 0)
+                {
+                    Flip(false); // 오른쪽 바라보기
+                }
+                else if (directionX < 0)
+                {
+                    Flip(true); // 왼쪽 바라보기
+                }
+            }
+            // ======================================================================
+
             if (distanceToPlayer <= attackRange)
             {
-                // 플레이어가 공격 범위 안에 있으면 공격
                 PerformAttackLogic();
             }
             else if (distanceToPlayer <= detectionRange)
             {
-                // 플레이어가 감지 범위 안에 있으면 추적
                 MoveTowardsPlayer();
             }
             else
             {
-                // 플레이어가 감지 범위 밖에 있으면 대기
                 PlayIdleAnim();
-                rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); // 이동 중지
+                rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             }
         }
         else
         {
-            // 플레이어 Transform이 설정되지 않았거나 null이면 대기
             PlayIdleAnim();
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); // 이동 중지
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
     }
 
     // 플레이어를 향해 이동
     protected virtual void MoveTowardsPlayer()
     {
-        if (playerTransform == null) return; // playerTransform이 null이면 이동하지 않음
+        if (playerTransform == null) return;
+
+        float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+
+        // ======================================================================
+        // **수정: 공격 범위 직전에서 멈추도록**
+        // 플레이어가 attackRange + attackStopBuffer 안에 들어오면 이동을 멈춤.
+        // ======================================================================
+        if (distanceToPlayer <= attackRange + attackStopBuffer)
+        {
+            rb.linearVelocity = Vector2.zero; // 이동 정지
+            PlayIdleAnim(); // 대기 애니메이션 재생 (옵션)
+            return; // 더 이상 이동하지 않음
+        }
+        // ======================================================================
 
         Vector2 direction = (playerTransform.position - transform.position).normalized;
 
-        // 이동 방향에 따라 캐릭터 스프라이트 뒤집기
-        if (direction.x > 0)
-        {
-            Flip(false); // 오른쪽 바라보기
-        }
-        else if (direction.x < 0)
-        {
-            Flip(true); // 왼쪽 바라보기
-        }
+        // Flip 로직은 이제 Update()에서 처리되므로 여기서는 제거합니다.
+        // if (direction.x > 0) { Flip(false); }
+        // else if (direction.x < 0) { Flip(true); }
 
-        // 이동 애니메이션 재생
         PlayWalkAnim();
-
-        // Rigidbody를 이용하여 이동 (물리적 이동)
         rb.linearVelocity = new Vector2(direction.x * moveSpeed, rb.linearVelocity.y);
     }
 
-    // 공격 로직 (자식 클래스에서 오버라이드)
     protected virtual void PerformAttackLogic()
     {
         // 자식 클래스에서 이 메서드를 오버라이드하여 특정 공격 애니메이션 재생
         // 예: PlayAttack1Anim();
     }
 
-    // 공격 애니메이션 종료 시 호출될 콜백 (애니메이션 이벤트에 연결)
     public virtual void OnAttackAnimationEnd()
     {
         isPerformingAttackAnimation = false;
-        // 공격 후 잠시 멈추기 (코루틴 시작)
         StartCoroutine(PostAttackWaitCoroutine(postAttackWaitDuration));
-        ResetAttackTriggers(); // 공격 트리거 리셋
+        ResetAttackTriggers();
     }
 
-    // 공격 후 대기 코루틴
     protected IEnumerator PostAttackWaitCoroutine(float duration)
     {
         isWaitingAfterAttack = true;
-        rb.linearVelocity = Vector2.zero; // 공격 후 이동 잠시 중지
+        rb.linearVelocity = Vector2.zero;
         yield return new WaitForSeconds(duration);
         isWaitingAfterAttack = false;
     }
 
-    // IDamageable 인터페이스 구현 (피격 처리)
     public virtual void TakeDamage(float damage, GameObject attackObject)
     {
         if (IsDead) return;
@@ -184,88 +185,74 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
 
         if (CurrentHp <= 0 && !IsDead)
         {
-            HandleDeathLogic(); // 실제 사망 처리 로직을 담은 메서드 호출
-            OnDead?.Invoke(); // IDamageable 인터페이스의 OnDead Action 속성 Invoke
+            HandleDeathLogic();
+            OnDead?.Invoke();
         }
         else
         {
-            // 피격 애니메이션이 있다면 여기서 재생
+            isPerformingHurtAnimation = true;
             PlayHurtAnim();
         }
     }
 
-    // 실제 사망 처리 로직
     public virtual void HandleDeathLogic()
     {
         if (IsDead) return;
 
-        _isDead = true; // 내부 _isDead 변수 업데이트
+        _isDead = true;
         Debug.Log($"{gameObject.name}이(가) 사망했습니다.");
 
-        PlayDeathAnim(); // 사망 애니메이션 재생
+        PlayDeathAnim();
 
-        // ============== 적 사망 이벤트 발생 (스폰 매니저용) ===================
-        OnEnemyDiedGlobal?.Invoke(gameObject); // 이벤트를 구독하는 모든 객체에게 사망한 GameObject를 전달
-        // =====================================================================
+        OnEnemyDiedGlobal?.Invoke(gameObject);
 
-        // 물리적 상호작용 비활성화
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.isKinematic = true; // 물리 영향 받지 않음
+            rb.isKinematic = true;
         }
         if (GetComponent<Collider2D>() != null)
         {
-            GetComponent<Collider2D>().enabled = false; // 콜라이더 비활성화
+            GetComponent<Collider2D>().enabled = false;
         }
 
-        // 일정 시간 후 GameObject 비활성화 또는 파괴
-        // 여기에 MarkAsDead()를 넣지 않습니다. DestroyAfterDelay 코루틴 내부에서 호출됩니다.
-        StartCoroutine(DestroyAfterDelay(1.5f)); // 사망 애니메이션 재생 후 1.5초 뒤 파괴 (수치 조정 가능)
+        StartCoroutine(DestroyAfterDelay(1.5f));
     }
 
-    // GameObject를 지연 파괴하는 코루틴
     IEnumerator DestroyAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay); // 설정된 딜레이 시간만큼 기다립니다.
+        yield return new WaitForSeconds(delay);
 
-        // ======================================================================
-        // 적이 완전히 사라지기 직전에 EnemyStatusBridge의 MarkAsDead()를 호출합니다.
-        // 이것은 해당 스크립트가 죽음을 '처리'하도록 합니다.
-        // ======================================================================
         EnemyStatusBridge statusBridge = GetComponent<EnemyStatusBridge>();
         if (statusBridge != null)
         {
-            statusBridge.MarkAsDead(); // EnemyStatusBridge의 MarkAsDead() 함수를 호출합니다.
+            statusBridge.MarkAsDead();
             Debug.Log($"{gameObject.name}: EnemyStatusBridge.MarkAsDead() 호출 완료.");
         }
         else
         {
             Debug.LogWarning($"{gameObject.name}: EnemyStatusBridge 컴포넌트를 찾을 수 없습니다. MarkAsDead()를 호출할 수 없습니다.", this);
         }
-        // ======================================================================
 
-        Destroy(gameObject); // 모든 처리가 끝난 후 GameObject를 실제로 파괴합니다.
+        Destroy(gameObject);
     }
 
-    // ===== 애니메이션 관련 가상 함수들 (자식 클래스에서 오버라이드) =====
     protected virtual void PlayIdleAnim() { }
     protected virtual void PlayWalkAnim() { }
     protected virtual void PlayJumpAnim() { }
     protected virtual void PlayDeathAnim() { }
     protected virtual void PlayHurtAnim() { }
 
-    // 피격 애니메이션 종료 시 호출될 애니메이션 이벤트 메서드
     public virtual void OnHurtAnimationEnd()
     {
         isPerformingHurtAnimation = false;
+        Debug.Log(gameObject.name + ": Hurt 애니메이션 종료. 다시 움직임 가능.", this);
     }
     protected virtual void PlayAttack1Anim() { }
     protected virtual void PlayAttack2Anim() { }
     protected virtual void PlayAttack3Anim() { }
     protected virtual void ResetAttackTriggers() { }
 
-    // 캐릭터 스프라이트 또는 GameObject 방향 뒤집기
     protected virtual void Flip(bool faceLeft)
     {
         Transform spriteToFlip = transform.Find("Sprite");
@@ -280,24 +267,16 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
 
         if (faceLeft) // 왼쪽을 바라보도록
         {
-            // x 스케일을 음수로 만들어 뒤집습니다. (기본적으로 오른쪽을 볼 때 양수 스케일이라고 가정)
-            spriteToFlip.localScale = new Vector3(+Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+            spriteToFlip.localScale = new Vector3(-Mathf.Abs(currentScale.x) * -1, currentScale.y, currentScale.z); // 오른쪽을 바라볼 때 양수라면 왼쪽을 볼 때는 음수로
         }
         else // 오른쪽을 바라보도록
         {
-            // x 스케일을 양수로 만들어 뒤집습니다.
-            spriteToFlip.localScale = new Vector3(-Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+            spriteToFlip.localScale = new Vector3(Mathf.Abs(currentScale.x), currentScale.y, currentScale.z); // 오른쪽을 바라볼 때 양수로
         }
     }
 
-    // ======================================================================
-    // 외부에서 플레이어 Transform을 설정하기 위한 함수
-    // "전체 관리하는 친구"가 이 함수를 호출하여 플레이어 정보를 전달할 것입니다.
-    // ======================================================================
     public void SetPlayerTarget(Transform newPlayerTransform)
     {
-        // GetComponent<EnemyStatusBridge>()?.MarkAsDead(); // <--- 이전에 실수로 여기에 있었던 라인입니다. 여기서는 호출하지 않습니다!
-
         if (newPlayerTransform != null)
         {
             playerTransform = newPlayerTransform;

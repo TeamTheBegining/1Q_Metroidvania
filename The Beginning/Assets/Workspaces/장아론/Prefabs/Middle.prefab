@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6355267846556763877
 Transform:
   m_ObjectHideFlags: 0
@@ -162,9 +162,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 10
+  playerTransform: {fileID: 0}
   detectionRange: 10
   attackRange: 1.7
   moveSpeed: 1.5
+  attackStopBuffer: 0.1
   postAttackWaitDuration: 0.5
   attack1HitboxObject: {fileID: 8636349439236697190}
   attack2HitboxObject: {fileID: 7284608179196531827}
@@ -276,7 +278,7 @@ GameObject:
   - component: {fileID: 8638052610913381231}
   - component: {fileID: 8365653497963683572}
   - component: {fileID: 8577942537084657431}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HitBox2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -368,7 +370,7 @@ GameObject:
   - component: {fileID: 6617382676446914423}
   - component: {fileID: 4035733495766516499}
   - component: {fileID: 1819448699489631292}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HitBox3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -460,7 +462,7 @@ GameObject:
   - component: {fileID: 8437797541820128511}
   - component: {fileID: 753307439680008148}
   - component: {fileID: 3588456522265218387}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HitBox1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
