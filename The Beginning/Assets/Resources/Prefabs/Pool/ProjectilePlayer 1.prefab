@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 9149421173763270596}
   - component: {fileID: 1520243659246409190}
   - component: {fileID: 4568387920035596637}
-  m_Layer: 9
-  m_Name: ProjectilePlayer
+  m_Layer: 0
+  m_Name: ProjectilePlayer 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,15 +129,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 107.78408
-      outSlope: 107.78408
+      inSlope: 238.51741
+      outSlope: 238.51741
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.09995961
-      value: 10.774055
+      time: 0.047525406
+      value: 11.335637
       inSlope: 0.7166518
       outSlope: 0.7166518
       tangentMode: 0
@@ -145,8 +145,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 1
     - serializedVersion: 3
-      time: 0.19509786
-      value: 5.3695335
+      time: 0.16549958
+      value: 4.3092017
       inSlope: 0.94349813
       outSlope: 0.94349813
       tangentMode: 0
@@ -154,8 +154,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 1
     - serializedVersion: 3
-      time: 0.27117705
-      value: 11.1436
+      time: 0.27963042
+      value: 11.057205
       inSlope: 1.3745488
       outSlope: 1.3745488
       tangentMode: 0
@@ -163,14 +163,23 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.35460097
     - serializedVersion: 3
-      time: 0.3313949
-      value: 7.6052227
+      time: 0.36859584
+      value: -0.906816
       inSlope: -0.48594582
       outSlope: -0.48594582
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.60639924
       outWeight: 0.05250356
+    - serializedVersion: 3
+      time: 0.44717714
+      value: 19.24534
+      inSlope: 5.3903995
+      outSlope: 5.3903995
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.068673454
     - serializedVersion: 3
       time: 1.0351526
       value: 19.24534

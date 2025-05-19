@@ -97,6 +97,7 @@ public class Player : MonoBehaviour, IDamageable
     private Collider2D skillColl1;
     private Collider2D slidingColl;
     private Collider2D playerColl;
+    private Collider2D parryingCounterColl;
     private Bounds grabBounds;
     bool isGround = false;
     bool isParrying = false;
@@ -106,7 +107,7 @@ public class Player : MonoBehaviour, IDamageable
     bool isLadder = false;
     bool isHit = false;
     bool isAttack = false;
-    bool isSkill1 = false;
+    bool isSkill = false;
     bool isMoveDelay = false;
     bool isGrapDelay = false;
     bool isLadderDelay = false;
@@ -125,7 +126,6 @@ public class Player : MonoBehaviour, IDamageable
     private Vector3 m_grabPos;
     Vector3 playerleftdown;
     Interactable interactable;
-
     public float Damage
     {
         get => damage;
@@ -211,6 +211,7 @@ public class Player : MonoBehaviour, IDamageable
         m_grabColl = transform.GetChild(9).GetComponent<Collider2D>();
         m_grabTransform = transform.GetChild(9).GetComponent<Transform>();
         playerColl = transform.GetComponent<Collider2D>();
+        parryingCounterColl = transform.GetChild(10).GetComponent<Collider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
         curParryCount = 0;
@@ -223,13 +224,14 @@ public class Player : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
-        /*//테스트용
+        //테스트용
         if (input.IsParrying&&input.InputVec.y<0)
         {
             isParryAble = true;
             TakeDamage(95,gameObject);
             input.IsParrying = false;
-        }*/
+        }
+        if (IsDead) return;
         CheckList();
         switch (currentState)
         {
@@ -308,12 +310,12 @@ public class Player : MonoBehaviour, IDamageable
     private void CheckList()
     {
         //FlipCheck();
+        //ParryingCounterCheck();
         JumpCheck();
         WallCheck();
         ParryCountCheck();
         DelayCheck();
         EnergyOverCheck();
-        ParryingCounterCheck();
         isGround = CheckIsGround();
     }
 
@@ -458,7 +460,7 @@ public class Player : MonoBehaviour, IDamageable
         curDir = (int)curDir == 1 ? PlayerDirectionState.Left : PlayerDirectionState.Right;
         transform.eulerAngles = (int)curDir == 1 ? Vector3.zero : new Vector3(0, -180, 0);
     }
-    private void ParryingCounterCheck()
+    /*private void ParryingCounterCheck()
     {
         if (isParrySuccess)
         {
@@ -480,7 +482,7 @@ public class Player : MonoBehaviour, IDamageable
                 parryCounterTimer = 0;
             }
         }
-    }
+    }*/
     void WallCheck()
     {
         if (m_wallSensor1.State() && m_wallSensor2.State())
@@ -521,10 +523,10 @@ public class Player : MonoBehaviour, IDamageable
             currentState = PlayerState.Move;
         JumpAble();
         AttackAble();
-        SkillAble();
         ParryAble();
         ＣrouchAble(); 
         SlidingAble();
+        SkillAble();
     }
 
     private void PlayerMoveUpdate()
@@ -535,9 +537,9 @@ public class Player : MonoBehaviour, IDamageable
         JumpAble();
         ParryAble();
         AttackAble();
-        SkillAble();
         ＣrouchAble();
         SlidingAble();
+        SkillAble();
     }
 
     private void PlayerLadderUpdate()
@@ -602,7 +604,6 @@ public class Player : MonoBehaviour, IDamageable
             input.IsAttack = false;
             isAttack = true;
             attackColl.enabled = false;
-            attackColl2.enabled = true;
             currentState = PlayerState.Attack2;
             if ((int)curDir != Mathf.RoundToInt(input.InputVec.x) && input.InputVec.x != 0) Flip();
         }
@@ -618,7 +619,6 @@ public class Player : MonoBehaviour, IDamageable
             input.IsAttack = false;
             isAttack = true;
             attackColl2.enabled = false;
-            attackColl3.enabled = true;
             currentState = PlayerState.Attack3;
             if ((int)curDir != Mathf.RoundToInt(input.InputVec.x) && input.InputVec.x != 0) Flip();
         }
@@ -745,7 +745,6 @@ public class Player : MonoBehaviour, IDamageable
         {
             input.IsAttack = false;
             currentState = PlayerState.Attack1;
-            attackColl.enabled = true;
             isAttack = true;
             if (isGround) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
@@ -757,9 +756,8 @@ public class Player : MonoBehaviour, IDamageable
         if (input.IsSkill1 && !isAttack && currentMp > 10)
         {
             input.IsSkill1 = false;
-            isSkill1 = true;
+            isSkill = true;
             currentState = PlayerState.Skill1;
-            attackColl.enabled = true;
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             currentMp -= 10;
             gameObject.layer = LayerMask.NameToLayer("Invincibility");
@@ -878,7 +876,19 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void AttackCollider()
     {
-        //attackColl.enabled = true;
+        attackColl.enabled = true;
+    }
+    private void AttackCollider2()
+    {
+        attackColl2.enabled = true;
+    }
+    private void AttackCollider3()
+    {
+        attackColl3.enabled = true;
+    }
+    private void SkillCollider1()
+    {
+        skillColl1.enabled = true;
     }
     private void AttackFinish()
     {
@@ -902,9 +912,13 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void Skill1Finish()
     {
-        isSkill1 = false;
+        isSkill = false;
         skillColl1.enabled = false;
         currentState = PlayerState.Idle;
+    }
+    private void ProjectileSkill1()
+    {
+        PoolManager.Instance.Pop<ProjectilePlayer>(PoolType.ProjectilePlayer, transform.position).Init((int)curDir == -1 ? true : false);
     }
 
     private void Attack2Check()
@@ -930,6 +944,18 @@ public class Player : MonoBehaviour, IDamageable
         playerColl.enabled = true;
         currentState = PlayerState.Idle;
         rb.gravityScale = 1;
+    }
+
+    private void ParryingCounterAttack()
+    {
+        parryingCounterColl.enabled = true;
+    }
+
+    private void ParryingCounterAttackFinish()
+    {
+        parryingCounterColl.enabled = false;
+        currentState = PlayerState.Idle; 
+        gameObject.layer = LayerMask.NameToLayer("Player");
     }
 
     #endregion
@@ -1029,9 +1055,6 @@ public class Player : MonoBehaviour, IDamageable
                 col.enabled = false;
             }
             playerColl.enabled = true;
-            /*m_wallSensor1.enabled = true;
-            m_wallSensor2.enabled = true;
-            m_grabSensor.enabled = true;*/
         }
         else
         {
