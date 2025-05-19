@@ -69,27 +69,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Skill3",
-                    "type": "Button",
-                    "id": "7837e4fb-229e-49f6-a2a0-a375a903e1ba",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Parrying",
                     "type": "Button",
                     "id": "4579b726-550e-42f6-b919-be39d680f921",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Dodging",
-                    "type": "Button",
-                    "id": "6523a50d-34e5-4e4c-ba60-236bffec6c4c",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -225,17 +207,6 @@
                 },
                 {
                     "name": "",
-                    "id": "2d1d08ea-d52c-4c95-958d-baf636a3e373",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Skill3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "30965459-505e-45be-9a2d-2baffb8c172f",
                     "path": "<Keyboard>/s",
                     "interactions": "",
@@ -259,22 +230,11 @@
                 {
                     "name": "",
                     "id": "39c7baa5-770c-434b-a2e0-510122145bdd",
-                    "path": "<Keyboard>/w",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Skill2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "21afde8b-c67b-4aed-af21-d5b0360e3fe8",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Joystick",
-                    "action": "Dodging",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

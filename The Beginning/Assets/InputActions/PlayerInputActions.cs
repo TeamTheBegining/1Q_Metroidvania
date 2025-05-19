@@ -155,27 +155,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Skill3"",
-                    ""type"": ""Button"",
-                    ""id"": ""7837e4fb-229e-49f6-a2a0-a375a903e1ba"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Parrying"",
                     ""type"": ""Button"",
                     ""id"": ""4579b726-550e-42f6-b919-be39d680f921"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Dodging"",
-                    ""type"": ""Button"",
-                    ""id"": ""6523a50d-34e5-4e4c-ba60-236bffec6c4c"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -311,17 +293,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""2d1d08ea-d52c-4c95-958d-baf636a3e373"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Skill3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""30965459-505e-45be-9a2d-2baffb8c172f"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
@@ -345,22 +316,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""39c7baa5-770c-434b-a2e0-510122145bdd"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Skill2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""21afde8b-c67b-4aed-af21-d5b0360e3fe8"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse;Joystick"",
-                    ""action"": ""Dodging"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1294,9 +1254,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
         m_Player_Skill1 = m_Player.FindAction("Skill1", throwIfNotFound: true);
         m_Player_Skill2 = m_Player.FindAction("Skill2", throwIfNotFound: true);
-        m_Player_Skill3 = m_Player.FindAction("Skill3", throwIfNotFound: true);
         m_Player_Parrying = m_Player.FindAction("Parrying", throwIfNotFound: true);
-        m_Player_Dodging = m_Player.FindAction("Dodging", throwIfNotFound: true);
         m_Player_Sliding = m_Player.FindAction("Sliding", throwIfNotFound: true);
         m_Player_DashLeft = m_Player.FindAction("DashLeft", throwIfNotFound: true);
         m_Player_DashRight = m_Player.FindAction("DashRight", throwIfNotFound: true);
@@ -1412,9 +1370,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interaction;
     private readonly InputAction m_Player_Skill1;
     private readonly InputAction m_Player_Skill2;
-    private readonly InputAction m_Player_Skill3;
     private readonly InputAction m_Player_Parrying;
-    private readonly InputAction m_Player_Dodging;
     private readonly InputAction m_Player_Sliding;
     private readonly InputAction m_Player_DashLeft;
     private readonly InputAction m_Player_DashRight;
@@ -1458,17 +1414,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Skill2 => m_Wrapper.m_Player_Skill2;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Skill3".
-        /// </summary>
-        public InputAction @Skill3 => m_Wrapper.m_Player_Skill3;
-        /// <summary>
         /// Provides access to the underlying input action "Player/Parrying".
         /// </summary>
         public InputAction @Parrying => m_Wrapper.m_Player_Parrying;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Dodging".
-        /// </summary>
-        public InputAction @Dodging => m_Wrapper.m_Player_Dodging;
         /// <summary>
         /// Provides access to the underlying input action "Player/Sliding".
         /// </summary>
@@ -1528,15 +1476,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Skill2.started += instance.OnSkill2;
             @Skill2.performed += instance.OnSkill2;
             @Skill2.canceled += instance.OnSkill2;
-            @Skill3.started += instance.OnSkill3;
-            @Skill3.performed += instance.OnSkill3;
-            @Skill3.canceled += instance.OnSkill3;
             @Parrying.started += instance.OnParrying;
             @Parrying.performed += instance.OnParrying;
             @Parrying.canceled += instance.OnParrying;
-            @Dodging.started += instance.OnDodging;
-            @Dodging.performed += instance.OnDodging;
-            @Dodging.canceled += instance.OnDodging;
             @Sliding.started += instance.OnSliding;
             @Sliding.performed += instance.OnSliding;
             @Sliding.canceled += instance.OnSliding;
@@ -1578,15 +1520,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Skill2.started -= instance.OnSkill2;
             @Skill2.performed -= instance.OnSkill2;
             @Skill2.canceled -= instance.OnSkill2;
-            @Skill3.started -= instance.OnSkill3;
-            @Skill3.performed -= instance.OnSkill3;
-            @Skill3.canceled -= instance.OnSkill3;
             @Parrying.started -= instance.OnParrying;
             @Parrying.performed -= instance.OnParrying;
             @Parrying.canceled -= instance.OnParrying;
-            @Dodging.started -= instance.OnDodging;
-            @Dodging.performed -= instance.OnDodging;
-            @Dodging.canceled -= instance.OnDodging;
             @Sliding.started -= instance.OnSliding;
             @Sliding.performed -= instance.OnSliding;
             @Sliding.canceled -= instance.OnSliding;
@@ -2078,26 +2014,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSkill2(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Skill3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSkill3(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Parrying" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnParrying(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Dodging" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnDodging(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Sliding" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

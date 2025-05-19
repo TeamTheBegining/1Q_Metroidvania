@@ -12,9 +12,6 @@ public class PlayerInput : MonoBehaviour
     bool isAttack = false;
     public bool IsAttack { get => isAttack; set => isAttack = value; }
 
-    bool isRoll = false;
-    public bool IsRoll { get => isRoll; set => isRoll = value; }
-
     bool isJump = false;
 
     public bool IsJump { get => isJump; set => isJump = value; }
