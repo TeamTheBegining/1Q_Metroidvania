@@ -38,7 +38,7 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
     }
 
     [Header("Player Tracking")]
-    protected Transform playerTransform; // 플레이어의 Transform 참조
+    protected Transform playerTransform; // 플레이어의 Transform 참조 (이제 외부에서 설정됨)
     public float detectionRange = 5f; // 플레이어 감지 범위
     public float attackRange = 1.5f; // 공격 가능 범위
     public float moveSpeed = 2f; // 이동 속도
@@ -68,16 +68,10 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
             Debug.LogError(gameObject.name + ": Rigidbody2D 컴포넌트를 찾을 수 없습니다! 이동이 제대로 동작하지 않을 수 있습니다.", this);
         }
 
-        // "Player" 태그를 가진 GameObject를 찾아 Transform을 할당
-        GameObject playerObject = GameObject.FindWithTag("Player");
-        if (playerObject != null)
-        {
-            playerTransform = playerObject.transform;
-        }
-        else
-        {
-            Debug.LogWarning(gameObject.name + ": 'Player' 태그를 가진 플레이어 GameObject를 찾을 수 없습니다! AI가 플레이어를 추적하지 못할 수 있습니다.", this);
-        }
+        // ======================================================================
+        // 이곳에서 플레이어를 직접 찾던 코드는 이제 제거되었습니다.
+        // 플레이어 Transform은 외부(매니저)에서 SetPlayerTarget 함수를 통해 설정됩니다.
+        // ======================================================================
     }
 
     protected virtual void Start()
@@ -103,6 +97,7 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
         }
 
         // 플레이어 추적 및 공격 로직
+        // playerTransform이 null일 수 있으므로 반드시 체크
         if (playerTransform != null)
         {
             float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
@@ -126,7 +121,7 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
         }
         else
         {
-            // 플레이어가 없으면 대기
+            // 플레이어 Transform이 설정되지 않았거나 null이면 대기
             PlayIdleAnim();
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); // 이동 중지
         }
@@ -135,7 +130,7 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
     // 플레이어를 향해 이동
     protected virtual void MoveTowardsPlayer()
     {
-        if (playerTransform == null) return;
+        if (playerTransform == null) return; // playerTransform이 null이면 이동하지 않음
 
         Vector2 direction = (playerTransform.position - transform.position).normalized;
 
@@ -227,7 +222,7 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
         }
 
         // 일정 시간 후 GameObject 비활성화 또는 파괴
-        StartCoroutine(DestroyAfterDelay(1.5f)); // 사망 애니메이션 재생 후 3초 뒤 파괴
+        StartCoroutine(DestroyAfterDelay(1.5f)); // 사망 애니메이션 재생 후 1.5초 뒤 파괴 (수치 조정 가능)
     }
 
     // GameObject를 지연 파괴하는 코루틴
@@ -257,14 +252,8 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
     // 캐릭터 스프라이트 또는 GameObject 방향 뒤집기
     protected virtual void Flip(bool faceLeft)
     {
-        // 팁: 대부분의 2D 게임에서 스프라이트 렌더러는 메인 게임 오브젝트의 자식 오브젝트에 있습니다.
-        // 예를 들어, 자식 오브젝트 이름이 "Sprite"라면 아래와 같이 자식의 Transform을 사용해야 합니다.
-        // 만약 스프라이트 렌더러가 이 스크립트가 붙어있는 메인 오브젝트에 직접 있다면,
-        // 아래 'transform.Find("Sprite");' 줄을 주석 처리하고 'spriteToFlip = transform;' 라인을 활성화하세요.
         Transform spriteToFlip = transform.Find("Sprite");
 
-        // "Sprite"라는 자식 오브젝트를 찾지 못했다면, 현재 오브젝트의 Transform을 사용합니다.
-        // 이 경우, 스프라이트 렌더러가 메인 오브젝트에 직접 붙어있다고 가정합니다.
         if (spriteToFlip == null)
         {
             spriteToFlip = transform;
@@ -275,14 +264,30 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
 
         if (faceLeft) // 왼쪽을 바라보도록
         {
-            // 현재 x 스케일이 양수이면 음수로 뒤집기 (왼쪽 바라봄)
-            // Mathf.Abs를 사용하여 이미 음수여도 정확하게 양수값으로 만들어서 뒤집습니다.
-            spriteToFlip.localScale = new Vector3(+Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
-        }
-        else // 오른쪽을 바라보도록 (faceRight)
-        {
-            // 현재 x 스케일이 음수이면 양수로 뒤집기 (오른쪽 바라봄)
+            // x 스케일을 음수로 만들어 뒤집습니다. (기본적으로 오른쪽을 볼 때 양수 스케일이라고 가정)
             spriteToFlip.localScale = new Vector3(-Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+        }
+        else // 오른쪽을 바라보도록
+        {
+            // x 스케일을 양수로 만들어 뒤집습니다.
+            spriteToFlip.localScale = new Vector3(Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+        }
+    }
+
+    // ======================================================================
+    // 외부에서 플레이어 Transform을 설정하기 위한 함수
+    // "전체 관리하는 친구"가 이 함수를 호출하여 플레이어 정보를 전달할 것입니다.
+    // ======================================================================
+    public void SetPlayerTarget(Transform newPlayerTransform)
+    {
+        if (newPlayerTransform != null)
+        {
+            playerTransform = newPlayerTransform;
+            Debug.Log($"{gameObject.name}: 플레이어 타겟이 설정되었습니다: {playerTransform.name}", this);
+        }
+        else
+        {
+            Debug.LogWarning($"{gameObject.name}: SetPlayerTarget 함수에 전달된 플레이어 Transform이 null입니다. 플레이어를 추적할 수 없습니다.", this);
         }
     }
 }
