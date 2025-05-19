@@ -35,6 +35,10 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float cjumpPower = 4f;
     [Tooltip("피격시 날아가는 힘")]
     [SerializeField] float flyPower = 3f;
+    [Tooltip("이단 점프하는 힘")]
+    [SerializeField] float dpower = 4f;
+    /*[Tooltip("이단 점프 내려가는중 점프하는 힘")]
+    [SerializeField] float ddpower = 1.25f;*/
     [Space(2)]
     [Header("HP,MP 수치 조정")]
     [SerializeField] float maxHp = 10f;
@@ -53,16 +57,18 @@ public class Player : MonoBehaviour, IDamageable
     float slidingDelayTimer = 0f;
     float attackDelayTimer = 0f;
     float moveDelayTimer = 0f;
+    float doubleJumpDelayTimer = 0f;
     float grabDelayTimer = 0f;
     float ladderDelayTimer = 0f;
-    float parryCounterTimer = 0;
     float healingTimer = 0;
+    float attackButtonDownTimer = 0f;
 
     [Space(2)]
     [Header("딜레이 시간")]
     [Tooltip("점프 후 시간만큼 땅 체크 무시")]
     [SerializeField] float jumpDisableGroundCheckTime = 0.1f;
     [SerializeField] float moveDelayTime = 0.2f;
+    [SerializeField] float doubleJumpDelayTime = 0.2f;
     [SerializeField] float grabDelayTime = 0.2f;
     [SerializeField] float ladderDelayTime = 0.2f;
     [SerializeField] float attackDelayTime = 0f;
@@ -70,6 +76,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float parryDelayTime = 0.8f;
     [SerializeField] float spawnDelayTime = 0.1f;
     [SerializeField] float parryCountTime = 0.3f;
+    [SerializeField] float chargeThresholdTime = 1f;
 
     [Space(2)]
     [Header("현재 상태 - 애니메이션 비교 확인")]
@@ -91,6 +98,7 @@ public class Player : MonoBehaviour, IDamageable
     private Transform groundCheckTransform;
     private LayerMask groundLayer;
     private SpriteRenderer spriternderer;
+    private Collider2D chargingColl;
     private Collider2D attackColl;
     private Collider2D attackColl2;
     private Collider2D attackColl3;
@@ -98,6 +106,7 @@ public class Player : MonoBehaviour, IDamageable
     private Collider2D slidingColl;
     private Collider2D playerColl;
     private Collider2D parryingCounterColl;
+    private Collider2D chargingAttackColl;
     private Bounds grabBounds;
     bool isGround = false;
     bool isParrying = false;
@@ -111,10 +120,13 @@ public class Player : MonoBehaviour, IDamageable
     bool isMoveDelay = false;
     bool isGrapDelay = false;
     bool isLadderDelay = false;
+    bool isDoubleJumpDelay = false;
     bool isWallClimbable = false;
     bool isHealing = false;
     bool attack2Able = false;
     bool attack3Able = false;
+    [SerializeField]bool getDoublejump = false;
+    [SerializeField]bool getCharging = false;
     //bool isInteraction = false;
 
     //벽타기 체크 변수
@@ -142,7 +154,10 @@ public class Player : MonoBehaviour, IDamageable
         Idle,
         Move,
         Jump,
+        DoubleJump,
         Landing,
+        Chaging,
+        ChagingAttack,
         Attack1,
         Attack2,
         Attack3,
@@ -203,12 +218,14 @@ public class Player : MonoBehaviour, IDamageable
         
         // 콜라이더 그룹 찾기
         Transform attackGroup = transform.Find("Colliders");
+        chargingColl = attackGroup.Find("ChargingAttackCollider").GetComponent<Collider2D>();
         attackColl = attackGroup.Find("AttackCollider").GetComponent<Collider2D>();
         attackColl2 = attackGroup.Find("AttackCollider2").GetComponent<Collider2D>();
         attackColl3 = attackGroup.Find("AttackCollider3").GetComponent<Collider2D>();
         skillColl1 = attackGroup.Find("SkillCollider1").GetComponent<Collider2D>();
         slidingColl = attackGroup.Find("SlidingCollider").GetComponent<Collider2D>();
         parryingCounterColl = attackGroup.Find("ParryingCounterAttackCollider").GetComponent<Collider2D>();
+        chargingAttackColl = attackGroup.Find("ChargingAttackCollider").GetComponent<Collider2D>();
         m_grabColl = attackGroup.Find("GrabCollider").GetComponent<Collider2D>();
         // 그랩 위치
         m_grabTransform = m_grabColl.gameObject.GetComponent<Transform>();
@@ -252,8 +269,17 @@ public class Player : MonoBehaviour, IDamageable
             case PlayerState.Jump:
                 PlayerJumpUpdate();
                 break;
+            case PlayerState.DoubleJump:
+                PlayerJumpUpdate();
+                break;
             case PlayerState.Landing:
                 PlayerLandingUpdate();
+                break;
+            case PlayerState.Chaging:
+                PlayerChagingUpdate();
+                break;
+            case PlayerState.ChagingAttack:
+                //PlayerChagingAttackUpdate();
                 break;
             case PlayerState.Attack1:
                 PlayerAttack1Update();
@@ -315,11 +341,9 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+
     private void CheckList()
     {
-        //FlipCheck();
-        //ParryingCounterCheck();
-        JumpCheck();
         WallCheck();
         ParryCountCheck();
         DelayCheck();
@@ -420,6 +444,15 @@ public class Player : MonoBehaviour, IDamageable
             moveDelayTimer = 0;
         }
 
+        if (isDoubleJumpDelay)
+            doubleJumpDelayTimer += Time.deltaTime;
+
+        if (doubleJumpDelayTimer > doubleJumpDelayTime)
+        {
+            isDoubleJumpDelay = false;
+            doubleJumpDelayTimer = 0;
+        }
+
         if (isGrapDelay)
             grabDelayTimer += Time.deltaTime;
 
@@ -501,10 +534,6 @@ public class Player : MonoBehaviour, IDamageable
         else
             isWallClimbable = false;
     }
-    void JumpCheck()
-    {
-        if(currentState!=PlayerState.Jump)jumpCount = 0;
-    }
 
 
     private bool CheckIsGround()
@@ -515,6 +544,7 @@ public class Player : MonoBehaviour, IDamageable
         // 점프하거나 낙하 중일 때는 착지로 처리하지 않음
         if (onGround && rb.linearVelocity.y <= 0.1f)
         {
+            jumpCount = 0;
             return true;
         }
         return false;
@@ -591,7 +621,7 @@ public class Player : MonoBehaviour, IDamageable
             jumpTimer = 0;
         }
         if (jumpCount == 0) jumpCount = 1; // 점프 상태일 경우 기본 1로 정의
-        //if (jumpCount < 2) DoubleJumpAble();
+        if (jumpCount < 2 && getDoublejump) DoubleJumpAble();
         MoveAble(jumpMoveSpeed);
         AttackAble();
         ClimbingAble();
@@ -618,6 +648,29 @@ public class Player : MonoBehaviour, IDamageable
         if (!isGround)
             MoveAble(attackMoveSpeed);
     }
+
+    private void PlayerChagingUpdate()
+    {
+        if (rb.linearVelocity.x !=0) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        attackButtonDownTimer += Time.deltaTime; 
+
+        // 공격 떼면 처리
+        if (!input.IsAttack)
+        {
+            isAttack = true;
+            if (attackButtonDownTimer >= chargeThresholdTime)
+            {
+                currentState = PlayerState.ChagingAttack;
+            }
+            else
+            {
+                currentState = PlayerState.Attack1;
+            }
+
+            attackButtonDownTimer = 0f;
+        }
+    }
+
     private void PlayerAttack2Update()
     {
         if (isGround) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
@@ -736,7 +789,7 @@ public class Player : MonoBehaviour, IDamageable
         if (input.InputVec.x != 0)
         {
             rb.linearVelocity = new Vector2(input.InputVec.x * currentMoveSpeed * moveSpeed, rb.linearVelocity.y);
-            if ((int)curDir != Mathf.RoundToInt(input.InputVec.x)&&(currentState == PlayerState.Jump|| currentState == PlayerState.Move)) Flip();
+            if ((int)curDir != Mathf.RoundToInt(input.InputVec.x)&&(currentState == PlayerState.DoubleJump || currentState == PlayerState.Jump|| currentState == PlayerState.Move)) Flip();
         }
         else
         {
@@ -749,12 +802,19 @@ public class Player : MonoBehaviour, IDamageable
     void AttackAble()
     {
         if (isParrySuccess) return;
-        if (input.IsAttack && !isAttack)
+        if (getCharging&& input.IsAttack)
         {
-            input.IsAttack = false;
-            currentState = PlayerState.Attack1;
-            isAttack = true;
-            if (isGround) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            currentState = PlayerState.Chaging;
+        }
+        else
+        {
+            if (input.IsAttack && !isAttack)
+            {
+                input.IsAttack = false;
+                currentState = PlayerState.Attack1;
+                isAttack = true;
+                if (isGround) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            }
         }
     }
 
@@ -789,18 +849,24 @@ public class Player : MonoBehaviour, IDamageable
             rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             currentState = PlayerState.Jump;
             input.IsJump = false;
+            isDoubleJumpDelay = true;
         }
     }
     void DoubleJumpAble()
     {
 
-        if (isMoveDelay) return;
+        if (isMoveDelay || isDoubleJumpDelay) return;
         if (input.IsJump)
         {
-            float powerValue = rb.linearVelocity.y > 0 ? 0.7f : 1.5f;
-            rb.AddForce(Vector2.up * jumpPower * powerValue, ForceMode2D.Impulse);
+            float mass = rb.mass;
+
+            // 현재 y속도 제거 + 점프 힘 보정
+            float cancelOutForce = -rb.linearVelocity.y * mass;
+            float jumpImpulse = cancelOutForce + (dpower * mass);
+            rb.AddForce(new Vector2(0, jumpImpulse), ForceMode2D.Impulse);
             input.IsJump = false;
             jumpCount++;
+            currentState = PlayerState.DoubleJump;
         }
     }
 
@@ -881,6 +947,20 @@ public class Player : MonoBehaviour, IDamageable
         playerColl.enabled = true;
         slidingColl.enabled = false;
         gameObject.layer = LayerMask.NameToLayer("Player");
+    }
+    private void ChagingColliderEnable()
+    {
+        chargingColl.enabled = true;
+    }
+    private void ChagingColliderDisable()
+    {
+        chargingColl.enabled = false;
+    }
+    private void ChagingFinish()
+    {
+        currentState = PlayerState.Idle;
+        chargingColl.enabled = false;
+        isAttack = false;
     }
     private void AttackCollider()
     {

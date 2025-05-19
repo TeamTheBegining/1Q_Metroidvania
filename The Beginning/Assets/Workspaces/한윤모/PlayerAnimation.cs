@@ -51,8 +51,17 @@ public class PlayerAnimation : MonoBehaviour
             case Player.PlayerState.Jump:
                 animator.Play("Jump");
                 break;
+            case Player.PlayerState.DoubleJump:
+                animator.Play("DoubleJump");
+                break;
             case Player.PlayerState.Landing:
                 animator.Play("Landing");
+                break;
+            case Player.PlayerState.Chaging:
+                animator.Play("Chaging");
+                break;
+            case Player.PlayerState.ChagingAttack:
+                animator.Play("ChagingAttack");
                 break;
             case Player.PlayerState.Attack1:
                 animator.Play("Attack1");
