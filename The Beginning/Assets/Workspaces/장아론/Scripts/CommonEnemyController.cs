@@ -281,12 +281,12 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
         if (faceLeft) // 왼쪽을 바라보도록
         {
             // x 스케일을 음수로 만들어 뒤집습니다. (기본적으로 오른쪽을 볼 때 양수 스케일이라고 가정)
-            spriteToFlip.localScale = new Vector3(-Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+            spriteToFlip.localScale = new Vector3(+Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
         }
         else // 오른쪽을 바라보도록
         {
             // x 스케일을 양수로 만들어 뒤집습니다.
-            spriteToFlip.localScale = new Vector3(Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+            spriteToFlip.localScale = new Vector3(-Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
         }
     }
 
