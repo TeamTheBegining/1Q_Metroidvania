@@ -64,6 +64,8 @@ public class Scene2Manager : LocalSceneManager
 
         GameObject playerObject = FindFirstObjectByType<Player>().gameObject;
 
+        GameManager.Instance.State = GameState.CutScene;
+
         // 처음 시작 카메라 설정
         CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene2PlayerCamera, 20);
         CameraManager.Instance.SetTarget(CameraType.Scene2PlayerCamera, playerObject.transform);

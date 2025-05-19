@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 플레이어 사망 시 등장하는 패널 ( Setactive로 컨트롤 )
@@ -19,13 +20,10 @@ public class PlayerDeadPanel : MonoBehaviour
     private void Start()
     {
         cg.alpha = 0.0f;
-        this.gameObject.SetActive(false);
-        Player player = FindFirstObjectByType<Player>();
+        Init();
 
-        if(player != null)
-        {
-            player.OnDead += () => { ShowPanel(); };
-        }
+
+        this.gameObject.SetActive(false);
     }
 
     private void OnEnable()
@@ -65,5 +63,25 @@ public class PlayerDeadPanel : MonoBehaviour
             cg.alpha = timeElapsed / duration;
             yield return null;
         }
+    }
+
+    public void Init()
+    {
+        this.gameObject.SetActive(false);
+
+        Player player = FindFirstObjectByType<Player>();
+        // 처음 시작 시 플레이어 찾기
+        if (player != null)
+        {
+            player.OnDead += () =>
+            {
+                if (GameManager.Instance.State == GameState.Play)
+                {
+                    GameManager.Instance.State = GameState.PlayEnd;
+                    ShowPanel();
+                }
+            };
+        }
+
     }
 }

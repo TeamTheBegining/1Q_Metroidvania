@@ -113,6 +113,7 @@ public class GameManager : Singleton<GameManager>
     private void OnPlay()
     {
         globalCanvas.worldCamera = Camera.main;
+        FindObjectsByType<PlayerDeadPanel>(FindObjectsInactive.Include).Init();
     }
 
     private void OnPause()
@@ -125,8 +126,31 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = 1f;
     }
 
-#if UNITY_EDITOR
+    #region CheatInputActions
 
+    private CheatInputActions cheatActions;
+
+    private void CheatInit()
+    {
+        cheatActions = new CheatInputActions();
+        cheatActions.Enable();
+
+        cheatActions.Cheat.F1.started += F1_started;
+    }
+
+    private void F1_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        Player player = FindAnyObjectByType<Player>();
+        if(player != null)
+        {
+            player.CurrentMp = player.MaxMp;
+        }
+    }
+
+
+    #endregion
+
+#if UNITY_EDITOR
     [Space(20f)]
     [Header("Test Section")]
     public bool isDebug = false;
@@ -144,16 +168,15 @@ public class GameManager : Singleton<GameManager>
 
     private void PageDown_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //GameSceneManager.Instance.RequestSceneChange(spawnPointName,)
-        LightManager.Instance.SetPlayerLightValue(0f);
+        Player player = FindFirstObjectByType<Player>();
+        if(player != null)
+        {
+            player.CurrentHp = 0f;
+        }
     }
 
     private void PageUp_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        //GameSceneManager.Instance.ChangeScene(nextSceneIndex);
-        LightManager.Instance.SetPlayerLightValue(0f);
     }
-
-
 #endif
 }

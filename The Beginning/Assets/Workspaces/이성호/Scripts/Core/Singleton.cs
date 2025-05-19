@@ -36,7 +36,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             instance = this as T;
             DontDestroyOnLoad(this.gameObject);
-            Debug.Log($"{typeof(T).Name} Initialize by {this.gameObject.name}");
+            //Debug.Log($"{typeof(T).Name} Initialize by {this.gameObject.name}");
         }
         else if(instance != this) // 이미 생성한 객체가 존재함
         {

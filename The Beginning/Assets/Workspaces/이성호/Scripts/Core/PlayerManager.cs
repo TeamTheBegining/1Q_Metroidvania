@@ -92,17 +92,27 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             GameSceneManager.Instance.RequestSceneChange(spawnSceneName, spawnData);
         }
+
+        GameManager.Instance.State = GameState.Play;
     }
 
     /// <summary>
     /// 플레이어 스폰 함수 ( 플레이어 제거 확인 및 씬 전환 후 호출 할 것 )
     /// </summary>
-    /// <param name="isSceneChange">씬 전환 스폰 여부</param>
     public Player SpawnPlayer(Vector2 spawnVector)
     {
         Player player = Instantiate(playerPrefab, spawnVector, Quaternion.identity).GetComponent<Player>();
-        player.CurrentHp = remainHp; // 저장된 hp로 설정
 
+        if(remainHp <= 0f)
+        {
+            player.CurrentHp = player.MaxHp; 
+        }
+        else
+        {
+            player.CurrentHp = player.CurrentHp;
+        }
+
+        GameManager.Instance.State = GameState.Play;
         return player;
     }
 }

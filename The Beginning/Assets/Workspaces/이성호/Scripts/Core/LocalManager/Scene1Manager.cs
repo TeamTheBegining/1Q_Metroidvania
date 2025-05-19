@@ -3,18 +3,25 @@ using UnityEngine;
 
 public class Scene1Manager : LocalSceneManager
 {
-    public GameObject playerPrefab;
+    public GameObject playerObj;
     public Transform spawnPosition;
     private bool isFirstGameStart = false;
 
     float duration = 3f;
     float targetRadius = 20f;
 
+    private void OnEnable()
+    {
+        if(!isFirstGameStart)
+        {
+            playerObj = PlayerManager.Instance.SpawnPlayer(spawnPosition.position).gameObject;
+        }
+    }
+
     private void Start()
     {
-        GameObject obj = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
         CameraManager.Instance.SetTarget(CameraType.Scene1Camera, FindFirstObjectByType<Player>().gameObject.transform);
-        LightManager.Instance.SetPlayerShadowTarget(obj);
+        LightManager.Instance.SetPlayerShadowTarget(playerObj);
         LightManager.Instance.SetPlayerLightValue(200f);
     }
 

@@ -37,8 +37,8 @@ public enum CameraType
 
 public enum PlayerSkillType
 {
-    Skill1 = 0,
-    Skill2,
+    DoubleJump = 0,
+    ChargeAttack,
     PlayerSkillTypeCount,
 }
 
