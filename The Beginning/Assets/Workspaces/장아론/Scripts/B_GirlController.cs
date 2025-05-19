@@ -48,7 +48,19 @@ public class B_GirlController : CommonEnemyController
     private Coroutine attack3MoveCoroutine; // 공격 3 이동 코루틴 참조
 
     // B_Girl 고유의 공격 패턴 관리 변수
-    private int nextAttackIndex = 1; // 다음에 실행할 공격 (1: Attack1, 2: Attack2, 3: Attack3)
+    // --- 다음 콤보 상태를 추적하기 위한 enum과 변수들 ---
+    private enum ComboState
+    {
+        None,   // 콤보 비활성 또는 콤보 완료/초기화 상태
+        Jab1,   // 첫 번째 잽(Attack1) 수행 후
+        Jab2,   // 두 번째 잽(Attack1) 수행 후
+    }
+    private ComboState currentComboState = ComboState.None;
+    private float lastAttackAttemptTime = 0f; // 마지막 공격 시도 시간을 추적하여 콤보 초기화 로직에 사용
+
+    [Header("B_Girl Combo Settings")]
+    public float comboResetTime = 1.2f; // 마지막 공격 후 이 시간 동안 다음 콤보 공격이 없으면 콤보를 초기화합니다.
+    public float comboChainDelay = 0.4f; // 콤보 공격 간의 짧은 지연 시간 (예: 잽 -> 잽)
 
     // 슈퍼 아머를 위한 추가 변수
     private SpriteRenderer spriteRenderer; // 스프라이트 렌더러 참조
@@ -120,11 +132,11 @@ public class B_GirlController : CommonEnemyController
             // SetPlayerTarget은 CommonEnemyController에 정의된 protected 메서드로
             // playerTransform을 설정하고 관련 초기화 작업을 수행합니다.
             SetPlayerTarget(playerGameObject.transform);
-            Debug.Log($"A_Attacker: Start()에서 플레이어 '{playerGameObject.name}'를 찾았습니다.", this);
+            Debug.Log($"B_GirlController: Start()에서 플레이어 '{playerGameObject.name}'를 찾았습니다.", this); // B_GirlController로 로그 변경
         }
         else
         {
-            Debug.LogWarning("A_Attacker: Start()에서 'Player' 태그를 가진 게임 오브젝트를 찾을 수 없습니다! 플레이어가 씬에 있는지, 태그가 올바른지 확인하세요.", this);
+            Debug.LogWarning("B_GirlController: Start()에서 'Player' 태그를 가진 게임 오브젝트를 찾을 수 없습니다! 플레이어가 씬에 있는지, 태그가 올바른지 확인하세요.", this); // B_GirlController로 로그 변경
         }
         // =========================================================================
         // SpriteRenderer 컴포넌트 참조 및 원래 색상 저장
@@ -206,9 +218,8 @@ public class B_GirlController : CommonEnemyController
             Debug.LogWarning("Attack 3 Hitbox Object가 인스펙터에 할당되지 않았습니다.", this);
         }
 
-
-        nextAttackTime = Time.time;
-        nextAttackIndex = 1;
+        nextAttackTime = Time.time; // 초기 공격 가능 시간 설정
+        currentComboState = ComboState.None; // 콤보 상태 초기화
     }
 
     // Update는 Base 클래스의 것을 사용합니다.
@@ -290,54 +301,99 @@ public class B_GirlController : CommonEnemyController
     // ===== AI 공격 로직 (Base 클래스의 virtual PerformAttackLogic 오버라이드) =====
     protected override void PerformAttackLogic()
     {
+        // 1. 전역 쿨다운 및 콤보 리셋 시간 체크 (기존 로직 유지)
+        Debug.Log($"[B_Girl] PerformAttackLogic 호출됨. 현재 콤보 상태: {currentComboState}, 다음 공격 가능 시간: {nextAttackTime:F2}, 현재 시간: {Time.time:F2}");
+
         if (Time.time < nextAttackTime)
         {
+            Debug.Log($"[B_Girl] 공격 쿨다운 중. 남은 시간: {nextAttackTime - Time.time:F2}");
             return;
         }
 
-        isPerformingAttackAnimation = true; // 공격 애니메이션 중임을 플래그로 표시
+        // 마지막 공격 시도 후 충분한 시간이 지났다면 콤보 상태를 초기화합니다.
+        if (Time.time - lastAttackAttemptTime > comboResetTime)
+        {
+            Debug.Log($"[B_Girl] 콤보 리셋됨! (시간 초과: {Time.time - lastAttackAttemptTime:F2}s, 리셋 기준: {comboResetTime:F2}s)");
+            currentComboState = ComboState.None;
+        }
 
-        // 순환식 공격 로직 (Attack1 -> Attack2 -> Attack3 -> Attack1 ...)
-        if (nextAttackIndex == 1)
+        // 2. 패턴 3: 회오리 돌진 (중거리에서 접근 및 공격 - 콤보 중이 아닐 때만 발동)
+        // 현재 콤보 중이 아니고 (None 상태) 플레이어가 중거리(공격 범위 밖, 탐지 범위 안)에 있을 때만 회오리 돌진을 고려합니다.
+        if (currentComboState == ComboState.None) // 콤보가 진행 중이 아닐 때만 돌진 고려
         {
-            PlayAttack1Anim();
-            nextAttackIndex = 2;
+            float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+
+            // 플레이어가 공격 범위보다 약간 멀리 있지만, 탐지 범위 안쪽에 있을 때 (중거리)
+            if (distanceToPlayer > attackRange * 1.5f && distanceToPlayer <= detectionRange * 0.8f) // *1.5f와 *0.8f는 예시, 값 조절 가능
+            {
+                if (UnityEngine.Random.Range(0f, 1f) < 0.5f) // 50% 확률로 회오리 돌진 시도
+                {
+                    isPerformingAttackAnimation = true;
+                    PlayAttack3Anim(); // Attack3 애니메이션 재생
+                    nextAttackTime = Time.time + attack3Cooldown; // Attack3 쿨다운 적용
+                                                                  // 회오리 돌진은 독립적인 공격이므로 콤보 상태를 None으로 유지
+                    Debug.Log($"[B_Girl] 패턴 3 (회오리 돌진) 시도! 플레이어 거리: {distanceToPlayer:F2}");
+                    return; // 회오리 돌진이 발동했으니 다른 공격은 시도하지 않고 함수 종료
+                }
+            }
         }
-        else if (nextAttackIndex == 2)
+
+
+        // 3. 근접 공격 패턴 선택 및 실행 (회오리 돌진이 발동하지 않았을 때)
+        isPerformingAttackAnimation = true; // 공격 애니메이션 시작 플래그 설정
+
+        if (currentComboState == ComboState.None) // 새로운 근접 공격 시퀀스를 시작할 때만 패턴 선택
         {
-            PlayAttack2Anim();
-            nextAttackIndex = 3;
+            // 70% 확률로 패턴 1 (잽-잽-라이트 콤보), 30% 확률로 패턴 2 (단일 라이트 강타)
+            if (UnityEngine.Random.Range(0f, 1f) < 0.7f)
+            {
+                // 패턴 1 시작: 잽-잽-라이트 콤보의 첫 번째 잽
+                PlayAttack1Anim();
+                currentComboState = ComboState.Jab1; // 콤보 상태를 Jab1으로 변경
+                nextAttackTime = Time.time + comboChainDelay;
+                Debug.Log($"[B_Girl] 패턴 1 (콤보 시작): 첫 번째 잽 (Attack1) 시도!");
+            }
+            else
+            {
+                // 패턴 2 시작: 단일 라이트 강타
+                PlayAttack2Anim(); // 바로 라이트 펀치 (Attack2) 재생
+                currentComboState = ComboState.None; // 단일 공격이므로 콤보 상태 바로 초기화
+                nextAttackTime = Time.time + attack2Cooldown; // 단일 강타 후 전체 쿨다운 적용
+                Debug.Log($"[B_Girl] 패턴 2 (단일 강타): 라이트 펀치 (Attack2) 시도!");
+            }
         }
-        else // nextAttackIndex == 3
+        else // 기존 콤보가 진행 중일 때 (Jab1 또는 Jab2)
         {
-            PlayAttack3Anim();
-            nextAttackIndex = 1;
+            // currentComboState에 따라 콤보를 이어나갑니다.
+            switch (currentComboState)
+            {
+                case ComboState.Jab1:
+                    PlayAttack1Anim(); // 두 번째 잽
+                    currentComboState = ComboState.Jab2;
+                    nextAttackTime = Time.time + comboChainDelay;
+                    Debug.Log($"[B_Girl] 패턴 1 (콤보 중): 두 번째 잽 (Attack1) 시도!");
+                    break;
+
+                case ComboState.Jab2:
+                    PlayAttack2Anim(); // 라이트 펀치 (콤보 마무리)
+                    currentComboState = ComboState.None; // 콤보 완료 후 초기화
+                    nextAttackTime = Time.time + attack2Cooldown;
+                    Debug.Log($"[B_Girl] 패턴 1 (콤보 완료): 라이트 펀치 (Attack2) 시도!");
+                    break;
+            }
         }
+        lastAttackAttemptTime = Time.time;
     }
 
     // ===== Animation Event Callbacks =====
 
     // CommonEnemyController의 OnAttackAnimationEnd가 public virtual로 변경되었으므로,
     // 여기도 public override로 변경해야 합니다.
-    public override void OnAttackAnimationEnd() // <-- public override로 변경됨
+    public override void OnAttackAnimationEnd()
     {
         base.OnAttackAnimationEnd(); // isPerformingAttackAnimation = false 설정, 공격 후 일시 정지 코루틴 시작
-
-        float cooldownToApply;
-        // 다음에 실행할 공격이 무엇이었는지에 따라 쿨타임 적용
-        if (nextAttackIndex == 2) // 방금 Attack 1이 끝난 경우 (다음 공격은 Attack 2)
-        {
-            cooldownToApply = attack1Cooldown;
-        }
-        else if (nextAttackIndex == 3) // 방금 Attack 2가 끝난 경우 (다음 공격은 Attack 3)
-        {
-            cooldownToApply = attack2Cooldown;
-        }
-        else // 방금 Attack 3이 끝난 경우 (다음 공격은 Attack 1)
-        {
-            cooldownToApply = attack3Cooldown;
-        }
-        nextAttackTime = Time.time + cooldownToApply;
+        // 다음 공격 시간 (nextAttackTime)은 이제 PerformAttackLogic()에서 직접 설정되므로,
+        // 이 부분의 쿨다운 계산 로직은 더 이상 필요하지 않습니다.
     }
 
     // 공격 1 히트박스 활성화 (Animation Event에서 호출)
@@ -459,6 +515,7 @@ public class B_GirlController : CommonEnemyController
         if (direction.x != 0)
         {
             // CommonEnemyController의 Flip 함수를 사용하여 플레이어 방향으로 캐릭터 뒤집기
+            // B_Girl의 Flip 로직은 오버라이드되어 있으므로, 여기서는 단순히 호출하면 됩니다.
             Flip(direction.x < 0);
         }
 
@@ -491,4 +548,35 @@ public class B_GirlController : CommonEnemyController
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); // X축 속도만 0으로, Y축 속도는 유지
         }
     }
+
+    // =========================================================================
+    // **추가된 부분: B_Girl의 Flip 로직 오버라이드**
+    // =========================================================================
+    protected override void Flip(bool faceLeft)
+    {
+        // 'Sprite'라는 이름의 자식 오브젝트를 찾거나, 없으면 현재 오브젝트 자체를 사용합니다.
+        Transform spriteToFlip = transform.Find("Sprite");
+        if (spriteToFlip == null)
+        {
+            spriteToFlip = transform;
+            Debug.LogWarning(gameObject.name + ": 'Sprite' 자식 오브젝트를 찾을 수 없습니다. 메인 오브젝트의 Transform을 사용하여 뒤집기를 시도합니다.", this);
+        }
+
+        float desiredSign;
+        // B_Girl의 경우, localScale.x가 1일 때 왼쪽을 바라본다고 가정합니다.
+        // 따라서, 왼쪽을 바라보려면 localScale.x를 1로, 오른쪽을 바라보려면 -1로 설정합니다.
+        if (faceLeft) // 왼쪽을 바라보고 싶다면
+        {
+            desiredSign = 1f; // B_Girl은 localScale.x가 1일 때 왼쪽을 바라봅니다.
+        }
+        else // 오른쪽을 바라보고 싶다면
+        {
+            desiredSign = -1f; // B_Girl은 localScale.x가 -1일 때 오른쪽을 바라봅니다.
+        }
+
+        // 현재 스케일의 절대값을 유지하면서 방향만 바꿉니다.
+        float currentMagnitude = Mathf.Abs(spriteToFlip.localScale.x);
+        spriteToFlip.localScale = new Vector3(desiredSign * currentMagnitude, spriteToFlip.localScale.y, spriteToFlip.localScale.z);
+    }
+    // =========================================================================
 }
