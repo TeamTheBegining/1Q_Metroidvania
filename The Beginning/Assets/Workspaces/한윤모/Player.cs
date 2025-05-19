@@ -226,6 +226,7 @@ public class Player : MonoBehaviour, IDamageable
         //테스트용
         if (input.IsParrying)
         {
+            isParryAble = true;
             TakeDamage(95,gameObject);
             input.IsParrying = false;
         }
@@ -374,12 +375,13 @@ public class Player : MonoBehaviour, IDamageable
                     damage = baseDamage * 2.4f;
                     break;
                 case 4:
-                    RandomBuff();
+                    //RandomBuff(); 일단 막아
                     break;
             }
             preParryCount = curParryCount;
         }
     }
+
 
     private void RandomBuff()
     {
