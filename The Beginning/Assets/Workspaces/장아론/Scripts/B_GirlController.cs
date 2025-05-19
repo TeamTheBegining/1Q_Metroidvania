@@ -427,7 +427,7 @@ public class B_GirlController : CommonEnemyController
     // 공격 3 히트박스 활성화 (Animation Event에서 호출)
     public void EnableAttack3Hitbox()
     {
-        if (IsDead) return;
+       /* if (IsDead) return;
         if (attack3HitboxObject != null && attack3HitboxCollider != null)
         {
             if (attack3EnemyHitbox != null)
@@ -435,17 +435,17 @@ public class B_GirlController : CommonEnemyController
                 attack3EnemyHitbox.attackDamage = attack3Value;
             }
             attack3HitboxCollider.enabled = true;
-        }
+        }*/
     }
 
     // 공격 3 히트박스 비활성화 (Animation Event에서 호출)
     public void DisableAttack3Hitbox()
     {
-        if (IsDead) return;
+        /*if (IsDead) return;
         if (attack3HitboxCollider != null)
         {
             attack3HitboxCollider.enabled = false;
-        }
+        }*/
     }
 
     // ===== B_Attack3 돌진 관련 함수 =====

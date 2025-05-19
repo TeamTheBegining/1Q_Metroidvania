@@ -279,48 +279,56 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
         {
             float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
-            // A) 패턴 1: 회오리 돌진 (Attack3) - 이제 근거리에서도 발동 가능
-            // 플레이어에게 상당히 가까이 붙었을 때 (기존 공격 범위 안팎에서) 또는 중거리에서 50% 확률로 발동
-            if ((distanceToPlayer <= attackRange * 1.2f && distanceToPlayer > 0.5f) || // 근거리 조건 추가: 공격 범위 근처 (너무 겹치는 경우 방지)
-                (distanceToPlayer > attackRange * 1.5f && distanceToPlayer <= detectionRange * 0.8f)) // 기존 중거리 조건 유지
+            // A) 패턴 1: 회오리 돌진 (Attack3) - 이제 플레이어와 일정 거리가 멀어졌을 때만 발동 (원거리/추격 공격)
+            // 플레이어가 일반 공격 범위보다 멀리 떨어져 있지만, 감지 범위 내에 있을 때 (예: attackRange의 2배 ~ detectionRange의 90% 사이)
+            if (distanceToPlayer > attackRange * 2.0f && distanceToPlayer <= detectionRange * 0.9f)
             {
-                if (UnityEngine.Random.Range(0f, 1f) < 0.5f) // 여전히 50% 확률로 시도
+                if (UnityEngine.Random.Range(0f, 1f) < 0.7f) // 70% 확률로 회오리 돌진 시도 (원거리 도주에 대한 강력한 대응)
                 {
                     isPerformingAttackAnimation = true;
-                    PlayAttack3Anim();
+                    PlayAttack3Anim(); // Attack3 애니메이션 재생 (애니메이션 이벤트로 PerformDashAttack() 호출)
                     nextAttackTime = Time.time + attack3Cooldown;
                     lastAttackAttemptTime = Time.time;
-                    Debug.Log($"[B_Girl] (새로운 패턴) 회오리 돌진 (Attack3) 발동!");
+                    Debug.Log($"[B_Girl] (새로운 패턴) 원거리 추격 회오리 돌진 (Attack3) 발동!");
                     return; // 회오리 돌진 발동 시 다른 공격은 시도하지 않음
                 }
             }
 
             // B) 근접 패턴 선택 (회오리 돌진이 발동하지 않았을 경우)
-            float patternRoll = UnityEngine.Random.Range(0f, 1f);
+            // 플레이어가 충분히 가까이 있을 때만 근접 패턴을 고려합니다.
+            if (distanceToPlayer <= attackRange * 2.0f) // 플레이어가 근접 패턴 발동 범위 내에 있을 때
+            {
+                float patternRoll = UnityEngine.Random.Range(0f, 1f);
 
-            if (patternRoll < 0.4f) // 40% 확률로 '빠른 잽 연타' 시작
-            {
-                isPerformingAttackAnimation = true;
-                PlayAttack1Anim();
-                currentComboState = ComboState.QuickJab_Initial; // 새로운 잽 콤보 시작 상태
-                nextAttackTime = Time.time + comboChainDelay;
-                Debug.Log($"[B_Girl] (새로운 패턴) 시작: 빠른 잽 연타 (Attack1)");
+                if (patternRoll < 0.4f) // 40% 확률로 '빠른 잽 연타' 시작
+                {
+                    isPerformingAttackAnimation = true;
+                    PlayAttack1Anim();
+                    currentComboState = ComboState.QuickJab_Initial; // 새로운 잽 콤보 시작 상태
+                    nextAttackTime = Time.time + comboChainDelay;
+                    Debug.Log($"[B_Girl] (새로운 패턴) 시작: 빠른 잽 연타 (Attack1)");
+                }
+                else if (patternRoll < 0.75f) // 35% 확률로 '묵직한 펀치 연타' 시작
+                {
+                    isPerformingAttackAnimation = true;
+                    PlayAttack2Anim(); // 첫 번째 '퉁'
+                    currentComboState = ComboState.HeavyAttack_Initial; // 묵직한 펀치 콤보 시작 상태
+                    nextAttackTime = Time.time + heavyPunchFirstDelay; // 첫 번째 퉁 후 지연
+                    Debug.Log($"[B_Girl] (새로운 패턴) 시작: 묵직한 펀치 연타 (Attack2) - 퉁!");
+                }
+                else // 25% 확률로 '엇박 콤보' 시작
+                {
+                    isPerformingAttackAnimation = true;
+                    PlayAttack1Anim(); // 엇박 콤보의 시작은 잽
+                    currentComboState = ComboState.OffBeat_Initial; // 엇박 콤보 시작 상태
+                    nextAttackTime = Time.time + offBeatFirstDelay; // 첫 번째 엇박 공격 후 지연
+                    Debug.Log($"[B_Girl] (새로운 패턴) 시작: 엇박 콤보 (Attack1)");
+                }
             }
-            else if (patternRoll < 0.75f) // 35% 확률로 '묵직한 펀치 연타' 시작
+            else // 플레이어가 너무 멀어서 근접 패턴을 시작할 수 없을 때 (회오리 돌진도 발동 안 했다면)
             {
-                isPerformingAttackAnimation = true;
-                PlayAttack2Anim(); // 첫 번째 '퉁'
-                currentComboState = ComboState.HeavyAttack_Initial; // 묵직한 펀치 콤보 시작 상태
-                nextAttackTime = Time.time + heavyPunchFirstDelay; // 첫 번째 퉁 후 지연
-                Debug.Log($"[B_Girl] (새로운 패턴) 시작: 묵직한 펀치 연타 (Attack2) - 퉁!");
-            }
-            else // 25% 확률로 '엇박 콤보' 시작
-            {
-                isPerformingAttackAnimation = true;
-                PlayAttack1Anim(); // 엇박 콤보의 시작은 잽
-                currentComboState = ComboState.OffBeat_Initial; // 엇박 콤보 시작 상태
-                nextAttackTime = Time.time + offBeatFirstDelay; // 첫 번째 엇박 공격 후 지연
-                Debug.Log($"[B_Girl] (새로운 패턴) 시작: 엇박 콤보 (Attack1)");
+                // Debug.Log("[B_Girl] 플레이어가 너무 멀어서 패턴을 시작할 수 없음. 이동 중.");
+                // 이 경우, CommonEnemyController의 MoveTowardsPlayer/MovePatrol 로직에 따라 이동만 합니다.
             }
         }
         else // 현재 콤보 진행 중 (ComboState.None이 아님) - 콤보 이어나가기
