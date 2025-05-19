@@ -929,12 +929,15 @@ MonoBehaviour:
   jumpDisableGroundCheckTime: 0.1
   moveDelayTime: 0.2
   grabDelayTime: 0.2
+  ladderDelayTime: 0.2
   attackDelayTime: 0
   slidingDelayTime: 1
   parryDelayTime: 0.8
   spawnDelayTime: 0.1
   parryCountTime: 0.1
   currentState: 0
+  isNearLadder: 0
+  ladderCollision: {fileID: 0}
 --- !u!114 &1936319529697070694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1029,7 +1032,7 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!95 &2226661430775944039

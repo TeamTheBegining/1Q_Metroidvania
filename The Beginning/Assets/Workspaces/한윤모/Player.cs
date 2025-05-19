@@ -110,7 +110,7 @@ public class Player : MonoBehaviour, IDamageable
     bool attack3Able = false;
     bool attack4Able = false;
     bool getAtack4 = false;
-    bool isInteraction = false;
+    //bool isInteraction = false;
 
     //벽타기 체크 변수
     private WallSensor m_wallSensor1;
@@ -313,8 +313,8 @@ public class Player : MonoBehaviour, IDamageable
     private void CheckList()
     {
         //FlipCheck();
+        //InteractionCheck();
         LadderCheck();
-        InteractionCheck();
         WallCheck();
         DeadCheck();
         ParryCountCheck();
@@ -345,13 +345,13 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    private void InteractionCheck()
+    /*private void InteractionCheck()
     {
         if(isInteraction)
         {
             interactable.OnInteraction();
         }
-    }
+    }*/
 
     private void ParryCountCheck()
     {
@@ -959,22 +959,13 @@ public class Player : MonoBehaviour, IDamageable
     #endregion
 
     #region 트리거
-   /* private void OnTriggerStay2D(Collider2D collision)
+   private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ladder") 
-            && ((transform.position.y - collision.transform.position.y > 0) && input.InputVec.y < 0 
-            || (transform.position.y - collision.transform.position.y < 0) && input.InputVec.y > 0) 
-            && !isLadder)
+        if (collision.gameObject.GetComponent<Interactable>() != null && input.IsInteraction)
         {
-            
-            rb.gravityScale = 0f;
-            currentState = PlayerState.Ladder;
-            transform.position = new Vector3(collision.transform.position.x, transform.position.y, transform.position.z);
-            isLadder = true;
-            rb.linearVelocity = Vector2.zero; // 속도 제거
-            gameObject.layer = LayerMask.NameToLayer("Ladder");
+            interactable = collision.gameObject.GetComponent<Interactable>();
         }
-    }*/
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -983,17 +974,11 @@ public class Player : MonoBehaviour, IDamageable
             isNearLadder = true;
             ladderCollision = collision;
         }
-
-        if (collision.gameObject.GetComponent<Interactable>() != null)
-        {
-            isInteraction = true;
-            interactable = collision.gameObject.GetComponent<Interactable>();
-        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ladder"))//&&isLadder)
+        if (collision.CompareTag("Ladder")&&isLadder)
         {
             rb.gravityScale = 1;
             if(CheckIsGround())
@@ -1006,12 +991,6 @@ public class Player : MonoBehaviour, IDamageable
             isNearLadder = false;
             ladderCollision = null;
             gameObject.layer = LayerMask.NameToLayer("Player");
-        }
-
-        if(collision.gameObject.GetComponent<Interactable>() != null)
-        {
-            isInteraction = false;
-            interactable = null;
         }
     }
     #endregion
