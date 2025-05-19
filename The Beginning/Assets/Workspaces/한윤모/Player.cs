@@ -51,6 +51,7 @@ public class Player : MonoBehaviour, IDamageable
     float parryDelayTimer = 0f;
     float slidingTimer = 0f;
     float slidingDelayTimer = 0f;
+    float attackDelayTimer = 0f;
     float moveDelayTimer = 0f;
     float grabDelayTimer = 0f;
     float ladderDelayTimer = 0f;
@@ -64,6 +65,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float moveDelayTime = 0.2f;
     [SerializeField] float grabDelayTime = 0.2f;
     [SerializeField] float ladderDelayTime = 0.2f;
+    [SerializeField] float attackDelayTime = 0f;
     [SerializeField] float slidingDelayTime = 1f;
     [SerializeField] float parryDelayTime = 0.8f;
     [SerializeField] float spawnDelayTime = 0.1f;
@@ -221,13 +223,13 @@ public class Player : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
-        //테스트용
+        /*//테스트용
         if (input.IsParrying&&input.InputVec.y<0)
         {
             isParryAble = true;
             TakeDamage(95,gameObject);
             input.IsParrying = false;
-        }
+        }*/
         CheckList();
         switch (currentState)
         {
@@ -424,6 +426,15 @@ public class Player : MonoBehaviour, IDamageable
         {
             isLadderDelay = false;
             ladderDelayTimer = 0;
+        }
+
+        if (isAttack)
+            attackDelayTimer += Time.deltaTime;
+
+        if (attackDelayTimer > attackDelayTime)
+        {
+            isAttack = false;
+            attackDelayTimer = 0;
         }
 
         if (isHealing)

@@ -867,6 +867,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ProjectilePlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 1468081738227425407, guid: 1188848c08d4b1547b81e107e93181b8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4568387920035596637, guid: 1188848c08d4b1547b81e107e93181b8, type: 3}
       propertyPath: MoveSpeed
       value: 0
@@ -1242,7 +1246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7615141092581372037, guid: bb346fcb8c8c0234ea50af6c6b2d0259, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
