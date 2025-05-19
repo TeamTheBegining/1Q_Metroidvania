@@ -113,7 +113,7 @@ public class GameManager : Singleton<GameManager>
     private void OnPlay()
     {
         globalCanvas.worldCamera = Camera.main;
-        FindFirstObjectByType<PlayerDeadPanel>().Init();
+        //FindFirstObjectByType<PlayerDeadPanel>().Init();
     }
 
     private void OnPause()

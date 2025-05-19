@@ -115,4 +115,11 @@ public class PlayerManager : Singleton<PlayerManager>
         GameManager.Instance.State = GameState.Play;
         return player;
     }
+
+    public void StatUp(SkillUnlockItemSO data)
+    {
+        Player player = FindFirstObjectByType<Player>();
+
+        // 플레이어 스탯업 함수 사용
+    }
 }
