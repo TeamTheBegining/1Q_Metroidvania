@@ -4,7 +4,7 @@ public class Scene3Item1 : MonoBehaviour, Interactable
 {
     public void OnInteraction()
     {
-        PlayerManager.Instance.UnlockPlayerSkill(PlayerSkillType.Skill1);
+        PlayerManager.Instance.UnlockPlayerSkill(PlayerSkillType.DoubleJump);
         Destroy(this.gameObject);
     }
 }
