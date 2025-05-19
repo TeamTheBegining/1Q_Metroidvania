@@ -177,12 +177,21 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   detectionRange: 3
   attackRange: 1.2
-  moveSpeed: 2
+  moveSpeed: 6
   attackStopBuffer: 0.1
   enablePatrol: 0
-  patrolLeftLimit: {x: 0, y: 0, z: 0}
-  patrolRightLimit: {x: 0, y: 0, z: 0}
+  patrolLeftLimit: {x: 0.3, y: 0, z: 0}
+  patrolRightLimit: {x: 0.3, y: 0, z: 0}
   postAttackWaitDuration: 0.5
+  currentComboState: 0
+  comboChainDelay: 0.3
+  comboResetTime: 2.5
+  attack2Cooldown: 1
+  attack3Cooldown: 2
+  heavyPunchFirstDelay: 0.6
+  heavyPunchSecondDelay: 0.8
+  offBeatFirstDelay: 0.7
+  offBeatSecondDelay: 0.3
   attackAHitboxObject: {fileID: 2182750305260988826}
   attackAValue: 0.5
   attackACooldown: 3
