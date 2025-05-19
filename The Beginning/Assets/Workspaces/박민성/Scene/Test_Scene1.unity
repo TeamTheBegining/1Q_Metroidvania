@@ -469,17 +469,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!114 &1175138569 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1687315845236695876, guid: 7201619a966d2434d90441edc2e31034, type: 3}
-  m_PrefabInstance: {fileID: 794361531521402041}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1829789714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c60a9390738cc349813d7e3dc9b2469, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1306397056
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1195,8 +1184,6 @@ GameObject:
   - component: {fileID: 1916627794}
   - component: {fileID: 1916627793}
   - component: {fileID: 1916627792}
-  - component: {fileID: 1916627791}
-  - component: {fileID: 1916627796}
   m_Layer: 5
   m_Name: Inventory UI
   m_TagString: Untagged
@@ -1204,19 +1191,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1916627791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916627790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 740b997a38c9e3b49a14adf7e0dfdcd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryManager: {fileID: 1175138569}
 --- !u!114 &1916627792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1300,21 +1274,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1916627796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916627790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d33b8e4df688f844db0e0601650bee87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SkillPopup: {fileID: 497432659}
-  EquipPopup: {fileID: 1134249159}
-  SpecialPopup: {fileID: 1330620528}
 --- !u!1001 &2072415408
 PrefabInstance:
   m_ObjectHideFlags: 0
