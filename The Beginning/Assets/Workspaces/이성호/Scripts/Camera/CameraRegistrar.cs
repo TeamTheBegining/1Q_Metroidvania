@@ -6,9 +6,9 @@ public class CameraRegistrar : MonoBehaviour
 {
     public CameraType type;
 
-    void Awake()
+    private void Start()
     {
-        CameraManager.Instance.Register(type, GetComponent<CinemachineCamera>());
+        CameraManager.Instance.Register(type, GetComponent<CinemachineCamera>()); 
         //SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
     }
 

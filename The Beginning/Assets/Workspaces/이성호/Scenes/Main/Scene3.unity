@@ -2748,7 +2748,7 @@ GameObject:
   - component: {fileID: 1875311087}
   - component: {fileID: 1875311086}
   - component: {fileID: 1875311088}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Ladder
   m_TagString: Ladder
   m_Icon: {fileID: 0}
@@ -2897,7 +2897,7 @@ Transform:
   m_GameObject: {fileID: 1896018468}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.47, y: 10.14, z: 0}
+  m_LocalPosition: {x: 20.038, y: 10.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

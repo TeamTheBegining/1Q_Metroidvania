@@ -1,49 +1,68 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 /// <summary>
-/// ÀûÀÇ »óÅÂ¸¦ ¸Å´ÏÀú¿¡ µ¿±âÈ­ ÇÏ±â À§ÇÑ µ¶¸³ ÄÄÆ÷³ÍÆ®
+/// ì ì˜ ìƒíƒœë¥¼ ë§¤ë‹ˆì €ì— ë™ê¸°í™” í•˜ê¸° ìœ„í•œ ë…ë¦½ ì»´í¬ë„ŒíŠ¸
 /// </summary>
 /// <remarks>
-/// ´Ü¼øÈ÷ °íÀ¯ ID ºÎÂø°ú ¸Å´ÏÀú¿Í »óÅÂ µ¿±âÈ­¸¦ ¸ñÀûÀ¸·Î ÇÑ Å¬·¡½º
+/// ë‹¨ìˆœíˆ ê³ ìœ  ID ë¶€ì°©ê³¼ ë§¤ë‹ˆì €ì™€ ìƒíƒœ ë™ê¸°í™”ë¥¼ ëª©ì ìœ¼ë¡œ í•œ í´ë˜ìŠ¤
 /// </remarks>
 public class EnemyStatusBridge : MonoBehaviour
 {
-    [Tooltip("»óÅÂ È®ÀÎÇÒ ÀûÀÇ °íÀ¯ ¾ÆÀÌµğ °ªÀ» Á¤ÀÇ")]
+    [Tooltip("ìƒíƒœ í™•ì¸í•  ì ì˜ ê³ ìœ  ì•„ì´ë”” ê°’ì„ ì •ì˜")]
     public string enemyID;
 
     private void Awake()
     {
+
+    }
+
+    private void Start()
+    {
         if (string.IsNullOrEmpty(enemyID))
         {
-            Debug.LogError($"[EnemyStatusBridge] Àû ID°¡ ºñ¾îÀÖ½À´Ï´Ù! GameObject: {gameObject.name}");
+            Debug.LogError($"[EnemyStatusBridge] ì  IDê°€ ë¹„ì–´ìˆìŠµë‹ˆë‹¤! GameObject: {gameObject.name}");
         }
         else
         {
             EnemyStateManager.Instance.RegisterEnemy(enemyID);
         }
-    }
 
-    private void Start()
-    {
+        Debug.Log($"{EnemyStateManager.Instance.IsEnemyDead(enemyID)}");
+
         if (EnemyStateManager.Instance.IsEnemyDead(enemyID))
         {
-            gameObject.SetActive(false); // ÀÌ¹Ì Á×Àº ÀûÀº ºñÈ°¼ºÈ­
+            gameObject.SetActive(false); // ì´ë¯¸ ì£½ì€ ì ì€ ë¹„í™œì„±í™”
             Debug.Log("deactive");
+            return;
+        }
+
+        // ì‚¬ë§ì´ ì•„ë‹ˆë©´ í”Œë ˆì´ì–´ ì°¾ê¸°
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+    }
+
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        Player player = FindFirstObjectByType<Player>();
+        if (player != null)
+        {
+            GetComponent<CommonEnemyController>()?.SetPlayerTarget(player.transform);
+            Debug.Log($"{enemyID} found player");
         }
     }
 
     /// <summary>
-    /// ÀûÀÌ »ç¸ÁÇÒ ¶§ EnemyStateManager¿¡ »óÅÂ¸¦ ¾Ë¸®´Â ÇÔ¼ö.
-    /// (Àû »ç¸Á Ã³¸® ÇÔ¼ö ³»¿¡¼­ È£ÃâÇÒ °Í)
+    /// ì ì´ ì‚¬ë§í•  ë•Œ EnemyStateManagerì— ìƒíƒœë¥¼ ì•Œë¦¬ëŠ” í•¨ìˆ˜.
+    /// (ì  ì‚¬ë§ ì²˜ë¦¬ í•¨ìˆ˜ ë‚´ì—ì„œ í˜¸ì¶œí•  ê²ƒ)
     /// </summary>
     /// <remarks>
-    /// ÀÌ ÇÔ¼ö È£Ãâ·Î ¾À ·Îµå ÈÄ¿¡µµ Àû »ç¸Á »óÅÂ°¡ À¯ÁöµË´Ï´Ù.
-    /// 2025.05.18 - ÀÛ¼ºÀÚ : ÀÌ¼ºÈ£
+    /// ì´ í•¨ìˆ˜ í˜¸ì¶œë¡œ ì”¬ ë¡œë“œ í›„ì—ë„ ì  ì‚¬ë§ ìƒíƒœê°€ ìœ ì§€ë©ë‹ˆë‹¤.
+    /// 2025.05.18 - ì‘ì„±ì : ì´ì„±í˜¸
     /// </remarks>
     public void MarkAsDead()
     {
-        // ¾À ·Îµå ÈÄ¿¡µµ Àû »ç¸Á À¯Áö¸¦ À§ÇÑ »óÅÂ ¼³Á¤
+        // ì”¬ ë¡œë“œ í›„ì—ë„ ì  ì‚¬ë§ ìœ ì§€ë¥¼ ìœ„í•œ ìƒíƒœ ì„¤ì •
 
         EnemyStateManager.Instance.SetEnemyDead(enemyID);
     }
