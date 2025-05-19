@@ -113,7 +113,7 @@ public class GameManager : Singleton<GameManager>
     private void OnPlay()
     {
         globalCanvas.worldCamera = Camera.main;
-        FindObjectsByType<PlayerDeadPanel>(FindObjectsInactive.Include).Init();
+        //FindObjectsByType<PlayerDeadPanel>(FindObjectsInactive.Include).Init();
     }
 
     private void OnPause()
