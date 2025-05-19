@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using TMPro;
 using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
@@ -7,46 +7,46 @@ using UnityEngine.Windows;
 using static PlayerAnimation;
 using static Unity.Burst.Intrinsics.X86.Sse4_2;
 
-//ÇØ´ç ½ºÅ©¸³Æ®°¡ ¾ø´Ù¸é Ãß°¡
+//í•´ë‹¹ ìŠ¤í¬ë¦½íŠ¸ê°€ ì—†ë‹¤ë©´ ì¶”ê°€
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerAnimation))]
 
 public class Player : MonoBehaviour, IDamageable
 {
-    [Header("½ºÇÇµå Á¶Àı")]
-    [Tooltip("ÇÃ·¹ÀÌ¾î ÀÌµ¿ ¼Óµµ")]
+    [Header("ìŠ¤í”¼ë“œ ì¡°ì ˆ")]
+    [Tooltip("í”Œë ˆì´ì–´ ì´ë™ ì†ë„")]
     [SerializeField] float moveSpeed = 4f;
     [SerializeField] float baseMoveSpeed = 4f;
-    [Tooltip("ÇÃ·¹ÀÌ¾î »ç´Ù¸® ÀÌµ¿ ¼Óµµ")]
+    [Tooltip("í”Œë ˆì´ì–´ ì‚¬ë‹¤ë¦¬ ì´ë™ ì†ë„")]
     [SerializeField] float lmoveSpeed = 2f;
-    [Tooltip("ÇÃ·¹ÀÌ¾î Á¡ÇÁÁß ÀÌµ¿ ¼Óµµ")]
+    [Tooltip("í”Œë ˆì´ì–´ ì í”„ì¤‘ ì´ë™ ì†ë„")]
     [SerializeField] float jumpMoveSpeed = 0.7f;
-    [Tooltip("ÇÃ·¹ÀÌ¾î ½½¶óÀÌµù ÀÌµ¿ ¼Óµµ")]
+    [Tooltip("í”Œë ˆì´ì–´ ìŠ¬ë¼ì´ë”© ì´ë™ ì†ë„")]
     [SerializeField] float slideSpeed = 5f;
-    [Tooltip("ÇÃ·¹ÀÌ¾î °ø°İÁß ÀÌµ¿ ¼Óµµ")]
+    [Tooltip("í”Œë ˆì´ì–´ ê³µê²©ì¤‘ ì´ë™ ì†ë„")]
     [SerializeField] float attackMoveSpeed = 0.5f;
     [Space(2)]
-    [Header("AddForce ÆÄ¿ö Á¶Àı")]
+    [Header("AddForce íŒŒì›Œ ì¡°ì ˆ")]
     [SerializeField] float jumpPower = 5f;
     [SerializeField] float baseJumpPower = 5f;
-    [Tooltip("»ç´Ù¸®¿¡¼­ Á¡ÇÁÇÏ´Â Èû")]
+    [Tooltip("ì‚¬ë‹¤ë¦¬ì—ì„œ ì í”„í•˜ëŠ” í˜")]
     [SerializeField] float ljumpPower = 4f;
-    [Tooltip("º®Å¸±â Áß Á¡ÇÁÇÏ´Â Èû")]
+    [Tooltip("ë²½íƒ€ê¸° ì¤‘ ì í”„í•˜ëŠ” í˜")]
     [SerializeField] float cjumpPower = 4f;
-    [Tooltip("ÇÇ°İ½Ã ³¯¾Æ°¡´Â Èû")]
+    [Tooltip("í”¼ê²©ì‹œ ë‚ ì•„ê°€ëŠ” í˜")]
     [SerializeField] float flyPower = 3f;
     [Space(2)]
-    [Header("HP,MP ¼öÄ¡ Á¶Á¤")]
+    [Header("HP,MP ìˆ˜ì¹˜ ì¡°ì •")]
     [SerializeField] float maxHp = 10f;
     [SerializeField] float maxMp = 25f;
     [SerializeField] float currentHp = 10f;
     [SerializeField] float currentMp = 0f;
     [Space(2)]
-    [Header("ÇÃ·¹ÀÌ¾î °ø°İ·Â")]
+    [Header("í”Œë ˆì´ì–´ ê³µê²©ë ¥")]
     [SerializeField] float baseDamage = 2f;
     [SerializeField] float damage = 2f;
 
-    float groundCheckRadius = 0.21f;//¹Ù´Ú Ã¼Å© °Å¸®
+    float groundCheckRadius = 0.21f;//ë°”ë‹¥ ì²´í¬ ê±°ë¦¬
     float jumpTimer = 0f;
     float parryDelayTimer = 0f;
     float slidingTimer = 0f;
@@ -59,8 +59,8 @@ public class Player : MonoBehaviour, IDamageable
     float healingTimer = 0;
 
     [Space(2)]
-    [Header("µô·¹ÀÌ ½Ã°£")]
-    [Tooltip("Á¡ÇÁ ÈÄ ½Ã°£¸¸Å­ ¶¥ Ã¼Å© ¹«½Ã")]
+    [Header("ë”œë ˆì´ ì‹œê°„")]
+    [Tooltip("ì í”„ í›„ ì‹œê°„ë§Œí¼ ë•… ì²´í¬ ë¬´ì‹œ")]
     [SerializeField] float jumpDisableGroundCheckTime = 0.1f;
     [SerializeField] float moveDelayTime = 0.2f;
     [SerializeField] float grabDelayTime = 0.2f;
@@ -72,12 +72,12 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float parryCountTime = 0.3f;
 
     [Space(2)]
-    [Header("ÇöÀç »óÅÂ - ¾Ö´Ï¸ŞÀÌ¼Ç ºñ±³ È®ÀÎ")]
+    [Header("í˜„ì¬ ìƒíƒœ - ì• ë‹ˆë©”ì´ì…˜ ë¹„êµ í™•ì¸")]
     [SerializeField] private PlayerState currentState;
 
-    int sidx = 0;//½½¶óÀÌµù ÀÎµ¦½º
-    int curParryCount;//ÆĞ¸µ Ä«¿îÆ®
-    int preParryCount;//ÆĞ¸µ Ä«¿îÆ®
+    int sidx = 0;//ìŠ¬ë¼ì´ë”© ì¸ë±ìŠ¤
+    int curParryCount;//íŒ¨ë§ ì¹´ìš´íŠ¸
+    int preParryCount;//íŒ¨ë§ ì¹´ìš´íŠ¸
     int healingCount = 0;
     float climbDir = 0f;
     private PlayerInput input;
@@ -112,7 +112,7 @@ public class Player : MonoBehaviour, IDamageable
     bool getAtack4 = false;
     //bool isInteraction = false;
 
-    //º®Å¸±â Ã¼Å© º¯¼ö
+    //ë²½íƒ€ê¸° ì²´í¬ ë³€ìˆ˜
     private WallSensor m_wallSensor1;
     private WallSensor m_wallSensor2;
     private GrabSensor m_grabSensor;
@@ -146,11 +146,11 @@ public class Player : MonoBehaviour, IDamageable
         Skill1,
         Skill2,
         Skill3,
-        Parrying,               //ÆĞ¸µ - ÆĞ¸µÁß
-        ParrySuccess,           //ÆĞ¸µ - ¼º°ø ¾Ö´Ï¸ŞÀÌ¼Ç + Àû °æÁ÷
-        ParryCounterAttack,     //ÆĞ¸µ - ¹İ°İ
-        ParryReflect,           //ÆĞ¸µ - ¹İ»ç
-        ParryKnockback,         //ÆĞ¸µ - ¹Ğ¸²
+        Parrying,               //íŒ¨ë§ - íŒ¨ë§ì¤‘
+        ParrySuccess,           //íŒ¨ë§ - ì„±ê³µ ì• ë‹ˆë©”ì´ì…˜ + ì  ê²½ì§
+        ParryCounterAttack,     //íŒ¨ë§ - ë°˜ê²©
+        ParryReflect,           //íŒ¨ë§ - ë°˜ì‚¬
+        ParryKnockback,         //íŒ¨ë§ - ë°€ë¦¼
         Ladder,
         Sliding,
         Climbing,
@@ -162,7 +162,7 @@ public class Player : MonoBehaviour, IDamageable
         Crouch
     }
 
-    PlayerDirectionState curDir = PlayerDirectionState.Right;//ÇöÀç ¹æÇâ
+    PlayerDirectionState curDir = PlayerDirectionState.Right;//í˜„ì¬ ë°©í–¥
     private bool isDead;
     [SerializeField] private bool isNearLadder = false;
     [SerializeField] private Collider2D ladderCollision;
@@ -223,7 +223,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
-        //Å×½ºÆ®¿ë
+        //í…ŒìŠ¤íŠ¸ìš©
         if (input.IsParrying)
         {
             TakeDamage(95,gameObject);
@@ -333,7 +333,7 @@ public class Player : MonoBehaviour, IDamageable
             float yDiff = transform.position.y - ladderCollision.transform.position.y;
             if (isGround&&(Mathf.Sign(yDiff) != Mathf.Sign(input.InputVec.y) && Mathf.Abs(yDiff) > 0.1f)||!isGround)
             {
-                // »ç´Ù¸® Å¸±â ½ÃÀÛ
+                // ì‚¬ë‹¤ë¦¬ íƒ€ê¸° ì‹œì‘
                 rb.gravityScale = 0f;
                 currentState = PlayerState.Ladder;
                 transform.position = new Vector3(ladderCollision.transform.position.x, transform.position.y, transform.position.z);
@@ -383,23 +383,23 @@ public class Player : MonoBehaviour, IDamageable
 
     private void RandomBuff()
     {
-        //ÆĞ¸µ Ä«¿îÆ®¿¡¼­ °¡ÁßÄ¡°¡ »ı±ä´Ù¸é ¼öÁ¤ÇØ¾ßÇÔ
+        //íŒ¨ë§ ì¹´ìš´íŠ¸ì—ì„œ ê°€ì¤‘ì¹˜ê°€ ìƒê¸´ë‹¤ë©´ ìˆ˜ì •í•´ì•¼í•¨
         switch(UnityEngine.Random.Range(0, 4))
         {
             case 0:
                 isHealing = true;
-                print("0 ¹ßµ¿");
+                print("0 ë°œë™");
                 break;
             case 1:
-                jumpPower = baseJumpPower * 1.5f;//¼öÁ¤ ÇÊ¿ä
-                print("1 ¹ßµ¿");
+                jumpPower = baseJumpPower * 1.5f;//ìˆ˜ì • í•„ìš”
+                print("1 ë°œë™");
                 break;
             case 2:
                 moveSpeed = baseMoveSpeed * 1.2f;
-                print("2 ¹ßµ¿");
+                print("2 ë°œë™");
                 break;
             case 3:
-                print("3 ¹ßµ¿");
+                print("3 ë°œë™");
                 break;
             default:
                 break;
@@ -506,7 +506,7 @@ public class Player : MonoBehaviour, IDamageable
         {
 
             parryCounterTimer += Time.deltaTime;
-            //ÃßÈÄ ¹æÇâ ¹× °Å¸® Ãß°¡ÇØ¾ßÇÔ
+            //ì¶”í›„ ë°©í–¥ ë° ê±°ë¦¬ ì¶”ê°€í•´ì•¼í•¨
             if (parryCounterTimer < parryCountTime)
             {
                 if (input.IsAttack)
@@ -540,7 +540,7 @@ public class Player : MonoBehaviour, IDamageable
        // return Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
         bool onGround = Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundLayer);
 
-        // Á¡ÇÁÇÏ°Å³ª ³«ÇÏ ÁßÀÏ ¶§´Â ÂøÁö·Î Ã³¸®ÇÏÁö ¾ÊÀ½
+        // ì í”„í•˜ê±°ë‚˜ ë‚™í•˜ ì¤‘ì¼ ë•ŒëŠ” ì°©ì§€ë¡œ ì²˜ë¦¬í•˜ì§€ ì•ŠìŒ
         if (onGround && rb.linearVelocity.y <= 0.1f)
         {
             return true;
@@ -550,17 +550,17 @@ public class Player : MonoBehaviour, IDamageable
 
 
 
-    #region Update ¸ğÀ½
+    #region Update ëª¨ìŒ
     private void PlayerIdleUpdate()
     {
-        //È¤½Ã ¸ğ¸¦ ÃÊ±âÈ­
+        //í˜¹ì‹œ ëª¨ë¥¼ ì´ˆê¸°í™”
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         if (input.InputVec.x != 0)
             currentState = PlayerState.Move;
         JumpAble();
         AttackAble();
         ParryAble();
-        £ÃrouchAble(); 
+        ï¼£rouchAble(); 
         SlidingAble();
     }
 
@@ -572,13 +572,13 @@ public class Player : MonoBehaviour, IDamageable
         JumpAble();
         ParryAble();
         AttackAble();
-        £ÃrouchAble();
+        ï¼£rouchAble();
         SlidingAble();
     }
 
     private void PlayerLadderUpdate()
     {
-        // »ç´Ù¸® ÀÌµ¿
+        // ì‚¬ë‹¤ë¦¬ ì´ë™
         if (input.InputVec.y > 0)
         {
             transform.position += Vector3.up * lmoveSpeed * Time.deltaTime;
@@ -595,7 +595,7 @@ public class Player : MonoBehaviour, IDamageable
         }
 
         if (isLadderDelay) return;
-        // »ç´Ù¸® Á¡ÇÁ
+        // ì‚¬ë‹¤ë¦¬ ì í”„
         if (input.IsJump && !(input.InputVec.y < 0))
         {
             isLadderDelay = true;
@@ -710,7 +710,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void PlayerClimbingUpdate()
     {
-        //½½¶óÀÌµùÅ°¿Í µ¿ÀÏ
+        //ìŠ¬ë¼ì´ë”©í‚¤ì™€ ë™ì¼
         if (input.IsSliding)
         {
             rb.linearVelocity = Vector2.zero;
@@ -746,7 +746,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void ParrySuccessUpdate()
     {
-        //ÆĞ¸µ ¼º°ø½Ã ÇÒ Çàµ¿ Ãß°¡
+        //íŒ¨ë§ ì„±ê³µì‹œ í•  í–‰ë™ ì¶”ê°€
     }
     private void PlayerGrabUpdate()
     {
@@ -768,7 +768,7 @@ public class Player : MonoBehaviour, IDamageable
 
     #endregion
 
-    #region ¿òÁ÷ÀÓ °¡´É ÇÔ¼ö
+    #region ì›€ì§ì„ ê°€ëŠ¥ í•¨ìˆ˜
     void MoveAble(float currentMoveSpeed = 1f)
     {
         if (isMoveDelay) return;
@@ -803,9 +803,9 @@ public class Player : MonoBehaviour, IDamageable
         {
             currentState = PlayerState.Parrying;
             rb.linearVelocity = Vector2.zero;
-            input.IsParrying = false;   // ÆĞ¸µ ÀÔ·Â Á¾·á
-            isParrying = true;          // ÆĞ¸µÁß È®ÀÎ
-            isParryAble = true;         // ÆĞ¸µ Àû¿ë È®ÀÎ º¯¼ö
+            input.IsParrying = false;   // íŒ¨ë§ ì…ë ¥ ì¢…ë£Œ
+            isParrying = true;          // íŒ¨ë§ì¤‘ í™•ì¸
+            isParryAble = true;         // íŒ¨ë§ ì ìš© í™•ì¸ ë³€ìˆ˜
         }
     }
     void JumpAble()
@@ -817,7 +817,7 @@ public class Player : MonoBehaviour, IDamageable
             input.IsJump = false;
         }
     }
-    void £ÃrouchAble()
+    void ï¼£rouchAble()
     {
         if (input.InputVec.y<0 && isGround)
         {
@@ -829,7 +829,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         if (input.IsSliding&& isGround && !isSliding)
         {
-            rb.linearVelocity = Vector2.zero;//½½¶óÀÌµù Velocity Àû¿ëÀ» À§ÇÑ ÃÊ±âÈ­
+            rb.linearVelocity = Vector2.zero;//ìŠ¬ë¼ì´ë”© Velocity ì ìš©ì„ ìœ„í•œ ì´ˆê¸°í™”
             currentState = PlayerState.Sliding;
             Input.IsSliding = false;
             isSliding = true;
@@ -844,10 +844,10 @@ public class Player : MonoBehaviour, IDamageable
     }
     void ClimbingAble()
     {
-        if (input.InputVec.x!=0 && isWallClimbable )//&& currentState == PlayerState.Jump)//°¨Áö µÇ¾úÀ»¶§
+        if (input.InputVec.x!=0 && isWallClimbable )//&& currentState == PlayerState.Jump)//ê°ì§€ ë˜ì—ˆì„ë•Œ
         {
             currentState = PlayerState.Climbing;
-            rb.linearVelocity = Vector2.zero;//ÃÊ±âÈ­
+            rb.linearVelocity = Vector2.zero;//ì´ˆê¸°í™”
             rb.gravityScale = 0.1f;
         }
     }
@@ -872,7 +872,7 @@ public class Player : MonoBehaviour, IDamageable
 
     #endregion
 
-    #region ÀÌº¥Æ® ÇÔ¼ö
+    #region ì´ë²¤íŠ¸ í•¨ìˆ˜
     private void LandingFinish()
     {
         if(currentState == PlayerState.Landing) 
@@ -936,7 +936,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Attack4Check()
     {
-        //±âº» °ø°Ü 4 ¾ò´Â °æ¿ì »ç¿ë °¡´É
+        //ê¸°ë³¸ ê³µê²¨ 4 ì–»ëŠ” ê²½ìš° ì‚¬ìš© ê°€ëŠ¥
         if(getAtack4)
             attack4Able = true;
     }
@@ -958,8 +958,8 @@ public class Player : MonoBehaviour, IDamageable
 
     #endregion
 
-    #region Æ®¸®°Å
-   private void OnTriggerStay2D(Collider2D collision)
+    #region Æ®ï¿½ï¿½ï¿½ï¿½
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<Interactable>() != null && input.IsInteraction)
         {
@@ -1017,8 +1017,8 @@ public class Player : MonoBehaviour, IDamageable
             currentState = PlayerState.Hit;
             curParryCount = 0;
             isHit = true;
-            gameObject.layer = LayerMask.NameToLayer("Invincibility");//ÇÇ°İ Áß ¹«Àû ·¹ÀÌ¾î
-            rb.linearVelocity = Vector2.zero;//ÃÊ±âÈ­ ÈÄ ÁøÇà
+            gameObject.layer = LayerMask.NameToLayer("Invincibility");//í”¼ê²© ì¤‘ ë¬´ì  ë ˆì´ì–´
+            rb.linearVelocity = Vector2.zero;//ì´ˆê¸°í™” í›„ ì§„í–‰
             rb.gravityScale = 1;
 
             float direction;
@@ -1034,7 +1034,7 @@ public class Player : MonoBehaviour, IDamageable
             }
 
             rb.AddForce(new Vector2(0.5f * direction, 1) * flyPower, ForceMode2D.Impulse);
-            //ÇÏÀ§ Äİ¶óÀÌ´õ ÀüºÎ ÃÊ±âÈ­
+            //í•˜ìœ„ ì½œë¼ì´ë” ì „ë¶€ ì´ˆê¸°í™”
             foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
             {
                 if (col.gameObject.layer == LayerMask.NameToLayer("Invincibility")) return;
@@ -1047,7 +1047,7 @@ public class Player : MonoBehaviour, IDamageable
         }
         else
         {
-            curParryCount++;//ÆĞ¸µ ¼º°ø ½Ã Ä«¿îÆ® Áõ°¡
+            curParryCount++;//íŒ¨ë§ ì„±ê³µ ì‹œ ì¹´ìš´íŠ¸ ì¦ê°€
             isParrySuccess = true;
             currentMp += 10;
             currentState = PlayerState.ParrySuccess;
