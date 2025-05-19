@@ -2793,6 +2793,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RespawnPoint
       objectReference: {fileID: 0}
+    - target: {fileID: 6585653404345666538, guid: 0f669d26703bc7341b4269cfa5f351cc, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -605125999041912829, guid: 9f134d4d3c8081345b661a9ac0fb9133, type: 3}
     - target: {fileID: 7227004346915515580, guid: 0f669d26703bc7341b4269cfa5f351cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.69

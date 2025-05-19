@@ -22,7 +22,6 @@ public class RespawnPoint : MonoBehaviour, Interactable
         }
 
         EnemyStateManager.Instance.ResetAllEnemies();
-        Debug.Log("respawnInteraction ------------------------");
 
         StartCoroutine(InteractionProcess());
     }
