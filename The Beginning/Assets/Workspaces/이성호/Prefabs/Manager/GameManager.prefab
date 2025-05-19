@@ -1249,6 +1249,7 @@ MonoBehaviour:
   state: 0
   isDebug: 0
   nextSceneIndex: 0
+  spawnPointName: 
 --- !u!1 &8964365630873834681
 GameObject:
   m_ObjectHideFlags: 0

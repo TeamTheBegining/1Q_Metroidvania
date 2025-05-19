@@ -66,12 +66,13 @@ public class TitlePanel : MonoBehaviour
         {
             timeElapsed += Time.deltaTime;
 
-            titleText.color = new Color(1f, 1f, 1f, 1 - timeElapsed / duration);
-            guideText.color = new Color(1f, 1f, 1f, 1 - timeElapsed / duration);
+            titleText.faceColor = new Color(titleText.faceColor.r, titleText.faceColor.g, titleText.faceColor.b, 1 - timeElapsed / duration); // 글자의 face 색상 조정
+            //titleText.material.SetColor("Color", new Color(titleText.faceColor.r, titleText.faceColor.g, titleText.faceColor.b, 1 - timeElapsed / duration)); // glow 색상 조정
+            guideText.faceColor = new Color(1f, 1f, 1f, 1 - timeElapsed / duration);
+
             yield return null;
         }
 
-        Debug.Log("a");
         CutSceneManager.Instance.ShowCutscene(0);
         CameraManager.Instance.SetCameraBlendingSpeed();
 
