@@ -21,7 +21,7 @@ public class S_AttackerController : CommonEnemyController
     private EnemyHitbox attackSEnemyHitbox; // Assumes EnemyHitbox script exists
 
     [Header("S_Attacker Stats")]
-    // Health and other stats are managed by the Base class (maxHealth, currentHealth)
+    // Health and other stats are managed by the Base class (MaxHp, CurrentHp)
 
     [Header("S_Attacker Combat")]
     public float attackSValue = 0.5f; // S Attack damage
@@ -36,88 +36,86 @@ public class S_AttackerController : CommonEnemyController
 
     private Coroutine stunCoroutine; // To hold reference to the running stun coroutine
 
-    //  ´ë½Ã °ø°Ý Àü¿ë ¼³Á¤ 
+    //  ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
     [Header("S_Attacker Dash Attack")]
-    // ¾Ö´Ï¸ÞÀÌ¼Ç Ä¿ºê: ´ë½Ã °ø°Ý Áß ¼Óµµ º¯È­¸¦ Á¦¾îÇÕ´Ï´Ù.
-    // XÃàÀº Á¤±ÔÈ­µÈ ½Ã°£(0~1), YÃàÀº ¼Óµµ ¹èÀ²(0~1 ÀÌ»ó)ÀÔ´Ï´Ù.
+    // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Ä¿ï¿½ï¿½: ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+    // Xï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ ï¿½Ã°ï¿½(0~1), Yï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½(0~1 ï¿½Ì»ï¿½)ï¿½Ô´Ï´ï¿½.
     public AnimationCurve dashSpeedCurve;
-    public float dashBaseSpeed = 8f; // ´ë½Ã °ø°ÝÀÇ ±âº» ¼Óµµ (Ä¿ºê ¹èÀ²°ú °öÇØÁü)
-    // ½ÇÁ¦ ¾Ö´Ï¸ÞÀÌ¼Ç Å¬¸³ ±æÀÌ¿Í ÀÏÄ¡ÇÏµµ·Ï ÀÎ½ºÆåÅÍ¿¡¼­ ¼³Á¤ÇÏ´Â °ÍÀÌ ÁÁÁö¸¸,
-    // ÄÚ·çÆ¾ ³»ºÎ¿¡¼­ ¾Ö´Ï¸ÞÀÌÅÍ Å¬¸³ ±æÀÌ¸¦ °¡Á®¿Í »ç¿ëÇÒ °ÍÀÔ´Ï´Ù.
-    // public float dashAttackDuration = 0.5f;
+    public float dashBaseSpeed = 8f; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº» ï¿½Óµï¿½ (Ä¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 
-    private Coroutine dashAttackCoroutine; // ½ÇÇà ÁßÀÎ ´ë½Ã ÄÚ·çÆ¾ ÂüÁ¶
+    private Coroutine dashAttackCoroutine; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½
 
-    // ÇÃ·¹ÀÌ¾î Åë°ú¸¦ À§ÇÑ ÀûÀÇ ¸ÞÀÎ ÄÝ¶óÀÌ´õ
-    private Collider2D mainCollider; // Àû º»Ã¼ÀÇ ¸ÞÀÎ ÄÝ¶óÀÌ´õ (¿¹: CapsuleCollider2D)
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½
+    private Collider2D mainCollider; // ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ (ï¿½ï¿½: CapsuleCollider2D)
 
-    // CommonEnemyController¿¡¼­ »ó¼Ó¹ÞÀº attackRange¸¦ S_Attacker¿¡ ¸ÂÃç 1.5·Î ¼³Á¤ÇÕ´Ï´Ù.
-    //  ¿©±â¿¡¼­ public new float attackRange = 1.5f; ÁÙÀ» »èÁ¦Çß½À´Ï´Ù. 
-    // ÀÌÁ¦ CommonEnemyControllerÀÇ attackRange¸¦ »ó¼Ó¹Þ½À´Ï´Ù.
+    // CommonEnemyControllerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ attackRangeï¿½ï¿½ S_Attackerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 1.5ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+    // ï¿½ï¿½ï¿½â¿¡ï¿½ï¿½ public new float attackRange = 1.5f; ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½. 
+    // ï¿½ï¿½ï¿½ï¿½ CommonEnemyControllerï¿½ï¿½ attackRangeï¿½ï¿½ ï¿½ï¿½Ó¹Þ½ï¿½ï¿½Ï´ï¿½.
 
 
-    // TakeDamage ¿À¹ö¶óÀÌµå (Base Å¬·¡½º¿¡¼­ Ã³¸®µÇ¹Ç·Î ÇÊ¿äÇÑ ºÎºÐ¸¸ ³²±è)
+    // TakeDamage ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ (Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½Ç¹Ç·ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ÎºÐ¸ï¿½ ï¿½ï¿½ï¿½ï¿½)
     public override void TakeDamage(float damage, GameObject attackObject)
     {
-        if (isDead) return;
+        if (IsDead) return; // <-- isDead -> IsDead
 
-        // ½ºÅÏ Áß¿¡´Â µ¥¹ÌÁö¸¸ ÀÔ°í ÇÇ°Ý ¾Ö´Ï¸ÞÀÌ¼ÇÀº ½ºÅµ
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ß¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ç°ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½Åµ
         if (isStunned)
         {
-            base.TakeDamage(damage, attackObject); // Base Å¬·¡½º¿¡¼­ Ã¼·Â °¨¼Ò, »ç¸Á Ã³¸®
+            base.TakeDamage(damage, attackObject); // Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
             return;
         }
 
-        base.TakeDamage(damage, attackObject); // Base Å¬·¡½º¿¡¼­ Ã¼·Â °¨¼Ò, »ç¸Á Ã³¸®
+        base.TakeDamage(damage, attackObject); // Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
 
-        if (currentHealth > 0) // ¾ÆÁ÷ »ì¾ÆÀÖÀ¸¸é ÇÇ°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+        if (CurrentHp > 0) // <-- currentHealth -> CurrentHp, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç°ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
         {
             PlayHurtAnim();
         }
     }
 
-    // ½ºÅÏ »óÅÂ Ã³¸®
-    public void Stun() // ¿ÜºÎ¿¡¼­ È£Ãâ °¡´É (¿¹: ÇÃ·¹ÀÌ¾î ÆÐ¸®)
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+    public void Stun() // ï¿½ÜºÎ¿ï¿½ï¿½ï¿½ È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½: ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ð¸ï¿½)
     {
-        if (isDead || isStunned) return;
+        if (IsDead || isStunned) return; // <-- isDead -> IsDead
 
         isStunned = true;
-        PlayStunAnim(); // ½ºÅÏ ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+        PlayStunAnim(); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
 
         if (stunCoroutine != null)
             StopCoroutine(stunCoroutine);
         stunCoroutine = StartCoroutine(ReleaseStunCoroutine(stunDuration));
     }
 
-    // ½ºÅÏ ÇØÁ¦ ÄÚ·çÆ¾
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾
     IEnumerator ReleaseStunCoroutine(float duration)
     {
         yield return new WaitForSeconds(duration);
 
-        if (!isDead)
+        if (!IsDead) // <-- isDead -> IsDead
         {
             isStunned = false;
-            SetState(EnemyState.Chase); // ½ºÅÏ ÇØÁ¦ ÈÄ ÃßÀû »óÅÂ·Î º¹±Í
+            // SetState(EnemyState.Chase); // ï¿½ï¿½ ï¿½Îºï¿½ï¿½ï¿½ CommonEnemyControllerï¿½ï¿½ EnemyStateï¿½ï¿½ ï¿½ï¿½ï¿½ÇµÇ¾ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ CommonEnemyControllerï¿½ï¿½ï¿½ï¿½ EnemyStateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½Ö¼ï¿½ Ã³ï¿½ï¿½
         }
     }
 
-    // Start ¿À¹ö¶óÀÌµå
+    // Start ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½
     protected override void Start()
     {
-        base.Start(); // Base CommonEnemyController Start È£Ãâ
+        base.Start(); // Base CommonEnemyController Start È£ï¿½ï¿½
 
-        // CommonEnemyController¿¡¼­ »ó¼Ó¹ÞÀº attackRange °ªÀ» S_Attacker¿¡ ¸ÂÃç ¼³Á¤ÇÕ´Ï´Ù.
-        // ÀÎ½ºÆåÅÍ¿¡¼­ Á÷Á¢ ¼³Á¤ÇÏ´Â °ÍÀ» ±ÇÀåÇÏÁö¸¸, ÄÚµå·Î °­Á¦ÇÏ·Á¸é ¿©±â¿¡ Ãß°¡ÇÏ¼¼¿ä.
+        // CommonEnemyControllerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ attackRange ï¿½ï¿½ï¿½ï¿½ S_Attackerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+        // ï¿½Î½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Úµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½ß°ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.
         // this.attackRange = 1.5f; 
 
-        // È÷Æ®¹Ú½º ¿ÀºêÁ§Æ® ¹× ÄÄÆ÷³ÍÆ® ÂüÁ¶ ÃÊ±âÈ­
+        // ï¿½ï¿½Æ®ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         if (attackSHitboxObject != null)
         {
             attackSHitboxCollider = attackSHitboxObject.GetComponent<BoxCollider2D>();
             attackSEnemyHitbox = attackSHitboxObject.GetComponent<EnemyHitbox>();
             if (attackSHitboxCollider != null)
             {
-                attackSHitboxCollider.enabled = false; // ½ÃÀÛ ½Ã ÄÝ¶óÀÌ´õ ºñÈ°¼ºÈ­
+                attackSHitboxCollider.enabled = false; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
             }
             else
             {
@@ -133,57 +131,58 @@ public class S_AttackerController : CommonEnemyController
             Debug.LogWarning("Attack S Hitbox Object is not assigned in the Inspector.", this);
         }
 
-        // ÀûÀÇ ¸ÞÀÎ ÄÝ¶óÀÌ´õ ÂüÁ¶ °¡Á®¿À±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         mainCollider = GetComponent<Collider2D>();
         if (mainCollider == null) Debug.LogError("Main Collider2D component not found on S_Attacker!", this);
 
 
-        isStunned = false; // ½ºÅÏ ÇÃ·¡±× ÃÊ±âÈ­
-        nextAttackTime = Time.time; // °ø°Ý Äð´Ù¿î ½Ã°£ ÃÊ±âÈ­
+        isStunned = false; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+        nextAttackTime = Time.time; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ù¿ï¿½ ï¿½Ã°ï¿½ ï¿½Ê±ï¿½È­
 
-        // ÀÎ½ºÆåÅÍ¿¡¼­ AnimationCurve°¡ ¼³Á¤µÇÁö ¾Ê¾ÒÀ» °æ¿ì ±âº» Ä¿ºê »ý¼º
-        // 0¿¡¼­ ½ÃÀÛÇÏ¿© 0.25¿¡¼­ ÃÖ°í ¼Óµµ(1), 0.75¿¡¼­ ÃÖ°í ¼Óµµ¸¦ À¯ÁöÇÏ°í 1¿¡¼­ 0À¸·Î ¶³¾îÁö´Â Ä¿ºê
+        // ï¿½Î½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ AnimationCurveï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½âº» Ä¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // IDE0090 ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ `new AnimationCurve(...)` Ç¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ `new()`ï¿½ï¿½ ï¿½Ü¼ï¿½È­ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´Ù´ï¿½ ï¿½Ç¹ï¿½ï¿½Ô´Ï´ï¿½.
+        // ï¿½ï¿½É»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, C# ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ `new()`ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ ï¿½Ë´Ï´ï¿½.
         if (dashSpeedCurve == null || dashSpeedCurve.length == 0)
         {
             dashSpeedCurve = new AnimationCurve(
-                new Keyframe(0, 0, 0, 4), // 0ÃÊ ÁöÁ¡, ¼Óµµ 0, Tangent Out 4 (ÃÊ±â ¼Óµµ °¡ÆÄ¸£°Ô Áõ°¡)
-                new Keyframe(0.25f, 1, 0, 0), // 0.25ÃÊ ÁöÁ¡, ¼Óµµ 1 (ÃÖ°í ¼Óµµ), Tangent Flat (´ÙÀ½ Å°ÇÁ·¹ÀÓ±îÁö À¯Áö)
-                new Keyframe(0.75f, 1, 0, 0), // 0.75ÃÊ ÁöÁ¡, ¼Óµµ 1 (ÃÖ°í ¼Óµµ À¯Áö), Tangent Flat
-                new Keyframe(1, 0, -4, 0) // 1ÃÊ ÁöÁ¡, ¼Óµµ 0, Tangent In -4 (¸¶¹«¸® ¼Óµµ ±Þ°ÝÈ÷ °¨¼Ò)
+                new Keyframe(0, 0, 0, 4), // 0ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Óµï¿½ 0, Tangent Out 4 (ï¿½Ê±ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+                new Keyframe(0.25f, 1, 0, 0), // 0.25ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Óµï¿½ 1 (ï¿½Ö°ï¿½ ï¿½Óµï¿½), Tangent Flat (ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ï¿½Ó±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+                new Keyframe(0.75f, 1, 0, 0), // 0.75ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Óµï¿½ 1 (ï¿½Ö°ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½), Tangent Flat
+                new Keyframe(1, 0, -4, 0) // 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Óµï¿½ 0, Tangent In -4 (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ ï¿½Þ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
             );
             Debug.LogWarning("Dash Speed Curve not set in Inspector. Using default curve.", this);
         }
     }
 
-    // Update ¿À¹ö¶óÀÌµå: Á×À½, ½ºÅÏ, ¶Ç´Â ´ë½Ã °ø°Ý Áß¿¡´Â Base AI ·ÎÁ÷ ½ºÅµ
+    // Update ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½: ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß¿ï¿½ï¿½ï¿½ Base AI ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Åµ
     protected override void Update()
     {
-        // isPerformingHurtAnimation Ã¼Å©´Â Base CommonEnemyController.Update()¿¡¼­ ÀÌ¹Ì Ã³¸®
-        if (isDead || isStunned || isPerformingAttackAnimation)
+        // isPerformingHurtAnimation Ã¼Å©ï¿½ï¿½ Base CommonEnemyController.Update()ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ Ã³ï¿½ï¿½
+        if (IsDead || isStunned || isPerformingAttackAnimation) // <-- isDead -> IsDead
         {
             return;
         }
 
-        base.Update(); // Base Å¬·¡½ºÀÇ AI »óÅÂ ¸Ó½Å, ÀÌµ¿ µî È£Ãâ
+        base.Update(); // Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ AI ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½, ï¿½Ìµï¿½ ï¿½ï¿½ È£ï¿½ï¿½
     }
 
-    // ===== ¾Ö´Ï¸ÞÀÌ¼Ç °ü·Ã ÇÔ¼ö (Base Å¬·¡½º¿¡¼­ ¿À¹ö¶óÀÌµå) =====
+    // ===== ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ (Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½) =====
 
     protected override void PlayIdleAnim()
     {
-        // Á×À½, ½ºÅÏ, ÇÇ°Ý, ´ë½Ã °ø°Ý ÁßÀÌ ¾Æ´Ò ¶§¸¸ Idle ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
-        if (!isDead && !isStunned && !isPerformingHurtAnimation && !isPerformingAttackAnimation && animator != null)
+        // ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½Ç°ï¿½, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½ Idle ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
+        if (!IsDead && !isStunned && !isPerformingHurtAnimation && !isPerformingAttackAnimation && animator != null) // <-- isDead -> IsDead, isPerformingHurtAnimation ï¿½ï¿½ï¿½ï¿½
             animator.SetBool(ANIM_BOOL_S_WALK, false);
     }
 
     protected override void PlayWalkAnim()
     {
-        // Á×À½, ½ºÅÏ, ÇÇ°Ý, ´ë½Ã °ø°Ý ÁßÀÌ ¾Æ´Ò ¶§¸¸ Walk ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
-        if (!isDead && !isStunned && !isPerformingHurtAnimation && !isPerformingAttackAnimation && animator != null)
+        // ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½Ç°ï¿½, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½ Walk ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
+        if (!IsDead && !isStunned && !isPerformingHurtAnimation && !isPerformingAttackAnimation && animator != null) // <-- isDead -> IsDead, isPerformingHurtAnimation ï¿½ï¿½ï¿½ï¿½
             animator.SetBool(ANIM_BOOL_S_WALK, true);
     }
 
-    // S_Attacker´Â Á¡ÇÁ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¾øÀ¸¹Ç·Î ºñ¿öµÒ
+    // S_Attackerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
     protected override void PlayJumpAnim()
     {
         // Debug.LogWarning("PlayJumpAnim called on S_AttackerController, but it has no jump.");
@@ -195,17 +194,17 @@ public class S_AttackerController : CommonEnemyController
             animator.SetTrigger(ANIM_TRIGGER_S_DEATH);
     }
 
-    // ÇÇ°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
-    protected void PlayHurtAnim()
+    // ï¿½Ç°ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ (Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ virtual ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½)
+    protected override void PlayHurtAnim() // <-- 'override' Å°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     {
-        if (!isDead && !isStunned && animator != null)
+        if (!IsDead && !isStunned && animator != null) // <-- isDead -> IsDead
         {
-            isPerformingHurtAnimation = true; // ÇÇ°Ý ¾Ö´Ï¸ÞÀÌ¼Ç ½ÃÀÛ ÇÃ·¡±× ¼³Á¤
+            isPerformingHurtAnimation = true; // ï¿½Ç°ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             animator.SetTrigger(ANIM_TRIGGER_S_HURT);
         }
     }
 
-    // ½ºÅÏ ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
     protected void PlayStunAnim()
     {
         if (animator != null)
@@ -214,40 +213,40 @@ public class S_AttackerController : CommonEnemyController
         }
     }
 
-    // Base Å¬·¡½ºÀÇ PlayAttack1Anim ¿À¹ö¶óÀÌµå (S Attack¿¡ »ç¿ë)
+    // Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ PlayAttack1Anim ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ (S Attackï¿½ï¿½ ï¿½ï¿½ï¿½)
     protected override void PlayAttack1Anim()
     {
-        // Á×À½, ½ºÅÏ, ÇÇ°Ý ÁßÀÌ ¾Æ´Ò ¶§¸¸ °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Æ®¸®°Å
-        if (!isDead && !isStunned && !isPerformingHurtAnimation && animator != null)
+        // ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½Ç°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½
+        if (!IsDead && !isStunned && !isPerformingHurtAnimation && animator != null) // <-- isDead -> IsDead, isPerformingHurtAnimation ï¿½ï¿½ï¿½ï¿½
         {
             animator.SetTrigger(ANIM_TRIGGER_S_ATTACK_A);
         }
     }
 
-    // Base Å¬·¡½ºÀÇ ResetAttackTriggers ¿À¹ö¶óÀÌµå
+    // Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ResetAttackTriggers ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½
     protected override void ResetAttackTriggers()
     {
         if (animator != null)
         {
-            // Æ¯Á¤ °ø°Ý, ÇÇ°Ý, ½ºÅÏ Æ®¸®°Å ¸®¼Â
+            // Æ¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Ç°ï¿½, ï¿½ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             animator.ResetTrigger(ANIM_TRIGGER_S_ATTACK_A);
             animator.ResetTrigger(ANIM_TRIGGER_S_HURT);
             animator.ResetTrigger(ANIM_TRIGGER_S_STUN);
         }
     }
 
-    // ===== AI °ø°Ý ·ÎÁ÷ (Base Å¬·¡½ºÀÇ PerformAttackLogic ¿À¹ö¶óÀÌµå) =====
+    // ===== AI ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ PerformAttackLogic ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½) =====
     protected override void PerformAttackLogic()
     {
         bool cooldownReady = Time.time >= nextAttackTime;
 
-        // Äð´Ù¿îÀÌ ¾Æ´Ï°Å³ª ÀÌ¹Ì ´ë½Ã ÁßÀÌ¸é °ø°Ý ½ºÅµ
+        // ï¿½ï¿½Ù¿ï¿½ï¿½ï¿½ ï¿½Æ´Ï°Å³ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Åµ
         if (!cooldownReady || isPerformingAttackAnimation)
         {
             return;
         }
 
-        // ±âÁ¸ ´ë½Ã ÄÚ·çÆ¾ÀÌ ÀÖ´Ù¸é ÁßÁöÇÏ°í »õ·Î¿î ÄÚ·çÆ¾ ½ÃÀÛ
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½
         if (dashAttackCoroutine != null)
         {
             StopCoroutine(dashAttackCoroutine);
@@ -255,33 +254,33 @@ public class S_AttackerController : CommonEnemyController
         dashAttackCoroutine = StartCoroutine(DashAttackCoroutine());
     }
 
-    //  ´ë½Ã °ø°Ý ÄÚ·çÆ¾ ±¸Çö 
+    //  ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½ 
     private IEnumerator DashAttackCoroutine()
     {
-        isPerformingAttackAnimation = true; // AI ÀÌµ¿À» ¸ØÃß±â À§ÇÑ ÇÃ·¡±× ¼³Á¤
+        isPerformingAttackAnimation = true; // AI ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        // ´ë½Ã °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
         PlayAttack1Anim();
 
-        // °ø°Ý ½ÃÀÛ ½Ã ÇÃ·¹ÀÌ¾î Åë°ú¸¦ À§ÇØ ¸ÞÀÎ ÄÝ¶óÀÌ´õ¸¦ Æ®¸®°Å·Î º¯°æ ¶Ç´Â ºñÈ°¼ºÈ­
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½Å·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         if (mainCollider != null)
         {
-            // ÀÌ ¹æ¹ýÀº ¶¥À» ¶Õ°í ¶³¾îÁú ¼ö ÀÖÀ¸´Ï ÁÖÀÇ.
-            // ¸¸¾à Ä³¸¯ÅÍ°¡ ¶¥À» ¶Õ°í ¶³¾îÁø´Ù¸é, mainCollider.isTrigger = true; ·Î º¯°æÇÏ°Å³ª Collision Layer ¼³Á¤À» ÅëÇØ ÇÃ·¹ÀÌ¾î¿Í¸¸ Ãæµ¹ÇÏÁö ¾Êµµ·Ï Á¶Á¤ÇÏ´Â °ÍÀÌ °¡Àå ÁÁ½À´Ï´Ù.
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Õ°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+            // ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Õ°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½, mainCollider.isTrigger = true; ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°Å³ï¿½ Collision Layer ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½Í¸ï¿½ ï¿½æµ¹ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
             mainCollider.enabled = false;
         }
 
         float timer = 0f;
-        float currentClipLength = 0.5f; // ±âº»°ª, ½ÇÁ¦ ¾Ö´Ï¸ÞÀÌ¼Ç Å¬¸³ ±æÀÌ·Î ¾÷µ¥ÀÌÆ®µÉ °Í
+        float currentClipLength = 0.5f; // ï¿½âº»ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½Ì·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½
 
-        // ¾Ö´Ï¸ÞÀÌÅÍ¿¡¼­ "S_AttackA" ¾Ö´Ï¸ÞÀÌ¼Ç Å¬¸³ÀÇ ½ÇÁ¦ ±æÀÌ¸¦ °¡Á®¿É´Ï´Ù.
-        // ÀÌ°ÍÀÌ °íÁ¤µÈ dashAttackDurationº¸´Ù ¾ÈÀüÇÕ´Ï´Ù.
+        // ï¿½Ö´Ï¸ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ "S_AttackA" ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½É´Ï´ï¿½.
+        // ï¿½Ì°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ dashAttackDurationï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         if (animator != null)
         {
-            AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0); // ÇöÀç ·¹ÀÌ¾î 0ÀÇ Å¬¸³ Á¤º¸
+            AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½ 0ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             foreach (AnimatorClipInfo clip in clipInfo)
             {
-                if (clip.clip.name.Contains("S_AttackA")) // ¾Ö´Ï¸ÞÀÌ¼Ç Å¬¸³ ÀÌ¸§¿¡ "S_AttackA"°¡ Æ÷ÇÔµÇ¾î ÀÖ´Ù°í °¡Á¤
+                if (clip.clip.name.Contains("S_AttackA")) // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Å¬ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ "S_AttackA"ï¿½ï¿½ ï¿½ï¿½ï¿½ÔµÇ¾ï¿½ ï¿½Ö´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½
                 {
                     currentClipLength = clip.clip.length;
                     break;
@@ -293,59 +292,63 @@ public class S_AttackerController : CommonEnemyController
 
         while (timer < currentClipLength)
         {
-            float normalizedTime = timer / currentClipLength; // 0¿¡¼­ 1±îÁöÀÇ Á¤±ÔÈ­µÈ ½Ã°£
-            float currentSpeedMultiplier = dashSpeedCurve.Evaluate(normalizedTime); // Ä¿ºê¿¡¼­ ÇöÀç ½Ã°£ÀÇ ¼Óµµ ¹èÀ² °¡Á®¿À±â
-            float currentDashMovement = currentSpeedMultiplier * dashBaseSpeed * Time.deltaTime; // ½ÇÁ¦ ÀÌµ¿·® °è»ê
+            if (IsDead) // <-- isDead -> IsDead (ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+            {
+                if (rb != null) rb.linearVelocity = Vector2.zero;
+                yield break;
+            }
 
-            // ÀûÀÇ ÇöÀç ¹Ù¶óº¸´Â ¹æÇâ (transform.localScale.xÀÇ ºÎÈ£¸¦ »ç¿ë)À¸·Î ÀÌµ¿
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½Îµå·´ï¿½ï¿½ ï¿½Ìµï¿½
             Vector3 moveDirection = new Vector3(Mathf.Sign(transform.localScale.x), 0, 0);
+            float currentSpeedMultiplier = dashSpeedCurve.Evaluate(timer / currentClipLength); // Ä¿ï¿½ê¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            float currentDashMovement = currentSpeedMultiplier * dashBaseSpeed * Time.deltaTime; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             transform.position += moveDirection * currentDashMovement;
 
             timer += Time.deltaTime;
-            yield return null; // ´ÙÀ½ ÇÁ·¹ÀÓ±îÁö ´ë±â
+            yield return null; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ó±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         }
 
-        // ´ë½Ã Á¾·á ÈÄ ¸ÞÀÎ ÄÝ¶óÀÌ´õ ´Ù½Ã È°¼ºÈ­
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½Ù½ï¿½ È°ï¿½ï¿½È­
         if (mainCollider != null)
         {
-            mainCollider.enabled = true; // ¶Ç´Â mainCollider.isTrigger = false;
+            mainCollider.enabled = true; // ï¿½Ç´ï¿½ mainCollider.isTrigger = false;
         }
 
-        // Base Å¬·¡½ºÀÇ OnAttackAnimationEnd¸¦ È£ÃâÇÏ¿© °ø°Ý ÈÄ ÀÏ½Ã Á¤Áö ¹× ÇÃ·¡±× ¸®¼Â Ã³¸®
+        // Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ OnAttackAnimationEndï¿½ï¿½ È£ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
         OnAttackAnimationEnd();
     }
 
 
-    // Base Å¬·¡½ºÀÇ OnAttackAnimationEnd ¿À¹ö¶óÀÌµå
-    protected override void OnAttackAnimationEnd()
+    // Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ OnAttackAnimationEnd ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½
+    public override void OnAttackAnimationEnd() // <-- public override ï¿½ï¿½ï¿½ï¿½
     {
-        base.OnAttackAnimationEnd(); // isPerformingAttackAnimation = false ¼³Á¤, °ø°Ý ÈÄ ÀÏ½Ã Á¤Áö ÄÚ·çÆ¾ ½ÃÀÛ
-        nextAttackTime = Time.time + attackSCooldown; // S_Attacker °íÀ¯ÀÇ Äð´Ù¿î ½Ã°£ ¼³Á¤
+        base.OnAttackAnimationEnd(); // isPerformingAttackAnimation = false ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½
+        nextAttackTime = Time.time + attackSCooldown; // S_Attacker ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ù¿ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
 
-    // ÇÇ°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Á¾·á ½Ã È£ÃâµÉ Animation Event ¸Þ¼­µå ¿À¹ö¶óÀÌµå
-    // S_Hurt ¾Ö´Ï¸ÞÀÌ¼Ç Å¬¸³ ³¡¿¡ ÀÌ ÀÌ¸§ÀÇ Animation Event¸¦ Ãß°¡ÇØ¾ß ÇÕ´Ï´Ù.
-    public override void OnHurtAnimationEnd()
+    // ï¿½Ç°ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½ï¿½ Animation Event ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½
+    // S_Hurt ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ Animation Eventï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ø¾ï¿½ ï¿½Õ´Ï´ï¿½.
+    public override void OnHurtAnimationEnd() // <-- 'public override' Å°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½)
     {
-        base.OnHurtAnimationEnd(); // Base Å¬·¡½ºÀÇ isPerformingHurtAnimation = false ¼³Á¤
+        base.OnHurtAnimationEnd(); // Base Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ isPerformingHurtAnimation = false ï¿½ï¿½ï¿½ï¿½
     }
 
-    // S Attack È÷Æ®¹Ú½º È°¼ºÈ­ (S_AttackA Å¬¸³ÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç ÀÌº¥Æ®¿¡¼­ È£Ãâ)
+    // S Attack ï¿½ï¿½Æ®ï¿½Ú½ï¿½ È°ï¿½ï¿½È­ (S_AttackA Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½)
     public void EnableAttackHitbox()
     {
-        if (isDead) return;
+        if (IsDead) return; // <-- isDead -> IsDead
 
         if (attackSHitboxObject != null && attackSHitboxCollider != null)
         {
             if (attackSEnemyHitbox != null)
             {
-                attackSEnemyHitbox.attackDamage = attackSValue; // S_AttackerÀÇ °ø°Ý·Â ¼³Á¤
+                attackSEnemyHitbox.attackDamage = attackSValue; // S_Attackerï¿½ï¿½ ï¿½ï¿½ï¿½Ý·ï¿½ ï¿½ï¿½ï¿½ï¿½
             }
             else
             {
                 Debug.LogWarning("EnemyHitbox component not found on Attack S Hitbox Object!", attackSHitboxObject);
             }
-            attackSHitboxCollider.enabled = true; // ÄÝ¶óÀÌ´õ È°¼ºÈ­
+            attackSHitboxCollider.enabled = true; // ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ È°ï¿½ï¿½È­
         }
         else
         {
@@ -353,20 +356,18 @@ public class S_AttackerController : CommonEnemyController
         }
     }
 
-    // S Attack È÷Æ®¹Ú½º ºñÈ°¼ºÈ­ (S_AttackA Å¬¸³ÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç ÀÌº¥Æ®¿¡¼­ È£Ãâ)
+    // S Attack ï¿½ï¿½Æ®ï¿½Ú½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ (S_AttackA Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½)
     public void DisableAttackHitbox()
     {
-        if (isDead) return;
+        if (IsDead) return; // <-- isDead -> IsDead
 
         if (attackSHitboxCollider != null)
         {
-            attackSHitboxCollider.enabled = false; // ÄÝ¶óÀÌ´õ ºñÈ°¼ºÈ­
+            attackSHitboxCollider.enabled = false; // ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         }
         else
         {
             Debug.LogWarning("Attack S Hitbox Collider not assigned or found.", this);
         }
     }
-
-   
 }
