@@ -23,8 +23,12 @@ AnimationClip:
     - time: 0
       value: {fileID: -4322904503534487539, guid: 01e1a513df112fa49b1fd63aa662cf97, type: 3}
     - time: 0.083333336
-      value: {fileID: 7347909384166220309, guid: e97733c88a7e6564092210e8ccc69d61, type: 3}
+      value: {fileID: -4322904503534487539, guid: 01e1a513df112fa49b1fd63aa662cf97, type: 3}
     - time: 0.16666667
+      value: {fileID: 7347909384166220309, guid: e97733c88a7e6564092210e8ccc69d61, type: 3}
+    - time: 0.25
+      value: {fileID: 7347909384166220309, guid: e97733c88a7e6564092210e8ccc69d61, type: 3}
+    - time: 0.5
       value: {fileID: 6405319566415573061, guid: cb6dc0fc2ccd88046b08c526056a90bb, type: 3}
     attribute: m_Sprite
     path: 
@@ -49,6 +53,8 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
     - {fileID: -4322904503534487539, guid: 01e1a513df112fa49b1fd63aa662cf97, type: 3}
+    - {fileID: -4322904503534487539, guid: 01e1a513df112fa49b1fd63aa662cf97, type: 3}
+    - {fileID: 7347909384166220309, guid: e97733c88a7e6564092210e8ccc69d61, type: 3}
     - {fileID: 7347909384166220309, guid: e97733c88a7e6564092210e8ccc69d61, type: 3}
     - {fileID: 6405319566415573061, guid: cb6dc0fc2ccd88046b08c526056a90bb, type: 3}
   m_AnimationClipSettings:
@@ -56,7 +62,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.25
+    m_StopTime: 0.5833333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -90,21 +96,21 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.25
+  - time: 0.5
     functionName: OnAttackAnimationEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.25
+  - time: 0.5
     functionName: DisableAttack3Hitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.25
+  - time: 0.5
     functionName: StopAttack3Movement
     data: 
     objectReferenceParameter: {fileID: 0}

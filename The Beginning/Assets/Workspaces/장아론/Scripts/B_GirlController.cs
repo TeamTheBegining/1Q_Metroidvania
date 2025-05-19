@@ -45,8 +45,8 @@ public class B_GirlController : CommonEnemyController
     // private float lastAttackAttemptTime = 0f; // CommonEnemyController의 lastAttackAttemptTime을 사용합니다.
     // private float nextAttackTime = 0f; // CommonEnemyController의 nextAttackTime을 사용합니다.
 
-    /*[Header("B_Girl Custom Combo Delays")] // B_Girl 고유의 엇박 패턴을 위한 지연 시간
-    public float heavyPunchFirstDelay = 0.6f;  // "퉁퉁 퉁~" 첫 번째 '퉁' 후 다음 '퉁'까지의 지연
+    [Header("B_Girl Custom Combo Delays")] // B_Girl 고유의 엇박 패턴을 위한 지연 시간
+    /*public float heavyPunchFirstDelay = 0.6f;  // "퉁퉁 퉁~" 첫 번째 '퉁' 후 다음 '퉁'까지의 지연
     public float heavyPunchSecondDelay = 0.8f; // "퉁퉁 퉁~" 두 번째 '퉁' 후 마지막 '퉁'까지의 지연
 
     public float offBeatFirstDelay = 0.7f;     // 엇박 콤보 첫 번째 공격 후 다음 공격까지의 지연 (길게)
@@ -61,16 +61,48 @@ public class B_GirlController : CommonEnemyController
     public float hurtColorDuration = 0.2f;
     private Coroutine hurtColorCoroutine;
 
+    // 슈퍼 아머 상태를 나타내는 변수 추가
+    [Header("Super Armor Settings")]
+    public bool isSuperArmored { get; private set; } = false; // 기본적으로 슈퍼 아머 아님
+
     // Base 클래스의 TakeDamage 오버라이드
     public override void TakeDamage(float damage, GameObject attackObject)
     {
         if (IsDead) return;
 
-        base.TakeDamage(damage, attackObject);
-
-        if (CurrentHp > 0)
+        if (isSuperArmored)
         {
-            IndicateDamage();
+            // 슈퍼 아머 활성화 시: 데미지는 받지만, 일반적인 피격 반응(경직, 넉백 등)은 무시
+            // CommonEnemyController의 CurrentHp 속성이 protected 이상으로 노출되어 있다고 가정합니다.
+            CurrentHp -= damage; // 직접 HP 감소
+
+            Debug.Log($"[B_Girl] Super Armor Active! Took {damage} damage. Current HP: {CurrentHp:F2}");
+
+            if (CurrentHp <= 0)
+            {
+                // 죽음 처리
+                // IsDead는 읽기 전용이므로, CommonEnemyController의 죽음 처리 메서드를 호출합니다.
+                //Die(); // CommonEnemyController의 죽음 처리 메서드 호출을 가정
+                Debug.Log($"[B_Girl] DIED while super armored!");
+                // 필요한 경우 추가적인 죽음 관련 로직은 CommonEnemyController의 Die() 메서드 또는 여기서 추가
+            }
+            else
+            {
+                IndicateDamage(); // 피격 시 색상 변경은 유지
+            }
+
+            // 슈퍼 아머 상태에서는 base.TakeDamage()를 호출하지 않아 경직/넉백 등 일반적인 피격 반응을 방지합니다.
+            // (CommonEnemyController의 TakeDamage가 HP 감소 외에 경직/넉백을 담당한다고 가정)
+        }
+        else
+        {
+            // 슈퍼 아머 비활성화 시: 기본 TakeDamage 로직 수행 (경직, 넉백 포함)
+            base.TakeDamage(damage, attackObject);
+
+            if (CurrentHp > 0)
+            {
+                IndicateDamage();
+            }
         }
     }
 
@@ -192,6 +224,8 @@ public class B_GirlController : CommonEnemyController
         {
             spriteRenderer.color = originalColor;
         }
+        // 죽음 시 슈퍼 아머 비활성화 (혹시라도 활성화된 상태였다면)
+        SetSuperArmor(false);
     }
 
     protected override void PlayAttack1Anim()
@@ -374,6 +408,18 @@ public class B_GirlController : CommonEnemyController
     public override void OnAttackAnimationEnd()
     {
         base.OnAttackAnimationEnd();
+        // 공격 애니메이션이 끝나면 슈퍼 아머 비활성화
+        SetSuperArmor(false);
+    }
+
+    /// <summary>
+    /// 슈퍼 아머 상태를 설정합니다. 이 메서드는 애니메이션 이벤트 등으로 호출되어 특정 동작 중 피격 경직을 무시하게 합니다.
+    /// </summary>
+    /// <param name="value">슈퍼 아머 활성화 여부 (true: 활성화, false: 비활성화)</param>
+    public void SetSuperArmor(bool value)
+    {
+        isSuperArmored = value;
+        Debug.Log($"[B_Girl] Super Armor is now: {isSuperArmored}");
     }
 
     // 공격 1 히트박스 활성화 (Animation Event에서 호출)
@@ -388,6 +434,7 @@ public class B_GirlController : CommonEnemyController
             }
             attack1HitboxCollider.enabled = true;
         }
+        // Attack1에는 기본적으로 슈퍼아머를 주지 않음. 필요 시 여기에 SetSuperArmor(true); 추가
     }
 
     // 공격 1 히트박스 비활성화 (Animation Event에서 호출)
@@ -398,6 +445,7 @@ public class B_GirlController : CommonEnemyController
         {
             attack1HitboxCollider.enabled = false;
         }
+        // Attack1 슈퍼아머 비활성화. EnableAttack1Hitbox에서 활성화했다면 여기에 SetSuperArmor(false); 추가
     }
 
     // 공격 2 히트박스 활성화 (Animation Event에서 호출)
@@ -412,6 +460,7 @@ public class B_GirlController : CommonEnemyController
             }
             attack2HitboxCollider.enabled = true;
         }
+        // Attack2에는 기본적으로 슈퍼아머를 주지 않음. 필요 시 여기에 SetSuperArmor(true); 추가
     }
 
     // 공격 2 히트박스 비활성화 (Animation Event에서 호출)
@@ -422,12 +471,13 @@ public class B_GirlController : CommonEnemyController
         {
             attack2HitboxCollider.enabled = false;
         }
+        // Attack2 슈퍼아머 비활성화. EnableAttack2Hitbox에서 활성화했다면 여기에 SetSuperArmor(false); 추가
     }
 
     // 공격 3 히트박스 활성화 (Animation Event에서 호출)
     public void EnableAttack3Hitbox()
     {
-       /* if (IsDead) return;
+        if (IsDead) return;
         if (attack3HitboxObject != null && attack3HitboxCollider != null)
         {
             if (attack3EnemyHitbox != null)
@@ -435,17 +485,21 @@ public class B_GirlController : CommonEnemyController
                 attack3EnemyHitbox.attackDamage = attack3Value;
             }
             attack3HitboxCollider.enabled = true;
-        }*/
+        }
+        // Attack3 (돌진 공격) 시 슈퍼 아머 활성화
+        SetSuperArmor(true);
     }
 
     // 공격 3 히트박스 비활성화 (Animation Event에서 호출)
     public void DisableAttack3Hitbox()
     {
-        /*if (IsDead) return;
+        if (IsDead) return;
         if (attack3HitboxCollider != null)
         {
             attack3HitboxCollider.enabled = false;
-        }*/
+        }
+        // Attack3 공격이 끝나면 슈퍼 아머 비활성화
+        SetSuperArmor(false);
     }
 
     // ===== B_Attack3 돌진 관련 함수 =====
