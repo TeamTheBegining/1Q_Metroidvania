@@ -5,9 +5,16 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Collider2D))]
 public class RespawnPoint : MonoBehaviour, Interactable
 {
+    public SpawnPointDataSO data;
+
     public void OnInteraction()
     {        
-        PlayerManager.Instance.SetSpawn(SceneManager.GetActiveScene().buildIndex, this.transform.position);
+        if(data == null)
+        {
+            Debug.LogWarning($"{this.gameObject.name}의 SpawnPointData 데이터가 비어있습니다.");
+        }
+
+        PlayerManager.Instance.SetSpawn(SceneManager.GetActiveScene().name, data);
         Player player = FindFirstObjectByType<Player>();
         if(player != null)
         {

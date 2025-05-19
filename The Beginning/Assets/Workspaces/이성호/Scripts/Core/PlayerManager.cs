@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
     public GameObject playerPrefab;
-    private int spawnSceneBuildIndex = 0;
-    private Vector2 respawnPosition = Vector2.zero;
+    private string spawnSceneName;
+    private SpawnPointDataSO spawnData;
 
     private int coin;
 
@@ -73,30 +74,34 @@ public class PlayerManager : Singleton<PlayerManager>
     /// <summary>
     /// 스폰 포인트 정보 저장 함수 
     /// </summary>
-    /// <param name="buildIndex">스폰할 씬 빌드 인덱스</param>
-    /// <param name="spawnVector">스폰할 위치 벡터</param>
-    public void SetSpawn(int buildIndex, Vector2 spawnVector)
+    /// <param name="sceneName">스폰할 씬 빌드 인덱스</param>
+    /// <param name="data">스폰할 위치 데이터</param>
+    public void SetSpawn(string sceneName, SpawnPointDataSO data)
     {
-        spawnSceneBuildIndex = buildIndex;
-        respawnPosition = spawnVector;  
+        spawnSceneName = sceneName;
+        spawnData = data;  
+    }
+
+    public void Respawn()
+    {
+        if(spawnData == null) // 스폰 데이터가 존재하지 않으면
+        {
+            SceneManager.LoadScene(0); // 강제로 시작 씬 불러오기
+        }
+        else
+        {
+            GameSceneManager.Instance.RequestSceneChange(spawnSceneName, spawnData);
+        }
     }
 
     /// <summary>
     /// 플레이어 스폰 함수 ( 플레이어 제거 확인 및 씬 전환 후 호출 할 것 )
     /// </summary>
     /// <param name="isSceneChange">씬 전환 스폰 여부</param>
-    public Player SpawnPlayer(Vector2 spawnVector, bool isSceneChange = false)
+    public Player SpawnPlayer(Vector2 spawnVector)
     {
         Player player = Instantiate(playerPrefab, spawnVector, Quaternion.identity).GetComponent<Player>();
-
-        if(isSceneChange)
-        {
-            player.CurrentHp = remainHp; // 저장된 hp로 설정
-        }
-        else
-        {
-            player.CurrentHp = player.MaxHp;
-        }
+        player.CurrentHp = remainHp; // 저장된 hp로 설정
 
         return player;
     }
