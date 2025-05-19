@@ -103,16 +103,22 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         Player player = Instantiate(playerPrefab, spawnVector, Quaternion.identity).GetComponent<Player>();
 
-        if(remainHp <= 0f)
+        if (remainHp <= 0f)
         {
-            player.CurrentHp = player.MaxHp; 
+            player.CurrentHp = player.MaxHp;
+            remainHp = player.MaxHp;
         }
         else
         {
-            player.CurrentHp = player.CurrentHp;
+            player.CurrentHp = remainHp;
         }
 
-        GameManager.Instance.State = GameState.Play;
+        PlayerDeadPanel deadPanel = FindFirstObjectByType<PlayerDeadPanel>();
+        if (deadPanel != null)
+        {
+            deadPanel.Init();
+        }
+
         return player;
     }
 

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public enum GameState
 {
-    BeforeStart = 0, // 프로그램 시작 후 State 호출 전 상태
+    Menu = 0, // 프로그램 시작 후 State 호출 전 상태
     Play,
     CutScene,
     Pause,
@@ -40,24 +40,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private int enemyCount = 0;
-    public int EnemyCount
-    {
-        get => enemyCount;
-        set
-        {
-            enemyCount = value;
-            OnEnemyCountChange?.Invoke(EnemyCount);
-
-            if(State == GameState.Play && enemyCount == 0)
-            {
-                State = GameState.PlayEnd;
-            }
-        }
-    }
-
-    public Action<int> OnEnemyCountChange;
-
     protected override void Awake()
     {
         base.Awake();
@@ -70,7 +52,6 @@ public class GameManager : Singleton<GameManager>
     {
         globalCanvas.renderMode = RenderMode.ScreenSpaceCamera;
         globalCanvas.worldCamera = Camera.main;
-        State = GameState.BeforeStart;
 
         CheatInit();
 
@@ -84,6 +65,11 @@ public class GameManager : Singleton<GameManager>
         
     }
 
+    public void InitCamera()
+    {
+        globalCanvas.worldCamera = Camera.main;
+    }
+
     private void Initialize(GameState state)
     {
         if(state != GameState.Pause)
@@ -93,7 +79,8 @@ public class GameManager : Singleton<GameManager>
 
         switch (state)
         {
-            case GameState.BeforeStart:
+            case GameState.Menu:
+                OnMenu();
                 break;
             case GameState.Play:
                 OnPlay();
@@ -113,11 +100,13 @@ public class GameManager : Singleton<GameManager>
         Application.Quit();
     }
 
+    private void OnMenu()
+    {
+    }
+
     private void OnPlay()
     {
         globalCanvas.worldCamera = Camera.main;
-        //PlayerDeadPanel deadPanel = FindFirstObjectByType<PlayerDeadPanel>();
-        //deadPanel.Init();
     }
 
     private void OnPause()
@@ -166,11 +155,11 @@ public class GameManager : Singleton<GameManager>
     {
         testActions = new TestInputActions();
         testActions.Enable();
-        testActions.Test.PageUp.performed += PageUp_performed;
-        testActions.Test.PageDown.performed += PageDown_performed;
+        testActions.Test.PageUp.started += PageUp_start;
+        testActions.Test.PageDown.started += PageDown_start;
     }
 
-    private void PageDown_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void PageUp_start(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         Player player = FindFirstObjectByType<Player>();
         if(player != null)
@@ -179,7 +168,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private void PageUp_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void PageDown_start(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
     }
 #endif

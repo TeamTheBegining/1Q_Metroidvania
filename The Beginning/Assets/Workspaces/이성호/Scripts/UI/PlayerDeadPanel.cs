@@ -20,36 +20,44 @@ public class PlayerDeadPanel : MonoBehaviour
     private void Start()
     {
         cg.alpha = 0.0f;
-        Init();
-
-
-        this.gameObject.SetActive(false);
     }
 
-    private void OnEnable()
+    public void Init()
     {
-        actions = new PlayerInputActions();
-        actions.UI.Space.Enable();
-        actions.UI.Space.started += Space_started;
+        Player player = FindFirstObjectByType<Player>();
+        // 처음 시작 시 플레이어 찾기
+        if (player != null)
+        {
+            player.OnDead += () =>
+            {
+                if (GameManager.Instance.State == GameState.Play)
+                {
+                    GameManager.Instance.State = GameState.PlayEnd;
+
+                    actions = new PlayerInputActions();
+                    actions.UI.Space.Enable();
+                    actions.UI.Space.started += Space_started;
+
+                    ShowPanel();
+                }
+            };
+        }
     }
 
-    private void OnDisable()
-    {
-        actions.UI.Space.started -= Space_started;        
-        actions.UI.Space.Disable();
-    }
 
     private void Space_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        this.gameObject.SetActive(false);
         PlayerManager.Instance.Respawn();
+        cg.alpha = 0f;
+
+        actions.UI.Space.started -= Space_started;
+        actions.UI.Space.Disable();
     }
 
     public void ShowPanel()
     {
         if (cg.alpha > 0.0f) return; // 중복 호출 방지
 
-        this.gameObject.SetActive(true);
         StartCoroutine(ShowPanelProcess());
     }
 
@@ -63,25 +71,5 @@ public class PlayerDeadPanel : MonoBehaviour
             cg.alpha = timeElapsed / duration;
             yield return null;
         }
-    }
-
-    public void Init()
-    {
-        this.gameObject.SetActive(false);
-
-        Player player = FindFirstObjectByType<Player>();
-        // 처음 시작 시 플레이어 찾기
-        if (player != null)
-        {
-            player.OnDead += () =>
-            {
-                if (GameManager.Instance.State == GameState.Play)
-                {
-                    GameManager.Instance.State = GameState.PlayEnd;
-                    ShowPanel();
-                }
-            };
-        }
-
     }
 }

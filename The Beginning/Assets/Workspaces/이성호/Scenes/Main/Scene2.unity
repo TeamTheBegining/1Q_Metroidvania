@@ -452,6 +452,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Middle
       objectReference: {fileID: 0}
+    - target: {fileID: 1927935692765118903, guid: 0ca21cbd0545b294db918ef084bd6197, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5755833673258281902, guid: 0ca21cbd0545b294db918ef084bd6197, type: 3}
       propertyPath: enemyID
       value: Scene2Enemy1
@@ -2440,6 +2444,10 @@ PrefabInstance:
     - target: {fileID: 1927935692765118903, guid: 0ca21cbd0545b294db918ef084bd6197, type: 3}
       propertyPath: m_Name
       value: Middle (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927935692765118903, guid: 0ca21cbd0545b294db918ef084bd6197, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5755833673258281902, guid: 0ca21cbd0545b294db918ef084bd6197, type: 3}
       propertyPath: enemyID

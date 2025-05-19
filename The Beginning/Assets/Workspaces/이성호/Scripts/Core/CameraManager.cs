@@ -22,14 +22,17 @@ public class CameraManager : Singleton<CameraManager>
         {
             Destroy(localCam);
         }
-    }
 
-    private void Start()
-    {
         mainCamera = Resources.Load<GameObject>("Prefabs/Camera/Main Camera");
         DontDestroyOnLoad(Instantiate(mainCamera));
         camBrain = mainCamera.GetComponent<CinemachineBrain>();
 
+        mainCamera.tag = "MainCamera";
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.InitCamera();
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
     }
 

@@ -4491,15 +4491,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1048180773333080416, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.305563
+      value: -39.9
       objectReference: {fileID: 0}
     - target: {fileID: 1048180773333080416, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.4386835
+      value: 1.77
       objectReference: {fileID: 0}
     - target: {fileID: 1048180773333080416, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -22.146841
       objectReference: {fileID: 0}
     - target: {fileID: 1048180773333080416, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4529,13 +4529,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2616648113741138368, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
+      propertyPath: m_RendererIndex
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3898517192938623017, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 3898517192938623017, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8796248666621642685, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: orthographic size
-      value: 2.5
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
