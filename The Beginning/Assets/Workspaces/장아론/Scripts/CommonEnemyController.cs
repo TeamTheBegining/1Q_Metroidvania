@@ -68,10 +68,8 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
             Debug.LogError(gameObject.name + ": Rigidbody2D 컴포넌트를 찾을 수 없습니다! 이동이 제대로 동작하지 않을 수 있습니다.", this);
         }
 
-        // ======================================================================
         // 이곳에서 플레이어를 직접 찾던 코드는 이제 제거되었습니다.
         // 플레이어 Transform은 외부(매니저)에서 SetPlayerTarget 함수를 통해 설정됩니다.
-        // ======================================================================
     }
 
     protected virtual void Start()
@@ -222,14 +220,32 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
         }
 
         // 일정 시간 후 GameObject 비활성화 또는 파괴
+        // 여기에 MarkAsDead()를 넣지 않습니다. DestroyAfterDelay 코루틴 내부에서 호출됩니다.
         StartCoroutine(DestroyAfterDelay(1.5f)); // 사망 애니메이션 재생 후 1.5초 뒤 파괴 (수치 조정 가능)
     }
 
     // GameObject를 지연 파괴하는 코루틴
     IEnumerator DestroyAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay);
-        Destroy(gameObject);
+        yield return new WaitForSeconds(delay); // 설정된 딜레이 시간만큼 기다립니다.
+
+        // ======================================================================
+        // 적이 완전히 사라지기 직전에 EnemyStatusBridge의 MarkAsDead()를 호출합니다.
+        // 이것은 해당 스크립트가 죽음을 '처리'하도록 합니다.
+        // ======================================================================
+        EnemyStatusBridge statusBridge = GetComponent<EnemyStatusBridge>();
+        if (statusBridge != null)
+        {
+            statusBridge.MarkAsDead(); // EnemyStatusBridge의 MarkAsDead() 함수를 호출합니다.
+            Debug.Log($"{gameObject.name}: EnemyStatusBridge.MarkAsDead() 호출 완료.");
+        }
+        else
+        {
+            Debug.LogWarning($"{gameObject.name}: EnemyStatusBridge 컴포넌트를 찾을 수 없습니다. MarkAsDead()를 호출할 수 없습니다.", this);
+        }
+        // ======================================================================
+
+        Destroy(gameObject); // 모든 처리가 끝난 후 GameObject를 실제로 파괴합니다.
     }
 
     // ===== 애니메이션 관련 가상 함수들 (자식 클래스에서 오버라이드) =====
@@ -280,6 +296,8 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
     // ======================================================================
     public void SetPlayerTarget(Transform newPlayerTransform)
     {
+        // GetComponent<EnemyStatusBridge>()?.MarkAsDead(); // <--- 이전에 실수로 여기에 있었던 라인입니다. 여기서는 호출하지 않습니다!
+
         if (newPlayerTransform != null)
         {
             playerTransform = newPlayerTransform;
