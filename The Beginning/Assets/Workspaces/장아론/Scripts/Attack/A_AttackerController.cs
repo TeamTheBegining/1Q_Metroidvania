@@ -383,8 +383,56 @@ public class A_AttackerController : CommonEnemyController
         }
     }
 
-    // TODO: Override other virtual methods from CommonEnemyController if needed for specific A_Attacker behavior.
-    // For example, if A_Attacker needs different movement logic:
-    // protected override void MoveTowardsPlayer() { base.MoveTowardsPlayer(); }
-    // protected override void MoveAwayFromPlayer() { base.MoveAwayFromPlayer(); }
+    // ======================================================================
+    // **새로 추가/수정된 Flip (좌우 방향 전환) 메서드 오버라이드**
+    // CommonEnemyController의 Flip 로직을 반대로 적용하여 A_Attacker의 방향을 맞춥니다.
+    // 만약 A_Attacker의 스프라이트가 기본적으로 '왼쪽'을 바라보고 있고
+    // 'localScale.x = 1'일 때 왼쪽을 바라보게 되어 있다면, 이 로직이 맞을 수 있습니다.
+    // ======================================================================
+    protected override void Flip(bool faceLeft)
+    {
+        Transform spriteToFlip = transform.Find("Sprite"); // 'Sprite'라는 자식 오브젝트를 찾음
+
+        if (spriteToFlip == null)
+        {
+            spriteToFlip = transform; // 자식 오브젝트가 없으면 자기 자신(루트 오브젝트)을 사용
+            Debug.LogWarning(gameObject.name + ": 'Sprite' 자식 오브젝트를 찾을 수 없습니다. 메인 오브젝트의 Transform을 사용하여 뒤집기를 시도합니다.", this);
+        }
+
+        Vector3 currentScale = spriteToFlip.localScale;
+
+        // 여기서는 'faceLeft'의 의미를 반전시켜서 적용해봅니다.
+        // 즉, 'faceLeft'가 true일 때 (왼쪽으로 가야 할 때) 실제로는 '오른쪽'을 바라보도록 스케일을 만들고,
+        // 'faceLeft'가 false일 때 (오른쪽으로 가야 할 때) 실제로는 '왼쪽'을 바라보도록 스케일을 만듭니다.
+        // 이는 스프라이트의 기본 방향이 일반적인 예상과 반대일 때 유용합니다.
+        if (faceLeft) // 왼쪽을 바라봐야 한다고 코드(MoveTowardsPlayer)가 지시할 때
+        {
+            // 실제로는 오른쪽을 보도록 스케일을 양수로 만듭니다.
+            spriteToFlip.localScale = new Vector3(Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+        }
+        else // 오른쪽을 바라봐야 한다고 코드(MoveTowardsPlayer)가 지시할 때
+        {
+            // 실제로는 왼쪽을 보도록 스케일을 음수로 만듭니다.
+            spriteToFlip.localScale = new Vector3(-Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
+        }
+    }
+    // ======================================================================
+
+
+    // ======================================================================
+    // 외부에서 플레이어 Transform을 설정하기 위한 함수
+    // "전체 관리하는 친구"가 이 함수를 호출하여 플레이어 정보를 전달할 것입니다.
+    // ======================================================================
+    public void SetPlayerTarget(Transform newPlayerTransform)
+    {
+        if (newPlayerTransform != null)
+        {
+            playerTransform = newPlayerTransform;
+            Debug.Log($"{gameObject.name}: 플레이어 타겟이 설정되었습니다: {playerTransform.name}", this);
+        }
+        else
+        {
+            Debug.LogWarning($"{gameObject.name}: SetPlayerTarget 함수에 전달된 플레이어 Transform이 null입니다. 플레이어를 추적할 수 없습니다.", this);
+        }
+    }
 }

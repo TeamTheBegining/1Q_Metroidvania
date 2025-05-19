@@ -38,7 +38,7 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
     }
 
     [Header("Player Tracking")]
-    protected Transform playerTransform; // 플레이어의 Transform 참조 (이제 외부에서 설정됨)
+    [SerializeField]protected Transform playerTransform; // 플레이어의 Transform 참조 (이제 외부에서 설정됨)
     public float detectionRange = 5f; // 플레이어 감지 범위
     public float attackRange = 1.5f; // 공격 가능 범위
     public float moveSpeed = 2f; // 이동 속도
