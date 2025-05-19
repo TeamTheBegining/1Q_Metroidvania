@@ -71,6 +71,9 @@ public class GameManager : Singleton<GameManager>
         globalCanvas.renderMode = RenderMode.ScreenSpaceCamera;
         globalCanvas.worldCamera = Camera.main;
         State = GameState.BeforeStart;
+
+        CheatInit();
+
 #if UNITY_EDITOR
         TestInit();
 #endif
@@ -113,7 +116,8 @@ public class GameManager : Singleton<GameManager>
     private void OnPlay()
     {
         globalCanvas.worldCamera = Camera.main;
-        //FindFirstObjectByType<PlayerDeadPanel>().Init();
+        //PlayerDeadPanel deadPanel = FindFirstObjectByType<PlayerDeadPanel>();
+        //deadPanel.Init();
     }
 
     private void OnPause()
