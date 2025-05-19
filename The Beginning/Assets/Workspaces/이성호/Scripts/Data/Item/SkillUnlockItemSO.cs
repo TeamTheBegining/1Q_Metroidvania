@@ -5,7 +5,8 @@ public class SkillUnlockItemSO : ItemDataSO
 {
     public PlayerSkillType type;
 
-    public void UnlockSkill()
+
+    public override void OnUseItem()
     {
         PlayerManager.Instance.UnlockPlayerSkill(type);
     }

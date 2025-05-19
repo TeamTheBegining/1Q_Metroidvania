@@ -18,6 +18,16 @@ public class Test_06_PoolManager : TestBase
         StartCoroutine(PopProcess());
     }
 
+    protected override void OnTest3(InputAction.CallbackContext context)
+    {
+        PoolManager.Instance.Pop(PoolType.ProjectilePlayer, targetposition.position);
+    }
+
+    protected override void OnTest4(InputAction.CallbackContext context)
+    {
+        PoolManager.Instance.Pop(PoolType.ProjectileEnemy, targetposition.position);
+    }
+
     private IEnumerator PopProcess()
     {
         PoolManager.Instance.Pop<PlayerSlideAfterImage>(PoolType.PlayerSlideAfterImage, targetposition.position).Init(0);

@@ -14,4 +14,8 @@ public class ItemDataSO : ScriptableObject
     /// </summary>
     [TextArea]
     public string itemDescription;
+
+    public virtual void OnUseItem()
+    { 
+    }
 }

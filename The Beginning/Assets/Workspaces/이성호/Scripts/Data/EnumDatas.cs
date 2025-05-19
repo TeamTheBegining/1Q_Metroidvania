@@ -9,6 +9,8 @@ public enum PoolType
 {
     Hit1 = 0,
     PlayerSlideAfterImage,
+    ProjectilePlayer,
+    ProjectileEnemy,
     PoolTypeCount
 }
 
