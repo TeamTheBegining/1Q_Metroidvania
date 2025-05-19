@@ -24,19 +24,13 @@ public class PlayerInput : MonoBehaviour
     public bool IsInteraction { get => isInteraction; }
 
     bool isSkill1 = false;
-    public bool IsSkill1 { get => isSkill1; }
+    public bool IsSkill1 { get => isSkill1; set => isSkill1 = value; }
 
     bool isSkill2 = false;
-    public bool IsSkill2 { get => isSkill2; }
-
-    bool isSkill3 = false;
-    public bool IsSkill3 { get => isSkill3; }
+    public bool IsSkill2 { get => isSkill2; set => isSkill2 = value; }
 
     bool isParrying = false;
     public bool IsParrying { get => isParrying; set => isParrying = value; }
-
-    bool isDodging = false;
-    public bool IsDodging { get => isDodging; }
 
     bool isSliding = false;
 
@@ -66,8 +60,6 @@ public class PlayerInput : MonoBehaviour
         actions.Player.Skill1.canceled += Skill1_canceled;
         actions.Player.Skill2.started += Skill2_started;
         actions.Player.Skill2.canceled += Skill2_canceled;
-        actions.Player.Skill3.started += Skill3_started;
-        actions.Player.Skill3.canceled += Skill3_canceled;
         actions.Player.Interaction.started += Interaction_started;
         actions.Player.Interaction.canceled += Interaction_canceled;
         actions.Player.Sliding.started += Sliding_started;
@@ -83,18 +75,15 @@ public class PlayerInput : MonoBehaviour
     {
         actions.Player.Enable();
 
-        actions.Player.Move.Enable();
-        actions.Player.Attack.Enable();
-        actions.Player.Jump.Enable();
-        actions.Player.Parrying.Enable();
-        actions.Player.Skill1.Enable();
-        actions.Player.Skill2.Enable();
-        actions.Player.Skill3.Enable();
-        actions.Player.Interaction.Enable();
-        actions.Player.Sliding.Enable();
+        AllEnable();
     }
 
     private void OnDisable()
+    {
+        AllDisable();
+        actions.Player.Disable();
+    }
+    public void AllDisable()
     {
         actions.Player.Attack.Disable();
         actions.Player.Move.Disable();
@@ -102,12 +91,43 @@ public class PlayerInput : MonoBehaviour
         actions.Player.Parrying.Disable();
         actions.Player.Skill1.Disable();
         actions.Player.Skill2.Disable();
-        actions.Player.Skill3.Disable();
         actions.Player.Interaction.Disable();
         actions.Player.Sliding.Disable();
-
-        actions.Player.Disable();
     }
+    public void AllEnable()
+    {
+        actions.Player.Attack.Enable();
+        actions.Player.Move.Enable();
+        actions.Player.Jump.Enable();
+        actions.Player.Parrying.Enable();
+        actions.Player.Skill1.Enable();
+        actions.Player.Skill2.Enable();
+        actions.Player.Interaction.Enable();
+        actions.Player.Sliding.Enable();
+    }
+
+    public void OneEnable(int idx)
+    {
+        switch(idx)
+        {
+            case 0:
+                actions.Player.Attack.Enable();
+                break;
+            case 1:
+                actions.Player.Parrying.Enable();
+                break;
+            case 2:
+                actions.Player.Skill1.Enable();
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+        }
+    }
+
 
     private void Jump_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
@@ -168,16 +188,6 @@ public class PlayerInput : MonoBehaviour
     private void Skill2_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         isSkill2 = false;
-    }
-
-    private void Skill3_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        isSkill3 = true;
-    }
-
-    private void Skill3_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        isSkill3 = false;
     }
 
     private void Parrying_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
