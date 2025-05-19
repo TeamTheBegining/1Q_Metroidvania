@@ -200,18 +200,26 @@ public class Player : MonoBehaviour, IDamageable
         animatorCtrl = GetComponent<PlayerAnimation>();
         spriternderer = gameObject.GetComponent<SpriteRenderer>();
         groundCheckTransform = transform.GetChild(0).transform;
-        attackColl = transform.GetChild(1).GetComponent<Collider2D>();
-        attackColl2 = transform.GetChild(2).GetComponent<Collider2D>();
-        attackColl3 = transform.GetChild(3).GetComponent<Collider2D>();
-        skillColl1 = transform.GetChild(4).GetComponent<Collider2D>();
-        slidingColl = transform.GetChild(5).GetComponent<Collider2D>();
-        m_wallSensor1 = transform.GetChild(6).GetComponent<WallSensor>();
-        m_wallSensor2 = transform.GetChild(7).GetComponent<WallSensor>();
-        m_grabSensor = transform.GetChild(8).GetComponent<GrabSensor>();
-        m_grabColl = transform.GetChild(9).GetComponent<Collider2D>();
-        m_grabTransform = transform.GetChild(9).GetComponent<Transform>();
+        
+        // 콜라이더 그룹 찾기
+        Transform attackGroup = transform.Find("Colliders");
+        attackColl = attackGroup.Find("AttackCollider").GetComponent<Collider2D>();
+        attackColl2 = attackGroup.Find("AttackCollider2").GetComponent<Collider2D>();
+        attackColl3 = attackGroup.Find("AttackCollider3").GetComponent<Collider2D>();
+        skillColl1 = attackGroup.Find("SkillCollider1").GetComponent<Collider2D>();
+        slidingColl = attackGroup.Find("SlidingCollider").GetComponent<Collider2D>();
+        parryingCounterColl = attackGroup.Find("ParryingCounterAttackCollider").GetComponent<Collider2D>();
+        m_grabColl = attackGroup.Find("GrabCollider").GetComponent<Collider2D>();
+        // 그랩 위치
+        m_grabTransform = m_grabColl.gameObject.GetComponent<Transform>();
+
+        // 센서 그룹 찾기
+        Transform sensorGroup = transform.Find("Sensors");
+        m_wallSensor1 = sensorGroup.Find("WallSensor1").GetComponent<WallSensor>();
+        m_wallSensor2 = sensorGroup.Find("WallSensor2").GetComponent<WallSensor>();
+        m_grabSensor = sensorGroup.Find("GrabSensor").GetComponent<GrabSensor>();
+
         playerColl = transform.GetComponent<Collider2D>();
-        parryingCounterColl = transform.GetChild(10).GetComponent<Collider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
         curParryCount = 0;
