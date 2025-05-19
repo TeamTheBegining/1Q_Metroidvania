@@ -2,6 +2,24 @@ using System;
 using UnityEngine;
 using System.Collections;
 
+// 이 enum은 CommonEnemyController 클래스 밖에 정의합니다. (여기에만 있어야 합니다!)
+public enum ComboState
+{
+    None,
+
+    // 빠른 잽 연타 콤보 상태
+    QuickJab_Initial,
+    QuickJab_Second,
+
+    // 묵직한 펀치 연타 콤보 상태 ("퉁퉁 퉁~")
+    HeavyAttack_Initial,
+    HeavyAttack_Second,
+
+    // 엇박 콤보 상태
+    OffBeat_Initial,
+    OffBeat_Second
+}
+
 public abstract class CommonEnemyController : MonoBehaviour, IDamageable
 {
     [Header("Base Enemy Stats")]
@@ -505,22 +523,4 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
             Debug.LogWarning($"{gameObject.name}: SetPlayerTarget 함수에 전달된 플레이어 Transform이 null입니다. 플레이어를 추적할 수 없습니다.", this);
         }
     }
-}
-
-// ComboState enum은 CommonEnemyController 클래스 내부에 정의합니다.
-public enum ComboState
-{
-    None,                     // 콤보가 진행 중이 아님, 새로운 공격을 시작할 준비 완료
-
-    // 빠른 잽 연타 콤보 상태
-    QuickJab_Initial,        // 첫 번째 Attack1 (잽)을 방금 수행함
-    QuickJab_Second,         // 두 번째 Attack1 (잽)을 방금 수행함
-
-    // 묵직한 펀치 연타 콤보 상태 ("퉁퉁 퉁~")
-    HeavyAttack_Initial,      // 첫 번째 Attack2 (퉁)을 방금 수행함
-    HeavyAttack_Second,       // 두 번째 Attack2 (퉁)을 방금 수행함
-
-    // 엇박 콤보 상태
-    OffBeat_Initial,          // 엇박 콤보 첫 번째 공격 (Attack1)을 방금 수행함
-    OffBeat_Second            // 엇박 콤보 두 번째 공격 (Attack1 또는 Attack2)을 방금 수행함
 }

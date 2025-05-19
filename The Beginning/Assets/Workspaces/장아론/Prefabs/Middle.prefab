@@ -53,7 +53,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3405676440427053774
 Transform:
   m_ObjectHideFlags: 0
@@ -171,6 +171,15 @@ MonoBehaviour:
   patrolLeftLimit: {x: 0, y: 0, z: 0}
   patrolRightLimit: {x: 0, y: 0, z: 0}
   postAttackWaitDuration: 0.5
+  currentComboState: 0
+  comboChainDelay: 0.3
+  comboResetTime: 2.5
+  attack2Cooldown: 2
+  attack3Cooldown: 5
+  heavyPunchFirstDelay: 0.6
+  heavyPunchSecondDelay: 0.8
+  offBeatFirstDelay: 0.7
+  offBeatSecondDelay: 0.3
   attack1HitboxObject: {fileID: 8636349439236697190}
   attack2HitboxObject: {fileID: 7284608179196531827}
   attack3HitboxObject: {fileID: 7971730487343713275}
@@ -182,6 +191,8 @@ MonoBehaviour:
   attack3Value: 3.5
   attack3DashSpeed: 5
   attack3DashDuration: 0.5
+  comboResetTime: 1.2
+  comboChainDelay: 0.4
   hurtColor: {r: 0.6509434, g: 0.17501779, b: 0.17501779, a: 1}
   hurtColorDuration: 0.2
 --- !u!61 &278362775629190335
