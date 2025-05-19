@@ -8,20 +8,23 @@ public enum PopupType { Skill = 0, Equip, Special, Quest}
 public class PopupController : MonoBehaviour
 {
     [Header("Popup Windows")]
-    [SerializeField] private GameObject skillPopup;
-    [SerializeField] private GameObject equipPopup;
-    [SerializeField] private GameObject specialPopup;
+    [SerializeField] private GameObject SkillPopup;
+    [SerializeField] private GameObject EquipPopup;
+    [SerializeField] private GameObject SpecialPopup;
+    [SerializeField] private GameObject QuestPopup;
 
     [Header("Slot Settings")]
     public Transform slotParent;
     public Image highlightImage;
 
-    private List<InventorySlotUI> slotList = new List<InventorySlotUI>();
-    private int popupIndex = 0;
+    public GameObject currentActivePopup;
+
+
+    public List<InventorySlotUI> slotList = new List<InventorySlotUI>();
+    public int popupIndex = 0;
 
     private Dictionary<PopupType, GameObject> popupDict;
     private PopupType currentPopupType;
-    private GameObject currentActivePopup;
 
     // 현재 인벤토리 커서가 가리키는 타입을 외부에서 세팅
     private PopupType currentCursorType = PopupType.Skill;
@@ -45,10 +48,10 @@ public class PopupController : MonoBehaviour
         {
             popupDict = new Dictionary<PopupType, GameObject>
             {
-                { PopupType.Skill, skillPopup },
-                { PopupType.Equip, equipPopup },
-                { PopupType.Special, specialPopup },
-                //{ PopupType.Quest, 퀘스트팝업 }
+                { PopupType.Skill, SkillPopup },
+                { PopupType.Equip, EquipPopup },
+                { PopupType.Special, SpecialPopup },
+                { PopupType.Quest, QuestPopup }
             };
         }
 
