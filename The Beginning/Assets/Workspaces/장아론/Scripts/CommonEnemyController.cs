@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using System.Collections;
 
-// 이 enum은 CommonEnemyController 클래스 밖에 정의합니다. (여기에만 있어야 합니다!)
 public enum ComboState
 {
     None,
@@ -75,17 +74,17 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
     protected float nextAttackTime = 0f; // 다음 공격이 가능한 시간
     public ComboState currentComboState = ComboState.None; // 콤보 상태 추적
     protected float lastAttackAttemptTime = 0f; // 마지막 공격 시도 시간 기록 (콤보 리셋용)
-    public float comboChainDelay = 0.3f; // 일반적인 콤보 공격 사이의 지연 시간 (짧게 설정)
-    public float comboResetTime = 2.5f; // 콤보가 완전히 리셋되는 시간 (인스펙터에서 조절, 이전보다 길게 설정)
-    public float attack2Cooldown = 1.0f; // Attack2 (강타)의 쿨다운 (콤보 마무리시 사용)
-    public float attack3Cooldown = 2.0f; // Attack3 (회오리 돌진)의 쿨다운
+    public float comboChainDelay = 0.2f; // 일반적인 콤보 공격 사이의 지연 시간 (짧게 설정)
+    public float comboResetTime = 1.5f; // 콤보가 완전히 리셋되는 시간 (인스펙터에서 조절, 이전보다 길게 설정)
+    public float attack2Cooldown = 0.8f; // Attack2 (강타)의 쿨다운 (콤보 마무리시 사용)
+    public float attack3Cooldown = 1.5f; // Attack3 (회오리 돌진)의 쿨다운
 
     [Header("Custom Combo Delays")] // 새로운 패턴을 위한 지연 시간 변수들
-    public float heavyPunchFirstDelay = 0.6f;  // "퉁퉁 퉁~" 첫 번째 '퉁' 후 다음 '퉁'까지의 지연
-    public float heavyPunchSecondDelay = 0.8f; // "퉁퉁 퉁~" 두 번째 '퉁' 후 마지막 '퉁'까지의 지연
+    public float heavyPunchFirstDelay = 0.4f;  // "퉁퉁 퉁~" 첫 번째 '퉁' 후 다음 '퉁'까지의 지연
+    public float heavyPunchSecondDelay = 0.6f; // "퉁퉁 퉁~" 두 번째 '퉁' 후 마지막 '퉁'까지의 지연
 
-    public float offBeatFirstDelay = 0.7f;     // 엇박 콤보 첫 번째 공격 후 다음 공격까지의 지연 (길게)
-    public float offBeatSecondDelay = 0.3f;    // 엇박 콤보 두 번째 공격 후 다음 공격까지의 지연 (짧게)
+    public float offBeatFirstDelay = 0.5f;     // 엇박 콤보 첫 번째 공격 후 다음 공격까지의 지연 (길게)
+    public float offBeatSecondDelay = 0.2f;    // 엇박 콤보 두 번째 공격 후 다음 공격까지의 지연 (짧게)
     // --- (여기까지) ---
 
     protected Rigidbody2D rb;
@@ -280,10 +279,12 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
         {
             float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
-            // A) 패턴 1: 회오리 돌진 (Attack3) - 중거리 우선순위
-            if (distanceToPlayer > attackRange * 1.5f && distanceToPlayer <= detectionRange * 0.8f) // 중거리 범위 설정
+            // A) 패턴 1: 회오리 돌진 (Attack3) - 이제 근거리에서도 발동 가능
+            // 플레이어에게 상당히 가까이 붙었을 때 (기존 공격 범위 안팎에서) 또는 중거리에서 50% 확률로 발동
+            if ((distanceToPlayer <= attackRange * 1.2f && distanceToPlayer > 0.5f) || // 근거리 조건 추가: 공격 범위 근처 (너무 겹치는 경우 방지)
+                (distanceToPlayer > attackRange * 1.5f && distanceToPlayer <= detectionRange * 0.8f)) // 기존 중거리 조건 유지
             {
-                if (UnityEngine.Random.Range(0f, 1f) < 0.5f) // 50% 확률로 회오리 돌진 시도
+                if (UnityEngine.Random.Range(0f, 1f) < 0.5f) // 여전히 50% 확률로 시도
                 {
                     isPerformingAttackAnimation = true;
                     PlayAttack3Anim();

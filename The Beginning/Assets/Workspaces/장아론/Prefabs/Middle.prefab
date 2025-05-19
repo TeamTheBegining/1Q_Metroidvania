@@ -161,11 +161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0d974b6d09e9374f943174a5209fcb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 10
+  _maxHealth: 100
   playerTransform: {fileID: 0}
-  detectionRange: 10
-  attackRange: 1.3
-  moveSpeed: 1.5
+  detectionRange: 5
+  attackRange: 1.5
+  moveSpeed: 2.5
   attackStopBuffer: 0.1
   enablePatrol: 0
   patrolLeftLimit: {x: 0, y: 0, z: 0}
@@ -174,8 +174,8 @@ MonoBehaviour:
   currentComboState: 0
   comboChainDelay: 0.3
   comboResetTime: 2.5
-  attack2Cooldown: 2
-  attack3Cooldown: 5
+  attack2Cooldown: 4
+  attack3Cooldown: 2
   heavyPunchFirstDelay: 0.6
   heavyPunchSecondDelay: 0.8
   offBeatFirstDelay: 0.7
@@ -183,17 +183,17 @@ MonoBehaviour:
   attack1HitboxObject: {fileID: 8636349439236697190}
   attack2HitboxObject: {fileID: 7284608179196531827}
   attack3HitboxObject: {fileID: 7971730487343713275}
-  attack1Cooldown: 1.5
-  attack2Cooldown: 2
-  attack3Cooldown: 5
+  attack1Cooldown: 3
   attack1Value: 1.5
-  attack2Value: 2
+  attack2Value: 2.5
   attack3Value: 3.5
   attack3DashSpeed: 5
   attack3DashDuration: 0.5
-  comboResetTime: 1.2
-  comboChainDelay: 0.4
-  hurtColor: {r: 0.6509434, g: 0.17501779, b: 0.17501779, a: 1}
+  heavyPunchFirstDelay: 0.6
+  heavyPunchSecondDelay: 0.8
+  offBeatFirstDelay: 0.7
+  offBeatSecondDelay: 0.3
+  hurtColor: {r: 1, g: 0, b: 0, a: 1}
   hurtColorDuration: 0.2
 --- !u!61 &278362775629190335
 BoxCollider2D:
