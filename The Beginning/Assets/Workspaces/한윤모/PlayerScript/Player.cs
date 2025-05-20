@@ -15,18 +15,13 @@ using static Unity.Burst.Intrinsics.X86.Sse4_2;
 
 public class Player : MonoBehaviour, IDamageable
 {
-    [Header("스피드 조절")]
-    [Tooltip("플레이어 이동 속도")]
-    [SerializeField] float moveSpeed = 4f;
-    [SerializeField] float baseMoveSpeed = 4f;
-    [Tooltip("플레이어 사다리 이동 속도")]
-    [SerializeField] float lmoveSpeed = 2f;
-    [Tooltip("플레이어 점프중 이동 속도")]
-    [SerializeField] float jumpMoveSpeed = 0.7f;
-    [Tooltip("플레이어 슬라이딩 이동 속도")]
-    [SerializeField] float slideSpeed = 5f;
-    [Tooltip("플레이어 공격중 이동 속도")]
-    [SerializeField] float attackMoveSpeed = 0.5f;
+     float moveSpeed = 4f;
+     float baseMoveSpeed = 4f;
+     float lmoveSpeed = 2f;
+     float jumpMoveSpeed = 0.7f;
+     float slideSpeed = 5f;
+     float attackMoveSpeed = 0.5f;
+
     [Space(2)]
     [Header("AddForce 파워 조절")]
     [SerializeField] float jumpPower = 5f;
@@ -39,8 +34,6 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float flyPower = 3f;
     [Tooltip("이단 점프하는 힘")]
     [SerializeField] float dpower = 4f;
-    /*[Tooltip("이단 점프 내려가는중 점프하는 힘")]
-    [SerializeField] float ddpower = 1.25f;*/
     [Space(2)]
     [Header("HP,MP 수치 조정")]
     [SerializeField] float maxHp = 10f;
@@ -65,21 +58,18 @@ public class Player : MonoBehaviour, IDamageable
     float healingTimer = 0;
     float dropDownTimer = 0f;
     float cutSceneTimer = 0f;
-
-    [Space(2)]
-    [Header("딜레이 시간")]
-    [Tooltip("점프 후 시간만큼 땅 체크 무시")]
-    [SerializeField] float jumpDisableGroundCheckTime = 0.3f;
-    [SerializeField] float moveDelayTime = 0.3f;
-    [SerializeField] float doubleJumpDelayTime = 0.2f;
-    [SerializeField] float grabDelayTime = 0.2f;
-    [SerializeField] float ladderDelayTime = 0.2f;
-    [SerializeField] float attackDelayTime = 0.2f;
-    [SerializeField] float slidingDelayTime = 1f;
-    [SerializeField] float parryDelayTime = 0.8f;
-    [SerializeField] float spawnDelayTime = 0.1f;
-    [SerializeField] float parryCountTime = 0.3f;
-    [SerializeField] float dropDownTime = 0.5f;
+    float chargingmoveTime = 0f;
+     float jumpDisableGroundCheckTime = 0.3f;
+     float moveDelayTime = 0.3f;
+     float doubleJumpDelayTime = 0.2f;
+     float grabDelayTime = 0.2f;
+     float ladderDelayTime = 0.2f;
+     float attackDelayTime = 0.2f;
+     float slidingDelayTime = 1f;
+     float parryDelayTime = 0.8f;
+     float spawnDelayTime = 0.1f;
+     float parryCountTime = 0.3f;
+     float dropDownTime = 0.5f;
     float cutSceneTime;
 
     [Space(2)]
@@ -129,9 +119,9 @@ public class Player : MonoBehaviour, IDamageable
     bool attack2Able = false;
     bool attack3Able = false;
     bool isDropDown = false;
-    [SerializeField]bool getDoublejump = false;
-    [SerializeField]bool getCharging = false;
-    [SerializeField]bool chargingAttackAble = false;
+    bool getDoublejump = false;
+    bool getCharging = false;
+    bool chargingAttackAble = false;
     //bool isInteraction = false;
 
     //벽타기 체크 변수
@@ -142,6 +132,11 @@ public class Player : MonoBehaviour, IDamageable
     private Transform m_grabTransform;
     private Vector3 m_grabPos;
     Vector3 playerleftdown;
+
+    //차징 공격
+    private Vector3 chargingStartPos;
+    [SerializeField]private float chargingDis = 3f;
+
     Interactable interactable;
     public float Damage
     {
@@ -186,7 +181,7 @@ public class Player : MonoBehaviour, IDamageable
     }
 
     PlayerDirectionState curDir = PlayerDirectionState.Right;//현재 방향
-    private bool isDead;
+    [SerializeField]private bool isDead = false;
 
     enum PlayerDirectionState
     {
@@ -214,7 +209,9 @@ public class Player : MonoBehaviour, IDamageable
     public bool IsDead => isDead;
     public Action OnDead { get; set; }
 
-    [SerializeField]private float skillpos = 2f;
+    [SerializeField] private float skillpos = 1.2f;
+    [SerializeField] private AnimationCurve anicurve;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -258,7 +255,7 @@ public class Player : MonoBehaviour, IDamageable
         //테스트용
         if (input.IsParrying&&input.InputVec.y<0)
         {
-            isParryAble = true;
+            //isParryAble = true;
             TakeDamage(95,gameObject);
             input.IsParrying = false;
         }
@@ -285,7 +282,7 @@ public class Player : MonoBehaviour, IDamageable
                 PlayerChargingUpdate();
                 break;
             case PlayerState.ChargingAttack:
-                //PlayerChargingAttackUpdate();
+                PlayerChargingAttackUpdate();
                 break;
             case PlayerState.Attack1:
                 PlayerAttack1Update();
@@ -362,8 +359,11 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void SkillUnLockCheck()
     {
-        getCharging = PlayerManager.Instance.IsSkillUnlock[0];
-        getDoublejump = PlayerManager.Instance.IsSkillUnlock[1];
+        if(PlayerManager.Instance.IsSkillUnlock != null)
+        {
+            getCharging = PlayerManager.Instance.IsSkillUnlock[0];
+            getDoublejump = PlayerManager.Instance.IsSkillUnlock[1];
+        }
     }
 
     private void ColliderCheck()
@@ -646,7 +646,7 @@ public class Player : MonoBehaviour, IDamageable
             input.IsJump = false;
             rb.gravityScale = 1;
             animatorCtrl.AniSpeed = 1f;
-            gameObject.layer = LayerMask.NameToLayer("Player"); // 무브 딜레이 끝나면 Player로 수정 예정
+            gameObject.layer = LayerMask.NameToLayer("Player");
             rb.AddForce(Vector2.up * ljumpPower, ForceMode2D.Impulse);
             currentState = PlayerState.Jump;
         }
@@ -691,7 +691,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void PlayerChargingUpdate()
     {
-        if (rb.linearVelocity.x !=0) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        if (rb.linearVelocity.x != 0) rb.linearVelocity = Vector2.zero;
 
         // 공격 떼면 처리
         if (!input.IsAttack)
@@ -700,6 +700,8 @@ public class Player : MonoBehaviour, IDamageable
             if (chargingAttackAble)
             {
                 currentState = PlayerState.ChargingAttack;
+                chargingStartPos = transform.position;
+                chargingmoveTime = 0;
             }
             else
             {
@@ -707,6 +709,16 @@ public class Player : MonoBehaviour, IDamageable
             }
             chargingAttackAble = false;
         }
+    }
+
+    private void PlayerChargingAttackUpdate()
+    {
+        chargingmoveTime += Time.deltaTime;
+        float normalizedTime = Mathf.Clamp01(chargingmoveTime / 0.3f); // 커브 총 시간 0.3f
+        float curveValue = anicurve.Evaluate(normalizedTime); // 커브 값을 가져옴
+
+        Vector3 targetPosition = chargingStartPos + Vector3.right * chargingDis * (int)curDir;
+        transform.position = Vector3.Lerp(chargingStartPos, targetPosition, curveValue);
     }
 
     private void PlayerAttack2Update()
@@ -1237,11 +1249,13 @@ public class Player : MonoBehaviour, IDamageable
 
     private void PlayerDead()
     {
-        OnDead?.Invoke();
+        gameObject.layer = LayerMask.NameToLayer("Player");
         currentState = PlayerState.Dead;
         isDead =true;
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0f;
+        OnDead?.Invoke();
+        print("뭐지");
     }
 
 }
