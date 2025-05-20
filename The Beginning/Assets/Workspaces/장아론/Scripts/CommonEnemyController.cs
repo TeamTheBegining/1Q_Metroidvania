@@ -79,13 +79,13 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
     public float attack2Cooldown = 0.8f; // Attack2 (강타)의 쿨다운 (콤보 마무리시 사용)
     public float attack3Cooldown = 1.5f; // Attack3 (회오리 돌진)의 쿨다운
 
-    /*[Header("Custom Combo Delays")] // 새로운 패턴을 위한 지연 시간 변수들
-    public float heavyPunchFirstDelay = 0.4f;  // "퉁퉁 퉁~" 첫 번째 '퉁' 후 다음 '퉁'까지의 지연
-    public float heavyPunchSecondDelay = 0.6f; // "퉁퉁 퉁~" 두 번째 '퉁' 후 마지막 '퉁'까지의 지연
+    //[Header("Custom Combo Delays")] // 새로운 패턴을 위한 지연 시간 변수들
+    //public float heavyPunchFirstDelay = 0.4f;  // "퉁퉁 퉁~" 첫 번째 '퉁' 후 다음 '퉁'까지의 지연
+    //public float heavyPunchSecondDelay = 0.6f; // "퉁퉁 퉁~" 두 번째 '퉁' 후 마지막 '퉁'까지의 지연
 
-    public float offBeatFirstDelay = 0.5f;     // 엇박 콤보 첫 번째 공격 후 다음 공격까지의 지연 (길게)
-    public float offBeatSecondDelay = 0.2f;    // 엇박 콤보 두 번째 공격 후 다음 공격까지의 지연 (짧게)
-    // --- (여기까지) ---*/
+    //public float offBeatFirstDelay = 0.5f;     // 엇박 콤보 첫 번째 공격 후 다음 공격까지의 지연 (길게)
+    //public float offBeatSecondDelay = 0.2f;    // 엇박 콤보 두 번째 공격 후 다음 공격까지의 지연 (짧게)
+    // --- (여기까지) ---
 
     protected Rigidbody2D rb;
 
@@ -260,155 +260,9 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
 
     protected virtual void PerformAttackLogic()
     {
-        // 1. 전역 쿨다운 및 콤보 리셋 시간 체크
-        if (Time.time < nextAttackTime)
-        {
-            // Debug.Log($"[B_Girl] 공격 쿨다운 중. 남은 시간: {nextAttackTime - Time.time:F2}");
-            return;
-        }
-
-        // 마지막 공격 시도 후 충분한 시간이 지났다면 콤보 상태를 초기화합니다.
-        if (Time.time - lastAttackAttemptTime > comboResetTime)
-        {
-            Debug.Log($"[B_Girl] 콤보 리셋됨! (시간 초과: {Time.time - lastAttackAttemptTime:F2}s, 리셋 기준: {comboResetTime:F2}s)");
-            currentComboState = ComboState.None; // 콤보 상태를 None으로 초기화
-        }
-
-        // 2. 새로운 패턴을 시작할지, 기존 콤보를 이어나갈지 결정
-        if (currentComboState == ComboState.None) // 콤보가 진행 중이 아닐 때, 새로운 패턴 시작 결정
-        {
-            float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
-
-            // A) 패턴 1: 회오리 돌진 (Attack3) - 이제 플레이어와 일정 거리가 멀어졌을 때만 발동 (원거리/추격 공격)
-            // 플레이어가 일반 공격 범위보다 멀리 떨어져 있지만, 감지 범위 내에 있을 때 (예: attackRange의 2배 ~ detectionRange의 90% 사이)
-            if (distanceToPlayer > attackRange * 2.0f && distanceToPlayer <= detectionRange * 0.9f)
-            {
-                if (UnityEngine.Random.Range(0f, 1f) < 0.7f) // 70% 확률로 회오리 돌진 시도 (원거리 도주에 대한 강력한 대응)
-                {
-                    isPerformingAttackAnimation = true;
-                    PlayAttack3Anim(); // Attack3 애니메이션 재생 (애니메이션 이벤트로 PerformDashAttack() 호출)
-                    nextAttackTime = Time.time + attack3Cooldown;
-                    lastAttackAttemptTime = Time.time;
-                    Debug.Log($"[B_Girl] (새로운 패턴) 원거리 추격 회오리 돌진 (Attack3) 발동!");
-                    return; // 회오리 돌진 발동 시 다른 공격은 시도하지 않음
-                }
-            }
-
-            // B) 근접 패턴 선택 (회오리 돌진이 발동하지 않았을 경우)
-            // 플레이어가 충분히 가까이 있을 때만 근접 패턴을 고려합니다.
-            if (distanceToPlayer <= attackRange * 2.0f) // 플레이어가 근접 패턴 발동 범위 내에 있을 때
-            {
-                float patternRoll = UnityEngine.Random.Range(0f, 1f);
-
-                if (patternRoll < 0.4f) // 40% 확률로 '빠른 잽 연타' 시작
-                {
-                    isPerformingAttackAnimation = true;
-                    PlayAttack1Anim();
-                    currentComboState = ComboState.QuickJab_Initial; // 새로운 잽 콤보 시작 상태
-                    nextAttackTime = Time.time + comboChainDelay;
-                    Debug.Log($"[B_Girl] (새로운 패턴) 시작: 빠른 잽 연타 (Attack1)");
-                }
-                else if (patternRoll < 0.75f) // 35% 확률로 '묵직한 펀치 연타' 시작
-                {
-                    isPerformingAttackAnimation = true;
-                    PlayAttack2Anim(); // 첫 번째 '퉁'
-                    currentComboState = ComboState.HeavyAttack_Initial; // 묵직한 펀치 콤보 시작 상태
-                    nextAttackTime = Time.time + heavyPunchFirstDelay; // 첫 번째 퉁 후 지연
-                    Debug.Log($"[B_Girl] (새로운 패턴) 시작: 묵직한 펀치 연타 (Attack2) - 퉁!");
-                }
-                else // 25% 확률로 '엇박 콤보' 시작
-                {
-                    isPerformingAttackAnimation = true;
-                    PlayAttack1Anim(); // 엇박 콤보의 시작은 잽
-                    currentComboState = ComboState.OffBeat_Initial; // 엇박 콤보 시작 상태
-                    nextAttackTime = Time.time + offBeatFirstDelay; // 첫 번째 엇박 공격 후 지연
-                    Debug.Log($"[B_Girl] (새로운 패턴) 시작: 엇박 콤보 (Attack1)");
-                }
-            }
-            else // 플레이어가 너무 멀어서 근접 패턴을 시작할 수 없을 때 (회오리 돌진도 발동 안 했다면)
-            {
-                // Debug.Log("[B_Girl] 플레이어가 너무 멀어서 패턴을 시작할 수 없음. 이동 중.");
-                // 이 경우, CommonEnemyController의 MoveTowardsPlayer/MovePatrol 로직에 따라 이동만 합니다.
-            }
-        }
-        else // 현재 콤보 진행 중 (ComboState.None이 아님) - 콤보 이어나가기
-        {
-            isPerformingAttackAnimation = true; // 콤보 중이니 애니메이션 플래그 유지
-            switch (currentComboState)
-            {
-                case ComboState.QuickJab_Initial: // 빠른 잽 연타: 첫 번째 잽 후
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.6f) // 60% 확률로 두 번째 잽 ('원원' 패턴으로 이어짐)
-                    {
-                        PlayAttack1Anim();
-                        currentComboState = ComboState.QuickJab_Second; // 두 번째 잽 상태
-                        nextAttackTime = Time.time + comboChainDelay;
-                        Debug.Log($"[B_Girl] 콤보 진행: 빠른 잽 연타 (두 번째 Attack1)");
-                    }
-                    else // 40% 확률로 강타 ('원투' 패턴으로 마무리)
-                    {
-                        PlayAttack2Anim();
-                        currentComboState = ComboState.None; // 콤보 끝
-                        nextAttackTime = Time.time + attack2Cooldown; // 콤보 마무리 후 쿨다운
-                        Debug.Log($"[B_Girl] 콤보 마무리: 빠른 잽 연타 (Attack2 마무리)");
-                    }
-                    break;
-
-                case ComboState.QuickJab_Second: // 빠른 잽 연타: 두 번째 잽 후 ('원원투' 패턴으로 마무리)
-                    PlayAttack2Anim();
-                    currentComboState = ComboState.None; // 콤보 끝
-                    nextAttackTime = Time.time + attack2Cooldown; // 콤보 마무리 후 쿨다운
-                    Debug.Log($"[B_Girl] 콤보 완료: 빠른 잽 연타 (세 번째 Attack2 마무리)");
-                    break;
-
-                case ComboState.HeavyAttack_Initial: // 묵직한 펀치 연타: 첫 번째 '퉁' 후
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.7f) // 70% 확률로 두 번째 '퉁'
-                    {
-                        PlayAttack2Anim();
-                        currentComboState = ComboState.HeavyAttack_Second; // 두 번째 '퉁' 상태
-                        nextAttackTime = Time.time + heavyPunchSecondDelay; // 두 번째 '퉁' 후 지연
-                        Debug.Log($"[B_Girl] 콤보 진행: 묵직한 펀치 연타 (두 번째 Attack2) - 퉁!");
-                    }
-                    else
-                    {
-                        currentComboState = ComboState.None; // 콤보 끝 (중간에 종료)
-                        nextAttackTime = Time.time + attack2Cooldown;
-                        Debug.Log($"[B_Girl] 콤보 마무리: 묵직한 펀치 연타 (두 번째 퉁 건너뛰고 마무리)");
-                    }
-                    break;
-
-                case ComboState.HeavyAttack_Second: // 묵직한 펀치 연타: 두 번째 '퉁' 후
-                    PlayAttack2Anim(); // 마지막 세 번째 '퉁'
-                    currentComboState = ComboState.None; // 콤보 끝
-                    nextAttackTime = Time.time + attack2Cooldown;
-                    Debug.Log($"[B_Girl] 콤보 완료: 묵직한 펀치 연타 (세 번째 Attack2) - 퉁~!");
-                    break;
-
-                case ComboState.OffBeat_Initial: // 엇박 콤보: 첫 번째 잽 후
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.5f) // 50% 확률로 잽으로 이어짐 (느린 박자)
-                    {
-                        PlayAttack1Anim();
-                        currentComboState = ComboState.OffBeat_Second; // 엇박 콤보 두 번째 상태
-                        nextAttackTime = Time.time + offBeatSecondDelay; // 두 번째 엇박 공격 후 지연 (여기서 박자 조절)
-                        Debug.Log($"[B_Girl] 콤보 진행: 엇박 콤보 (Attack1으로 이어짐 - 느린 박자)");
-                    }
-                    else // 50% 확률로 강타로 마무리 (빠른 박자)
-                    {
-                        PlayAttack2Anim();
-                        currentComboState = ComboState.None; // 콤보 끝
-                        nextAttackTime = Time.time + attack2Cooldown;
-                        Debug.Log($"[B_Girl] 콤보 마무리: 엇박 콤보 (Attack2 마무리 - 빠른 박자)");
-                    }
-                    break;
-
-                case ComboState.OffBeat_Second: // 엇박 콤보: 두 번째 공격 후
-                    PlayAttack2Anim(); // 최종 강타로 마무리
-                    currentComboState = ComboState.None; // 콤보 끝
-                    nextAttackTime = Time.time + attack2Cooldown;
-                    Debug.Log($"[B_Girl] 콤보 완료: 엇박 콤보 (최종 Attack2 마무리)");
-                    break;
-            }
-        }
-        lastAttackAttemptTime = Time.time; // 마지막 공격 시도 시간 업데이트
+        // 이 함수는 B_GirlController에서 오버라이드하여 사용됩니다.
+        // 다른 일반 적들에게는 공통적인 공격 로직이 없다면 비워두거나,
+        // 있다면 여기에 일반적인 로직을 추가하세요.
     }
 
     public virtual void OnAttackAnimationEnd()
