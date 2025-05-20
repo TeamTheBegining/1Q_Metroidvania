@@ -28,7 +28,6 @@ public class Test_04_TmpCustomShader : TestBase
 
     private void Update()
     {
-        int a = 0;
         if (mat != null)
         {
             mat.SetFloat("_Dissolve_Thredshold", value);

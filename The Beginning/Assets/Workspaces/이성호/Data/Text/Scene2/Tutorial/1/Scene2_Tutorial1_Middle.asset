@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293dec649e04ae8419b1bd01b629f6d1, type: 3}
   m_Name: Scene2_Tutorial1_Middle
   m_EditorClassIdentifier: 
-  text: "\u201C\uC791\uC740 \uC77C\uB3C4 \uBB34\uC2DC\uD558\uC9C0 \uC54A\uACE0 \uCD5C\uC120\uC744
+  text: "\u201C\uC791\uC740 \uC77C\uB3C4 \uBB34\uC2DC\uD558\uC9C0 \uC54A\uACE0 \n\uCD5C\uC120\uC744
     \uB2E4\uD574\uC57C \uD55C\uB2E4\u201D\r\n"

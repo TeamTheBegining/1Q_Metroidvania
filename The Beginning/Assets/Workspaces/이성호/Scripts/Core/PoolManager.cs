@@ -228,5 +228,6 @@ public class PoolManager : Singleton<PoolManager>
         poolPrefabs[1] = Resources.Load<GameObject>("Prefabs/Pool/PlayerSlideAfterImage");
         poolPrefabs[2] = Resources.Load<GameObject>("Prefabs/Pool/ProjectilePlayer");
         poolPrefabs[3] = Resources.Load<GameObject>("Prefabs/Pool/ProjectileEnemy");
+        poolPrefabs[4] = Resources.Load<GameObject>("Prefabs/Pool/UltEffect");
     }
 }

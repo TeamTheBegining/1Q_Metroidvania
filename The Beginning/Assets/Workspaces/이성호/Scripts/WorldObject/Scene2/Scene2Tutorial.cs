@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
+using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Scene2Tutorial : MonoBehaviour, Interactable
 {
-    CheatInputActions actions;
+    private CinemachineCamera tutorialCam;
+    private CinemachineCamera tutorialCamToEnemy;
 
     public TextDataSO[] upper;
     public TextDataSO[] middle;
@@ -15,14 +19,19 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
     private TextMeshPro textBottom;
 
     public GameObject TutorialEnemyPrefab;
+    private TutorialEnemy enemy;
+    public Transform enemySpawnPoint;
 
-    public PlayerInput input;
+    private PlayerInput input;
 
     private int currentFlowCount = 0;
     private int maxFlowCount = 0;
 
     private float duration = 1f;
     private bool isTriggered = false; // 상호작용 여부
+
+    private bool isEnemyMove = false;
+    private bool isEnemyAttacking = false; // 현재 적이 애니메이션 공격을 하고 있는지 확인 변수
 
     private void Awake()
     {
@@ -34,6 +43,14 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         textBottom.color = new Color(1f, 1f, 1f, 0f);
 
         maxFlowCount = upper.Length;
+
+        tutorialCam = transform.GetChild(4).GetComponent<CinemachineCamera>();
+        tutorialCamToEnemy = transform.GetChild(5).GetComponent<CinemachineCamera>();
+    }
+
+    private void Update()
+    {
+        UpdateEnemyMove();
     }
 
     public void Play()
@@ -56,37 +73,65 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         {
             if(CheckInput())
             {
-                // 각 구간별 특정 인풋활성화
-                if(0 <= currentFlowCount && currentFlowCount <= 5 - 1) // 패링
-                {
-                    if(currentFlowCount == 0)
-                    {
-                        yield return new WaitForSeconds(1f);
-                    }
 
-                    input.AllDisable();
-                    input.OneEnable(1);
-                }
-                else if(currentFlowCount == 6 - 1) // 스킬1
-                {
-                    input.AllDisable();
-                    input.OneEnable(2);
+                isEnemyAttacking = false;
 
-                    player.CurrentMp = player.MaxMp;
+                yield return new WaitForFixedUpdate();
+                if(enemy && 0 <= currentFlowCount && currentFlowCount <= 5)
+                {
+                    enemy.PlayAttack();
+                    enemy.AttackToTarget();
                 }
 
-                currentFlowCount++;  
+                input.AllDisable();
+
+                if(currentFlowCount == 6)
+                {
+                    yield return new WaitForSeconds(1.2f);
+                    enemy.PlayDead();
+                }
+                else if(currentFlowCount == 7)
+                {
+                    tutorialCamToEnemy.Priority = 110;
+                    yield return new WaitForSeconds(3f);
+                }
+                else if(currentFlowCount == 8)
+                {
+                    tutorialCamToEnemy.Priority = 0;
+                    yield return new WaitForSeconds(3f);
+                }
+                else if(currentFlowCount == 9)
+                {
+                    tutorialCam.Priority = 0;
+                }
+
+                // 적 시나리오
+                currentFlowCount++;
+                EnemyScearioContorller(currentFlowCount);
+
+                // 글자 애니메이션
                 StartCoroutine(FadeOutProcess(currentFlowCount));
                 yield return new WaitForSeconds(duration);
 
                 StartCoroutine(FadeInProcess(currentFlowCount));
                 yield return new WaitForSeconds(duration);
 
+                // 각 구간별 특정 인풋활성화
+                if (0 <= currentFlowCount && currentFlowCount <= 5) // 패링
+                {
+                    input.OneEnable(1);
+                }
+                else if (currentFlowCount == 6) // 스킬1
+                {
+                    input.OneEnable(2);
+
+                    player.CurrentMp = player.MaxMp;
+                }
+
                 // 최대값 확인
                 if (currentFlowCount == maxFlowCount - 1)
                 {
                     StartCoroutine(FadeOutProcess(currentFlowCount));
-                    Debug.Log("종료");
                     break;
                 }
             }
@@ -96,6 +141,7 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
 
         input.AllEnable();
         player.CurrentMp = 0f; // 마나 제거
+        tutorialCam.Priority = 0; // 카메라 포커스 제거
     }
 
     private IEnumerator FadeInProcess(int index)
@@ -154,17 +200,61 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         }
     }
 
-    private void SpawnEnemy()
+    #region enemyControll
+    private void EnemyScearioContorller(int flowIndex)
     {
-        GameObject obj = Instantiate(TutorialEnemyPrefab);
+        if(flowIndex == 2)
+        {
+            SpawnEnemy();
+            SetEnemyMove();
+        }
+        else if(flowIndex >= 3 && flowIndex <= 6)
+        {
+            isEnemyMove = true;
+        }
     }
 
+    private void UpdateEnemyMove()
+    {
+        if (input == null || enemy == null) return;
+
+        float distance = Vector3.Distance(input.gameObject.transform.position, enemy.gameObject.transform.position);
+
+        if (distance < 1f && isEnemyMove) // 일정거리까지 오면 정지 후 공격 애니메이션 시작
+        {            
+            enemy.SetMoveActive(false);
+            isEnemyMove = false;
+        }
+    }
+
+    private void SpawnEnemy()
+    {
+        if (enemy != null) return;
+
+        GameObject obj = Instantiate(TutorialEnemyPrefab, enemySpawnPoint ? enemySpawnPoint.position : Vector3.zero, Quaternion.identity);
+        enemy = obj.GetComponent<TutorialEnemy>();
+    }
+
+    private void SetEnemyMove()
+    {
+        if (input == null || enemy == null) return;
+
+        enemy.PlayRun();
+        enemy.SetMoveActive(true);
+        isEnemyMove = true;
+    }
+    #endregion
+
+    #region Interaction
     public void OnInteraction()
     {
         if (isTriggered) return;
 
         input = FindFirstObjectByType<PlayerInput>();
+        tutorialCam.Priority = 100;
+
         StartCoroutine(Tutorial());
         isTriggered = true;
     }
+    #endregion
 }

@@ -28,6 +28,11 @@ public class Test_06_PoolManager : TestBase
         PoolManager.Instance.Pop(PoolType.ProjectileEnemy, targetposition.position);
     }
 
+    protected override void OnTest5(InputAction.CallbackContext context)
+    {
+        PoolManager.Instance.Pop(PoolType.UltEffect, targetposition.position);
+    }
+
     private IEnumerator PopProcess()
     {
         PoolManager.Instance.Pop<PlayerSlideAfterImage>(PoolType.PlayerSlideAfterImage, targetposition.position).Init(0);

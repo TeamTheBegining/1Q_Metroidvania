@@ -11,6 +11,7 @@ public enum PoolType
     PlayerSlideAfterImage,
     ProjectilePlayer,
     ProjectileEnemy,
+    UltEffect,
     PoolTypeCount
 }
 
