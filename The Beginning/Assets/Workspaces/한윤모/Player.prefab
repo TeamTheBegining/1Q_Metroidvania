@@ -1083,9 +1083,9 @@ MonoBehaviour:
   cjumpPower: 4
   flyPower: 3
   dpower: 4
-  maxHp: 1000
+  maxHp: 10
   maxMp: 25
-  currentHp: 100
+  currentHp: 10
   currentMp: 0
   baseDamage: 2
   damage: 2
@@ -1100,6 +1100,7 @@ MonoBehaviour:
   spawnDelayTime: 0.1
   parryCountTime: 0.1
   chargeThresholdTime: 1
+  dropDownTime: 0.5
   currentState: 0
   getDoublejump: 0
   getCharging: 0

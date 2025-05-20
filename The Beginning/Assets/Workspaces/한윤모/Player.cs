@@ -3,6 +3,8 @@ using TMPro;
 using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
 using UnityEngine.Windows;
 using static PlayerAnimation;
 using static Unity.Burst.Intrinsics.X86.Sse4_2;
@@ -62,11 +64,13 @@ public class Player : MonoBehaviour, IDamageable
     float ladderDelayTimer = 0f;
     float healingTimer = 0;
     float attackButtonDownTimer = 0f;
+    float dropDownTimer = 0f;
+    float cutSceneTimer = 0f;
 
     [Space(2)]
     [Header("딜레이 시간")]
     [Tooltip("점프 후 시간만큼 땅 체크 무시")]
-    [SerializeField] float jumpDisableGroundCheckTime = 0.1f;
+    [SerializeField] float jumpDisableGroundCheckTime = 0.3f;
     [SerializeField] float moveDelayTime = 0.2f;
     [SerializeField] float doubleJumpDelayTime = 0.2f;
     [SerializeField] float grabDelayTime = 0.2f;
@@ -77,6 +81,8 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float spawnDelayTime = 0.1f;
     [SerializeField] float parryCountTime = 0.3f;
     [SerializeField] float chargeThresholdTime = 1f;
+    [SerializeField] float dropDownTime = 0.5f;
+    float cutSceneTime;
 
     [Space(2)]
     [Header("현재 상태 - 애니메이션 비교 확인")]
@@ -125,6 +131,7 @@ public class Player : MonoBehaviour, IDamageable
     bool isHealing = false;
     bool attack2Able = false;
     bool attack3Able = false;
+    bool isDropDown = false;
     [SerializeField]bool getDoublejump = false;
     [SerializeField]bool getCharging = false;
     //bool isInteraction = false;
@@ -163,6 +170,7 @@ public class Player : MonoBehaviour, IDamageable
         Attack3,
         Skill1,
         Skill2,
+        Skill2CutScene,
         Parrying,               //패링 - 패링중
         ParrySuccess,           //패링 - 성공 애니메이션 + 적 경직
         ParryCounterAttack,     //패링 - 반격
@@ -208,6 +216,7 @@ public class Player : MonoBehaviour, IDamageable
     public bool IsDead => isDead;
     public Action OnDead { get; set; }
 
+    [SerializeField]private float skillpos = 2f;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -240,6 +249,8 @@ public class Player : MonoBehaviour, IDamageable
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
         curParryCount = 0;
+
+        cutSceneTime = CutSceneManager.Instance.GetSequenceTime(2);
     }
 
     void Start()
@@ -296,6 +307,9 @@ public class Player : MonoBehaviour, IDamageable
             case PlayerState.Skill2:
                 //PlayerSkillk2();
                 break;
+            case PlayerState.Skill2CutScene:
+                PlayerSkill2CutSceneUpdate();
+                break;
             case PlayerState.Parrying:
                 //PlayerParryingUpdate();
                 break;
@@ -341,14 +355,27 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-
     private void CheckList()
     {
         WallCheck();
         ParryCountCheck();
         DelayCheck();
         EnergyOverCheck();
+        ColliderCheck();
         isGround = CheckIsGround();
+    }
+
+    private void ColliderCheck()
+    {
+        if (isDropDown)
+            dropDownTimer += Time.deltaTime;
+
+        if (dropDownTimer > dropDownTime)
+        {
+            playerColl.enabled = true;
+            isDropDown = false;
+            dropDownTimer = 0;
+        }
     }
 
     private void ParryCountCheck()
@@ -443,7 +470,10 @@ public class Player : MonoBehaviour, IDamageable
             isMoveDelay = false;
             moveDelayTimer = 0;
             if (gameObject.layer != LayerMask.NameToLayer("Player"))
+            {
                 gameObject.layer = LayerMask.NameToLayer("Player");
+                rb.linearVelocity = Vector2.zero;
+            }
         }
 
         if (isDoubleJumpDelay)
@@ -561,7 +591,10 @@ public class Player : MonoBehaviour, IDamageable
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         //히트, 스킬, 슬라이딩 등 무적 이였다가 Idle 되면 레이어 변경
         if (gameObject.layer != LayerMask.NameToLayer("Player"))
+        {
             gameObject.layer = LayerMask.NameToLayer("Player");
+            rb.linearVelocity = Vector2.zero;
+        }
         if (input.InputVec.x != 0)
             currentState = PlayerState.Move;
         JumpAble();
@@ -619,6 +652,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void PlayerJumpUpdate()
     {
+        if(isDropDown) return;
         jumpTimer += Time.deltaTime;
         if (jumpTimer > jumpDisableGroundCheckTime && isGround)
         {
@@ -784,6 +818,18 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+
+    private void PlayerSkill2CutSceneUpdate()
+    {
+        cutSceneTimer += Time.deltaTime;
+        if (cutSceneTimer > cutSceneTime)
+        {
+            currentState = PlayerState.Skill2;
+            PoolManager.Instance.Pop<EffectObject>(PoolType.UltEffect, transform.position + Vector3.up * skillpos).Init((int)curDir == -1 ? true : false);
+            cutSceneTimer = 0;
+        }
+    }
+
     #endregion
 
     #region 움직임 가능 함수
@@ -830,10 +876,22 @@ public class Player : MonoBehaviour, IDamageable
             input.IsSkill1 = false;
             isSkill = true;
             currentState = PlayerState.Skill1;
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            rb.linearVelocity = Vector2.zero;
             currentMp -= 10;
             gameObject.layer = LayerMask.NameToLayer("Invincibility");
         }
+
+        if (input.IsSkill2 && !isAttack && currentMp == MaxMp)
+        {
+            input.IsSkill2 = false;
+            CutSceneManager.Instance.ShowCutscene(2);
+            currentState = PlayerState.Skill2CutScene;
+            gameObject.layer = LayerMask.NameToLayer("Invincibility");
+            rb.linearVelocity = Vector2.zero;
+            currentMp = 0;
+            isSkill = true;
+        }
+
     }
     void ParryAble()
     {
@@ -1053,6 +1111,18 @@ public class Player : MonoBehaviour, IDamageable
     #endregion
 
     #region Ʈ����
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "DropDown" && input.InputVec.y<0&&input.IsJump)
+        {
+            rb.linearVelocity = Vector2.zero;
+            //rb.linearVelocity = new Vector2(0, -5f);
+            currentState = PlayerState.Jump;
+            playerColl.enabled = false;
+            isDropDown = true;
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<Interactable>() != null && input.IsInteraction)
