@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a649e8494e8189743b6e3cfe062e41c7
+guid: 3d45dba677cdb0740964de89fb5bd511
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4103308169148963175
-    second: galaxy_cut_scene_add_5_0
+      213: 2145703860874621829
+    second: ultiamte_skill_2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: galaxy_cut_scene_add_5_0
+      name: ultiamte_skill_2_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 132
         y: 0
-        width: 1766
-        height: 949
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 678
+        height: 175
+      alignment: 9
+      pivot: {x: 0.09173172, y: 0.27883852}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 996eaedd5fe1e07c0800000000000000
-      internalID: -4103308169148963175
+      spriteID: 583bd940b4217cd10800000000000000
+      internalID: 2145703860874621829
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b9c9c443a82cb4a468fd591c294301f3
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      galaxy_cut_scene_add_5_0: -4103308169148963175
+      ultiamte_skill_2_0: 2145703860874621829
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

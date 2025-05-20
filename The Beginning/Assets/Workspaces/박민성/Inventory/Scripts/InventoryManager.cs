@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using System;
+using TMPro;
 
 // InventoryManager.cs
 public class InventoryManager : MonoBehaviour
@@ -20,6 +21,7 @@ public class InventoryManager : MonoBehaviour
     public Color highlightColor = Color.yellow;
 
     [Header("Item Info UI")]
+    public TextMeshProUGUI Money;
     public GameObject itemInfoPanel;
     public Text itemNameText;
     public Image itemIcon;
@@ -49,6 +51,7 @@ public class InventoryManager : MonoBehaviour
     {
         actions = new PlayerInputActions();
         actions.UI.InventoryOpen.Enable();
+        Money.text = "1000";
 
         popupController = GetComponent<PopupController>(); // 0519
     }
@@ -109,7 +112,7 @@ public class InventoryManager : MonoBehaviour
 
     private void InventoryConfirm_started(InputAction.CallbackContext obj)
     {
-        if (IsPopupOpen())
+        if (isFocusToPopUI)
         {
             ConfirmSlot(); // 팝업 내부 처리
         }
@@ -212,20 +215,25 @@ public class InventoryManager : MonoBehaviour
             RectTransform cursorRect = highlightCursor.GetComponent<RectTransform>();
             RectTransform slotRect = allSlots[selectedIndex].GetComponent<RectTransform>();
             cursorRect.position = slotRect.position;
+            currentPGridX = 0;
+            currentPGridY = 0;
         }
 
         // 커서 타입 업데이트 0519
         if(selectedIndex == 0 || selectedIndex == 2) // 장비
         {
             popupController.SetCursorType(PopupType.Equip);
+            highlightCursor.transform.localScale = Vector3.one;
         }
         else if(selectedIndex == 1) // 스킬
         {
+            highlightCursor.transform.localScale = Vector3.one;
             popupController.SetCursorType(PopupType.Skill);
         }
         else if (selectedIndex == 5) // 퀘스트
         {
-            popupController.SetCursorType(PopupType.Quest); // TODO : 퀘스트 팝업 연결하기
+            highlightCursor.transform.localScale = Vector3.one;
+            popupController.SetCursorType(PopupType.Quest); // TODO : 퀘스트 팝업 연결하기            
         }
         else if(selectedIndex == 3 ||
             selectedIndex == 4 ||
@@ -233,6 +241,7 @@ public class InventoryManager : MonoBehaviour
             selectedIndex == 7)
         {
             popupController.SetCursorType(PopupType.Special);
+            highlightCursor.transform.localScale = new Vector3(0.7f,0.85f,0.9f);
         }
     }
 
@@ -242,7 +251,7 @@ public class InventoryManager : MonoBehaviour
         var slotUI = selectedSlot.GetComponent<InventorySlotUI>();
 
         if (slotUI != null && slotUI.HasItem())
-            ShowItemInfo(slotUI.heldItem);
+        { }//ShowItemInfo(slotUI.heldItem);
         else
             HideItemInfo();
     }
@@ -263,7 +272,7 @@ public class InventoryManager : MonoBehaviour
             itemInfoPanel.SetActive(false);
     }
 
-    private bool isFocusToPopUI = false;
+    public bool isFocusToPopUI = false;
     private bool IsPopupOpen()
     {
         // Ensure we are referencing the correct instance of PopupController
@@ -273,17 +282,18 @@ public class InventoryManager : MonoBehaviour
 
     private void OpenPopup_started(InputAction.CallbackContext obj)
     {
-        // 팝업이 열려 있으면 닫기
+        // 팝업이 열려 있으면 닫기  
         if (IsPopupOpen())
         {
             ClosePopup_started(obj);
             return;
         }
 
-        // 팝업 열기
+        // 팝업 열기  
+        Debug.Log("팝업이 열렸습니다!");
+
         isFocusToPopUI = true;
-        savedGridX = currentGridX;
-        savedGridY = currentGridY;
+        highlightCursor.transform.localScale = Vector3.one;
 
         popupController.TogglePopup(popupController.CurrentCursorType);
         foreach (Transform child in popupController.currentActivePopup.transform)
@@ -295,16 +305,16 @@ public class InventoryManager : MonoBehaviour
         cursorRect.position = slotRect.position;
         currentPGridX = 0;
         currentPGridY = 0;
+
     }
 
     // 팝업이 닫힐 때 호출됨
     private void ClosePopup_started(InputAction.CallbackContext obj)
     {
         popupController.TogglePopup(popupController.CurrentCursorType); // 닫기 시도
-        isFocusToPopUI = false;
-
-        currentGridX = savedGridX;
-        currentGridY = savedGridY;
+                                                                        //isFocusToPopUI = false;
+        currentPGridX = 0;
+        currentPGridY = 0;
 
         if (highlightCursor != null)
             highlightCursor.SetActive(true);
@@ -362,16 +372,15 @@ public class InventoryManager : MonoBehaviour
         UpdateSlotHighlight();
     }
 
-    private void ConfirmSlot()
+    public void ConfirmSlot()
     {
         if (popupController == null || popupController.slotList == null || popupController.slotList.Count == 0) return;
 
         var selectedSlot = popupController.slotList[popupController.popupIndex]; // 현재 선택된 팝업 내부 슬롯
         if (selectedSlot != null && selectedSlot.HasItem())
         {
-            Debug.Log("팝업 아이템 사용: " + selectedSlot.heldItem.itemName);
+            //Debug.Log("팝업 아이템 사용: " + selectedSlot.SetItem().itemName);
             // TODO: 실제 아이템 사용 로직 연결
         }
     }
-
 }

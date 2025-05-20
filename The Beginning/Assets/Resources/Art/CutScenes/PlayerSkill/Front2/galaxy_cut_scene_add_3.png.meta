@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      galaxy_cut_scene_add_3_0: 6915229323505645525
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

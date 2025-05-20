@@ -12,13 +12,13 @@ public class PopupController : MonoBehaviour
     [SerializeField] private GameObject EquipPopup;
     [SerializeField] private GameObject SpecialPopup;
     [SerializeField] private GameObject QuestPopup;
-
+    
     [Header("Slot Settings")]
     public Transform slotParent;
     public Image highlightImage;
 
     public GameObject currentActivePopup;
-
+    public InventoryManager inventoryManager;
 
     public List<InventorySlotUI> slotList = new List<InventorySlotUI>();
     public int popupIndex = 0;
@@ -61,6 +61,11 @@ public class PopupController : MonoBehaviour
 
         if (isActive)
         {
+            if (inventoryManager.isFocusToPopUI)
+            {
+                Debug.Log("inventory confirm!");
+                inventoryManager.ConfirmSlot();
+            }
             targetPopup.SetActive(false);
             currentActivePopup = null;
             // 팝업 닫기 → 인벤토리 입력 다시 가능
@@ -85,11 +90,15 @@ public class PopupController : MonoBehaviour
 
         if (slotParent == null) return;
 
-        foreach (Transform child in slotParent)
+        // 슬롯 타입
+        if (currentCursorType == PopupType.Skill)
         {
-            InventorySlotUI slot = child.GetComponent<InventorySlotUI>();
-            if (slot != null)
-                slotList.Add(slot);
+            foreach (Transform child in SkillPopup.transform)
+            {
+                InventorySlotUI slot = child.GetComponent<InventorySlotUI>();
+                if (slot != null)
+                    slotList.Add(slot);
+            }
         }
 
         popupIndex = 0;

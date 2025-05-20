@@ -395,7 +395,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4890674210052834723, guid: 8826e99874ad8fb46881d0d1c383bc34, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8826e99874ad8fb46881d0d1c383bc34, type: 3}
@@ -3064,7 +3065,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4890674210052834723, guid: 8826e99874ad8fb46881d0d1c383bc34, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8826e99874ad8fb46881d0d1c383bc34, type: 3}
@@ -3165,26 +3167,16 @@ CompositeCollider2D:
         Y: -962348
       - X: 60411500
         Y: -962348
-  - m_Collider: {fileID: 203191341}
-    m_ColliderPaths:
-    - - X: 41561500
-        Y: 2345538
-      - X: 21069686
-        Y: 2345538
-      - X: 21069686
-        Y: -962348
-      - X: 41561500
-        Y: -962348
   - m_Collider: {fileID: 6835493799865134370}
     m_ColliderPaths:
-    - - X: 15496998
+    - - X: 21103210
         Y: 2345538
       - X: -80311
         Y: 2345538
       - X: -80311
-        Y: -962348
-      - X: 15496998
-        Y: -962348
+        Y: 1383771
+      - X: 21103210
+        Y: 1383771
   - m_Collider: {fileID: 1942187921}
     m_ColliderPaths:
     - - X: 411498
@@ -3205,14 +3197,24 @@ CompositeCollider2D:
         Y: -962348
       - X: 120411504
         Y: -962348
+  - m_Collider: {fileID: 203191341}
+    m_ColliderPaths:
+    - - X: 41561500
+        Y: 2345538
+      - X: 21069686
+        Y: 2345538
+      - X: 21069686
+        Y: -962348
+      - X: 41561500
+        Y: -962348
   m_CompositePaths:
     m_Paths:
-    - - {x: 12.041121, y: -0.0962348}
-      - {x: 12.041121, y: 0.2345538}
-      - {x: 2.1069686, y: 0.2345245}
+    - - {x: 0.0411205, y: -0.0962348}
+      - {x: 0.0411792, y: 0.1383771}
+      - {x: 2.1069686, y: 0.1383477}
       - {x: 2.106998, y: -0.0962348}
-    - - {x: 1.5496706, y: -0.0962348}
-      - {x: 1.5496706, y: 0.2345538}
+      - {x: 12.04115, y: -0.0962055}
+      - {x: 12.041121, y: 0.2345538}
       - {x: -2.0080311, y: 0.2345245}
       - {x: -2.008002, y: -0.0962348}
   m_VertexDistance: 0.0005
@@ -3417,7 +3419,7 @@ GameObject:
   - component: {fileID: 6835493799865134370}
   m_Layer: 6
   m_Name: Floor1 (8)
-  m_TagString: Untagged
+  m_TagString: DropDown
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3706,7 +3708,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 1
   m_CompositeOrder: 0
-  m_Offset: {x: -0.22916567, y: 0.06915951}
+  m_Offset: {x: 0.051144958, y: 0.1864655}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -3716,7 +3718,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.5577309, y: 0.3307886}
+  m_Size: {x: 2.1183522, y: 0.096176624}
   m_EdgeRadius: 0
 --- !u!4 &6890146278893279426
 Transform:

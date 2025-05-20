@@ -10,7 +10,6 @@ public class SoundManager : Singleton<SoundManager>
     private float bgmSoundValue = 0.1f;
     private float sfxSoundValue = 0.6f;
 
-
     [SerializeField] private AudioClip[] bgmClips = new AudioClip[(int)BGMType.BGMTypeCount];
     [SerializeField] private AudioClip[] sfxClips = new AudioClip[(int)SFXType.SoundTypeCount];
 
