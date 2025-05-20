@@ -251,7 +251,7 @@ public class InventoryManager : MonoBehaviour
         var slotUI = selectedSlot.GetComponent<InventorySlotUI>();
 
         if (slotUI != null && slotUI.HasItem())
-            ShowItemInfo(slotUI.heldItem);
+        { }//ShowItemInfo(slotUI.heldItem);
         else
             HideItemInfo();
     }
@@ -379,9 +379,8 @@ public class InventoryManager : MonoBehaviour
         var selectedSlot = popupController.slotList[popupController.popupIndex]; // 현재 선택된 팝업 내부 슬롯
         if (selectedSlot != null && selectedSlot.HasItem())
         {
-            Debug.Log("팝업 아이템 사용: " + selectedSlot.heldItem.itemName);
+            //Debug.Log("팝업 아이템 사용: " + selectedSlot.SetItem().itemName);
             // TODO: 실제 아이템 사용 로직 연결
         }
     }
-
 }
