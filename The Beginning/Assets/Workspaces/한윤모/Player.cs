@@ -71,7 +71,7 @@ public class Player : MonoBehaviour, IDamageable
     [Header("딜레이 시간")]
     [Tooltip("점프 후 시간만큼 땅 체크 무시")]
     [SerializeField] float jumpDisableGroundCheckTime = 0.3f;
-    [SerializeField] float moveDelayTime = 0.2f;
+    [SerializeField] float moveDelayTime = 0.3f;
     [SerializeField] float doubleJumpDelayTime = 0.2f;
     [SerializeField] float grabDelayTime = 0.2f;
     [SerializeField] float ladderDelayTime = 0.2f;
@@ -645,7 +645,7 @@ public class Player : MonoBehaviour, IDamageable
             input.IsJump = false;
             rb.gravityScale = 1;
             animatorCtrl.AniSpeed = 1f;
-            //gameObject.layer = LayerMask.NameToLayer("Player"); // 무브 딜레이 끝나면 Player로 수정 예정
+            gameObject.layer = LayerMask.NameToLayer("Player"); // 무브 딜레이 끝나면 Player로 수정 예정
             rb.AddForce(Vector2.up * ljumpPower, ForceMode2D.Impulse);
             currentState = PlayerState.Jump;
         }
