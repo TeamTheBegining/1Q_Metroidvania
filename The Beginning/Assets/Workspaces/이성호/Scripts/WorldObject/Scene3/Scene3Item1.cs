@@ -26,9 +26,12 @@ public class Scene3Item1 : MonoBehaviour, Interactable
             StartCoroutine(MessageOutProcess());
             return;
         }
-
-        PlayerManager.Instance.UnlockPlayerSkill(type);
-        this.gameObject.SetActive(false);
+        else
+        {
+            PlayerManager.Instance.UnlockPlayerSkill(type);
+            PlayerManager.Instance.UseCoin(1000);
+            this.gameObject.SetActive(false);
+        }
     }
 
     private IEnumerator MessageOutProcess()

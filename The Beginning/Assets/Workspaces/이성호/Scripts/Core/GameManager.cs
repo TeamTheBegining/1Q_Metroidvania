@@ -129,6 +129,13 @@ public class GameManager : Singleton<GameManager>
         cheatActions.Enable();
 
         cheatActions.Cheat.F1.started += F1_started;
+        cheatActions.Cheat.F2.started += F2_started; ;
+    }
+
+    private void F2_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        PlayerManager.Instance.UnlockPlayerSkill(PlayerSkillType.DoubleJump);
+        PlayerManager.Instance.UnlockPlayerSkill(PlayerSkillType.ChargeAttack);
     }
 
     private void F1_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
