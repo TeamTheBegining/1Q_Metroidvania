@@ -249,13 +249,11 @@ public class Player : MonoBehaviour, IDamageable
         groundLayer = LayerMask.GetMask("Ground");
         currentState = PlayerState.Idle;
         curParryCount = 0;
-
-        cutSceneTime = CutSceneManager.Instance.GetSequenceTime(2);
     }
 
     void Start()
     {
-
+        cutSceneTime = CutSceneManager.Instance.GetSequenceTime(2);
     }
 
     private void FixedUpdate()
@@ -357,12 +355,18 @@ public class Player : MonoBehaviour, IDamageable
 
     private void CheckList()
     {
+        SkillUnLockCheck();
         WallCheck();
         ParryCountCheck();
         DelayCheck();
         EnergyOverCheck();
         ColliderCheck();
         isGround = CheckIsGround();
+    }
+    private void SkillUnLockCheck()
+    {
+        getCharging = PlayerManager.Instance.IsSkillUnlock[0];
+        getDoublejump = PlayerManager.Instance.IsSkillUnlock[1];
     }
 
     private void ColliderCheck()
