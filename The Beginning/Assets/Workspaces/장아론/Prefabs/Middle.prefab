@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0d974b6d09e9374f943174a5209fcb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 1000
+  _maxHealth: 30
   playerTransform: {fileID: 0}
   detectionRange: 5
   attackRange: 1.5
@@ -189,10 +189,6 @@ MonoBehaviour:
   attack3Value: 3.5
   attack3DashSpeed: 5
   attack3DashDuration: 0.5
-  heavyPunchFirstDelay: 0.6
-  heavyPunchSecondDelay: 0.8
-  offBeatFirstDelay: 0.7
-  offBeatSecondDelay: 0.3
   hurtColor: {r: 1, g: 0, b: 0, a: 1}
   hurtColorDuration: 0.2
 --- !u!61 &278362775629190335
