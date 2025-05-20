@@ -188,14 +188,10 @@ MonoBehaviour:
   comboResetTime: 2.5
   attack2Cooldown: 1
   attack3Cooldown: 2
-  heavyPunchFirstDelay: 0.6
-  heavyPunchSecondDelay: 0.8
-  offBeatFirstDelay: 0.7
-  offBeatSecondDelay: 0.3
   attackAHitboxObject: {fileID: 2182750305260988826}
-  attackAValue: 0.5
+  attackAValue: 0.7
   attackACooldown: 3
-  stunDuration: 0.7
+  stunDuration: 1
 --- !u!50 &7113455912212125040
 Rigidbody2D:
   serializedVersion: 5
