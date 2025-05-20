@@ -18,7 +18,7 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
 
     private int currentCount = 0;
     private int maxCount = 0;
-    private float duration = 2f;
+    private float duration = 1f;
     private bool isTriggered = false; // 상호작용 여부
 
     private void Awake()
@@ -35,6 +35,8 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
 
     public void Play()
     {
+        input.AllDisable();
+        input.OneEnable(0); // 1 공격 2 패링 3 스킬
         StartCoroutine(Tutorial());
     }
 
@@ -46,6 +48,16 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         {
             if(CheckInput())
             {
+                if(currentCount < 6 - 1)
+                {
+                    input.AllDisable();
+                    input.OneEnable(1);
+                }
+                else if(currentCount == 6)
+                {
+                    input.AllDisable();
+                    input.OneEnable(2);
+                }
                 StartCoroutine(FadeOutProcess(currentCount));
                 currentCount++;
 
@@ -63,6 +75,8 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
 
             yield return null;
         }
+
+        input.AllEnable();
     }
 
     private IEnumerator FadeInProcess(int index)
