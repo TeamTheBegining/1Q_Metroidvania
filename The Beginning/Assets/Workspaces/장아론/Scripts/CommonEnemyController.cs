@@ -79,13 +79,13 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
     public float attack2Cooldown = 0.8f; // Attack2 (강타)의 쿨다운 (콤보 마무리시 사용)
     public float attack3Cooldown = 1.5f; // Attack3 (회오리 돌진)의 쿨다운
 
-    [Header("Custom Combo Delays")] // 새로운 패턴을 위한 지연 시간 변수들
+    /*[Header("Custom Combo Delays")] // 새로운 패턴을 위한 지연 시간 변수들
     public float heavyPunchFirstDelay = 0.4f;  // "퉁퉁 퉁~" 첫 번째 '퉁' 후 다음 '퉁'까지의 지연
     public float heavyPunchSecondDelay = 0.6f; // "퉁퉁 퉁~" 두 번째 '퉁' 후 마지막 '퉁'까지의 지연
 
     public float offBeatFirstDelay = 0.5f;     // 엇박 콤보 첫 번째 공격 후 다음 공격까지의 지연 (길게)
     public float offBeatSecondDelay = 0.2f;    // 엇박 콤보 두 번째 공격 후 다음 공격까지의 지연 (짧게)
-    // --- (여기까지) ---
+    // --- (여기까지) ---*/
 
     protected Rigidbody2D rb;
 
