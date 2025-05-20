@@ -115,6 +115,7 @@ public class B_GirlController : CommonEnemyController
 
     protected void IndicateDamage()
     {
+        Debug.Log($"[B_Girl] IndicateDamage called. spriteRenderer is null: {spriteRenderer == null}"); // 이 줄 추가
         if (spriteRenderer == null) return;
 
         if (hurtColorCoroutine != null)
