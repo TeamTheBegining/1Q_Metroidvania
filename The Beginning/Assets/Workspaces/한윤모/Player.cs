@@ -1046,7 +1046,8 @@ public class Player : MonoBehaviour, IDamageable
     private void ParryingCounterAttackFinish()
     {
         parryingCounterColl.enabled = false;
-        currentState = PlayerState.Idle; 
+        isParrySuccess = false;
+        currentState = PlayerState.Idle;
     }
 
     #endregion
@@ -1114,7 +1115,6 @@ public class Player : MonoBehaviour, IDamageable
     {
         //A_AttackerController enemyscr = enemy.GetComponent<A_AttackerController>();
         if (IsDead) return;
-
         if (!isParryAble)
         {
             CurrentHp -= damage;
@@ -1149,8 +1149,10 @@ public class Player : MonoBehaviour, IDamageable
         }
         else
         {
+            gameObject.layer = LayerMask.NameToLayer("Invincibility");
             curParryCount++;//패링 성공 시 카운트 증가
             isParrySuccess = true;
+            isParryAble = false;
             currentMp += 10;
             currentState = PlayerState.ParrySuccess;
             //enemyscr.Stun();

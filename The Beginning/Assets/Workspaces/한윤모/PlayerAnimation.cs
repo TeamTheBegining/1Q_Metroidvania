@@ -65,7 +65,7 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Attack1:
                 animator.Play("Attack1");
-                if (stateInfo.normalizedTime >= 1) player.CurrentState = Player.PlayerState.Idle;
+                if (stateInfo.normalizedTime >= 1 && stateInfo.IsName("Attack1")) player.CurrentState = Player.PlayerState.Idle;
                 break;
             case Player.PlayerState.Attack2:
                 animator.Play("Attack2");
@@ -75,6 +75,7 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Skill1:
                 animator.Play("Skill1");
+                if (stateInfo.normalizedTime >= 1 && stateInfo.IsName("Skill1")) player.CurrentState = Player.PlayerState.Idle;
                 break;
             case Player.PlayerState.Skill2:
                 //animator.Play("Skill2");
