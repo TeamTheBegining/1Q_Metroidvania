@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a66db97ff0c6c544a1e88cc745141f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 100
+  _maxHealth: 5
   playerTransform: {fileID: 0}
   detectionRange: 3
   attackRange: 0.8
