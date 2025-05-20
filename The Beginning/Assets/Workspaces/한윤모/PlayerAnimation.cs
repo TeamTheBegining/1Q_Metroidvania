@@ -78,7 +78,10 @@ public class PlayerAnimation : MonoBehaviour
                 if (stateInfo.normalizedTime >= 1 && stateInfo.IsName("Skill1")) player.CurrentState = Player.PlayerState.Idle;
                 break;
             case Player.PlayerState.Skill2:
-                //animator.Play("Skill2");
+                animator.Play("Skill2");
+                break;
+            case Player.PlayerState.Skill2CutScene:
+                //animator.Play("Skill2CutScene");
                 break;
             case Player.PlayerState.Parrying:
                 animator.Play("Parrying");
