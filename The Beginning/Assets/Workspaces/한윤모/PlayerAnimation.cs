@@ -65,7 +65,7 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case Player.PlayerState.Attack1:
                 animator.Play("Attack1");
-                //if (stateInfo.normalizedTime >= 1) player.CurrentState = Player.PlayerState.Idle;
+                if (stateInfo.normalizedTime >= 1) player.CurrentState = Player.PlayerState.Idle;
                 break;
             case Player.PlayerState.Attack2:
                 animator.Play("Attack2");

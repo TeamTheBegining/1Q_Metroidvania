@@ -71,7 +71,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float doubleJumpDelayTime = 0.2f;
     [SerializeField] float grabDelayTime = 0.2f;
     [SerializeField] float ladderDelayTime = 0.2f;
-    [SerializeField] float attackDelayTime = 0f;
+    [SerializeField] float attackDelayTime = 0.2f;
     [SerializeField] float slidingDelayTime = 1f;
     [SerializeField] float parryDelayTime = 0.8f;
     [SerializeField] float spawnDelayTime = 0.1f;
@@ -442,6 +442,8 @@ public class Player : MonoBehaviour, IDamageable
         {
             isMoveDelay = false;
             moveDelayTimer = 0;
+            if (gameObject.layer != LayerMask.NameToLayer("Player"))
+                gameObject.layer = LayerMask.NameToLayer("Player");
         }
 
         if (isDoubleJumpDelay)
@@ -557,6 +559,9 @@ public class Player : MonoBehaviour, IDamageable
     {
         //혹시 모를 초기화
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        //히트, 스킬, 슬라이딩 등 무적 이였다가 Idle 되면 레이어 변경
+        if (gameObject.layer != LayerMask.NameToLayer("Player"))
+            gameObject.layer = LayerMask.NameToLayer("Player");
         if (input.InputVec.x != 0)
             currentState = PlayerState.Move;
         JumpAble();
@@ -607,7 +612,7 @@ public class Player : MonoBehaviour, IDamageable
             input.IsJump = false;
             rb.gravityScale = 1;
             animatorCtrl.AniSpeed = 1f;
-            gameObject.layer = LayerMask.NameToLayer("Player");
+            //gameObject.layer = LayerMask.NameToLayer("Player"); // 무브 딜레이 끝나면 Player로 수정 예정
             rb.AddForce(Vector2.up * ljumpPower, ForceMode2D.Impulse);
             currentState = PlayerState.Jump;
         }
@@ -694,7 +699,6 @@ public class Player : MonoBehaviour, IDamageable
         {
             currentState = PlayerState.Idle;
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-            gameObject.layer = LayerMask.NameToLayer("Player");
         }
     }
 
@@ -946,7 +950,7 @@ public class Player : MonoBehaviour, IDamageable
         //isParryAble = false;
         playerColl.enabled = true;
         slidingColl.enabled = false;
-        gameObject.layer = LayerMask.NameToLayer("Player");
+        if(currentState == PlayerState.Jump) gameObject.layer = LayerMask.NameToLayer("Player");// Idle은 따로 관리
     }
     private void ChagingColliderEnable()
     {
@@ -1043,7 +1047,6 @@ public class Player : MonoBehaviour, IDamageable
     {
         parryingCounterColl.enabled = false;
         currentState = PlayerState.Idle; 
-        gameObject.layer = LayerMask.NameToLayer("Player");
     }
 
     #endregion
