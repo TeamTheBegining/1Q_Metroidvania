@@ -7,8 +7,8 @@ public class SoundManager : Singleton<SoundManager>
     private int capacity = 8;
     private AudioSource bgmSource;
     private AudioSource[] sfxSources;
-    private float bgmSoundValue = 0.1f;
-    private float sfxSoundValue = 0.6f;
+    private float bgmSoundValue = 1.0f;
+    private float sfxSoundValue = 0.8f;
 
     [SerializeField] private AudioClip[] bgmClips = new AudioClip[(int)BGMType.BGMTypeCount];
     [SerializeField] private AudioClip[] sfxClips = new AudioClip[(int)SFXType.SoundTypeCount];
@@ -28,6 +28,12 @@ public class SoundManager : Singleton<SoundManager>
 
         // SFXType 내용 정의 순서대로 클립추가하기
         sfxClips[0] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN01");
+        sfxClips[1] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN02");
+        sfxClips[2] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN03");
+        sfxClips[3] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_01");
+        sfxClips[4] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_02");
+        sfxClips[5] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_03");
+        sfxClips[6] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_04");
     }
 
     public void PlayBGM(BGMType type)
