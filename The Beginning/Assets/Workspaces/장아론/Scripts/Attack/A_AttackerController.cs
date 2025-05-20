@@ -28,8 +28,7 @@ public class A_AttackerController : CommonEnemyController
     public float attackAValue = 0.5f; // A Attack damage
     public float attackACooldown = 3f; // A Attack cooldown
 
-    private float nextAttackTime = 0f; // Time when next attack is possible
-
+    
     // Stun state flag (managed in derived class as it's specific to A_Attacker)
     private bool isStunned = false;
     [Header("A_Attacker Stun")]

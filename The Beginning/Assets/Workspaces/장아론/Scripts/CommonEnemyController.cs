@@ -62,7 +62,7 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
     public bool enablePatrol = false;
     public Vector3 patrolLeftLimit;
     public Vector3 patrolRightLimit;
-    private int _currentPatrolDirection = 1;
+    protected int _currentPatrolDirection = 1;
 
     [Header("Attack State")]
     protected bool isPerformingAttackAnimation = false;
@@ -313,8 +313,7 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
 
         if (rb != null)
         {
-            rb.linearVelocity = Vector2.zero;
-            rb.isKinematic = true;
+            rb.linearVelocity = Vector2.zero;            
         }
         if (GetComponent<Collider2D>() != null)
         {
