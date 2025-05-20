@@ -10,11 +10,13 @@ public class PlayerDeadPanel : MonoBehaviour
 {
     PlayerInputActions actions;
     CanvasGroup cg;
+    TextScroll textScroll;
     private float duration = 0.5f;
 
     private void Awake()
     {
         cg = GetComponent<CanvasGroup>();
+        textScroll = GetComponentInChildren<TextScroll>();
     }
 
     private void Start()
@@ -34,6 +36,9 @@ public class PlayerDeadPanel : MonoBehaviour
                 {
                     GameManager.Instance.State = GameState.PlayEnd;
 
+                    textScroll.currIndex = 0;
+                    textScroll.ResetText();
+                    textScroll.PlayScroll();
                     actions = new PlayerInputActions();
                     actions.UI.Space.Enable();
                     actions.UI.Space.started += Space_started;

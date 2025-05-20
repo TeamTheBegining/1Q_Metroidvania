@@ -1248,7 +1248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioClips: []
   state: 0
-  isDebug: 1
+  isDebug: 0
   nextSceneIndex: 0
   spawnPointName: 
 --- !u!1 &8964365630873834681
@@ -1818,6 +1818,27 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5524879636317484005}
     m_Modifications:
+    - target: {fileID: 2446138720641304042, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -896
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899923831273066736, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_text
+      value: "if You Died == ture\n{\n    goto\n    ONE:\n        Say(\"\uB098\uC0AC\uB85C\uC57C,
+        \uB098\uC624\uB77C\")\n        // - \uC694\uD55C\uBCF5\uC74C 11:43\n}"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899923831273066736, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b4f8f488420db9f4c9b88350e683283b, type: 2}
+    - target: {fileID: 2899923831273066736, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -8677865199259529038, guid: b4f8f488420db9f4c9b88350e683283b, type: 2}
+    - target: {fileID: 2899923831273066736, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3554900681694042739, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
       propertyPath: m_Interactable
       value: 0
@@ -1906,6 +1927,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4069013781007934647, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069013781007934647, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069013781007934647, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069013781007934647, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 189.29999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069013781007934647, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -417.67
+      objectReference: {fileID: 0}
     - target: {fileID: 4879061451481328077, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
       propertyPath: m_Name
       value: PlayerDeadPanel
@@ -1913,8 +1954,32 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3446825375412781221, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5860094377680329033}
   m_SourcePrefab: {fileID: 100100000, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+--- !u!1 &4947881225706285504 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3446825375412781221, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
+  m_PrefabInstance: {fileID: 7746176688429738341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5860094377680329033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4947881225706285504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a5216e3be30625449a04284bc41ed11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 09c971a86925d4145895796f05b9da75, type: 2}
+  currIndex: 0
+  maxIndex: 0
+  delay: 0.25
 --- !u!224 &6833913785670754491 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3866624818959403486, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
