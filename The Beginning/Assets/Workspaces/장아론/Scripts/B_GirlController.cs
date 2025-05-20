@@ -45,12 +45,12 @@ public class B_GirlController : CommonEnemyController
     // private float lastAttackAttemptTime = 0f; // CommonEnemyController의 lastAttackAttemptTime을 사용합니다.
     // private float nextAttackTime = 0f; // CommonEnemyController의 nextAttackTime을 사용합니다.
 
-    [Header("B_Girl Custom Combo Delays")] // B_Girl 고유의 엇박 패턴을 위한 지연 시간
+   /* [Header("B_Girl Custom Combo Delays")] // B_Girl 고유의 엇박 패턴을 위한 지연 시간
     public float heavyPunchFirstDelay = 0.6f;  // "퉁퉁 퉁~" 첫 번째 '퉁' 후 다음 '퉁'까지의 지연
     public float heavyPunchSecondDelay = 0.8f; // "퉁퉁 퉁~" 두 번째 '퉁' 후 마지막 '퉁'까지의 지연
 
     public float offBeatFirstDelay = 0.7f;     // 엇박 콤보 첫 번째 공격 후 다음 공격까지의 지연 (길게)
-    public float offBeatSecondDelay = 0.3f;    // 엇박 콤보 두 번째 공격 후 다음 공격까지의 지연 (짧게)
+    public float offBeatSecondDelay = 0.3f;    // 엇박 콤보 두 번째 공격 후 다음 공격까지의 지연 (짧게)*/
 
 
     // 슈퍼 아머를 위한 추가 변수
@@ -80,12 +80,18 @@ public class B_GirlController : CommonEnemyController
 
             Debug.Log($"[B_Girl] Super Armor Active! Took {damage} damage. Current HP: {CurrentHp:F2}");
 
-            if (CurrentHp <= 0)
+            if (CurrentHp <= 0 && !IsDead) // 이미 죽은 상태가 아닐 때만 처리하도록 !IsDead 추가
             {
-                // 죽음 처리
-                // IsDead는 읽기 전용이므로, CommonEnemyController의 죽음 처리 메서드를 호출합니다.
-                //Die(); // CommonEnemyController의 죽음 처리 메서드 호출
                 Debug.Log($"[B_Girl] DIED while super armored!");
+                HandleDeathLogic(); // CommonEnemyController의 죽음 처리 메서드 호출
+
+                // --- 여기부터 추가된 내용입니다 ---
+                // EnemyStatusBridge 컴포넌트를 찾아 MarkAsDead() 메서드 호출
+                // '?.' (null-conditional operator)를 사용하여 컴포넌트가 없어도 오류가 발생하지 않도록 합니다.
+                GetComponent<EnemyStatusBridge>()?.MarkAsDead();
+                // --- 여기까지 추가된 내용입니다 ---
+
+                OnDead?.Invoke(); // 선택 사항: 죽음 이벤트를 외부에 알릴 필요가 있다면 추가
             }
             else
             {
