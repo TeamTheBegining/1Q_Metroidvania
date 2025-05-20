@@ -80,6 +80,11 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
                 {
                     enemy.PlayAttack();
                     enemy.AttackToTarget();
+
+                    if(currentFlowCount == 5)
+                    {
+                        enemy.PlayIdle();
+                    }
                 }
 
                 input.AllDisable();
@@ -207,7 +212,7 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
             SpawnEnemy();
             SetEnemyMove();
         }
-        else if(flowIndex >= 3 && flowIndex <= 6)
+        else if(flowIndex == 3)
         {
             isEnemyMove = true;
         }
@@ -220,7 +225,8 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         float distance = Vector3.Distance(input.gameObject.transform.position, enemy.gameObject.transform.position);
 
         if (distance < 1f && isEnemyMove) // 일정거리까지 오면 정지 후 공격 애니메이션 시작
-        {            
+        {
+            enemy.PlayAttackReady();
             enemy.SetMoveActive(false);
             isEnemyMove = false;
         }
