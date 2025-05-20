@@ -48,7 +48,7 @@ public class SkillCutsceneController : MonoBehaviour
 
     public void SetLightRange(float value)
     {
-        backlight.SetRange(value);
+        backlight.SetRange(value);        
     }
 
     public void DcreaseLightRangeToZero(float duration)
@@ -67,6 +67,7 @@ public class SkillCutsceneController : MonoBehaviour
             timeElapsed += Time.deltaTime;
             float lightValue = Mathf.Lerp(currentValue, targetValue, timeElapsed / duration);
             backlight.SetRange(lightValue);
+            Debug.Log($"{lightValue}");
             yield return null;
         }
 
