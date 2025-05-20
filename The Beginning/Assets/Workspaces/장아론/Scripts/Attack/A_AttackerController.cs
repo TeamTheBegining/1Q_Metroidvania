@@ -175,16 +175,19 @@ public class A_AttackerController : CommonEnemyController
     // Override Update: Skip Base AI logic if stunned or performing hurt animation
     protected override void Update()
     {
-        // 피격 애니메이션 중일 때도 Base Update 스킵 (CommonEnemyController에서 이미 처리) 
-        // A_AttackerController의 Update 오버라이드는 isStunned만 추가로 체크하여 Base.Update() 호출 여부를 결정합니다.
-        // isPerformingHurtAnimation 체크는 Base CommonEnemyController.Update() 시작 부분에서 전체 Update 내용을 스킵하도록 처리했습니다.
-        if (IsDead || isStunned) // IsDead 속성 사용, isStunned 사용
+        // 캐릭터가 죽었거나, 기절했거나, 피격 애니메이션 중일 때는 모든 AI 로직과 움직임을 건너뜁니다.
+        // 여기에 'isPerformingHurtAnimation' 조건을 추가했습니다.
+        if (IsDead || isStunned || isPerformingHurtAnimation) // IsDead 속성 사용, isStunned 사용
         {
-            // If dead, stunned, or performing hurt animation (handled in Base Update), skip Base AI logic and movement
-            return;
+            // Rigidbody2D가 있다면, 강제로 속도를 0으로 만들어 움직임을 멈춥니다.
+            if (rb != null) // rb (Rigidbody2D)가 CommonEnemyController에서 protected로 선언되어 접근 가능하다고 가정합니다.
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
+            return; // 모든 AI 로직 및 base.Update() 호출을 스킵합니다.
         }
 
-        // Call Base class Update for AI state machine, movement, etc.
+        // 위 조건에 해당하지 않을 때만 Base 클래스의 Update 로직을 호출합니다.
         base.Update();
     }
 
