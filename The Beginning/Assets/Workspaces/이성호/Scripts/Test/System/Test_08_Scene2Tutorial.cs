@@ -8,4 +8,10 @@ public class Test_08_Scene2Tutorial : TestBase
     {
         obj.Play();
     }
+
+    protected override void OnTest2(InputAction.CallbackContext context)
+    {
+        Player player = FindFirstObjectByType<Player>();
+        player.CurrentMp = player.MaxMp;
+    }
 }

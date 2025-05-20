@@ -14,10 +14,13 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
     private TextMeshPro textMiddle;
     private TextMeshPro textBottom;
 
+    public GameObject TutorialEnemyPrefab;
+
     public PlayerInput input;
 
-    private int currentCount = 0;
-    private int maxCount = 0;
+    private int currentFlowCount = 0;
+    private int maxFlowCount = 0;
+
     private float duration = 1f;
     private bool isTriggered = false; // 상호작용 여부
 
@@ -30,53 +33,69 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         textMiddle.color = new Color(1f, 1f, 1f, 0f);
         textBottom.color = new Color(1f, 1f, 1f, 0f);
 
-        maxCount = upper.Length;
+        maxFlowCount = upper.Length;
     }
 
     public void Play()
     {
-        input.AllDisable();
-        input.OneEnable(0); // 1 공격 2 패링 3 스킬
         StartCoroutine(Tutorial());
     }
 
     private IEnumerator Tutorial()
     {
-        currentCount = 0;
-        StartCoroutine(FadeInProcess(currentCount));
-        while(currentCount < maxCount - 1)
+        Player player = FindFirstObjectByType<Player>(); // 마나 충전을 위한 플레이어 찾기
+
+        currentFlowCount = 0;
+        
+        // 첫 인풋 막기
+        input.AllDisable();
+        input.OneEnable(0); // 1 공격 2 패링 3 스킬
+
+        StartCoroutine(FadeInProcess(currentFlowCount));
+        while(currentFlowCount < maxFlowCount - 1)
         {
             if(CheckInput())
             {
-                if(currentCount < 6 - 1)
+                // 각 구간별 특정 인풋활성화
+                if(0 <= currentFlowCount && currentFlowCount <= 5 - 1) // 패링
                 {
+                    if(currentFlowCount == 0)
+                    {
+                        yield return new WaitForSeconds(1f);
+                    }
+
                     input.AllDisable();
                     input.OneEnable(1);
                 }
-                else if(currentCount == 6)
+                else if(currentFlowCount == 6 - 1) // 스킬1
                 {
                     input.AllDisable();
                     input.OneEnable(2);
+
+                    player.CurrentMp = player.MaxMp;
                 }
-                StartCoroutine(FadeOutProcess(currentCount));
-                currentCount++;
+
+                currentFlowCount++;  
+                StartCoroutine(FadeOutProcess(currentFlowCount));
+                yield return new WaitForSeconds(duration);
+
+                StartCoroutine(FadeInProcess(currentFlowCount));
+                yield return new WaitForSeconds(duration);
 
                 // 최대값 확인
-                if (currentCount == maxCount - 1)
+                if (currentFlowCount == maxFlowCount - 1)
                 {
+                    StartCoroutine(FadeOutProcess(currentFlowCount));
+                    Debug.Log("종료");
                     break;
                 }
-
-                yield return new WaitForSeconds(duration);
-
-                StartCoroutine(FadeInProcess(currentCount));
-                yield return new WaitForSeconds(duration);
             }
 
             yield return null;
         }
 
         input.AllEnable();
+        player.CurrentMp = 0f; // 마나 제거
     }
 
     private IEnumerator FadeInProcess(int index)
@@ -101,10 +120,6 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
     {
         float timeElapsed = 0.0f;
 
-        textUpper.text = upper[index].text;
-        textMiddle.text = middle[index].text;
-        textBottom.text = bottom[index].text;
-
         while (timeElapsed < duration)
         {
             timeElapsed += Time.deltaTime;
@@ -113,19 +128,23 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
             textBottom.color = new Color(1, 1, 1, 1 - timeElapsed / duration);
             yield return null;
         }
+
+        textUpper.color = new Color(1, 1, 1, 0f);
+        textMiddle.color = new Color(1, 1, 1, 0f);
+        textBottom.color = new Color(1, 1, 1, 0f);
     }
 
     private bool CheckInput()
     {
-        if (currentCount == 0)
+        if (currentFlowCount == 0)
         {
             return input.IsAttack;
         }
-        else if (currentCount >= 1 && currentCount <= 5)
+        else if (currentFlowCount >= 1 && currentFlowCount <= 5)
         {
             return input.IsParrying;
         }
-        else if (currentCount == 6)
+        else if (currentFlowCount == 6)
         {
             return input.IsSkill1;
         }
@@ -133,6 +152,11 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         {
             return true;
         }
+    }
+
+    private void SpawnEnemy()
+    {
+        GameObject obj = Instantiate(TutorialEnemyPrefab);
     }
 
     public void OnInteraction()
