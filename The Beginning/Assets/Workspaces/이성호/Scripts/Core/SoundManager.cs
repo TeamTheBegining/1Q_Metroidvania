@@ -24,13 +24,11 @@ public class SoundManager : Singleton<SoundManager>
             sfxSources[i] = this.gameObject.AddComponent<AudioSource>();
         }
 
-        bgmClips[0] = Resources.Load<AudioClip>("Audio/BGM/Menu");
-        bgmClips[1] = Resources.Load<AudioClip>("Audio/BGM/Stage1");
+        // BGMType 내용 정의 순서대로 클립추가하기
+        bgmClips[0] = Resources.Load<AudioClip>("Audio/BGM/BGM01(Test)");
 
-        sfxClips[0] = Resources.Load<AudioClip>("Audio/Sound/Hit");
-        sfxClips[1] = Resources.Load<AudioClip>("Audio/Sound/Attack");
-        sfxClips[2] = Resources.Load<AudioClip>("Audio/Sound/Jump");
-        sfxClips[3] = Resources.Load<AudioClip>("Audio/Sound/Step");
+        // SFXType 내용 정의 순서대로 클립추가하기
+        sfxClips[0] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN01");
     }
 
     public void PlayBGM(BGMType type)

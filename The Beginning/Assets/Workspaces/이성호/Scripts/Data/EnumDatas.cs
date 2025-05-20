@@ -17,14 +17,13 @@ public enum PoolType
 
 public enum BGMType
 {
-    Menu = 0,
-    Battle,
+    MainTest,
     BGMTypeCount
 }
 
 public enum SFXType
-{ 
-    Hit = 0,
+{
+    PlayerFootstep1 = 0,
     SoundTypeCount
 }
 
