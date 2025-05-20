@@ -23,8 +23,9 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     public bool[] IsSkillUnlock => isSkillUnlock;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         isSkillUnlock = new bool[(int)PlayerSkillType.PlayerSkillTypeCount];
     }
 
@@ -127,5 +128,13 @@ public class PlayerManager : Singleton<PlayerManager>
         Player player = FindFirstObjectByType<Player>();
 
         // 플레이어 스탯업 함수 사용
+    }
+
+    public void ResetSkillUnlock()
+    {
+        for(int i = 0; i < isSkillUnlock.Length; i++)
+        {
+            isSkillUnlock[i] = false;
+        }
     }
 }

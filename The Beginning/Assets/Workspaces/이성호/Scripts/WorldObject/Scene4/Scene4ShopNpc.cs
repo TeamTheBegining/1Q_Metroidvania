@@ -1,0 +1,73 @@
+﻿using System.Collections;
+using UnityEngine;
+
+public class Scene4ShopNpc : MonoBehaviour, Interactable
+{
+    private TextScrollWorld textObj;
+    public TextDataSO[] textDatas;
+    public GameObject[] itemObjects;
+
+    private float timer;
+    private float maxTimer = 10f;
+
+    private void Awake()
+    {
+        textObj = transform.GetChild(0).GetComponent<TextScrollWorld>();
+    }
+
+    private void Start()
+    {
+        textObj.PlayScroll();        
+    }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        if (timer > maxTimer)
+        {
+            timer = 0f;        
+            textObj.ResetText();
+
+            int rand = UnityEngine.Random.Range(0, textDatas.Length);
+            textObj.data = textDatas[rand];
+            textObj.maxIndex = textDatas[rand].text.Length;
+            textObj.currIndex = 0;
+            textObj.PlayScroll();
+        }
+    }
+
+    public void OnInteraction()
+    {
+        StopAllCoroutines();
+        GameManager.Instance.BottomMessagePanel.Close();
+        GameManager.Instance.BottomMessagePanel.Show();
+        GameManager.Instance.BottomMessagePanel.SetText("모든 스킬을 반환합니다.");
+        StartCoroutine(MessageOutProcess());
+        PlayerManager.Instance.ResetSkillUnlock();
+
+        for(int i = 0; i < PlayerManager.Instance.IsSkillUnlock.Length; i++)
+        {
+            if (PlayerManager.Instance.IsSkillUnlock[i])
+            {
+                PlayerManager.Instance.AddCoin(1000);
+            }
+
+            itemObjects[i].SetActive(true);
+
+            // 텍스트 초기화 후 판매 텍스트 출력
+            timer = 0f;
+            textObj.ResetText();
+
+            textObj.data.text = $"스킬 회수 했습니다.";
+            textObj.maxIndex = textObj.data.text.Length;
+            textObj.currIndex = 0;
+            textObj.PlayScroll();
+        }
+    }
+
+    private IEnumerator MessageOutProcess()
+    {
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.BottomMessagePanel.FadeOutClose(2f);
+    }
+}

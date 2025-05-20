@@ -2,9 +2,9 @@
 using TMPro;
 using UnityEngine;
 
-public class TextScroll : MonoBehaviour
+public class TextScrollWorld : MonoBehaviour
 {
-    private TextMeshProUGUI text;
+    private TextMeshPro text;
     public TextDataSO data;
 
     public int currIndex;
@@ -13,7 +13,7 @@ public class TextScroll : MonoBehaviour
 
     private void Awake()
     {
-        text = GetComponent<TextMeshProUGUI>();
+        text = GetComponent<TextMeshPro>();
         maxIndex = data.text.Length;
     }
 
@@ -35,7 +35,7 @@ public class TextScroll : MonoBehaviour
         {
             timeElapsed += Time.deltaTime;
 
-            if(timeElapsed > delay)
+            if (timeElapsed > delay)
             {
                 text.text += $"{data.text[currIndex]}";
                 timeElapsed = 0f;

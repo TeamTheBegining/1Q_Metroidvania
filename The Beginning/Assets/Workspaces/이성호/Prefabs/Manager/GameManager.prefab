@@ -1248,7 +1248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioClips: []
   state: 0
-  isDebug: 0
+  isDebug: 1
   nextSceneIndex: 0
   spawnPointName: 
 --- !u!1 &8964365630873834681
@@ -1602,9 +1602,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5524879636317484005}
     m_Modifications:
+    - target: {fileID: 97885458318307948, guid: 74a2f749a476e8a499ab748fdbd27689, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b4f8f488420db9f4c9b88350e683283b, type: 2}
+    - target: {fileID: 97885458318307948, guid: 74a2f749a476e8a499ab748fdbd27689, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -8677865199259529038, guid: b4f8f488420db9f4c9b88350e683283b, type: 2}
     - target: {fileID: 504643186519613770, guid: 74a2f749a476e8a499ab748fdbd27689, type: 3}
       propertyPath: m_Name
       value: BottomMessagePanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2069637059472138107, guid: 74a2f749a476e8a499ab748fdbd27689, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2617837939228786587, guid: 74a2f749a476e8a499ab748fdbd27689, type: 3}
       propertyPath: m_Pivot.x

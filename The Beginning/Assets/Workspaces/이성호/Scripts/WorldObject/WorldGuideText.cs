@@ -1,9 +1,8 @@
-﻿using NUnit.Framework.Interfaces;
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class WorldTextInteractionGuid : MonoBehaviour
+public class WorldGuideText : MonoBehaviour
 {
     private TextMeshPro textMeshPro;
     public TextDataSO data;
@@ -13,6 +12,24 @@ public class WorldTextInteractionGuid : MonoBehaviour
     {
         textMeshPro = GetComponentInChildren<TextMeshPro>();
         textMeshPro.text = data.text;
+
+        HideText();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player"))
+        {
+            ShowText();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            HideText();
+        }
     }
 
     public void ShowText()

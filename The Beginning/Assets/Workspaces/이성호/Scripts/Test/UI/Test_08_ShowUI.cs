@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Test_08_ShowUI : TestBase
 {
-    public WorldText text;
+    public WorldTextInteractionGuid text;
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
