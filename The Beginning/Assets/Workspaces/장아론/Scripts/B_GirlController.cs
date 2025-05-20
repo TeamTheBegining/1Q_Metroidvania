@@ -45,6 +45,7 @@ public class B_GirlController : CommonEnemyController
     // private float lastAttackAttemptTime = 0f; // CommonEnemyController의 lastAttackAttemptTime을 사용합니다.
     // private float nextAttackTime = 0f; // CommonEnemyController의 nextAttackTime을 사용합니다.
 
+    //new add
     [Header("B_Girl Custom Combo Delays")] // B_Girl 고유의 엇박 패턴을 위한 지연 시간
     public new float heavyPunchFirstDelay = 0.6f;  // "퉁퉁 퉁~" 첫 번째 '퉁' 후 다음 '퉁'까지의 지연
     public new float heavyPunchSecondDelay = 0.8f; // "퉁퉁 퉁~" 두 번째 '퉁' 후 마지막 '퉁'까지의 지연
