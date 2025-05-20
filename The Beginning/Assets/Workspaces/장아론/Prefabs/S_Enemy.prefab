@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8479269629688570251}
   - component: {fileID: 8645927857016734877}
   - component: {fileID: 8741453574124372781}
-  - component: {fileID: 3540795706007851962}
   - component: {fileID: 4654338855039152723}
+  - component: {fileID: 3123978801810778454}
   m_Layer: 8
   m_Name: S_Attacker
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 3368205513827972223}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.013014436, z: 0}
+  m_LocalPosition: {x: 1.125, y: 0.82, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -141,75 +141,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &3540795706007851962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3368205513827972223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38b4c3e83fb7d1a4b81ec92e142a5767, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 0
-  moveSpeed: 3
-  detectionRange: 10
-  attackRange: 1.5
-  maintainBuffer: 0.5
-  preAttackPauseDuration: 0.5
-  postAttackPauseDuration: 1
-  playerObjectName: Player
-  initialFacingDirection: -1
-  attackSHitboxObject: {fileID: 0}
-  attackSValue: 0.5
-  attackSCooldown: 3
-  stunDuration: 2
-  dashSpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.49815726
-      value: 0.012751862
-      inSlope: 0.35447484
-      outSlope: 0.35447484
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.79024714
-      value: 0.18457529
-      inSlope: 1.7458742
-      outSlope: 1.7458742
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.8729248
-      value: 1.1011581
-      inSlope: 0.0776567
-      outSlope: 0.0776567
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.07483854
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  dashBaseSpeed: 8
 --- !u!61 &4654338855039152723
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -247,7 +178,7 @@ BoxCollider2D:
   m_Offset: {x: 0.118043184, y: 0.047955096}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5072286, y: 0.610334}
+    pivot: {x: 0.5012046, y: 0.65850794}
     oldSize: {x: 1.390625, y: 1.078125}
     newSize: {x: 0.75, y: 0.12}
     adaptiveTilingThreshold: 0.5
@@ -256,6 +187,38 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.55907726, y: 0.8103398}
   m_EdgeRadius: 0
+--- !u!114 &3123978801810778454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3368205513827972223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1255ab8bff0ea644ba78419428b0846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 10
+  playerTransform: {fileID: 0}
+  detectionRange: 5
+  attackRange: 1.5
+  moveSpeed: 2
+  attackStopBuffer: 0.1
+  enablePatrol: 0
+  patrolLeftLimit: {x: 0, y: 0, z: 0}
+  patrolRightLimit: {x: 0, y: 0, z: 0}
+  postAttackWaitDuration: 0.5
+  currentComboState: 0
+  comboChainDelay: 0.2
+  comboResetTime: 1.5
+  attack2Cooldown: 0.8
+  attack3Cooldown: 1.5
+  attackAHitboxObject: {fileID: 5482706447290755084}
+  mob02MaxHealth: 4
+  attackAValue: 0.4
+  attackACooldown: 1
+  stunDuration: 2
 --- !u!1 &5482706447290755084
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,7 +236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7686811047368377415
 Transform:
   m_ObjectHideFlags: 0
@@ -332,11 +295,11 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.08196306, y: -0.09686583}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -346,7 +309,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.7600236, y: 0.5678297}
   m_EdgeRadius: 0
 --- !u!1 &6441139757984839689
 GameObject:
