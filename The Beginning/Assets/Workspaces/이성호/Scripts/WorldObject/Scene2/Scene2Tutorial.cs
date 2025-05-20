@@ -73,7 +73,6 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         {
             if(CheckInput())
             {
-
                 isEnemyAttacking = false;
 
                 yield return new WaitForFixedUpdate();

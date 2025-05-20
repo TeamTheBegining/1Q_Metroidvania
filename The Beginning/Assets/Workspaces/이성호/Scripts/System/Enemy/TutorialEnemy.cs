@@ -32,6 +32,11 @@ public class TutorialEnemy : MonoBehaviour
         animator.Play("Attack", 0, 0f);
     }
 
+    public void PlayAttackReady()
+    {
+        animator.Play("AttackReady", 0, 0f);
+    }
+
     public void PlayRun()
     {
         animator.Play("Run",0 ,0f);        
