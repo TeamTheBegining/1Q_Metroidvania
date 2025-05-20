@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 3997535047431901342}
   - component: {fileID: 7917641251714311589}
   - component: {fileID: 4337823729265439242}
-  m_Layer: 0
+  - component: {fileID: 3348188056036808217}
+  m_Layer: 9
   m_Name: UltEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,3 +124,110 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5557cf1bd9b9c9a47a7d87a32fd470d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anicurv:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 37.468513
+      outSlope: 37.468513
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.10453321
+      value: 3.9167042
+      inSlope: 0.7166518
+      outSlope: 0.7166518
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.19577932
+      value: 1.2297482
+      inSlope: 0.94349813
+      outSlope: 0.94349813
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.27575064
+      value: 4.28625
+      inSlope: 1.3745488
+      outSlope: 1.3745488
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.35460097
+    - serializedVersion: 3
+      time: 0.3359685
+      value: 0.74787235
+      inSlope: -0.48594582
+      outSlope: -0.48594582
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.60639924
+      outWeight: 0.05250356
+    - serializedVersion: 3
+      time: 0.3915938
+      value: 7.6322513
+      inSlope: -Infinity
+      outSlope: -Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  posXmax: 0.5
+--- !u!61 &3348188056036808217
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5584801031562096325}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: -0.864078}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.265625, y: 3.984375}
+    newSize: {x: 5.265625, y: 3.984375}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 5.265625, y: 2.256219}
+  m_EdgeRadius: 0
