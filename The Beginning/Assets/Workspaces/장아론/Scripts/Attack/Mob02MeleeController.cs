@@ -130,35 +130,36 @@ public class Mob02MeleeController : CommonEnemyController
     /// </summary>
     protected override void Update()
     {
-        // 사망, 경직, 피격 애니메이션 중일 때는 움직임 및 AI 로직을 중지합니다.
+        // 1. 치명적인 상태 체크 (사망, 경직, 피격 애니메이션 중):
+        //    이 상태에서는 모든 움직임과 AI 로직을 중지하고 Update() 함수를 바로 종료합니다.
         if (IsDead || isStunned || isPerformingHurtAnimation)
         {
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector2.zero; // 물리적인 움직임 정지
-            }
-            return;
+            if (rb != null) rb.linearVelocity = Vector2.zero; // 물리적인 움직임 정지
+            return; // 현재 프레임의 모든 이후 로직을 건너뜁니다.
         }
 
-        // 공격 애니메이션 중일 때: 애니메이션 커브를 이용한 이동을 적용합니다.
+        // 2. 공격 애니메이션이 활성화된 상태:
+        //    이때는 애니메이션 커브를 이용한 공격 중 이동(`ApplyAttackAnimationMovement()`)만 수행하고,
+        //    다른 일반 AI 로직(추적 등)은 잠시 중단됩니다.
         if (isPerformingAttackAnimation)
         {
-            ApplyAttackAnimationMovement(); // 공격 중 이동 처리 메서드 호출
-            return;
+            ApplyAttackAnimationMovement(); // 공격 애니메이션에 따른 이동 수행
+            return; // 현재 프레임의 모든 이후 로직을 건너뜁니다.
         }
 
-        // 공격 후 대기 중일 때 (공격 애니메이션이 끝났지만 쿨다운 중)
+        // 3. 공격 후 쿨다운 대기 상태:
+        //    공격 애니메이션이 끝난 후 다음 공격까지 쿨다운 시간 동안 대기 상태를 유지합니다.
+        //    이때도 일반 AI 로직(추적 등)은 중단됩니다.
         if (isWaitingAfterAttack)
         {
-            PlayIdleAnim();
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector2.zero; // 물리적인 움직임 정지
-            }
-            return;
+            PlayIdleAnim(); // 대기 애니메이션 재생
+            if (rb != null) rb.linearVelocity = Vector2.zero; // 제자리에 멈춰있도록 함
+            return; // 현재 프레임의 모든 이후 로직을 건너뜁니다.
         }
 
-        // 위의 예외 상태가 아니면, 부모 클래스의 일반적인 AI 로직(플레이어 추적, 이동 등)을 실행합니다.
+        // 4. 위의 어떤 특별한 상태도 아닐 때:
+        //    기본적인 AI 로직(플레이어 추적, 순찰 등)과 일반적인 이동이 이루어집니다.
+        //    CommonEnemyController의 Update() 메서드가 호출되어 이 역할을 합니다.
         base.Update();
     }
 
@@ -280,33 +281,34 @@ public class Mob02MeleeController : CommonEnemyController
 
         float curveSpeedFactor = animator.GetFloat(ANIM_CURVE_ATTACK_FORWARD_SPEED);
 
-        // --- SpriteRenderer의 flipX를 사용하여 방향 감지 (수정) ---
+        // SpriteRenderer의 flipX를 사용하여 캐릭터의 현재 바라보는 방향을 감지합니다.
         // spriteRenderer가 초기화되었는지 확인합니다.
         Vector2 currentFacingDirection = Vector2.zero; // 기본값
         if (spriteRenderer != null)
         {
-            // spriteRenderer.flipX가 true면 스프라이트가 왼쪽을 바라봄
+            // spriteRenderer.flipX가 true면 스프라이트가 왼쪽을 바라봄 (Vector2.left)
+            // false면 스프라이트가 오른쪽을 바라봄 (Vector2.right)
             currentFacingDirection = spriteRenderer.flipX ? Vector2.left : Vector2.right;
         }
-        else // spriteRenderer가 없다면 transform.right를 기준으로 판단
+        else // spriteRenderer를 찾지 못했다면, Rigidbody의 현재 속도 방향을 임시로 사용
         {
-            currentFacingDirection = transform.right; // 기본적으로 오른쪽을 바라봄
-            // CommonEnemyController의 facingLeft 플래그를 사용하여 더욱 정확하게 판단 가능
-            // 또는 Rigidbody의 velocity.x 부호로 현재 이동 방향 판단
-            if (rb != null && rb.linearVelocity.x < 0) // 왼쪽으로 이동 중이라면
+            // 이 fallback은 SpriteRenderer가 없는 경우에만 사용되며,
+            // Flip() 함수가 Transform.localScale을 직접 조절했다면 이 로직을 수정해야 할 수 있습니다.
+            if (rb != null)
             {
-                currentFacingDirection = Vector2.left;
+                if (rb.linearVelocity.x < 0) currentFacingDirection = Vector2.left;
+                else if (rb.linearVelocity.x > 0) currentFacingDirection = Vector2.right;
+                else currentFacingDirection = Vector2.right; // 기본적으로 오른쪽
             }
-            else if (rb != null && rb.linearVelocity.x > 0) // 오른쪽으로 이동 중이라면
+            else
             {
-                currentFacingDirection = Vector2.right;
+                currentFacingDirection = Vector2.right; // Rigidbody도 없으면 기본 오른쪽
             }
-            // 이 fallback 로직은 Mob02가 항상 플레이어를 바라보도록 Flip() 함수가 작동한다고 가정
         }
-
 
         float actualMoveSpeed = moveSpeed * curveSpeedFactor;
 
+        // Rigidbody에 계산된 속도를 적용합니다. y축은 기존 속도를 유지하여 중력 등 영향을 받도록 합니다.
         rb.linearVelocity = new Vector2(currentFacingDirection.x * actualMoveSpeed, rb.linearVelocity.y);
     }
 
@@ -335,6 +337,7 @@ public class Mob02MeleeController : CommonEnemyController
     public override void OnAttackAnimationEnd()
     {
         base.OnAttackAnimationEnd();
+        // 공격 애니메이션이 끝난 후 다음 공격까지의 쿨다운 시간을 설정합니다.
         nextAttackTime = Time.time + attackACooldown;
     }
 
@@ -393,8 +396,6 @@ public class Mob02MeleeController : CommonEnemyController
         }
 
         // faceLeft가 true이면 flipX를 true로 (왼쪽을 바라봄), 아니면 false로 (오른쪽을 바라봄)
-        // SpriteRenderer의 `flipX`를 사용하면 Transform.localScale을 직접 조절하는 것보다
-        // 일반적으로 더 간단하고 스프라이트만 뒤집힙니다.
         spriteRenderer.flipX = faceLeft;
     }
 

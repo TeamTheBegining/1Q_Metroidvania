@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8741453574124372781}
   - component: {fileID: 4654338855039152723}
   - component: {fileID: 3123978801810778454}
+  - component: {fileID: 8070249802320740770}
   m_Layer: 8
   m_Name: S_Attacker
   m_TagString: Untagged
@@ -219,6 +220,19 @@ MonoBehaviour:
   attackAValue: 0.4
   attackACooldown: 1
   stunDuration: 2
+--- !u!114 &8070249802320740770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3368205513827972223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7f45e0f91af6ea49ae57351415a97d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyID: 
 --- !u!1 &5482706447290755084
 GameObject:
   m_ObjectHideFlags: 0
