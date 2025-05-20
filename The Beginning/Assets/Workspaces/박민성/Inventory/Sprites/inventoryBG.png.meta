@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a649e8494e8189743b6e3cfe062e41c7
+guid: 3dd40ceb8785e85448fa4070b6a52177
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4103308169148963175
-    second: galaxy_cut_scene_add_5_0
+      213: -7150969743949412938
+    second: inventoryBG 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: galaxy_cut_scene_add_5_0
+      name: inventoryBG 1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1766
-        height: 949
+        width: 799
+        height: 817
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 996eaedd5fe1e07c0800000000000000
-      internalID: -4103308169148963175
+      spriteID: 6b54454c7e6a2cc90800000000000000
+      internalID: -7150969743949412938
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      galaxy_cut_scene_add_5_0: -4103308169148963175
+      inventoryBG 1_0: -7150969743949412938
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -4,11 +4,11 @@ using UnityEngine.UI;
 public class InventorySlotUI : MonoBehaviour
 {
     public Image icon;
-    public ItemData heldItem;
+    public ItemDataSO data;
 
-    public void SetItem(ItemData item)
+    public void SetItem(ItemDataSO item)
     {
-        heldItem = item;
+        data = item;
 
         if (icon != null)
         {
@@ -19,6 +19,6 @@ public class InventorySlotUI : MonoBehaviour
 
     public bool HasItem()
     {
-        return heldItem != null;
+        return data != null;
     }
 }
