@@ -575,15 +575,6 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 5.5833335
-        value: -881
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
         time: 6.0333333
         value: -881
         inSlope: 0
@@ -625,15 +616,6 @@ AnimationClip:
       - serializedVersion: 3
         time: 4.883333
         value: 383
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 5.5833335
-        value: 622
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1849,15 +1831,6 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 5.5833335
-        value: -881
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
         time: 6.0333333
         value: -881
         inSlope: 0
@@ -1899,15 +1872,6 @@ AnimationClip:
       - serializedVersion: 3
         time: 4.883333
         value: 383
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 5.5833335
-        value: 622
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2381,7 +2345,7 @@ AnimationClip:
     floatParameter: 0.75
     intParameter: 0
     messageOptions: 0
-  - time: 5.8166666
+  - time: 4.883333
     functionName: SetDissolveThredshold
     data: 
     objectReferenceParameter: {fileID: 0}

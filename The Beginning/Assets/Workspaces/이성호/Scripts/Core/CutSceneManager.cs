@@ -24,10 +24,16 @@ public class CutSceneManager : Singleton<CutSceneManager>
 
         cutsceneCanvas = transform.GetChild(0).GetComponent<Canvas>();
 
-        sequences = new CutsceneSequenceSO[2];
+        sequences = new CutsceneSequenceSO[(int)CutSceneType.CutSceneTypeCount];
 
         sequences[0] = Resources.Load<CutsceneSequenceSO>("Data/CutScene/CutsceneSequence_Intro");
         sequences[1] = Resources.Load<CutsceneSequenceSO>("Data/CutScene/CutsceneSequence_Credit");
+        sequences[2] = Resources.Load<CutsceneSequenceSO>("Data/CutScene/CutsceneSequence_PlayerUlt");
+    }
+
+    public void ShowCutscene(CutSceneType type)
+    {
+        ShowCutscene((int)type);
     }
 
     public void ShowCutscene(int sequenceIndex)

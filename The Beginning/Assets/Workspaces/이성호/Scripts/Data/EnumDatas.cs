@@ -51,3 +51,11 @@ public enum EnemyType // TODO : 적 이름 정의 명확하게 지정할 것 - [
     S_Enemy,
     EnemyTypeCount
 }
+
+public enum CutSceneType
+{
+    Intro = 0,
+    Credit,
+    PlayerUlt,
+    CutSceneTypeCount
+}
