@@ -63,7 +63,6 @@ public class Player : MonoBehaviour, IDamageable
     float grabDelayTimer = 0f;
     float ladderDelayTimer = 0f;
     float healingTimer = 0;
-    float attackButtonDownTimer = 0f;
     float dropDownTimer = 0f;
     float cutSceneTimer = 0f;
 
@@ -80,7 +79,6 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float parryDelayTime = 0.8f;
     [SerializeField] float spawnDelayTime = 0.1f;
     [SerializeField] float parryCountTime = 0.3f;
-    [SerializeField] float chargeThresholdTime = 1f;
     [SerializeField] float dropDownTime = 0.5f;
     float cutSceneTime;
 
@@ -104,7 +102,6 @@ public class Player : MonoBehaviour, IDamageable
     private Transform groundCheckTransform;
     private LayerMask groundLayer;
     private SpriteRenderer spriternderer;
-    private Collider2D chargingColl;
     private Collider2D attackColl;
     private Collider2D attackColl2;
     private Collider2D attackColl3;
@@ -134,6 +131,7 @@ public class Player : MonoBehaviour, IDamageable
     bool isDropDown = false;
     [SerializeField]bool getDoublejump = false;
     [SerializeField]bool getCharging = false;
+    [SerializeField]bool chargingAttackAble = false;
     //bool isInteraction = false;
 
     //벽타기 체크 변수
@@ -163,8 +161,8 @@ public class Player : MonoBehaviour, IDamageable
         Jump,
         DoubleJump,
         Landing,
-        Chaging,
-        ChagingAttack,
+        Charging,
+        ChargingAttack,
         Attack1,
         Attack2,
         Attack3,
@@ -227,7 +225,6 @@ public class Player : MonoBehaviour, IDamageable
         
         // 콜라이더 그룹 찾기
         Transform attackGroup = transform.Find("Colliders");
-        chargingColl = attackGroup.Find("ChargingAttackCollider").GetComponent<Collider2D>();
         attackColl = attackGroup.Find("AttackCollider").GetComponent<Collider2D>();
         attackColl2 = attackGroup.Find("AttackCollider2").GetComponent<Collider2D>();
         attackColl3 = attackGroup.Find("AttackCollider3").GetComponent<Collider2D>();
@@ -284,11 +281,11 @@ public class Player : MonoBehaviour, IDamageable
             case PlayerState.Landing:
                 PlayerLandingUpdate();
                 break;
-            case PlayerState.Chaging:
-                PlayerChagingUpdate();
+            case PlayerState.Charging:
+                PlayerChargingUpdate();
                 break;
-            case PlayerState.ChagingAttack:
-                //PlayerChagingAttackUpdate();
+            case PlayerState.ChargingAttack:
+                //PlayerChargingAttackUpdate();
                 break;
             case PlayerState.Attack1:
                 PlayerAttack1Update();
@@ -692,25 +689,23 @@ public class Player : MonoBehaviour, IDamageable
             MoveAble(attackMoveSpeed);
     }
 
-    private void PlayerChagingUpdate()
+    private void PlayerChargingUpdate()
     {
         if (rb.linearVelocity.x !=0) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-        attackButtonDownTimer += Time.deltaTime; 
 
         // 공격 떼면 처리
         if (!input.IsAttack)
         {
             isAttack = true;
-            if (attackButtonDownTimer >= chargeThresholdTime)
+            if (chargingAttackAble)
             {
-                currentState = PlayerState.ChagingAttack;
+                currentState = PlayerState.ChargingAttack;
             }
             else
             {
                 currentState = PlayerState.Attack1;
             }
-
-            attackButtonDownTimer = 0f;
+            chargingAttackAble = false;
         }
     }
 
@@ -858,7 +853,7 @@ public class Player : MonoBehaviour, IDamageable
         if (isParrySuccess) return;
         if (getCharging&& input.IsAttack)
         {
-            currentState = PlayerState.Chaging;
+            currentState = PlayerState.Charging;
         }
         else
         {
@@ -1014,18 +1009,22 @@ public class Player : MonoBehaviour, IDamageable
         slidingColl.enabled = false;
         if(currentState == PlayerState.Jump) gameObject.layer = LayerMask.NameToLayer("Player");// Idle은 따로 관리
     }
-    private void ChagingColliderEnable()
+    private void ChargingAttackAble()
     {
-        chargingColl.enabled = true;
+        chargingAttackAble = true;
     }
-    private void ChagingColliderDisable()
+    private void ChargingAttackColliderEnable()
     {
-        chargingColl.enabled = false;
+        chargingAttackColl.enabled = true;
     }
-    private void ChagingFinish()
+    private void ChargingAttackColliderDisable()
+    {
+        chargingAttackColl.enabled = false;
+    }
+    private void ChargingFinish()
     {
         currentState = PlayerState.Idle;
-        chargingColl.enabled = false;
+        chargingAttackColl.enabled = false;
         isAttack = false;
     }
     private void AttackCollider()

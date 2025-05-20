@@ -57,10 +57,10 @@ public class PlayerAnimation : MonoBehaviour
             case Player.PlayerState.Landing:
                 animator.Play("Landing");
                 break;
-            case Player.PlayerState.Chaging:
+            case Player.PlayerState.Charging:
                 animator.Play("Chaging");
                 break;
-            case Player.PlayerState.ChagingAttack:
+            case Player.PlayerState.ChargingAttack:
                 animator.Play("ChagingAttack");
                 break;
             case Player.PlayerState.Attack1:

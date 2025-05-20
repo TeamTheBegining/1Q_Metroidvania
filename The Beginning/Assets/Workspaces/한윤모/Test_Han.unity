@@ -2472,19 +2472,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 306713975492954942, guid: 7deb2b89197bf4b4ea429bfec39f8b5a, type: 3}
       propertyPath: m_Size.x
-      value: 1.03125
+      value: 2.84375
       objectReference: {fileID: 0}
     - target: {fileID: 306713975492954942, guid: 7deb2b89197bf4b4ea429bfec39f8b5a, type: 3}
       propertyPath: m_Size.y
-      value: 1.125
+      value: 0.984375
       objectReference: {fileID: 0}
     - target: {fileID: 7071669524234704054, guid: 7deb2b89197bf4b4ea429bfec39f8b5a, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.x
-      value: 1.03125
+      value: 2.84375
       objectReference: {fileID: 0}
     - target: {fileID: 7071669524234704054, guid: 7deb2b89197bf4b4ea429bfec39f8b5a, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.y
-      value: 1.125
+      value: 0.984375
       objectReference: {fileID: 0}
     - target: {fileID: 7766923831768848115, guid: 7deb2b89197bf4b4ea429bfec39f8b5a, type: 3}
       propertyPath: skillpos

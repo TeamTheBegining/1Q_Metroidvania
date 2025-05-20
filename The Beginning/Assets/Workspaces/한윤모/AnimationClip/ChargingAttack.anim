@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ChagingAttack
+  m_Name: ChargingAttack
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,9 +21,19 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 8521717351194371342, guid: 69ee1b53daba0324fb5e06cf83b2a131, type: 3}
+      value: {fileID: -8743464065328807062, guid: 92e69508e0540d0468ff439a34825039, type: 3}
+    - time: 0.083333336
+      value: {fileID: 6684305917809644754, guid: b45967ee56073e84fa0038b591c9c246, type: 3}
+    - time: 0.16666667
+      value: {fileID: -3531806954253264403, guid: 3577c98d0f4e0184bacf392cba749ad9, type: 3}
+    - time: 0.25
+      value: {fileID: -2661376298641126880, guid: 7144164cd05508a4ab3e8f1f17eb1261, type: 3}
     - time: 0.33333334
-      value: {fileID: 8521717351194371342, guid: 69ee1b53daba0324fb5e06cf83b2a131, type: 3}
+      value: {fileID: -3372252338255938683, guid: 47d7dc12cba1b2a4593ccc1862df71bf, type: 3}
+    - time: 0.41666666
+      value: {fileID: -8926856448956798891, guid: 4d58879404def0c438906bf530b6c686, type: 3}
+    - time: 0.5
+      value: {fileID: -8926856448956798891, guid: 4d58879404def0c438906bf530b6c686, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -46,14 +56,19 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 8521717351194371342, guid: 69ee1b53daba0324fb5e06cf83b2a131, type: 3}
-    - {fileID: 8521717351194371342, guid: 69ee1b53daba0324fb5e06cf83b2a131, type: 3}
+    - {fileID: -8743464065328807062, guid: 92e69508e0540d0468ff439a34825039, type: 3}
+    - {fileID: 6684305917809644754, guid: b45967ee56073e84fa0038b591c9c246, type: 3}
+    - {fileID: -3531806954253264403, guid: 3577c98d0f4e0184bacf392cba749ad9, type: 3}
+    - {fileID: -2661376298641126880, guid: 7144164cd05508a4ab3e8f1f17eb1261, type: 3}
+    - {fileID: -3372252338255938683, guid: 47d7dc12cba1b2a4593ccc1862df71bf, type: 3}
+    - {fileID: -8926856448956798891, guid: 4d58879404def0c438906bf530b6c686, type: 3}
+    - {fileID: -8926856448956798891, guid: 4d58879404def0c438906bf530b6c686, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.4166667
+    m_StopTime: 0.5833333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -74,28 +89,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: ChagingColliderEnable
+    functionName: ChargingAttackColliderEnable
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.083333336
-    functionName: ChagingColliderDisable
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.16666667
-    functionName: ChagingColliderEnable
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.25
-    functionName: ChagingFinish
+  - time: 0.41666666
+    functionName: ChargingAttackColliderDisable
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

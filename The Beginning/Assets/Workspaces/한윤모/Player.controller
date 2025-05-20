@@ -263,7 +263,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Chaging
+  m_Name: Charging
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -276,7 +276,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d0cc8c3ba781cc547a6ec4b8e1bbf82e, type: 2}
+  m_Motion: {fileID: 7400000, guid: 7c639c689df017244aef06310cc515b0, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -315,7 +315,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ChagingAttack
+  m_Name: ChargingAttack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -328,7 +328,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 885ddffd202a69649830c058357f3d47, type: 2}
+  m_Motion: {fileID: 7400000, guid: 5796fffaf6aea154c81d2b502abef29d, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
