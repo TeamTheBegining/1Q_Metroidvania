@@ -269,7 +269,8 @@ public class B_GirlController : CommonEnemyController
     }
 
     // ===== AI 공격 로직 (Base 클래스의 virtual PerformAttackLogic 오버라이드) =====
-    protected override void PerformAttackLogic()
+
+protected override void PerformAttackLogic()
     {
         // Debug.Log($"[B_Girl] PerformAttackLogic 호출됨. 현재 콤보 상태: {currentComboState}, 다음 공격 가능 시간: {nextAttackTime:F2}, 현재 시간: {Time.time:F2}");
 
@@ -365,19 +366,16 @@ public class B_GirlController : CommonEnemyController
                     break;
 
                 case ComboState.HeavyAttack_Initial: // 묵직한 펀치 연타: 첫 번째 '퉁' 후
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.7f) // 70% 확률로 두 번째 '퉁'
+                                                     // --- 이 부분이 수정되었습니다: 70% 확률 대신 100% 확률로 다음 콤보로 이어집니다. ---
+                                                     // 이전 코드: if (UnityEngine.Random.Range(0f, 1f) < 0.7f)
+                    if (UnityEngine.Random.Range(0f, 1f) < 1.0f) // 100% 확률로 두 번째 '퉁'으로 이어짐
                     {
                         PlayAttack2Anim();
                         currentComboState = ComboState.HeavyAttack_Second; // 두 번째 '퉁' 상태
                         nextAttackTime = Time.time + heavyPunchSecondDelay; // 두 번째 '퉁' 후 지연 (B_Girl 고유)
                         Debug.Log($"[B_Girl] 콤보 진행: 묵직한 펀치 연타 (두 번째 Attack2) - 퉁!");
                     }
-                    else
-                    {
-                        currentComboState = ComboState.None; // 콤보 끝 (중간에 종료)
-                        nextAttackTime = Time.time + base.attack2Cooldown;
-                        Debug.Log($"[B_Girl] 콤보 마무리: 묵직한 펀치 연타 (두 번째 퉁 건너뛰고 마무리)");
-                    }
+                    // 이전의 'else' 블록 (30% 확률로 콤보 마무리)은 이제 실행되지 않으므로 제거되었습니다.
                     break;
 
                 case ComboState.HeavyAttack_Second: // 묵직한 펀치 연타: 두 번째 '퉁' 후
