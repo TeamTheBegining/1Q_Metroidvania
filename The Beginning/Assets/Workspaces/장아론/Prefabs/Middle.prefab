@@ -184,8 +184,8 @@ MonoBehaviour:
   attack1Value: 1.5
   attack2Value: 2.5
   attack3Value: 3.5
-  attack3DashSpeed: 5
-  attack3DashDuration: 0.5
+  attack3DashSpeed: 7
+  attack3DashDuration: 3
   heavyPunchFirstDelay: 0.6
   heavyPunchSecondDelay: 0.8
   offBeatFirstDelay: 0.7
