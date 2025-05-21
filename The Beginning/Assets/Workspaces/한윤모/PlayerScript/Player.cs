@@ -1248,6 +1248,11 @@ public class Player : MonoBehaviour, IDamageable
             isParryAble = false;
             currentMp += 10;
             currentState = PlayerState.ParrySuccess;
+            if(enemy.gameObject.GetComponent<SilverBlue>() != null)
+            {
+                enemy.gameObject.GetComponent<SilverBlue>().ParryingSuccess();
+            }
+
             //enemyscr.Stun();
             //counterTime;
         }
