@@ -1,29 +1,43 @@
 癤퓎sing System;
 using UnityEngine;
 
-public class SilverBlue : MonoBehaviour
+public class SilverBlue : MonoBehaviour, IDamageable
 {
     GameObject      player;
     Animator        animator;
     Rigidbody2D     rb;
     BoxCollider2D   boxCollider2D;
+    SpriteRenderer  spriteRenderer;
+    GameObject      attackAHitboxObject;
+    BoxCollider2D   attackAHitboxCollider;
+    EnemyHitbox     attackAEnemyHitbox;
 
     float distance;
     float randomdir;
     bool  leftdir;
     
     [SerializeField] float findDistance     = 3.0f;
-    [SerializeField] float moveChangetime   = 3.0f;
-    [SerializeField] float idleChangetime   = 3.0f;
+    [SerializeField] float damage           = 0.5f;
     [SerializeField] float attackRange      = 0.75f;
-
-    float movespeed    = 1.0f;
-    float chasingSpeed = 2.0f;
-
-    bool isPlayerFind = false;
+    [SerializeField] float attackdelay      = 1.0f;
+    [SerializeField] float attackTime       = 1.0f;
+    [SerializeField] float moveChangetime   = 3.0f;
+    [SerializeField] float idleChangetime   = 1.0f;
+    [SerializeField] float damagedtime      = 0.2f;
 
     float moveChangetimer;
     float idleChangetimer;
+    float attackTimer;
+    float damagedtimer;
+
+    float movespeed         = 1.0f;
+    float chasingSpeed      = 2.0f;
+    private float currentHp = 5.0f;
+    private float maxHp     = 5.0f;
+
+    bool isPlayerFind = false;
+    bool isDamaged    = false;
+
 
     public enum SilverBlueState
     {
@@ -35,16 +49,60 @@ public class SilverBlue : MonoBehaviour
     }
 
     public SilverBlueState currentState = SilverBlueState.Idle;
+    public float CurrentHp { get => currentHp; set => currentHp = value; }
+    public float MaxHp { get => maxHp; set => maxHp = value; }
+    public float Damage
+    {
+        get => damage;
+        set => damage = value;
+    }
+    public Action OnDead { get; set; }
+    public bool IsDead { get => currentState == SilverBlueState.Death; set { if (value) currentState = SilverBlueState.Death; } }
+
+    public void TakeDamage(float damage, GameObject attackObject)
+    {
+        isDamaged = true;
+        currentHp -= damage;
+
+        if (CurrentHp <= 0)
+        {
+            IsDead = true;
+            currentState = SilverBlueState.Death;
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = 0f;
+            OnDead?.Invoke();
+        }
+    }
+
+    public void SilverBlueDamaged()
+    {
+        if (isDamaged)
+        {
+            spriteRenderer.color = new Color(1.0f, 0, 0, 1.0f);
+
+            damagedtimer += Time.deltaTime;
+            if (damagedtimer > damagedtime)
+            {
+                spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                damagedtimer = 0;
+                isDamaged = false;
+            }
+            
+        }
+    }
 
     private void Awake()
     {
         animator        = GetComponent<Animator>();
         rb              = GetComponent<Rigidbody2D>();
         boxCollider2D   = GetComponent<BoxCollider2D>();
+        spriteRenderer  = GetComponent<SpriteRenderer>();
+        attackAHitboxObject = GetComponent<GameObject>();
+        attackAHitboxCollider = GetComponent<BoxCollider2D>();
+        attackAEnemyHitbox = GetComponent<EnemyHitbox>();
         moveChangetimer = 0;
         randomdir       = 1.0f;
-        leftdir         = false;
-        
+        leftdir         = false;        
     }
 
     private void OnEnable()
@@ -54,6 +112,8 @@ public class SilverBlue : MonoBehaviour
 
     private void FixedUpdate()
     {
+        SilverBlueDamaged();
+
         distance = Vector2.Distance(transform.position, player.transform.position);
         leftdir = player.transform.position.x < transform.position.x ? true : false;
 
@@ -75,11 +135,10 @@ public class SilverBlue : MonoBehaviour
                 //SilverBlueFreezeUpdate();
                 break;
             case SilverBlueState.Death:
-                //SilverBlueDeathUpdate();
+                animator.Play("death");
                 break;
         }
     }
-
 
     private void SilverBlueIdleUpdate()
     {
@@ -131,8 +190,43 @@ public class SilverBlue : MonoBehaviour
             }
         }
     }
+
     private void SilverBlueAttackUpdate()
     {
-        
+        attackTimer += Time.deltaTime;
+        if (attackTimer >= attackTime)
+        {
+            attackTimer = 0;
+
+            // 플레이어가 아직 범위 내에 있는지 확인
+            if (distance <= attackRange)
+            {
+                // 공격 로직 (예: 데미지 주기)
+                IDamageable playerDamageable = player.GetComponent<IDamageable>();
+                playerDamageable?.TakeDamage(damage, gameObject);
+            }
+
+            // 공격 후 Idle 혹은 Move로 복귀
+            currentState = SilverBlueState.Idle;
+        }
     }
+    public void EnableAttackHitbox()
+    {
+        // Check Base IsDead flag
+        if (IsDead) return; // IsDead 속성 사용 // Do not enable hitbox if dead
+
+        if (attackAHitboxObject != null && attackAHitboxCollider != null)
+        {
+            // Set damage value on the EnemyHitbox component
+            // Assumes EnemyHitbox.cs has a public float attackDamage; variable.
+            if (attackAEnemyHitbox != null)
+            {
+                attackAEnemyHitbox.attackDamage = damage; // Set damage from A_Attacker's value
+            }
+
+            attackAHitboxCollider.enabled = true; // Enable collider
+
+        }
+    }
+
 }
