@@ -1208,6 +1208,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             CurrentHp -= damage;
             if (IsDead) return;
+            currentHp += MaxHp / 10;
             currentMp += 5;
             currentState = PlayerState.Hit;
             curParryCount = 0;
