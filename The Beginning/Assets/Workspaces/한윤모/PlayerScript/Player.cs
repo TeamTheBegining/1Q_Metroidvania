@@ -254,12 +254,12 @@ public class Player : MonoBehaviour, IDamageable
     private void FixedUpdate()
     {
         //테스트용
-        if (input.IsParrying&&input.InputVec.y<0)
+        /*if (input.IsParrying&&input.InputVec.y<0)
         {
             //isParryAble = true;
             TakeDamage(95,gameObject);
             input.IsParrying = false;
-        }
+        }*/
         if (IsDead) return;
         CheckList();
         switch (currentState)
@@ -443,7 +443,7 @@ public class Player : MonoBehaviour, IDamageable
     private void EnergyOverCheck()
     {
         currentHp = currentHp > MaxHp ? MaxHp : currentHp;
-        currentMp = currentMp > MaxMp ? MaxHp : currentMp;
+        currentMp = currentMp > MaxMp ? MaxMp : currentMp;
     }
 
     private void DelayCheck()
