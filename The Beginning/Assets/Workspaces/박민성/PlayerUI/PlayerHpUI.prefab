@@ -174,7 +174,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpSlider: {fileID: 7364187641033403102}
   mpSlider: {fileID: 5343812793399084096}
-  parryingCountText: {fileID: 0}
+  appleimage:
+  - {fileID: 4548091305122935360, guid: e3beba2c33bcbad4a8c938af7406317b, type: 3}
+  - {fileID: 3317765001857784946, guid: e3beba2c33bcbad4a8c938af7406317b, type: 3}
+  - {fileID: 2789429840097148010, guid: e3beba2c33bcbad4a8c938af7406317b, type: 3}
   player: {fileID: 0}
 --- !u!1 &4813106044013724962
 GameObject:

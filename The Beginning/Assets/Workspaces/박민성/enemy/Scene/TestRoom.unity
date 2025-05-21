@@ -2622,10 +2622,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: trashmob
       objectReference: {fileID: 0}
-    - target: {fileID: 455939253207969763, guid: b94d316aa65aeb34ebdb89240a16de2a, type: 3}
-      propertyPath: damage
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 2635450506110073842, guid: b94d316aa65aeb34ebdb89240a16de2a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.5382326
@@ -2682,10 +2678,6 @@ PrefabInstance:
     - target: {fileID: 3519999045332464419, guid: 833a0ff2d8853d948803924d0118d154, type: 3}
       propertyPath: m_Name
       value: PlayerHpUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 5082080279558263446, guid: 833a0ff2d8853d948803924d0118d154, type: 3}
-      propertyPath: parryingCountText
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5369908141284532427, guid: 833a0ff2d8853d948803924d0118d154, type: 3}
       propertyPath: m_AnchorMax.x

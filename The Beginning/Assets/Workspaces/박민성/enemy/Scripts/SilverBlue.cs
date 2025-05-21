@@ -60,8 +60,10 @@ public class SilverBlue : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage, GameObject attackObject)
     {
+        if (IsDead) return;
         isDamaged = true;
         currentHp -= damage;
+        HitBoxDisable();
 
         if (CurrentHp <= 0)
         {
@@ -99,7 +101,7 @@ public class SilverBlue : MonoBehaviour, IDamageable
         hitBoxCollider  = transform.Find("HitBox").GetComponent<BoxCollider2D>();
         moveChangetimer = 0;
         randomdir       = 1.0f;
-        leftdir         = false;        
+        leftdir         = false;
     }
 
     private void OnEnable()
@@ -109,6 +111,7 @@ public class SilverBlue : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
+
         SilverBlueDamaged();
         AttackDelayCheck();
         ChasingCheck();
@@ -234,6 +237,7 @@ public class SilverBlue : MonoBehaviour, IDamageable
 
         if (freezetimer > freezetime)
         {
+            freezetimer = 0;
             currentState = SilverBlueState.Idle;
         }
         
