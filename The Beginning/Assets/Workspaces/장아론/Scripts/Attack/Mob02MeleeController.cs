@@ -1,87 +1,87 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Àâ¸÷02 (±Ù°Å¸®) Ä³¸¯ÅÍ¸¦ Á¦¾îÇÏ´Â ½ºÅ©¸³Æ®ÀÔ´Ï´Ù.
-/// ÀÌ ½ºÅ©¸³Æ®´Â CommonEnemyController¸¦ »ó¼Ó¹Ş¾Æ ±âº»ÀûÀÎ ÀûÀÇ Çàµ¿(ÇÇÇØ, »ç¸Á, ÃßÀû, ¼øÂû)À» °è½ÂÇÏ¸ç,
-/// Àâ¸÷02ÀÇ °íÀ¯ÇÑ ´É·ÂÄ¡, ´ÜÀÏ °ø°İ ÆĞÅÏ, °æÁ÷(ÆĞ¸µ ½Ã) ·ÎÁ÷À» ±¸ÇöÇÕ´Ï´Ù.
+/// ì¡ëª¹02 (ê·¼ê±°ë¦¬) ìºë¦­í„°ë¥¼ ì œì–´í•˜ëŠ” ìŠ¤í¬ë¦½íŠ¸ì…ë‹ˆë‹¤.
+/// ì´ ìŠ¤í¬ë¦½íŠ¸ëŠ” CommonEnemyControllerë¥¼ ìƒì†ë°›ì•„ ê¸°ë³¸ì ì¸ ì ì˜ í–‰ë™(í”¼í•´, ì‚¬ë§, ì¶”ì , ìˆœì°°)ì„ ê³„ìŠ¹í•˜ë©°,
+/// ì¡ëª¹02ì˜ ê³ ìœ í•œ ëŠ¥ë ¥ì¹˜, ë‹¨ì¼ ê³µê²© íŒ¨í„´, ê²½ì§(íŒ¨ë§ ì‹œ) ë¡œì§ì„ êµ¬í˜„í•©ë‹ˆë‹¤.
 /// </summary>
 public class Mob02MeleeController : CommonEnemyController
 {
-    // --- ¾Ö´Ï¸ŞÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ÀÌ¸§ »ó¼ö Á¤ÀÇ ---
+    // --- ì• ë‹ˆë©”ì´ì…˜ íŒŒë¼ë¯¸í„° ì´ë¦„ ìƒìˆ˜ ì •ì˜ ---
     private const string ANIM_BOOL_MOB02_WALK = "Mob02_Walk";
     private const string ANIM_TRIGGER_MOB02_ATTACK_A = "Mob02_AttackA";
     private const string ANIM_TRIGGER_MOB02_HURT = "Mob02_Hurt";
     private const string ANIM_TRIGGER_MOB02_STUN = "Mob02_Stun";
     private const string ANIM_TRIGGER_MOB02_DEATH = "Mob02_Death";
 
-    [Header("Àâ¸÷02 °ø°İ ÆÇÁ¤ ¼³Á¤")]
-    [Tooltip("A °ø°İ(³»Áö¸£±â) ½Ã È°¼ºÈ­µÉ È÷Æ®¹Ú½º °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ ¿¬°áÇÏ¼¼¿ä.")]
+    [Header("ì¡ëª¹02 ê³µê²© íŒì • ì„¤ì •")]
+    [Tooltip("A ê³µê²©(ë‚´ì§€ë¥´ê¸°) ì‹œ í™œì„±í™”ë  íˆíŠ¸ë°•ìŠ¤ ê²Œì„ ì˜¤ë¸Œì íŠ¸ë¥¼ ì—°ê²°í•˜ì„¸ìš”.")]
     public GameObject attackAHitboxObject;
 
     private BoxCollider2D attackAHitboxCollider;
     private EnemyHitbox attackAEnemyHitbox;
 
-    [Header("Àâ¸÷02 °íÀ¯ ´É·ÂÄ¡")]
-    [Tooltip("Àâ¸÷02ÀÇ ÃÖ´ë Ã¼·ÂÀÔ´Ï´Ù. CommonEnemyControllerÀÇ MaxHp¸¦ ÀÌ °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.")]
+    [Header("ì¡ëª¹02 ê³ ìœ  ëŠ¥ë ¥ì¹˜")]
+    [Tooltip("ì¡ëª¹02ì˜ ìµœëŒ€ ì²´ë ¥ì…ë‹ˆë‹¤. CommonEnemyControllerì˜ MaxHpë¥¼ ì´ ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.")]
     [SerializeField] private float mob02MaxHealth = 4f;
 
-    [Header("Àâ¸÷02 ÀüÅõ ¼³Á¤")]
-    [Tooltip("'³»Áö¸£±â' °ø°İ ½Ã Àû¿ëµÉ ÇÇÇØ·®ÀÔ´Ï´Ù.")]
+    [Header("ì¡ëª¹02 ì „íˆ¬ ì„¤ì •")]
+    [Tooltip("'ë‚´ì§€ë¥´ê¸°' ê³µê²© ì‹œ ì ìš©ë  í”¼í•´ëŸ‰ì…ë‹ˆë‹¤.")]
     public float attackAValue = 0.4f;
-    [Tooltip("°ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ÈÄ ´ÙÀ½ °ø°İÀ» ½ÃµµÇÏ±â Àü±îÁö ±â´Ù¸± ½Ã°£ (1ÃÊ).")]
+    [Tooltip("ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ í›„ ë‹¤ìŒ ê³µê²©ì„ ì‹œë„í•˜ê¸° ì „ê¹Œì§€ ê¸°ë‹¤ë¦´ ì‹œê°„ (1ì´ˆ).")]
     public float attackACooldown = 1.0f;
 
-    [Header("Àâ¸÷02 °¨Áö ¹× ÀÌµ¿ ¼³Á¤")]
-    [Tooltip("ÇÃ·¹ÀÌ¾î¸¦ °¨ÁöÇÏ´Â ¹üÀ§ÀÔ´Ï´Ù.")]
+    [Header("ì¡ëª¹02 ê°ì§€ ë° ì´ë™ ì„¤ì •")]
+    [Tooltip("í”Œë ˆì´ì–´ë¥¼ ê°ì§€í•˜ëŠ” ë²”ìœ„ì…ë‹ˆë‹¤.")]
    // public new float detectionRange = 3f;
-    //[Tooltip("ÇÃ·¹ÀÌ¾î¸¦ °¨ÁöÇßÀ» ¶§ ÃßÀû ¼ÓµµÀÔ´Ï´Ù.")]
+    //[Tooltip("í”Œë ˆì´ì–´ë¥¼ ê°ì§€í–ˆì„ ë•Œ ì¶”ì  ì†ë„ì…ë‹ˆë‹¤.")]
     public float chaseSpeed = 3f;
 
-    // --- ÀÎ½ºÆåÅÍ¿¡¼­ Á÷Á¢ Á¶ÀıÇÒ AnimationCurve º¯¼ö Ãß°¡ ---
-    [Header("°ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Ä¿ºê ¼³Á¤")]
-    [Tooltip("°ø°İ ½Ã ÀüÁø ÀÌµ¿ ¼Óµµ¸¦ ½Ã°£¿¡ µû¶ó Á¦¾îÇÏ´Â Ä¿ºêÀÔ´Ï´Ù. XÃàÀº ¾Ö´Ï¸ŞÀÌ¼Ç ÁøÇàµµ (0~1), YÃàÀº ¼Óµµ ¹èÀ².")]
-    public AnimationCurve attackForwardMovementCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1), new Keyframe(0.5f, 0)); // ±âº»°ª ¼³Á¤
-    [Tooltip("°ø°İ ÈÄ ÈÄÁø ÀÌµ¿ ¼Óµµ¸¦ ½Ã°£¿¡ µû¶ó Á¦¾îÇÏ´Â Ä¿ºêÀÔ´Ï´Ù. XÃàÀº ¾Ö´Ï¸ŞÀÌ¼Ç ÁøÇàµµ (0~1), YÃàÀº ¼Óµµ ¹èÀ².")]
-    public AnimationCurve attackBackwardMovementCurve = new AnimationCurve(new Keyframe(0.5f, 0), new Keyframe(0.7f, 1), new Keyframe(1, 0)); // ±âº»°ª ¼³Á¤
+    // --- ì¸ìŠ¤í™í„°ì—ì„œ ì§ì ‘ ì¡°ì ˆí•  AnimationCurve ë³€ìˆ˜ ì¶”ê°€ ---
+    [Header("ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì»¤ë¸Œ ì„¤ì •")]
+    [Tooltip("ê³µê²© ì‹œ ì „ì§„ ì´ë™ ì†ë„ë¥¼ ì‹œê°„ì— ë”°ë¼ ì œì–´í•˜ëŠ” ì»¤ë¸Œì…ë‹ˆë‹¤. Xì¶•ì€ ì• ë‹ˆë©”ì´ì…˜ ì§„í–‰ë„ (0~1), Yì¶•ì€ ì†ë„ ë°°ìœ¨.")]
+    public AnimationCurve attackForwardMovementCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1), new Keyframe(0.5f, 0)); // ê¸°ë³¸ê°’ ì„¤ì •
+    [Tooltip("ê³µê²© í›„ í›„ì§„ ì´ë™ ì†ë„ë¥¼ ì‹œê°„ì— ë”°ë¼ ì œì–´í•˜ëŠ” ì»¤ë¸Œì…ë‹ˆë‹¤. Xì¶•ì€ ì• ë‹ˆë©”ì´ì…˜ ì§„í–‰ë„ (0~1), Yì¶•ì€ ì†ë„ ë°°ìœ¨.")]
+    public AnimationCurve attackBackwardMovementCurve = new AnimationCurve(new Keyframe(0.5f, 0), new Keyframe(0.7f, 1), new Keyframe(1, 0)); // ê¸°ë³¸ê°’ ì„¤ì •
 
-    [Tooltip("°ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Áß ÃÖ´ë ÀüÁø ¼Óµµ ¹èÀ²ÀÔ´Ï´Ù.")]
+    [Tooltip("ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¤‘ ìµœëŒ€ ì „ì§„ ì†ë„ ë°°ìœ¨ì…ë‹ˆë‹¤.")]
     public float attackForwardSpeedMultiplier = 1.5f;
-    [Tooltip("°ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ÈÄ ÈÄÁø ¼Óµµ ¹èÀ²ÀÔ´Ï´Ù. (À½¼ö °ªÀ¸·Î »ç¿ëµÉ ¼ö ÀÖÀ½)")]
+    [Tooltip("ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ í›„ í›„ì§„ ì†ë„ ë°°ìœ¨ì…ë‹ˆë‹¤. (ìŒìˆ˜ ê°’ìœ¼ë¡œ ì‚¬ìš©ë  ìˆ˜ ìˆìŒ)")]
     public float attackBackwardSpeedMultiplier = 1f;
 
-    [Tooltip("°ø°İ ½Ã ÇÃ·¹ÀÌ¾î¿¡°Ô Ãß°¡ÀûÀ¸·Î ÀüÁøÇÒ °Å¸®ÀÔ´Ï´Ù. ÀÌ °Å¸®¸¦ °í·ÁÇÏ¿© °ø°İ ½ÃÀÛÁ¡À» °áÁ¤ÇÕ´Ï´Ù.")]
-    public float attackDashDistance = 1.5f; // »õ·Î Ãß°¡: °ø°İ ½Ã µ¹ÁøÇÒ °Å¸®
+    [Tooltip("ê³µê²© ì‹œ í”Œë ˆì´ì–´ì—ê²Œ ì¶”ê°€ì ìœ¼ë¡œ ì „ì§„í•  ê±°ë¦¬ì…ë‹ˆë‹¤. ì´ ê±°ë¦¬ë¥¼ ê³ ë ¤í•˜ì—¬ ê³µê²© ì‹œì‘ì ì„ ê²°ì •í•©ë‹ˆë‹¤.")]
+    public float attackDashDistance = 1.5f; // ìƒˆë¡œ ì¶”ê°€: ê³µê²© ì‹œ ëŒì§„í•  ê±°ë¦¬
 
-    // °æÁ÷(Stun) »óÅÂ °ü¸® º¯¼ö
+    // ê²½ì§(Stun) ìƒíƒœ ê´€ë¦¬ ë³€ìˆ˜
     private bool isStunned = false;
-    [Header("Àâ¸÷02 °æÁ÷ ¼³Á¤")]
-    [Tooltip("ÇÃ·¹ÀÌ¾îÀÇ ÆĞ¸µ °ø°İ µî¿¡ ÀÇÇØ °æÁ÷µÇ¾úÀ» ¶§ Áö¼ÓµÇ´Â ½Ã°£ÀÔ´Ï´Ù.")]
+    [Header("ì¡ëª¹02 ê²½ì§ ì„¤ì •")]
+    [Tooltip("í”Œë ˆì´ì–´ì˜ íŒ¨ë§ ê³µê²© ë“±ì— ì˜í•´ ê²½ì§ë˜ì—ˆì„ ë•Œ ì§€ì†ë˜ëŠ” ì‹œê°„ì…ë‹ˆë‹¤.")]
     public float stunDuration = 2f;
 
     private Coroutine stunCoroutine;
 
-    // --- Ãß°¡µÈ º¯¼ö: SpriteRenderer ÂüÁ¶ ---
+    // --- ì¶”ê°€ëœ ë³€ìˆ˜: SpriteRenderer ì°¸ì¡° ---
     private SpriteRenderer spriteRenderer;
 
-    // --- Ãß°¡µÈ º¯¼ö: ÇÃ·¹ÀÌ¾î °¨Áö ¹× ÃßÀû °ü·Ã ---
+    // --- ì¶”ê°€ëœ ë³€ìˆ˜: í”Œë ˆì´ì–´ ê°ì§€ ë° ì¶”ì  ê´€ë ¨ ---
     private bool isPlayerDetected = false;
     private Vector2 lastKnownPlayerPosition;
 
-    // --- °ø°İ ½Ã ÀüÁø/ÈÄÁø ·ÎÁ÷À» À§ÇÑ Ãß°¡ º¯¼ö ---
+    // --- ê³µê²© ì‹œ ì „ì§„/í›„ì§„ ë¡œì§ì„ ìœ„í•œ ì¶”ê°€ ë³€ìˆ˜ ---
     private bool isAttackingForward = false;
     private bool isAttackingBackward = false;
 
-    // --- Ãß°¡µÈ º¯¼ö: ¾Ö´Ï¸ŞÀÌ¼Ç ÁøÇàµµ ÃßÀû ---
+    // --- ì¶”ê°€ëœ ë³€ìˆ˜: ì• ë‹ˆë©”ì´ì…˜ ì§„í–‰ë„ ì¶”ì  ---
     private float attackAnimationProgress = 0f;
-    private float currentAttackAnimationLength = 0f; // ÇöÀç °ø°İ ¾Ö´Ï¸ŞÀÌ¼ÇÀÇ ±æÀÌ (Å¬¸³ Á¤º¸ ÇÊ¿ä)
+    private float currentAttackAnimationLength = 0f; // í˜„ì¬ ê³µê²© ì• ë‹ˆë©”ì´ì…˜ì˜ ê¸¸ì´ (í´ë¦½ ì •ë³´ í•„ìš”)
 
 
     /// <summary>
-    /// ¿ÀºêÁ§Æ®°¡ »ı¼ºµÉ ¶§ °¡Àå ¸ÕÀú È£ÃâµË´Ï´Ù.
-    /// CommonEnemyControllerÀÇ Awake¸¦ È£ÃâÇÏ°í, Àâ¸÷02ÀÇ ÃÊ±â ´É·ÂÄ¡¸¦ ¼³Á¤ÇÏ¸ç,
-    /// SpriteRenderer ÄÄÆ÷³ÍÆ®¸¦ ÃÊ±âÈ­ÇÕ´Ï´Ù.
+    /// ì˜¤ë¸Œì íŠ¸ê°€ ìƒì„±ë  ë•Œ ê°€ì¥ ë¨¼ì € í˜¸ì¶œë©ë‹ˆë‹¤.
+    /// CommonEnemyControllerì˜ Awakeë¥¼ í˜¸ì¶œí•˜ê³ , ì¡ëª¹02ì˜ ì´ˆê¸° ëŠ¥ë ¥ì¹˜ë¥¼ ì„¤ì •í•˜ë©°,
+    /// SpriteRenderer ì»´í¬ë„ŒíŠ¸ë¥¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
     /// </summary>
     protected override void Awake()
     {
@@ -102,13 +102,13 @@ public class Mob02MeleeController : CommonEnemyController
 
         if (spriteRenderer == null)
         {
-            Debug.LogError("Mob02MeleeController: SpriteRenderer ÄÄÆ÷³ÍÆ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. ½ºÇÁ¶óÀÌÆ® µÚÁı±â(Flip)°¡ Á¤»óÀûÀ¸·Î ÀÛµ¿ÇÏÁö ¾ÊÀ» ¼ö ÀÖ½À´Ï´Ù.", this);
+            Debug.LogError("Mob02MeleeController: SpriteRenderer ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ìŠ¤í”„ë¼ì´íŠ¸ ë’¤ì§‘ê¸°(Flip)ê°€ ì •ìƒì ìœ¼ë¡œ ì‘ë™í•˜ì§€ ì•Šì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤.", this);
         }
     }
 
     /// <summary>
-    /// ½ºÅ©¸³Æ®°¡ È°¼ºÈ­µÉ ¶§ ÇÑ ¹ø È£ÃâµË´Ï´Ù.
-    /// ÇÃ·¹ÀÌ¾î Å¸°ÙÀ» ¼³Á¤ÇÏ°í, È÷Æ®¹Ú½º °ü·Ã ÄÄÆ÷³ÍÆ®¸¦ ÃÊ±âÈ­ÇÕ´Ï´Ù.
+    /// ìŠ¤í¬ë¦½íŠ¸ê°€ í™œì„±í™”ë  ë•Œ í•œ ë²ˆ í˜¸ì¶œë©ë‹ˆë‹¤.
+    /// í”Œë ˆì´ì–´ íƒ€ê²Ÿì„ ì„¤ì •í•˜ê³ , íˆíŠ¸ë°•ìŠ¤ ê´€ë ¨ ì»´í¬ë„ŒíŠ¸ë¥¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
     /// </summary>
     protected override void Start()
     {
@@ -122,7 +122,7 @@ public class Mob02MeleeController : CommonEnemyController
         }
         else
         {
-            Debug.LogWarning("Mob02MeleeController: 'Player' ÅÂ±×¸¦ °¡Áø °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. ÇÃ·¹ÀÌ¾î°¡ ¾À¿¡ ÀÖ´ÂÁö, ÅÂ±×°¡ ¿Ã¹Ù¸¥Áö È®ÀÎÇÏ¼¼¿ä.", this);
+            Debug.LogWarning("Mob02MeleeController: 'Player' íƒœê·¸ë¥¼ ê°€ì§„ ê²Œì„ ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. í”Œë ˆì´ì–´ê°€ ì”¬ì— ìˆëŠ”ì§€, íƒœê·¸ê°€ ì˜¬ë°”ë¥¸ì§€ í™•ì¸í•˜ì„¸ìš”.", this);
         }
 
         if (attackAHitboxObject != null)
@@ -135,16 +135,16 @@ public class Mob02MeleeController : CommonEnemyController
             }
             else
             {
-                Debug.LogWarning("BoxCollider2D ÄÄÆ÷³ÍÆ®°¡ 'Attack A Hitbox Object'¿¡ ¾ø½À´Ï´Ù.", this);
+                Debug.LogWarning("BoxCollider2D ì»´í¬ë„ŒíŠ¸ê°€ 'Attack A Hitbox Object'ì— ì—†ìŠµë‹ˆë‹¤.", this);
             }
             if (attackAEnemyHitbox == null)
             {
-                Debug.LogWarning("EnemyHitbox ÄÄÆ÷³ÍÆ®°¡ 'Attack A Hitbox Object'¿¡ ¾ø½À´Ï´Ù!", this);
+                Debug.LogWarning("EnemyHitbox ì»´í¬ë„ŒíŠ¸ê°€ 'Attack A Hitbox Object'ì— ì—†ìŠµë‹ˆë‹¤!", this);
             }
         }
         else
         {
-            Debug.LogWarning("'Attack A Hitbox Object'°¡ ÀÎ½ºÆåÅÍ¿¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.", this);
+            Debug.LogWarning("'Attack A Hitbox Object'ê°€ ì¸ìŠ¤í™í„°ì— í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", this);
         }
 
         isStunned = false;
@@ -156,11 +156,13 @@ public class Mob02MeleeController : CommonEnemyController
     }
 
     /// <summary>
-    /// ¸Å ÇÁ·¹ÀÓ È£ÃâµË´Ï´Ù.
-    /// ÀûÀÇ ÇöÀç »óÅÂ¿¡ µû¶ó AI ·ÎÁ÷°ú ¿òÁ÷ÀÓÀ» Á¦¾îÇÕ´Ï´Ù.
+    /// ë§¤ í”„ë ˆì„ í˜¸ì¶œë©ë‹ˆë‹¤.
+    /// ì ì˜ í˜„ì¬ ìƒíƒœì— ë”°ë¼ AI ë¡œì§ê³¼ ì›€ì§ì„ì„ ì œì–´í•©ë‹ˆë‹¤.
     /// </summary>
     protected override void Update()
     {
+
+        //Debug.Log($"{gameObject.name} : Player Vector : {playerTransform.position} ----------");
         if (IsDead || isStunned || isPerformingHurtAnimation)
         {
             if (rb != null) rb.linearVelocity = Vector2.zero;
@@ -173,14 +175,14 @@ public class Mob02MeleeController : CommonEnemyController
             if (currentAttackAnimationLength == 0f && animator != null)
             {
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                // Animator ControllerÀÇ State ÀÌ¸§ÀÌ "AttackA"ÀÌ¹Ç·Î, ÀÌ ºÎºĞÀº ±×´ë·Î µÓ´Ï´Ù.
-                if (stateInfo.IsName("AttackA")) // <--- ÀÌ ºÎºĞÀº "AttackA"°¡ ¸Â½À´Ï´Ù.
+                // Animator Controllerì˜ State ì´ë¦„ì´ "AttackA"ì´ë¯€ë¡œ, ì´ ë¶€ë¶„ì€ ê·¸ëŒ€ë¡œ ë‘¡ë‹ˆë‹¤.
+                if (stateInfo.IsName("AttackA")) // <--- ì´ ë¶€ë¶„ì€ "AttackA"ê°€ ë§ìŠµë‹ˆë‹¤.
                 {
                     AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0);
                     if (clipInfo.Length > 0)
                     {
-                        // ÀÌ "Mob02_AttackA_ClipName"À» ½ÇÁ¦ ¾Ö´Ï¸ŞÀÌ¼Ç Å¬¸³ ÀÌ¸§ÀÎ "S_Attack"À¸·Î º¯°æÇØ¾ß ÇÕ´Ï´Ù.
-                        if (clipInfo[0].clip.name == "S_Attack") // <--- ÀÌ ºÎºĞÀ» "S_Attack"À¸·Î º¯°æ!!!
+                        // ì´ "Mob02_AttackA_ClipName"ì„ ì‹¤ì œ ì• ë‹ˆë©”ì´ì…˜ í´ë¦½ ì´ë¦„ì¸ "S_Attack"ìœ¼ë¡œ ë³€ê²½í•´ì•¼ í•©ë‹ˆë‹¤.
+                        if (clipInfo[0].clip.name == "S_Attack") // <--- ì´ ë¶€ë¶„ì„ "S_Attack"ìœ¼ë¡œ ë³€ê²½!!!
                         {
                             currentAttackAnimationLength = clipInfo[0].clip.length;
                         }
@@ -256,7 +258,7 @@ public class Mob02MeleeController : CommonEnemyController
 
         float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
-        // °ø°İ ¹üÀ§ + µ¹Áø °Å¸®º¸´Ù °¡±î¿ì¸é ¸ØÃß°í °ø°İ ÁØºñ
+        // ê³µê²© ë²”ìœ„ + ëŒì§„ ê±°ë¦¬ë³´ë‹¤ ê°€ê¹Œìš°ë©´ ë©ˆì¶”ê³  ê³µê²© ì¤€ë¹„
         if (distanceToPlayer <= attackRange + attackStopBuffer + attackDashDistance)
         {
             if (rb != null) rb.linearVelocity = Vector2.zero;
@@ -398,7 +400,7 @@ public class Mob02MeleeController : CommonEnemyController
     }
 
 
-    // --- AI °ø°İ ·ÎÁ÷ ---
+    // --- AI ê³µê²© ë¡œì§ ---
 
     protected override void PerformAttackLogic()
     {
@@ -409,19 +411,19 @@ public class Mob02MeleeController : CommonEnemyController
 
         float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
-        // ÇÃ·¹ÀÌ¾î°¡ °ø°İ ½ÃÀÛ °Å¸® ³»¿¡ ÀÖÀ» ¶§ °ø°İ ½ÃÀÛ
-        // attackRange + attackDashDistance + (Ãß°¡ ¹öÆÛ)
-        if (distanceToPlayer <= attackRange + attackDashDistance + attackStopBuffer) // attackStopBufferµµ °í·Á
+        // í”Œë ˆì´ì–´ê°€ ê³µê²© ì‹œì‘ ê±°ë¦¬ ë‚´ì— ìˆì„ ë•Œ ê³µê²© ì‹œì‘
+        // attackRange + attackDashDistance + (ì¶”ê°€ ë²„í¼)
+        if (distanceToPlayer <= attackRange + attackDashDistance + attackStopBuffer) // attackStopBufferë„ ê³ ë ¤
         {
-            // °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç ½ÃÀÛ
+            // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘
             isPerformingAttackAnimation = true;
             attackAnimationProgress = 0f;
-            currentAttackAnimationLength = 0f; // ¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ¸¦ ´Ù½Ã °¡Á®¿Àµµ·Ï ÃÊ±âÈ­
+            currentAttackAnimationLength = 0f; // ì• ë‹ˆë©”ì´ì…˜ ê¸¸ì´ë¥¼ ë‹¤ì‹œ ê°€ì ¸ì˜¤ë„ë¡ ì´ˆê¸°í™”
             PlayAttack1Anim();
         }
     }
 
-    // --- ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ® Äİ¹é ÇÔ¼ö ---
+    // --- ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸ ì½œë°± í•¨ìˆ˜ ---
 
     public override void OnAttackAnimationEnd()
     {
@@ -469,14 +471,14 @@ public class Mob02MeleeController : CommonEnemyController
             }
             else
             {
-                Debug.LogWarning("Mob02MeleeController: EnemyHitbox ÄÄÆ÷³ÍÆ®°¡ 'Attack A Hitbox Object'¿¡ ¾ø½À´Ï´Ù!", attackAHitboxObject);
+                Debug.LogWarning("Mob02MeleeController: EnemyHitbox ì»´í¬ë„ŒíŠ¸ê°€ 'Attack A Hitbox Object'ì— ì—†ìŠµë‹ˆë‹¤!", attackAHitboxObject);
             }
             attackAHitboxCollider.enabled = true;
             Debug.Log("Mob02: Attack Hitbox Enabled.");
         }
         else
         {
-            Debug.LogWarning("Mob02MeleeController: 'Attack A Hitbox Object' ¶Ç´Â Äİ¶óÀÌ´õ°¡ ÇÒ´çµÇÁö ¾Ê¾Ò°Å³ª Ã£À» ¼ö ¾ø½À´Ï´Ù. È÷Æ®¹Ú½º È°¼ºÈ­ ½ÇÆĞ.", this);
+            Debug.LogWarning("Mob02MeleeController: 'Attack A Hitbox Object' ë˜ëŠ” ì½œë¼ì´ë”ê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ê±°ë‚˜ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. íˆíŠ¸ë°•ìŠ¤ í™œì„±í™” ì‹¤íŒ¨.", this);
         }
     }
 
@@ -491,7 +493,7 @@ public class Mob02MeleeController : CommonEnemyController
         }
         else
         {
-            Debug.LogWarning("Mob02MeleeController: 'Attack A Hitbox Collider'°¡ ÇÒ´çµÇÁö ¾Ê¾Ò°Å³ª Ã£À» ¼ö ¾ø½À´Ï´Ù. È÷Æ®¹Ú½º ºñÈ°¼ºÈ­ ½ÇÆĞ.", this);
+            Debug.LogWarning("Mob02MeleeController: 'Attack A Hitbox Collider'ê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ê±°ë‚˜ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. íˆíŠ¸ë°•ìŠ¤ ë¹„í™œì„±í™” ì‹¤íŒ¨.", this);
         }
     }
 
@@ -510,16 +512,16 @@ public class Mob02MeleeController : CommonEnemyController
         spriteToFlip.localScale = new Vector3(desiredSign * currentMagnitude, spriteToFlip.localScale.y, spriteToFlip.localScale.z);
     }
 
-    public void SetPlayerTarget(Transform newPlayerTransform)
+    public override void SetPlayerTarget(Transform newPlayerTransform)
     {
         if (newPlayerTransform != null)
         {
             playerTransform = newPlayerTransform;
-            Debug.Log($"{gameObject.name}: ÇÃ·¹ÀÌ¾î Å¸°ÙÀÌ ¼³Á¤µÇ¾ú½À´Ï´Ù: {playerTransform.name}", this);
+            Debug.Log($"{gameObject.name}: í”Œë ˆì´ì–´ íƒ€ê²Ÿì´ ì„¤ì •ë˜ì—ˆìŠµë‹ˆë‹¤: {playerTransform.name}", this);
         }
         else
         {
-            Debug.LogWarning($"{gameObject.name}: SetPlayerTarget ÇÔ¼ö¿¡ Àü´ŞµÈ ÇÃ·¹ÀÌ¾î TransformÀÌ nullÀÔ´Ï´Ù. ÇÃ·¹ÀÌ¾î¸¦ ÃßÀûÇÒ ¼ö ¾ø½À´Ï´Ù.", this);
+            Debug.LogWarning($"{gameObject.name}: SetPlayerTarget í•¨ìˆ˜ì— ì „ë‹¬ëœ í”Œë ˆì´ì–´ Transformì´ nullì…ë‹ˆë‹¤. í”Œë ˆì´ì–´ë¥¼ ì¶”ì í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", this);
         }
     }
 
@@ -531,7 +533,7 @@ public class Mob02MeleeController : CommonEnemyController
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
 
-        // »õ·Î¿î °ø°İ ½ÃÀÛÁ¡ ½Ã°¢È­ (³ë¶õ»ö)
+        // ìƒˆë¡œìš´ ê³µê²© ì‹œì‘ì  ì‹œê°í™” (ë…¸ë€ìƒ‰)
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, attackRange + attackDashDistance + attackStopBuffer);
     }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
@@ -18,7 +19,7 @@ public class EnemyStatusBridge : MonoBehaviour
 
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
         if (string.IsNullOrEmpty(enemyID))
         {
@@ -35,21 +36,15 @@ public class EnemyStatusBridge : MonoBehaviour
         {
             gameObject.SetActive(false); // 이미 죽은 적은 비활성화
             Debug.Log("deactive");
-            return;
+            // 0521 추가 
         }
 
-        // 사망이 아니면 플레이어 찾기
-        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-    }
 
-    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
-    {
+        yield return new WaitUntil(() => FindFirstObjectByType<Player>() != null);
+
         Player player = FindFirstObjectByType<Player>();
-        if (player != null)
-        {
-            GetComponent<CommonEnemyController>()?.SetPlayerTarget(player.transform);
-            Debug.Log($"{enemyID} found player");
-        }
+        GetComponent<CommonEnemyController>()?.SetPlayerTarget(player.transform);
+        Debug.Log($"{enemyID} found player after wait ------------ ");
     }
 
     /// <summary>

@@ -12,16 +12,25 @@ public class Scene1Manager : LocalSceneManager
 
     private void OnEnable()
     {
-        if(!isFirstGameStart)
+/*        if(!isFirstGameStart)
+        {
+            playerObj = PlayerManager.Instance.SpawnPlayer(spawnPosition.position).gameObject;
+            PlayerManager.Instance.AddCoin(1000);
+        }*/
+    }
+
+    private IEnumerator Start()
+    {
+        yield return new WaitUntil(() => PlayerManager.Instance != null);
+
+        if (!isFirstGameStart)
         {
             playerObj = PlayerManager.Instance.SpawnPlayer(spawnPosition.position).gameObject;
             PlayerManager.Instance.AddCoin(1000);
         }
-    }
 
-    private void Start()
-    {
-        CameraManager.Instance.SetTarget(CameraType.Scene1Camera, FindFirstObjectByType<Player>().gameObject.transform);
+        // 생성 완료 후 적용
+        CameraManager.Instance.SetTarget(CameraType.Scene1Camera, playerObj.transform);
         LightManager.Instance.SetPlayerShadowTarget(playerObj);
         LightManager.Instance.SetPlayerLightValue(200f);
     }
