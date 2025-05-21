@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -129,7 +130,13 @@ public class GameManager : Singleton<GameManager>
         cheatActions.Enable();
 
         cheatActions.Cheat.F1.started += F1_started;
-        cheatActions.Cheat.F2.started += F2_started; ;
+        cheatActions.Cheat.F2.started += F2_started;
+        cheatActions.Cheat.F3.started += F3_started;
+    }
+
+    private void F3_started(InputAction.CallbackContext context)
+    {
+        PlayerManager.Instance.AddCoin(10000);
     }
 
     private void F2_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293dec649e04ae8419b1bd01b629f6d1, type: 3}
   m_Name: Text_Dead
   m_EditorClassIdentifier: 
-  text: "if ( You Died == ture )\n{\n    goto\n    ONE:\n        Say(\"\uB098\uC0AC\uB85C\uC57C,
+  text: "if ( You Died == true )\n{\n    goto\n    ONE:\n        Say(\"\uB098\uC0AC\uB85C\uC57C,
     \uB098\uC624\uB77C\")\n        // - \uC694\uD55C\uBCF5\uC74C 11:43\n}"

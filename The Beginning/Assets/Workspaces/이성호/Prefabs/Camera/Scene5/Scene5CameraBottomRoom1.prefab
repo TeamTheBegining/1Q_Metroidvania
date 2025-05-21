@@ -60,7 +60,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 10
+    FieldOfView: 1.5
     OrthographicSize: 3
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -78,7 +78,7 @@ MonoBehaviour:
       Curvature: {x: 2, y: 11}
       BarrelClipping: 0.25
       Anamorphism: 0
-  BlendHint: 0
+  BlendHint: 16
 --- !u!114 &5112154700149283641
 MonoBehaviour:
   m_ObjectHideFlags: 0

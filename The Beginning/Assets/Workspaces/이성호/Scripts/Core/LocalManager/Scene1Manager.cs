@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Scene1Manager : LocalSceneManager
 {
@@ -12,11 +13,7 @@ public class Scene1Manager : LocalSceneManager
 
     private void OnEnable()
     {
-/*        if(!isFirstGameStart)
-        {
-            playerObj = PlayerManager.Instance.SpawnPlayer(spawnPosition.position).gameObject;
-            PlayerManager.Instance.AddCoin(1000);
-        }*/
+
     }
 
     private IEnumerator Start()
@@ -26,7 +23,9 @@ public class Scene1Manager : LocalSceneManager
         if (!isFirstGameStart)
         {
             playerObj = PlayerManager.Instance.SpawnPlayer(spawnPosition.position).gameObject;
+            PlayerInput playerInput = playerObj.GetComponent<PlayerInput>();
             PlayerManager.Instance.AddCoin(1000);
+            playerInput.AllDisable();
         }
 
         // 생성 완료 후 적용
@@ -41,6 +40,9 @@ public class Scene1Manager : LocalSceneManager
         {
             isFirstGameStart = true;
             LightManager.Instance.SpreadPlayerLight(duration, targetRadius, 1f);
+
+            PlayerInput playerInput = playerObj.GetComponent<PlayerInput>();
+            playerInput.AllEnable();
         }
     }
 }

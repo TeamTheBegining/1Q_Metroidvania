@@ -43,7 +43,6 @@ public class Scene4ShopNpc : MonoBehaviour, Interactable
         GameManager.Instance.BottomMessagePanel.Show();
         GameManager.Instance.BottomMessagePanel.SetText("모든 스킬을 반환합니다.");
         StartCoroutine(MessageOutProcess());
-        PlayerManager.Instance.ResetSkillUnlock();
 
         for(int i = 0; i < PlayerManager.Instance.IsSkillUnlock.Length; i++)
         {
@@ -53,6 +52,7 @@ public class Scene4ShopNpc : MonoBehaviour, Interactable
             }
 
             itemObjects[i].SetActive(true);
+            itemObjects[i].GetComponent<Scene3Item1>().isTriggered = false;
 
             // 텍스트 초기화 후 판매 텍스트 출력
             timer = 0f;
@@ -63,6 +63,8 @@ public class Scene4ShopNpc : MonoBehaviour, Interactable
             textObj.currIndex = 0;
             textObj.PlayScroll();
         }
+
+        PlayerManager.Instance.ResetSkillUnlock();
     }
 
     private IEnumerator MessageOutProcess()

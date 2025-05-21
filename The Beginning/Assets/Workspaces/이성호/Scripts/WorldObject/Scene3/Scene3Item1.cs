@@ -5,7 +5,9 @@ using UnityEngine;
 public class Scene3Item1 : MonoBehaviour, Interactable
 {
     public PlayerSkillType type;
-    public float price = 1000;
+    public int price = 1000;
+
+    public bool isTriggered = false;
 
     private void Start()
     {
@@ -17,6 +19,10 @@ public class Scene3Item1 : MonoBehaviour, Interactable
 
     public void OnInteraction()
     {
+        if (isTriggered) return;
+
+        isTriggered = true;
+
         if (PlayerManager.Instance.Coin < price)
         {
             StopAllCoroutines();
@@ -29,7 +35,7 @@ public class Scene3Item1 : MonoBehaviour, Interactable
         else
         {
             PlayerManager.Instance.UnlockPlayerSkill(type);
-            PlayerManager.Instance.UseCoin(1000);
+            PlayerManager.Instance.UseCoin(price);
             this.gameObject.SetActive(false);
         }
     }
