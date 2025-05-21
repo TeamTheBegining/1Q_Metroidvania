@@ -978,6 +978,7 @@ GameObject:
   - component: {fileID: 6701176256747690452}
   - component: {fileID: 7071669524234704054}
   - component: {fileID: 624841335044114149}
+  - component: {fileID: 6938399919435665212}
   - component: {fileID: 2226661430775944039}
   m_Layer: 7
   m_Name: Player
@@ -1053,7 +1054,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.890625, y: 1.015625}
+  m_Size: {x: 2.84375, y: 0.984375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1071,12 +1072,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2df5d07b8e3298347a974d8b7ab5a287, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
-  baseMoveSpeed: 4
-  lmoveSpeed: 2
-  jumpMoveSpeed: 0.7
-  slideSpeed: 5
-  attackMoveSpeed: 0.5
   jumpPower: 5
   baseJumpPower: 5
   ljumpPower: 4
@@ -1089,21 +1084,52 @@ MonoBehaviour:
   currentMp: 0
   baseDamage: 2
   damage: 2
-  jumpDisableGroundCheckTime: 0.1
-  moveDelayTime: 0.2
-  doubleJumpDelayTime: 0.2
-  grabDelayTime: 0.2
-  ladderDelayTime: 0.2
-  attackDelayTime: 0
-  slidingDelayTime: 1
-  parryDelayTime: 0.8
-  spawnDelayTime: 0.1
-  parryCountTime: 0.1
-  chargeThresholdTime: 1
-  dropDownTime: 0.5
   currentState: 0
-  getDoublejump: 0
-  getCharging: 0
+  chargingDis: 3
+  isDead: 0
+  skillpos: 1.2
+  anicurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.533837
+      outSlope: 0.533837
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.100186914
+      value: 0.053483486
+      inSlope: -0.26131523
+      outSlope: -0.26131523
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25577506
+      value: 0.90663815
+      inSlope: -0.052556135
+      outSlope: -0.052556135
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.29738563
+      value: 1
+      inSlope: 2.2437053
+      outSlope: 2.2437053
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &1936319529697070694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1167,7 +1193,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.7, y: 0.5}
     oldSize: {x: 1.03125, y: 1.125}
-    newSize: {x: 0.890625, y: 1.015625}
+    newSize: {x: 2.84375, y: 0.984375}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -1201,6 +1227,18 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &6938399919435665212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8650716166065127325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc05ff30aa293a4f98cd812d11d5fa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &2226661430775944039
 Animator:
   serializedVersion: 7

@@ -22,7 +22,7 @@ public enum ComboState
 public abstract class CommonEnemyController : MonoBehaviour, IDamageable
 {
     [Header("Base Enemy Stats")]
-    protected float _currentHealth;
+    [SerializeField]protected float _currentHealth;
     public float _maxHealth = 10f;
     protected bool _isDead = false;
     protected Animator animator;
