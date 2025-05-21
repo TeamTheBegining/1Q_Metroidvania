@@ -103,6 +103,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public Player SpawnPlayer(Vector2 spawnVector)
     {
         Player player = Instantiate(playerPrefab, spawnVector, Quaternion.identity).GetComponent<Player>();
+        player.gameObject.name = "Player";
 
         if (remainHp <= 0f)
         {

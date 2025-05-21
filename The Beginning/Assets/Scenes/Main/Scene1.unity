@@ -806,7 +806,7 @@ GameObject:
   - component: {fileID: 198822007}
   m_Layer: 0
   m_Name: Scene2EnteranceLadder (1)
-  m_TagString: Ladder
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3456,7 +3456,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1174814271
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3516,7 +3516,7 @@ MonoBehaviour:
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 1.1463389
+  m_PointLightInnerRadius: 0
   m_PointLightOuterRadius: 1.1463389
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
@@ -4521,15 +4521,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1048180773333080416, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.305565
+      value: -39.9
       objectReference: {fileID: 0}
     - target: {fileID: 1048180773333080416, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.4386864
+      value: 1.77
       objectReference: {fileID: 0}
     - target: {fileID: 1048180773333080416, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -22.146841
       objectReference: {fileID: 0}
     - target: {fileID: 1048180773333080416, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4565,7 +4565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8796248666621642685, guid: c191837b534d5724a91129e2bf6c87e1, type: 3}
       propertyPath: orthographic size
-      value: 2.5
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

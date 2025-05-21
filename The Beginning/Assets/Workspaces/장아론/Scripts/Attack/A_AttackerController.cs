@@ -444,7 +444,7 @@ public class A_AttackerController : CommonEnemyController
     // 외부에서 플레이어 Transform을 설정하기 위한 함수
     // "전체 관리하는 친구"가 이 함수를 호출하여 플레이어 정보를 전달할 것입니다.
     // ======================================================================
-    public void SetPlayerTarget(Transform newPlayerTransform)
+    public override void SetPlayerTarget(Transform newPlayerTransform)
     {
         if (newPlayerTransform != null)
         {

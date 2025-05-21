@@ -1,9 +1,5 @@
-using System;
-using System.Linq.Expressions;
-using UnityEditor.Tilemaps;
+ï»¿using System;
 using UnityEngine;
-using UnityEngine.InputSystem.XR.Haptics;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class SilverBlue : MonoBehaviour
 {
@@ -34,7 +30,7 @@ public class SilverBlue : MonoBehaviour
         Idle,
         Move,
         Attack,
-        Freeze,     // ÆĞ¸µ ¹Ş¾ÒÀ» ¶§
+        Freeze,     // íŒ¨ë§ ë°›ì•˜ì„ ë•Œ
         Death
     }
 
@@ -123,7 +119,7 @@ public class SilverBlue : MonoBehaviour
         }
         else
         {
-            // ¾Æ¹« ¹æÇâÀ¸·Î¶óµµ ÀÌµ¿
+            // ì•„ë¬´ ë°©í–¥ìœ¼ë¡œë¼ë„ ì´ë™
             transform.position += Vector3.right * randomdir * movespeed * Time.deltaTime;
             transform.rotation = Quaternion.Euler(0f, randomdir < 0 ? 180f : 0f, 0f);
             

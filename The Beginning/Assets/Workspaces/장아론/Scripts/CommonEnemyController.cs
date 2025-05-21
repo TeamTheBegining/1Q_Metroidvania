@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using System.Collections;
 
@@ -373,7 +373,7 @@ public abstract class CommonEnemyController : MonoBehaviour, IDamageable
         spriteToFlip.localScale = new Vector3(desiredSign * currentMagnitude, spriteToFlip.localScale.y, spriteToFlip.localScale.z);
     }
 
-    public void SetPlayerTarget(Transform newPlayerTransform)
+    public virtual void SetPlayerTarget(Transform newPlayerTransform)
     {
         if (newPlayerTransform != null)
         {
