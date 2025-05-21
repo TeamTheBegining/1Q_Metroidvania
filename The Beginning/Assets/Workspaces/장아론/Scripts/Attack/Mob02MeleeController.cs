@@ -16,9 +16,9 @@ public class Mob02MeleeController : CommonEnemyController
     private const string ANIM_TRIGGER_MOB02_STUN = "Mob02_Stun";
     private const string ANIM_TRIGGER_MOB02_DEATH = "Mob02_Death";
 
-    // --- 애니메이션 커브 이름 상수 정의 (추가) ---
-    private const string ANIM_CURVE_ATTACK_FORWARD_SPEED = "AttackForwardSpeed"; // 공격 시 전진 속도 제어용 커브 이름
-    private const string ANIM_CURVE_ATTACK_BACKWARD_SPEED = "AttackBackwardSpeed"; // 공격 후 후진 속도 제어용 커브 이름 (새로 추가)
+    // --- 애니메이션 커브 이름 상수는 더 이상 Animator Layer에서 직접 읽지 않으므로 필요 없음 ---
+    // private const string ANIM_CURVE_ATTACK_FORWARD_SPEED = "AttackForwardSpeed";
+    // private const string ANIM_CURVE_ATTACK_BACKWARD_SPEED = "AttackBackwardSpeed";
 
     [Header("잡몹02 공격 판정 설정")]
     [Tooltip("A 공격(내지르기) 시 활성화될 히트박스 게임 오브젝트를 연결하세요.")]
@@ -39,13 +39,22 @@ public class Mob02MeleeController : CommonEnemyController
 
     [Header("잡몹02 감지 및 이동 설정")]
     [Tooltip("플레이어를 감지하는 범위입니다.")]
-    public new float detectionRange = 7f; // CommonEnemyController의 detectionRange를 숨기고 Mob02MeleeController의 detectionRange를 사용
+    public new float detectionRange = 7f;
     [Tooltip("플레이어를 감지했을 때 추적 속도입니다.")]
-    public float chaseSpeed = 3f; // 추적 속도 변수 추가
+    public float chaseSpeed = 3f;
+
+    // --- 인스펙터에서 직접 조절할 AnimationCurve 변수 추가 ---
+    [Header("공격 애니메이션 커브 설정")]
+    [Tooltip("공격 시 전진 이동 속도를 시간에 따라 제어하는 커브입니다. X축은 애니메이션 진행도 (0~1), Y축은 속도 배율.")]
+    public AnimationCurve attackForwardMovementCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1), new Keyframe(0.5f, 0));
+    [Tooltip("공격 후 후진 이동 속도를 시간에 따라 제어하는 커브입니다. X축은 애니메이션 진행도 (0~1), Y축은 속도 배율.")]
+    public AnimationCurve attackBackwardMovementCurve = new AnimationCurve(new Keyframe(0.5f, 0), new Keyframe(0.7f, 1), new Keyframe(1, 0));
+
+
     [Tooltip("공격 애니메이션 중 최대 전진 속도 배율입니다.")]
-    public float attackForwardSpeedMultiplier = 1.5f; // 공격 시 전진 속도 배율 추가 (이름 변경)
+    public float attackForwardSpeedMultiplier = 1.5f;
     [Tooltip("공격 애니메이션 종료 후 후진 속도 배율입니다. (음수 값으로 사용될 수 있음)")]
-    public float attackBackwardSpeedMultiplier = 1f; // 공격 후 후진 속도 배율 추가
+    public float attackBackwardSpeedMultiplier = 1f;
 
     // 경직(Stun) 상태 관리 변수
     private bool isStunned = false;
@@ -56,15 +65,20 @@ public class Mob02MeleeController : CommonEnemyController
     private Coroutine stunCoroutine;
 
     // --- 추가된 변수: SpriteRenderer 참조 ---
-    private SpriteRenderer spriteRenderer; // 캐릭터의 스프라이트 렌더러 컴포넌트
+    private SpriteRenderer spriteRenderer;
 
     // --- 추가된 변수: 플레이어 감지 및 추적 관련 ---
-    private bool isPlayerDetected = false; // 플레이어 감지 여부
-    private Vector2 lastKnownPlayerPosition; // 마지막으로 알려진 플레이어 위치
+    private bool isPlayerDetected = false;
+    private Vector2 lastKnownPlayerPosition;
 
     // --- 공격 시 전진/후진 로직을 위한 추가 변수 ---
-    private bool isAttackingForward = false; // 공격 중 전진 단계인지
-    private bool isAttackingBackward = false; // 공격 후 후진 단계인지
+    private bool isAttackingForward = false;
+    private bool isAttackingBackward = false;
+
+    // --- 추가된 변수: 애니메이션 진행도 추적 ---
+    private float attackAnimationProgress = 0f;
+    private float currentAttackAnimationLength = 0f; // 현재 공격 애니메이션의 길이 (클립 정보 필요)
+
 
     /// <summary>
     /// 오브젝트가 생성될 때 가장 먼저 호출됩니다.
@@ -165,8 +179,36 @@ public class Mob02MeleeController : CommonEnemyController
         // 2. 공격 애니메이션이 활성화된 상태 (전진/후진 모두 포함):
         if (isPerformingAttackAnimation)
         {
-            ApplyAttackAnimationMovement(); // 공격 애니메이션에 따른 이동 수행 (전진 또는 후진)
+            // 현재 재생 중인 애니메이션 클립의 길이를 가져옵니다. (최초 1회만 수행)
+            if (currentAttackAnimationLength == 0f && animator != null)
+            {
+                AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName("Mob02_AttackA")) // Animator State의 이름으로 체크
+                {
+                    AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0);
+                    if (clipInfo.Length > 0)
+                    {
+                        // 클립의 이름을 명시적으로 확인하여 해당 클립의 길이를 가져옵니다.
+                        // 이 부분은 애니메이션 클립의 실제 이름을 사용해야 합니다.
+                        // 예: animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Mob02_Attack_Animation_Clip"
+                        currentAttackAnimationLength = clipInfo[0].clip.length;
+                    }
+                }
+            }
+
+            if (currentAttackAnimationLength > 0)
+            {
+                attackAnimationProgress += Time.deltaTime / currentAttackAnimationLength;
+                attackAnimationProgress = Mathf.Clamp01(attackAnimationProgress); // 0과 1 사이로 클램프
+                ApplyAttackAnimationMovement(); // 공격 애니메이션에 따른 이동 수행 (전진 또는 후진)
+            }
             return; // 현재 프레임의 모든 이후 로직을 건너뜁니다.
+        }
+        else
+        {
+            // 공격 애니메이션이 아닐 때는 진행도와 길이를 초기화
+            attackAnimationProgress = 0f;
+            currentAttackAnimationLength = 0f;
         }
 
         // 3. 공격 후 쿨다운 대기 상태:
@@ -175,7 +217,7 @@ public class Mob02MeleeController : CommonEnemyController
         {
             PlayIdleAnim(); // 대기 애니메이션 재생
             if (rb != null) rb.linearVelocity = Vector2.zero; // 제자리에 멈춰있도록 함
-            return; // 현재 프레임의 모든 이후 로직을 건너뜁니다.
+            return; // 현재 프레임의 모든 이후 로직을 건너뜠니다.
         }
 
         // 4. 플레이어 감지 및 추적/순찰 로직
@@ -356,8 +398,11 @@ public class Mob02MeleeController : CommonEnemyController
         if (!IsDead && !isStunned && !isPerformingHurtAnimation && animator != null)
         {
             animator.SetTrigger(ANIM_TRIGGER_MOB02_ATTACK_A);
-            isAttackingForward = true; // 공격 시작 시 전진 단계로 설정
-            isAttackingBackward = false; // 후진 단계는 아님
+            // 공격 시작 시 전진 단계로 설정하고 진행도 초기화
+            isAttackingForward = true;
+            isAttackingBackward = false;
+            attackAnimationProgress = 0f; // 애니메이션 진행도 초기화
+            currentAttackAnimationLength = 0f; // 애니메이션 길이를 다시 가져오도록 초기화
         }
     }
 
@@ -376,33 +421,31 @@ public class Mob02MeleeController : CommonEnemyController
 
     /// <summary>
     /// 공격 애니메이션 중 애니메이션 커브 값을 읽어 전진 또는 후진 이동을 적용합니다.
-    /// 이 메서드는 'Mob02_AttackA' 애니메이션 클립에 'AttackForwardSpeed'와 'AttackBackwardSpeed' 커브가 존재한다고 가정합니다.
+    /// 이 메서드는 'Mob02MeleeController' 스크립트 내의 'attackForwardMovementCurve'와 'attackBackwardMovementCurve'를 사용합니다.
     /// </summary>
     private void ApplyAttackAnimationMovement()
     {
-        if (animator == null || rb == null) return;
+        if (rb == null) return;
 
-        float curveSpeedFactor;
-        float actualMoveSpeed;
+        float curveSpeedFactor = 0f;
+        float actualMoveSpeed = 0f;
         float directionX = Mathf.Sign(transform.Find("Sprite")?.localScale.x ?? transform.localScale.x); // 현재 바라보는 방향
 
-        // 애니메이션 클립의 현재 상태에 따라 전진 또는 후진 커브를 사용
-        // 이 로직은 애니메이션에 따라 자동으로 전환되도록 Animator State Machine에서 AttackForwardSpeed와 AttackBackwardSpeed 커브를 제어한다고 가정합니다.
-        // 또는 애니메이션 이벤트로 isAttackingForward / isAttackingBackward 플래그를 토글할 수도 있습니다.
+        // attackAnimationProgress를 사용하여 AnimationCurve에서 값을 샘플링합니다.
         if (isAttackingForward) // 공격 전진 단계
         {
-            curveSpeedFactor = animator.GetFloat(ANIM_CURVE_ATTACK_FORWARD_SPEED);
+            curveSpeedFactor = attackForwardMovementCurve.Evaluate(attackAnimationProgress);
             actualMoveSpeed = moveSpeed * curveSpeedFactor * attackForwardSpeedMultiplier;
             rb.linearVelocity = new Vector2(directionX * actualMoveSpeed, rb.linearVelocity.y);
-            Debug.Log($"Attack Forward Movement: Direction={directionX}, Speed={actualMoveSpeed}, Curve={curveSpeedFactor}");
+            // Debug.Log($"Attack Forward Movement: Direction={directionX}, Speed={actualMoveSpeed}, Curve={curveSpeedFactor}, Progress={attackAnimationProgress}");
         }
         else if (isAttackingBackward) // 공격 후진 단계
         {
-            curveSpeedFactor = animator.GetFloat(ANIM_CURVE_ATTACK_BACKWARD_SPEED);
+            curveSpeedFactor = attackBackwardMovementCurve.Evaluate(attackAnimationProgress);
             // 후진이므로 방향을 반대로 곱합니다.
             actualMoveSpeed = moveSpeed * curveSpeedFactor * attackBackwardSpeedMultiplier;
             rb.linearVelocity = new Vector2(-directionX * actualMoveSpeed, rb.linearVelocity.y); // 방향 반전
-            Debug.Log($"Attack Backward Movement: Direction={-directionX}, Speed={actualMoveSpeed}, Curve={curveSpeedFactor}");
+            // Debug.Log($"Attack Backward Movement: Direction={-directionX}, Speed={actualMoveSpeed}, Curve={curveSpeedFactor}, Progress={attackAnimationProgress}");
         }
         else
         {
@@ -431,6 +474,8 @@ public class Mob02MeleeController : CommonEnemyController
         {
             // 공격 애니메이션 시작
             isPerformingAttackAnimation = true; // 공격 애니메이션 중임을 알림
+            attackAnimationProgress = 0f; // 공격 시작 시 진행도 초기화
+            currentAttackAnimationLength = 0f; // 애니메이션 길이를 다시 가져오도록 초기화
             PlayAttack1Anim();
             // 공격 후에는 isWaitingAfterAttack이 OnAttackAnimationEnd에서 true로 설정됩니다.
         }
@@ -447,9 +492,12 @@ public class Mob02MeleeController : CommonEnemyController
         // 공격 애니메이션이 완전히 끝난 후 다음 공격까지의 쿨다운 시간을 설정합니다.
         nextAttackTime = Time.time + attackACooldown;
 
-        // 공격 애니메이션이 끝났으므로 전진/후진 플래그를 리셋합니다.
+        // 공격 애니메이션이 끝났으므로 전진/후진 플래그를 리셋하고 이동 정지합니다.
         isAttackingForward = false;
         isAttackingBackward = false;
+        isPerformingAttackAnimation = false; // 공격 애니메이션이 완전히 끝났음을 알림
+        attackAnimationProgress = 0f; // 애니메이션 진행도 초기화
+        currentAttackAnimationLength = 0f; // 애니메이션 길이도 초기화
         if (rb != null) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); // 공격 종료 후 바로 멈춤
 
         Debug.Log("OnAttackAnimationEnd: Attack animation finished.");
@@ -460,6 +508,7 @@ public class Mob02MeleeController : CommonEnemyController
     {
         isAttackingForward = true;
         isAttackingBackward = false;
+        // attackAnimationProgress는 Update에서 계속 증가시키므로 여기서 초기화할 필요 없음
         Debug.Log("Mob02: OnAttackForwardStart called.");
     }
 
@@ -468,6 +517,7 @@ public class Mob02MeleeController : CommonEnemyController
     {
         isAttackingForward = false;
         isAttackingBackward = true;
+        // attackAnimationProgress는 Update에서 계속 증가시키므로 여기서 초기화할 필요 없음
         Debug.Log("Mob02: OnAttackBackwardStart called.");
     }
 
