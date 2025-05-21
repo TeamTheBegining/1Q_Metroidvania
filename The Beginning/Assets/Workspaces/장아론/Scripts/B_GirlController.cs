@@ -297,7 +297,7 @@ protected override void PerformAttackLogic()
             // 플레이어가 공격 범위보다 약간 멀리 있지만, 탐지 범위 안쪽에 있을 때 (중거리)
             if (distanceToPlayer > attackRange * 1.5f && distanceToPlayer <= detectionRange * 0.8f)
             {
-                if (UnityEngine.Random.Range(0f, 1f) < 0.5f) // 50% 확률로 회오리 돌진 시도
+                if (UnityEngine.Random.Range(0f, 1f) < 1f) // 50% 확률로 회오리 돌진 시도
                 {
                     isPerformingAttackAnimation = true;
                     PlayAttack3Anim(); // Attack3 애니메이션 재생
