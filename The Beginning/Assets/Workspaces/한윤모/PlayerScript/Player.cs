@@ -1210,7 +1210,6 @@ public class Player : MonoBehaviour, IDamageable
         {
             CurrentHp -= damage;
             if (IsDead) return;
-            currentHp += MaxHp / 10;
             currentMp += 5;
             currentState = PlayerState.Hit;
             curParryCount = 0;
@@ -1242,6 +1241,7 @@ public class Player : MonoBehaviour, IDamageable
         }
         else
         {
+            currentHp += MaxHp / 10;
             gameObject.layer = LayerMask.NameToLayer("Invincibility");
             curParryCount++;//패링 성공 시 카운트 증가
             isParrySuccess = true;
