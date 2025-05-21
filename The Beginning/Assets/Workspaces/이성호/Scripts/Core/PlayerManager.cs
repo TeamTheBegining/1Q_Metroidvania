@@ -123,13 +123,6 @@ public class PlayerManager : Singleton<PlayerManager>
         return player;
     }
 
-    public void StatUp(SkillUnlockItemSO data)
-    {
-        Player player = FindFirstObjectByType<Player>();
-
-        // 플레이어 스탯업 함수 사용
-    }
-
     public void ResetSkillUnlock()
     {
         for(int i = 0; i < isSkillUnlock.Length; i++)

@@ -164,11 +164,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3863490817114177100, guid: 1d8f04740f4e08e499af8aa5e887e3ce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.5
+      value: 3.68
       objectReference: {fileID: 0}
     - target: {fileID: 3863490817114177100, guid: 1d8f04740f4e08e499af8aa5e887e3ce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 38.3
+      value: 22.61
       objectReference: {fileID: 0}
     - target: {fileID: 3863490817114177100, guid: 1d8f04740f4e08e499af8aa5e887e3ce, type: 3}
       propertyPath: m_LocalPosition.z
@@ -201,22 +201,6 @@ PrefabInstance:
     - target: {fileID: 3863490817114177100, guid: 1d8f04740f4e08e499af8aa5e887e3ce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9107934550870544149, guid: 1d8f04740f4e08e499af8aa5e887e3ce, type: 3}
-      propertyPath: Lens.FieldOfView
-      value: 57
-      objectReference: {fileID: 0}
-    - target: {fileID: 9107934550870544149, guid: 1d8f04740f4e08e499af8aa5e887e3ce, type: 3}
-      propertyPath: Priority.m_Value
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9107934550870544149, guid: 1d8f04740f4e08e499af8aa5e887e3ce, type: 3}
-      propertyPath: Lens.ModeOverride
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9107934550870544149, guid: 1d8f04740f4e08e499af8aa5e887e3ce, type: 3}
-      propertyPath: Lens.OrthographicSize
-      value: 40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1985,7 +1969,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8246816197321681020, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 5440548757243466192, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}
@@ -2976,7 +2960,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8246816197321681020, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 5440548757243466192, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}

@@ -12,7 +12,7 @@ public class TitlePanel : MonoBehaviour
 
     PlayerInputActions actions;
 
-    private bool isIntroStart = false;
+    //private bool isIntroStart = false;
 
     private float cutSceneDelay = 23f;
 
@@ -33,7 +33,7 @@ public class TitlePanel : MonoBehaviour
 #if UNITY_EDITOR
         if (GameManager.Instance.isDebug)
         {
-            isIntroStart = true;
+            //isIntroStart = true;
             gameObject.SetActive(false);
         }
 #endif
@@ -78,7 +78,7 @@ public class TitlePanel : MonoBehaviour
 
         yield return new WaitForSeconds(cutSceneDelay);
         GameManager.Instance.State = GameState.Play;
-        isIntroStart = true;
+        //isIntroStart = true;
         this.gameObject.SetActive(false);
     }
 }

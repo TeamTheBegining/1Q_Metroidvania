@@ -31,7 +31,7 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
     private bool isTriggered = false; // 상호작용 여부
 
     private bool isEnemyMove = false;
-    private bool isEnemyAttacking = false; // 현재 적이 애니메이션 공격을 하고 있는지 확인 변수
+    //private bool isEnemyAttacking = false; // 현재 적이 애니메이션 공격을 하고 있는지 확인 변수
 
     private void Awake()
     {
@@ -73,7 +73,7 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         {
             if(CheckInput())
             {
-                isEnemyAttacking = false;
+                //isEnemyAttacking = false;
 
                 yield return new WaitForFixedUpdate();
                 if(enemy && 0 <= currentFlowCount && currentFlowCount <= 5)

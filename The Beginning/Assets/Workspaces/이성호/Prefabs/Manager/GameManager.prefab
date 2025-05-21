@@ -1824,8 +1824,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2899923831273066736, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
       propertyPath: m_text
-      value: "if You Died == ture\n{\n    goto\n    ONE:\n        Say(\"\uB098\uC0AC\uB85C\uC57C,
-        \uB098\uC624\uB77C\")\n        // - \uC694\uD55C\uBCF5\uC74C 11:43\n}"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2899923831273066736, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
       propertyPath: m_fontAsset
@@ -1979,7 +1978,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 09c971a86925d4145895796f05b9da75, type: 2}
   currIndex: 0
   maxIndex: 0
-  delay: 0.25
+  delay: 0.08
 --- !u!224 &6833913785670754491 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3866624818959403486, guid: 9e5c4d687d379de4a9032cbd25d2cd9b, type: 3}
