@@ -11,6 +11,8 @@ public class CameraManager : Singleton<CameraManager>
 {
     private GameObject mainCamera;
     private CinemachineBrain camBrain;
+    private CinemachineImpulseSource impluseSource;
+
     [SerializeField] private Dictionary<CameraType, CinemachineCamera> cameraDictionary = new Dictionary<CameraType, CinemachineCamera>((int)CameraType.CameraTypeCount);
 
     protected override void Awake()
@@ -28,12 +30,24 @@ public class CameraManager : Singleton<CameraManager>
         camBrain = mainCamera.GetComponent<CinemachineBrain>();
 
         mainCamera.tag = "MainCamera";
+
+        // add impluse source
+        impluseSource = mainCamera.GetComponent<CinemachineImpulseSource>();
+        if(impluseSource == null)
+        {
+            impluseSource = mainCamera.AddComponent<CinemachineImpulseSource>();
+        }
     }
 
     private void Start()
     {
         GameManager.Instance.InitCamera();
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+
+        impluseSource.ImpulseDefinition.ImpulseType = CinemachineImpulseDefinition.ImpulseTypes.Uniform;
+        impluseSource.ImpulseDefinition.ImpulseShape = CinemachineImpulseDefinition.ImpulseShapes.Bump;
+        impluseSource.ImpulseDefinition.ImpulseDuration = 0.2f;
+        impluseSource.DefaultVelocity = new Vector3(0f, -1f, 0f);
     }
 
     private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -156,6 +170,35 @@ public class CameraManager : Singleton<CameraManager>
     public void SetCameraBlendingSpeed(float blendTime = 2f)
     {
         camBrain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.EaseInOut, blendTime);
+    }
+    #endregion
+
+    #region Cinemahcine Impluse
+
+    /// <summary>
+    /// 카메라에 충격 주는 함수 (흔들림)
+    /// </summary>
+    public void MakeImpulse()
+    {
+        impluseSource.GenerateImpulse();
+    }
+
+    /// <summary>
+    /// 카메라에 충격 주는 함수 (흔들림)
+    /// </summary>
+    /// <param name="force">세기</param>
+    public void MakeImpulse(float force)
+    {
+        impluseSource.GenerateImpulse(force);
+    }
+
+    /// <summary>
+    /// 카메라에 충격 주는 함수
+    /// </summary>
+    /// <param name="velocity">흔들릴 방향</param>
+    public void MakeImpulse(Vector2 velocity)
+    {
+        impluseSource.GenerateImpulse(velocity);
     }
     #endregion
 }
