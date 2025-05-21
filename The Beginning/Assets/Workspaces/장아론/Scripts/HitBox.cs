@@ -1,69 +1,83 @@
 using UnityEngine;
+using System.Collections.Generic; // HashSet을 사용하려면 필요
 
-// 이 스크립트는 B_Girl 게임오브젝트의 자식인 히트박스 게임오브젝트에 붙습니다.
+// 이 스크립트가 붙은 게임오브젝트의 콜라이더가 Trigger로 설정되어 있는지 확인
+[RequireComponent(typeof(Collider2D))] // Collider2D가 필수로 요구되도록 추가
 public class EnemyHitbox : MonoBehaviour
 {
-    // 부모 오브젝트(B_Girl)에 붙어있는 B_GirlController 스크립트 참조
-    // GetComponentInParent를 사용하기 위해 히트박스 오브젝트가 B_Girl의 자식이어야 합니다.
-    private CommonEnemyController enemyController;
-
-    // --- 추가: 이 히트박스가 줄 공격력 값 ---
+    // 부모 오브젝트 또는 다른 컨트롤러에서 설정할 공격력 값
     public float attackDamage;
-    // ------------------------------------
 
-    // 선택 사항: 같은 스윙으로 같은 대상을 여러 번 히트하는 것을 방지하는 플래그
-    // private bool hasHitTargetInSwing = false; // 예시 변수
+    // 이 히트박스가 이미 공격한 대상을 저장하는 HashSet
+    // HashSet은 중복을 허용하지 않고, 검색 및 추가/삭제에 효율적입니다.
+    private HashSet<GameObject> hitTargets = new HashSet<GameObject>();
+
+    // B_GirlController와 같이 해당 히트박스를 제어하는 주체 (선택 사항, 직접 접근하지 않고 이벤트 등으로 제어하는 것이 더 유연)
+    // private CommonEnemyController enemyController; // 필요하다면 주석 해제하여 사용
 
     void Awake()
     {
-        // 시작 시 부모(또는 그 위) 오브젝트에서 B_GirlController 컴포넌트를 찾습니다.
-        enemyController = GetComponentInParent<CommonEnemyController>();
-
-        if (enemyController == null)
-        {
-            //Debug.LogError("EnemyHitbox 스크립트는 부모 오브젝트에 B_GirlController(또는 상속받은 클래스)가 필요합니다.", this);
-            // 컨트롤러를 찾지 못하면 스크립트 비활성화 (에러 방지)
-            enabled = false;
-            return; // 더 이상 진행하지 않음
-        }
-
-        // 이 스크립트가 붙은 게임오브젝트의 콜라이더가 Trigger로 설정되어 있는지 확인
-        Collider col = GetComponent<Collider>(); // Collider2D일 가능성이 높습니다.
+        // Collider2D를 필수로 요구했으므로, 여기서 null 체크는 필요 없습니다.
+        // 하지만 isTrigger 설정 여부는 확인하는 것이 좋습니다.
+        Collider2D col = GetComponent<Collider2D>();
         if (col != null && !col.isTrigger)
         {
-            //Debug.LogWarning(gameObject.name + "의 콜라이더가 Trigger로 설정되어 있지 않습니다. OnTriggerEnter를 사용하려면 Trigger여야 합니다.", this);
+            Debug.LogWarning(gameObject.name + "의 Collider2D가 Trigger로 설정되어 있지 않습니다. OnTriggerEnter2D를 사용하려면 Trigger여야 합니다.", this);
         }
 
-        // 참고: B_GirlController에서 시작 시 히트박스 콜라이더를 비활성화합니다.
-        // 이 스크립트 자체는 활성화 상태로 두어도 됩니다.
+        // CommonEnemyController를 참조할 필요가 없다면 (즉, 이 히트박스가 직접 데미지를 줄 대상만 알면 된다면)
+        // 아래 코드는 필요 없습니다.
+        // enemyController = GetComponentInParent<CommonEnemyController>();
+        // if (enemyController == null)
+        // {
+        //     Debug.LogWarning($"EnemyHitbox on {gameObject.name}: CommonEnemyController (or derived) not found in parent. This hitbox may not function as expected for some enemies.", this);
+        // }
     }
-
-    // 콜라이더가 다른 콜라이더 영역 안으로 들어왔을 때 호출됩니다.
-    // 이 함수가 호출되려면 이 게임오브젝트의 콜라이더와 상대방 콜라이더 모두 있어야 하고,
-    // 둘 중 하나 이상은 Is Trigger가 체크되어 있어야 합니다.
 
     private void OnTriggerEnter2D(Collider2D collision) // 2D 게임이므로 OnTriggerEnter2D 사용
     {
-        // 충돌한 대상이 플레이어인지 태그로 확인
-        if (collision.CompareTag("Player")) // CompareTag가 String 비교보다 성능상 좋습니다.
+        // 사망 상태이거나, 이미 공격한 대상이라면 다시 데미지 주지 않음
+        // 여기서는 히트박스가 충돌을 감지하므로, 죽은 상태 체크는 상위 컨트롤러에서 해주거나
+        // EnemyStatusBridge와 같은 컴포넌트를 통해 확인해야 합니다.
+        // 현재는 단순히 이미 hitTargets에 포함된 대상인지 확인합니다.
+        if (hitTargets.Contains(collision.gameObject))
         {
-            // 충돌한 플레이어 오브젝트에서 IDamageable 컴포넌트를 가져와 데미지 적용
+            return;
+        }
+
+        // 충돌한 대상이 플레이어인지 태그로 확인
+        if (collision.CompareTag("Player"))
+        {
             IDamageable damageableTarget = collision.GetComponent<IDamageable>();
             if (damageableTarget != null)
             {
-                // --- 수정: 저장된 attackDamage 변수의 값을 사용 ---
-                damageableTarget.TakeDamage(attackDamage, enemyController.gameObject); // 여기에 B_GirlController에서 받아온 값을 사용합니다.
-                // -----------------------------------------------
-                //Debug.Log("플레이어에게 " + attackDamage + " 데미지 적용!");
+                damageableTarget.TakeDamage(attackDamage, this.gameObject); // 이 히트박스 오브젝트를 공격 주체로 전달
+                hitTargets.Add(collision.gameObject); // 공격한 대상을 기록
+                //Debug.Log($"플레이어에게 {attackDamage} 데미지 적용! (히트박스: {gameObject.name})");
             }
         }
-        // TODO: 같은 스윙으로 여러 번 히트 방지 로직 구현
-        // if (!hasHitTargetInSwing && collision.CompareTag("Player")) { ... hasHitTargetInSwing = true; ... }
+        // TODO: 다른 공격 가능한 대상(예: 파괴 가능한 오브젝트)이 있다면 여기에 추가
     }
 
-    // 선택 사항: 같은 스윙 여러 번 히트 방지를 위해, 애니메이션 이벤트의 EnableHitbox에서 이 메소드를 호출하여 플래그 리셋
-    // public void ResetHitFlag()
-    // {
-    //     hasHitTargetInSwing = false;
-    // }
+    /// <summary>
+    /// 이 히트박스가 이미 공격했던 대상을 초기화합니다.
+    /// 새로운 공격 애니메이션이 시작될 때 호출하여 중복 피해를 방지합니다.
+    /// </summary>
+    public void ResetHitPlayers()
+    {
+        hitTargets.Clear();
+        //Debug.Log($"{gameObject.name} 히트박스의 hitTargets가 초기화되었습니다.");
+    }
+
+    // 선택 사항: 히트박스가 활성화될 때마다 ResetHitPlayers를 자동으로 호출
+    private void OnEnable()
+    {
+        // ResetHitPlayers(); // Uncomment if you want to reset every time the hitbox GameObject is enabled
+    }
+
+    // 선택 사항: 히트박스가 비활성화될 때마다 ResetHitPlayers를 자동으로 호출 (안전 장치)
+    private void OnDisable()
+    {
+        ResetHitPlayers();
+    }
 }
