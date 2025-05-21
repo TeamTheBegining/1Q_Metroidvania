@@ -106,12 +106,12 @@ TextureImporter:
       name: silverblue_monster_attack_3_0
       rect:
         serializedVersion: 2
-        x: 29
+        x: 27
         y: 11
-        width: 55
-        height: 64
+        width: 59
+        height: 66
       alignment: 9
-      pivot: {x: 0.5069507, y: 0.6393745}
+      pivot: {x: 0.370359, y: 0.57440346}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -120,28 +120,6 @@ TextureImporter:
       bones: []
       spriteID: 4ab3ec9afa01115489a3e69695000354
       internalID: -1573181790
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: silverblue_monster_attack_3_1
-      rect:
-        serializedVersion: 2
-        x: 73
-        y: 29
-        width: 12
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ea72898add855be4cb42a8fddaa891d5
-      internalID: -1708204998
       vertices: []
       indices: 
       edges: []
@@ -161,7 +139,6 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       silverblue_monster_attack_3_0: -1573181790
-      silverblue_monster_attack_3_1: -1708204998
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

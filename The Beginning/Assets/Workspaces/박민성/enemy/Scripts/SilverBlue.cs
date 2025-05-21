@@ -8,9 +8,7 @@ public class SilverBlue : MonoBehaviour, IDamageable
     Rigidbody2D     rb;
     BoxCollider2D   boxCollider2D;
     SpriteRenderer  spriteRenderer;
-    GameObject      attackAHitboxObject;
-    BoxCollider2D   attackAHitboxCollider;
-    EnemyHitbox     attackAEnemyHitbox;
+    BoxCollider2D   hitBoxCollider;
 
     float distance;
     float randomdir;
@@ -19,15 +17,14 @@ public class SilverBlue : MonoBehaviour, IDamageable
     [SerializeField] float findDistance     = 3.0f;
     [SerializeField] float damage           = 0.5f;
     [SerializeField] float attackRange      = 0.75f;
-    [SerializeField] float attackdelay      = 1.0f;
-    [SerializeField] float attackTime       = 1.0f;
+    [SerializeField] float attackdelaytime      = 1.0f;
     [SerializeField] float moveChangetime   = 3.0f;
     [SerializeField] float idleChangetime   = 1.0f;
     [SerializeField] float damagedtime      = 0.2f;
 
     float moveChangetimer;
     float idleChangetimer;
-    float attackTimer;
+    float attackdelaytimer;
     float damagedtimer;
 
     float movespeed         = 1.0f;
@@ -97,9 +94,7 @@ public class SilverBlue : MonoBehaviour, IDamageable
         rb              = GetComponent<Rigidbody2D>();
         boxCollider2D   = GetComponent<BoxCollider2D>();
         spriteRenderer  = GetComponent<SpriteRenderer>();
-        attackAHitboxObject = GetComponent<GameObject>();
-        attackAHitboxCollider = GetComponent<BoxCollider2D>();
-        attackAEnemyHitbox = GetComponent<EnemyHitbox>();
+        hitBoxCollider  = transform.Find("HitBox").GetComponent<BoxCollider2D>();
         moveChangetimer = 0;
         randomdir       = 1.0f;
         leftdir         = false;        
@@ -113,6 +108,8 @@ public class SilverBlue : MonoBehaviour, IDamageable
     private void FixedUpdate()
     {
         SilverBlueDamaged();
+        AttackDelayCheck();
+        ChasingCheck();
 
         distance = Vector2.Distance(transform.position, player.transform.position);
         leftdir = player.transform.position.x < transform.position.x ? true : false;
@@ -128,7 +125,6 @@ public class SilverBlue : MonoBehaviour, IDamageable
                 animator.Play("move");
                 break;
             case SilverBlueState.Attack:
-                SilverBlueAttackUpdate();
                 animator.Play("attack");
                 break;
             case SilverBlueState.Freeze:
@@ -144,9 +140,8 @@ public class SilverBlue : MonoBehaviour, IDamageable
     {
         if (player != null)
         {
-            if (distance < findDistance)
+            if (isPlayerFind)
             {
-                isPlayerFind = true;
                 currentState = SilverBlueState.Move;
             }
             else
@@ -166,9 +161,11 @@ public class SilverBlue : MonoBehaviour, IDamageable
     {
         if (isPlayerFind)
         {
+            int dir = leftdir ? -1 : 1;
+            transform.rotation = Quaternion.Euler(0f, dir < 0 ? 180f : 0f, 0f);
+
             if (distance > attackRange)
             {
-                int dir = leftdir ? -1 : 1;
                 transform.position += Vector3.right * dir * chasingSpeed * Time.deltaTime;
             }
             else
@@ -191,41 +188,35 @@ public class SilverBlue : MonoBehaviour, IDamageable
         }
     }
 
-    private void SilverBlueAttackUpdate()
+    private void AttackDelayCheck()
     {
-        attackTimer += Time.deltaTime;
-        if (attackTimer >= attackTime)
+        attackdelaytimer += Time.deltaTime;
+        if (attackdelaytimer >= attackdelaytime)
         {
-            attackTimer = 0;
-
-            // 플레이어가 아직 범위 내에 있는지 확인
-            if (distance <= attackRange)
-            {
-                // 공격 로직 (예: 데미지 주기)
-                IDamageable playerDamageable = player.GetComponent<IDamageable>();
-                playerDamageable?.TakeDamage(damage, gameObject);
-            }
-
-            // 공격 후 Idle 혹은 Move로 복귀
-            currentState = SilverBlueState.Idle;
+            attackdelaytimer = 0;
         }
     }
-    public void EnableAttackHitbox()
+
+    private void HitBoxEnable()
     {
-        // Check Base IsDead flag
-        if (IsDead) return; // IsDead 속성 사용 // Do not enable hitbox if dead
+        hitBoxCollider.enabled = true;
+    }
 
-        if (attackAHitboxObject != null && attackAHitboxCollider != null)
+    private void HitBoxDisable()
+    {
+        hitBoxCollider.enabled = false;
+        currentState = SilverBlueState.Idle;
+    }
+
+    private void ChasingCheck()
+    {
+        if (distance < findDistance)
         {
-            // Set damage value on the EnemyHitbox component
-            // Assumes EnemyHitbox.cs has a public float attackDamage; variable.
-            if (attackAEnemyHitbox != null)
-            {
-                attackAEnemyHitbox.attackDamage = damage; // Set damage from A_Attacker's value
-            }
-
-            attackAHitboxCollider.enabled = true; // Enable collider
-
+            isPlayerFind = true;
+        }
+        else
+        {
+            isPlayerFind = false;
         }
     }
 

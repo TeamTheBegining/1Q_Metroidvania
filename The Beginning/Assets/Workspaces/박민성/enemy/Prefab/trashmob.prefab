@@ -30,7 +30,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7478795561179671568}
-  - {fileID: 8035730095362905654}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2365837632599000371
@@ -43,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8035730095362905654}
   - component: {fileID: 6665075834816390281}
-  - component: {fileID: 6135285492312797458}
+  - component: {fileID: 6662455067075685910}
   m_Layer: 10
   m_Name: HitBox
   m_TagString: Untagged
@@ -59,12 +58,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2365837632599000371}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.268, y: -0.856, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.028999895, y: -0.095999956, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2635450506110073842}
+  m_Father: {fileID: 7478795561179671568}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6665075834816390281
 BoxCollider2D:
@@ -73,7 +72,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2365837632599000371}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -96,7 +95,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -112,7 +111,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.6817622, y: 0.97479296}
   m_EdgeRadius: 0
---- !u!114 &6135285492312797458
+--- !u!114 &6662455067075685910
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,10 +120,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2365837632599000371}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85eac31f42e0bee4986802f2a94bcbcc, type: 3}
+  m_Script: {fileID: 11500000, guid: cca67dc0dddfcea4aa12bd06ef4fd635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 0
 --- !u!1 &3114221152242218737
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,7 +156,8 @@ Transform:
   m_LocalPosition: {x: -0.239, y: -0.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8035730095362905654}
   m_Father: {fileID: 2635450506110073842}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6286841704864132368
@@ -231,8 +230,7 @@ MonoBehaviour:
   findDistance: 3
   damage: 0.5
   attackRange: 0.75
-  attackdelay: 1
-  attackTime: 1
+  attackdelaytime: 1
   moveChangetime: 3
   idleChangetime: 1
   damagedtime: 0.2
