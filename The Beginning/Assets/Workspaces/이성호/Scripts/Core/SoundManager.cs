@@ -53,6 +53,7 @@ public class SoundManager : Singleton<SoundManager>
         sfxClips[17] = Resources.Load<AudioClip>("Audio/Parrying/Parrying_Swing_01");
 
         sfxClips[18] = Resources.Load<AudioClip>("Audio/Sliding/Slide_01");
+        sfxClips[19] = Resources.Load<AudioClip>("Audio/Sliding/Slide_02");
 
     }
 
