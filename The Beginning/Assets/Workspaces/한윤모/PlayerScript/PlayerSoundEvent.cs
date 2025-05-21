@@ -54,5 +54,12 @@ public class PlayerSoundEvent : MonoBehaviour
         //SoundManager.Instance.PlaySound((SFXType)rand);
         SoundManager.Instance.PlaySound(SFXType.slide_01);
     }
+    private void PlayerDamagedSound()
+    {
+        SoundManager.Instance.PlaySound(SFXType.armor_Hit_01);
+        SoundManager.Instance.PlaySound(SFXType.armor_Hit_02);
+    }
+
+
 
 }

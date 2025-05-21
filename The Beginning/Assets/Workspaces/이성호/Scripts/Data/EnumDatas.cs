@@ -44,6 +44,10 @@ public enum SFXType
     parrying_Swing_01,  // 17
     slide_01,           // 18
     slide_02,           // 19
+    armor_Hit_01,       // 20
+    armor_Hit_02,       // 21
+
+
     SoundTypeCount      
 }
 

@@ -55,6 +55,9 @@ public class SoundManager : Singleton<SoundManager>
         sfxClips[18] = Resources.Load<AudioClip>("Audio/Sliding/Slide_01");
         sfxClips[19] = Resources.Load<AudioClip>("Audio/Sliding/Slide_02");
 
+        sfxClips[20] = Resources.Load<AudioClip>("Audio/Damaged/Armor_Hit_01");
+        sfxClips[21] = Resources.Load<AudioClip>("Audio/Damaged/Armor_Hit_02");
+
     }
 
     public void PlayBGM(BGMType type)
