@@ -21,11 +21,13 @@ public class SilverBlue : MonoBehaviour, IDamageable
     [SerializeField] float moveChangetime   = 3.0f;
     [SerializeField] float idleChangetime   = 1.0f;
     [SerializeField] float damagedtime      = 0.2f;
+    [SerializeField] float freezetime      = 0.5f;
 
-    float moveChangetimer;
-    float idleChangetimer;
-    float attackdelaytimer;
-    float damagedtimer;
+    float moveChangetimer  = 0.0f;
+    float idleChangetimer  = 0.0f;
+    float attackdelaytimer = 0.0f;
+    float damagedtimer     = 0.0f;
+    float freezetimer      = 0.0f;
 
     float movespeed         = 1.0f;
     float chasingSpeed      = 2.0f;
@@ -128,7 +130,8 @@ public class SilverBlue : MonoBehaviour, IDamageable
                 animator.Play("attack");
                 break;
             case SilverBlueState.Freeze:
-                //SilverBlueFreezeUpdate();
+                SilverBlueFreezeUpdate();
+                animator.Play("freeze");
                 break;
             case SilverBlueState.Death:
                 animator.Play("death");
@@ -218,6 +221,22 @@ public class SilverBlue : MonoBehaviour, IDamageable
         {
             isPlayerFind = false;
         }
+    }
+
+    public void ParryingSuccess()
+    {
+        currentState = SilverBlueState.Freeze;
+    }
+
+    private void SilverBlueFreezeUpdate()
+    {
+        freezetimer += Time.deltaTime;
+
+        if (freezetimer > freezetime)
+        {
+            currentState = SilverBlueState.Idle;
+        }
+        
     }
 
 }
