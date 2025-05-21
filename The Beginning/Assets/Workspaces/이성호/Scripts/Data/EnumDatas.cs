@@ -23,14 +23,26 @@ public enum BGMType
 
 public enum SFXType
 {
-    playerFootstep1 = 0,
-    playerFootstep2,
-    playerFootstep3,
-    playerSword1,
-    playerSword2,
-    playerSword3,
-    playerSword4,
-    SoundTypeCount
+    playerSword1 = 0,
+    playerSword2,       // 1
+    playerSword3,       // 2
+    playerSword4,       // 3
+    blood_Main_01,      // 4
+    blood_Main_02,      // 5
+    blood_Main_03,      // 6
+    playerFootstep1,    // 7
+    playerFootstep2,    // 8
+    playerFootstep3,    // 9
+    jump_01,            // 10
+    ladder_01,          // 11
+    ladder_02,          // 12
+    ladder_03,          // 13
+    ladder_04,          // 14
+    landing_01,         // 15
+    parrying_Hit_01,    // 16
+    parrying_Swing_01,  // 17
+    slide_01,           // 18
+    SoundTypeCount      
 }
 
 public enum CameraType

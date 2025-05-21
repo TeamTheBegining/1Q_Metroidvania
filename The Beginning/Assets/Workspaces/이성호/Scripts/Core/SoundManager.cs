@@ -27,13 +27,33 @@ public class SoundManager : Singleton<SoundManager>
         bgmClips[0] = Resources.Load<AudioClip>("Audio/BGM/BGM01(Test)");
 
         // SFXType 내용 정의 순서대로 클립추가하기
-        sfxClips[0] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN01");
-        sfxClips[1] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN02");
-        sfxClips[2] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN03");
-        sfxClips[3] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_01");
-        sfxClips[4] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_02");
-        sfxClips[5] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_03");
-        sfxClips[6] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_04");
+        sfxClips[0] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_01");
+        sfxClips[1] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_02");
+        sfxClips[2] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_03");
+        sfxClips[3] = Resources.Load<AudioClip>("Audio/Attack/Player/Sword_Slash_04");
+
+        sfxClips[4] = Resources.Load<AudioClip>("Audio/Death/Blood_Main_01");
+        sfxClips[5] = Resources.Load<AudioClip>("Audio/Death/Blood_Main_02");
+        sfxClips[6] = Resources.Load<AudioClip>("Audio/Death/Blood_Main_03");
+
+        sfxClips[7] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN01");
+        sfxClips[8] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN02");
+        sfxClips[9] = Resources.Load<AudioClip>("Audio/Footstep/Player/NORMAL_FOOTSTEP_MAIN03");
+
+        sfxClips[10] = Resources.Load<AudioClip>("Audio/Jump/Jump_01");
+
+        sfxClips[11] = Resources.Load<AudioClip>("Audio/Ladder/Ladder_01");
+        sfxClips[12] = Resources.Load<AudioClip>("Audio/Ladder/Ladder_02");
+        sfxClips[13] = Resources.Load<AudioClip>("Audio/Ladder/Ladder_03");
+        sfxClips[14] = Resources.Load<AudioClip>("Audio/Ladder/Ladder_04");
+
+        sfxClips[15] = Resources.Load<AudioClip>("Audio/Landing/Landing_01");
+
+        sfxClips[16] = Resources.Load<AudioClip>("Audio/Parrying/Parrying_Hit_01");
+        sfxClips[17] = Resources.Load<AudioClip>("Audio/Parrying/Parrying_Swing_01");
+
+        sfxClips[18] = Resources.Load<AudioClip>("Audio/Sliding/Slide_01");
+
     }
 
     public void PlayBGM(BGMType type)
