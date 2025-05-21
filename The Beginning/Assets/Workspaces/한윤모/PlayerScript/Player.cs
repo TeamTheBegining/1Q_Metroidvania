@@ -836,7 +836,7 @@ public class Player : MonoBehaviour, IDamageable
         if (cutSceneTimer > cutSceneTime)
         {
             currentState = PlayerState.Skill2;
-            PoolManager.Instance.Pop<EffectObject>(PoolType.UltEffect, transform.position + Vector3.up * skillpos).Init((int)curDir == -1 ? true : false);
+            PoolManager.Instance.Pop<EffectObject2>(PoolType.UltEffect, transform.position + Vector3.up * skillpos).Init((int)curDir == -1 ? true : false);
             cutSceneTimer = 0;
         }
     }
@@ -1203,6 +1203,7 @@ public class Player : MonoBehaviour, IDamageable
         if (!isParryAble)
         {
             CurrentHp -= damage;
+            if (IsDead) return;
             currentMp += 5;
             currentState = PlayerState.Hit;
             curParryCount = 0;
@@ -1255,7 +1256,6 @@ public class Player : MonoBehaviour, IDamageable
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0f;
         OnDead?.Invoke();
-        print("뭐지");
     }
 
 }
