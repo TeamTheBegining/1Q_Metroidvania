@@ -4,16 +4,17 @@ using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
-public class EffectObject : MonoBehaviour, IPoolable
+public class EffectObject2 : MonoBehaviour, IPoolable
 {
     private Animator animator;
     private Player player;
-    float MoveSpeed;
     AnimatorStateInfo stateInfo;
     SpriteRenderer spriteRenderer;
     int state = 1;
-    [SerializeField] float posXmax = 1f;
-    Vector3 maxpos = Vector3.zero;
+    [SerializeField] float posXmax = 4f;
+    [SerializeField] float MoveSpeed = 25;
+    Vector3 maxPos = Vector3.zero;
+    Vector3 minPos = Vector3.zero;
     bool iscol = false;
 
     private void Awake()
@@ -25,7 +26,8 @@ public class EffectObject : MonoBehaviour, IPoolable
 
     private void OnEnable()
     {
-        maxpos = transform.position + new Vector3(posXmax * state, 0, 0);
+        maxPos = transform.position + new Vector3(posXmax, 0, 0);
+        minPos = transform.position - new Vector3(posXmax, 0, 0);
     }
 
     public Action ReturnAction { get; set; }
@@ -33,10 +35,21 @@ public class EffectObject : MonoBehaviour, IPoolable
     private void FixedUpdate()
     {
         stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        MoveSpeed = 25;
+        if(!iscol)
+        {
+            switch (state)
+            { 
+                case 1:
+                    if (maxPos.x > transform.position.x)
+                        transform.position += Vector3.right * MoveSpeed * Time.deltaTime;
+                    break;
+                case -1:
+                    if (minPos.x < transform.position.x)
+                        transform.position += Vector3.left * MoveSpeed * Time.deltaTime;
+                    break;
+            }
 
-        if (maxpos.x > transform.position.x && !iscol)
-            transform.position += Vector3.right * state * MoveSpeed * Time.deltaTime;
+        }
 
         if (IsAnimationEnd())
         {

@@ -1,28 +1,22 @@
 fileFormatVersion: 2
-guid: 04cfd15196132ac49a951d11b0af4af3
+guid: c1b191730d3371148aa3229e91af8e33
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4510537966654548847
-    second: ultimate_super_skill_7_0
+      213: 1899622361803198737
+    second: ultimatum_1_0
   - first:
-      213: 4920831426071904297
-    second: ultimate_super_skill_7_1
+      213: 8618152075033304099
+    second: ultimatum_1_1
   - first:
-      213: -3807621413966953805
-    second: ultimate_super_skill_7_2
+      213: 1025431785463504369
+    second: ultimatum_1_2
   - first:
-      213: -5002813934708178543
-    second: ultimate_super_skill_7_3
+      213: 1975442619353276030
+    second: ultimatum_1_3
   - first:
-      213: 7132011389731913071
-    second: ultimate_super_skill_7_4
-  - first:
-      213: -2751641314362663058
-    second: ultimate_super_skill_7_5
-  - first:
-      213: -3069590674425894913
-    second: ultimate_super_skill_7_6
+      213: -621493530282274375
+    second: ultimatum_1_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -55,7 +49,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -64,7 +58,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -118,155 +112,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ultimate_super_skill_7_0
+      name: ultimatum_1_1
       rect:
         serializedVersion: 2
-        x: 34
-        y: 138
-        width: 21
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f6b6b500266a89e30800000000000000
-      internalID: 4510537966654548847
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ultimate_super_skill_7_1
-      rect:
-        serializedVersion: 2
-        x: 37
-        y: 101
-        width: 15
-        height: 38
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 920489e3c1e4a4440800000000000000
-      internalID: 4920831426071904297
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ultimate_super_skill_7_2
-      rect:
-        serializedVersion: 2
-        x: 52
-        y: 92
-        width: 7
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3b244556f7c982bc0800000000000000
-      internalID: -3807621413966953805
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ultimate_super_skill_7_3
-      rect:
-        serializedVersion: 2
-        x: 61
+        x: 0
         y: 0
-        width: 276
+        width: 336
         height: 255
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 19148508b3f629ab0800000000000000
-      internalID: -5002813934708178543
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ultimate_super_skill_7_4
-      rect:
-        serializedVersion: 2
-        x: 43
-        y: 85
-        width: 10
-        height: 38
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f6db20b629ef9f260800000000000000
-      internalID: 7132011389731913071
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ultimate_super_skill_7_5
-      rect:
-        serializedVersion: 2
-        x: 46
-        y: 75
-        width: 11
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e6fdf1cadc430d9d0800000000000000
-      internalID: -2751641314362663058
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ultimate_super_skill_7_6
-      rect:
-        serializedVersion: 2
-        x: 28
-        y: 2
-        width: 45
-        height: 71
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ff72ef48b8f9665d0800000000000000
-      internalID: -3069590674425894913
+      spriteID: 32cd7acb6a3d99770800000000000000
+      internalID: 8618152075033304099
       vertices: []
       indices: 
       edges: []
@@ -275,7 +137,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 1cf898cc9ed43414082d5cf95ae69c16
     internalID: 0
     vertices: []
     indices: 
@@ -285,13 +147,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ultimate_super_skill_7_0: 4510537966654548847
-      ultimate_super_skill_7_1: 4920831426071904297
-      ultimate_super_skill_7_2: -3807621413966953805
-      ultimate_super_skill_7_3: -5002813934708178543
-      ultimate_super_skill_7_4: 7132011389731913071
-      ultimate_super_skill_7_5: -2751641314362663058
-      ultimate_super_skill_7_6: -3069590674425894913
+      ultimatum_1_0: 1899622361803198737
+      ultimatum_1_1: 8618152075033304099
+      ultimatum_1_2: 1025431785463504369
+      ultimatum_1_3: 1975442619353276030
+      ultimatum_1_4: -621493530282274375
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

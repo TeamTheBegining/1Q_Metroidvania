@@ -1,28 +1,28 @@
 fileFormatVersion: 2
-guid: 516eb0dbb47e3e14d8672f5b4a731b84
+guid: 521054eca66a65546b447b64b1c3bb23
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1002354393824130011
-    second: ultimatum_5_0
+      213: -2522587049954622568
+    second: ultimatum_7_0
   - first:
-      213: 8868454801504705283
-    second: ultimatum_5_1
+      213: -3627122255107580002
+    second: ultimatum_7_1
   - first:
-      213: -3932349225919201281
-    second: ultimatum_5_2
+      213: -1183372618030239971
+    second: ultimatum_7_2
   - first:
-      213: 5378259651806825218
-    second: ultimatum_5_3
+      213: 5033423180387183765
+    second: ultimatum_7_3
   - first:
-      213: 7121209838903177671
-    second: ultimatum_5_4
+      213: -1181752500804544627
+    second: ultimatum_7_4
   - first:
-      213: 6573217396951698541
-    second: ultimatum_5_5
+      213: -9081314964679481538
+    second: ultimatum_7_5
   - first:
-      213: -4554277880020337991
-    second: ultimatum_5_6
+      213: -7906781867903607480
+    second: ultimatum_7_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -118,7 +118,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ultimate_super_skill_11_0
+      name: ultimate_super_skill_13_0
       rect:
         serializedVersion: 2
         x: 0
@@ -133,8 +133,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 00477591b88aa6d4fa046f62138272e2
-      internalID: 1553080465
+      spriteID: da23f439c72339b438a275cd2a03763e
+      internalID: -1166409560
       vertices: []
       indices: 
       edges: []
@@ -143,7 +143,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: e602755b595a88247be2d0d638cb8c55
+    spriteID: 4f25d26f22fdaf3488fe61fab5e3f7f1
     internalID: 0
     vertices: []
     indices: 
@@ -153,14 +153,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ultimate_super_skill_11_0: 1553080465
-      ultimatum_5_0: 1002354393824130011
-      ultimatum_5_1: 8868454801504705283
-      ultimatum_5_2: -3932349225919201281
-      ultimatum_5_3: 5378259651806825218
-      ultimatum_5_4: 7121209838903177671
-      ultimatum_5_5: 6573217396951698541
-      ultimatum_5_6: -4554277880020337991
+      ultimate_super_skill_13_0: -1166409560
+      ultimatum_7_0: -2522587049954622568
+      ultimatum_7_1: -3627122255107580002
+      ultimatum_7_2: -1183372618030239971
+      ultimatum_7_3: 5033423180387183765
+      ultimatum_7_4: -1181752500804544627
+      ultimatum_7_5: -9081314964679481538
+      ultimatum_7_6: -7906781867903607480
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
