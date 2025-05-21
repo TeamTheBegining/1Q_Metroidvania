@@ -6,6 +6,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     private PlayerInputActions actions;
 
     public Scene1RootController rootController;
+    public GameObject rightBlockObject;
 
     [Space(20f)]
     public TextDataSO textData;
@@ -80,6 +81,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
 
         GameManager.Instance.MiddleMessagePanel.FadeOutClose();
         LightManager.Instance.SetPlayerShadowActive(false);
+        rightBlockObject.SetActive(false);
         rootController.ColliderActive();
     }
 }

@@ -22,6 +22,7 @@ public class Door : MonoBehaviour
             {
                 Debug.Log($"-- {gameObject.name} 문 열림 --");
                 animator.Play("Open");
+                MapStateManager.Instance.SetIsScene3DoorOpened();
                 isAnimatoinPlay = true;
             }
         }
@@ -37,6 +38,12 @@ public class Door : MonoBehaviour
 
     private void Start()
     {
+        if(MapStateManager.Instance.IsScene3DoorOpened)
+        {
+            this.gameObject.SetActive(false);
+            return;
+        }
+
         for (int i = 0; i < targetObjects.Count; i++)
         {
             IDamageable target = targetObjects[i].GetComponentInChildren<IDamageable>();

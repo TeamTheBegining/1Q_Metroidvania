@@ -72,6 +72,8 @@ public class Scene2Manager : LocalSceneManager
 
         // 보여 주기 위한 전체 씬 로드 하기
         GameSceneManager.Instance.LoadSceneAddive(2);
+        GameSceneManager.Instance.LoadSceneAddive(3);
+        GameSceneManager.Instance.LoadSceneAddive(4);
 
         yield return new WaitForSeconds(1f);
 
@@ -92,6 +94,8 @@ public class Scene2Manager : LocalSceneManager
         yield return new WaitForSeconds(3f);
         // 현재 씬 이외 씬들 모두 로드 해제
 
+        GameSceneManager.Instance.UnloadScene(4);
+        GameSceneManager.Instance.UnloadScene(3);
         GameSceneManager.Instance.UnloadScene(2);
         GameManager.Instance.State = GameState.Play;
         gameObject.SetActive(false);

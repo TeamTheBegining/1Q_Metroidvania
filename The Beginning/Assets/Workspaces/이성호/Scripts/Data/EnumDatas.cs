@@ -53,6 +53,12 @@ public enum CameraType
     Scene2PlayerCamera,
     Scene2CutSceneCamera,
     Scene3Camera,
+    Scene4Camera,
+    Scene5CameraUpper,
+    Scene5CameraMiddle,
+    Scene5CameraBottom,
+    Scene5CameraBottomBossWay,
+    Scene5CameraBottomRoom1,
     CameraTypeCount
 }
 
