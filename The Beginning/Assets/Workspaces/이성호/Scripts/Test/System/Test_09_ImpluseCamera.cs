@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class Test_09_ImpluseCamera : TestBase
 {
+#if UNITY_EDITOR
+
     public Vector3 velocity;
     public float force;
 
@@ -27,4 +29,5 @@ public class Test_09_ImpluseCamera : TestBase
         GameManager.Instance.MiddleMessagePanel.Show();
         GameManager.Instance.MiddleMessagePanel.SetText("09. Text Message box Impluse Test");
     }
+#endif
 }

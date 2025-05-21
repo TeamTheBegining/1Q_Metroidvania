@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Test_00_Interaction : TestBase
 {
+#if UNITY_EDITOR
     public GameObject objTarget;
 
     protected override void OnTest1(InputAction.CallbackContext context)
@@ -12,4 +13,5 @@ public class Test_00_Interaction : TestBase
 
         target.OnInteraction();
     }
+#endif
 }

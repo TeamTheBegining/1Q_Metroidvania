@@ -15,6 +15,7 @@ public class Scene1Manager : LocalSceneManager
         if(!isFirstGameStart)
         {
             playerObj = PlayerManager.Instance.SpawnPlayer(spawnPosition.position).gameObject;
+            PlayerManager.Instance.AddCoin(1000);
         }
     }
 

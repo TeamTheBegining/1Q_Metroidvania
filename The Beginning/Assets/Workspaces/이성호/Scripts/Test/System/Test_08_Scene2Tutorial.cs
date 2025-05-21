@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class Test_08_Scene2Tutorial : TestBase
 {
+#if UNITY_EDITOR
+
     public Scene2Tutorial obj;
     public TutorialEnemy enemy;
 
@@ -23,4 +25,5 @@ public class Test_08_Scene2Tutorial : TestBase
 
         enemy.AttackToTarget();
     }
+#endif
 }

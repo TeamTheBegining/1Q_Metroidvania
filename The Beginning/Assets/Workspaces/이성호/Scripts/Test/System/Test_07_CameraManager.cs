@@ -1,8 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Test_07_CameraManager : TestBase
 {
+#if UNITY_EDITOR
+
     public Transform target;
     public CameraType type;
 
@@ -29,4 +31,5 @@ public class Test_07_CameraManager : TestBase
     {
         GameSceneManager.Instance.UnloadScene(value);
     }
+#endif
 }

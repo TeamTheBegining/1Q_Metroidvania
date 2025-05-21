@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class Test_03_PopUpUI : TestBase
 {
+#if UNITY_EDITOR
+
     [Range(0f,1f)]
     public float posX;
 
@@ -19,4 +21,5 @@ public class Test_03_PopUpUI : TestBase
     {
         popUI.ShowPopUp(new Vector2(posX, posY), titleName, description, 2f, type);
     }
+#endif
 } 

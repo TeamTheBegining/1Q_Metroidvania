@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class Test_08_ShowUI : TestBase
 {
+#if UNITY_EDITOR
+
     public WorldTextInteractionGuid text;
 
     protected override void OnTest1(InputAction.CallbackContext context)
@@ -21,4 +23,5 @@ public class Test_08_ShowUI : TestBase
     {
         text.FadeOutText();
     }
+#endif
 }

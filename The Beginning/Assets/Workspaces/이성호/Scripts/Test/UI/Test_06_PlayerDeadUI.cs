@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class Test_06_PlayerDeadUI : TestBase
 {
+#if UNITY_EDITOR
+
     public PlayerDeadPanel panel;
     public Player player;
 
@@ -16,4 +18,5 @@ public class Test_06_PlayerDeadUI : TestBase
         GameManager.Instance.State = GameState.Play;
         player.CurrentHp = 0;
     }
+#endif
 }

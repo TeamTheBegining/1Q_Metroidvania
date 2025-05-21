@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class Test_05_SoundManager : TestBase
 {
+#if UNITY_EDITOR
+
     public BGMType bgmType;
     public SFXType sfxType;
 
@@ -15,4 +17,5 @@ public class Test_05_SoundManager : TestBase
     {
         SoundManager.Instance.PlaySound(sfxType);
     }
+#endif
 }

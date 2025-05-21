@@ -1,8 +1,6 @@
 ﻿using System;
 using UnityEditor;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class EffectObject2 : MonoBehaviour, IPoolable
 {

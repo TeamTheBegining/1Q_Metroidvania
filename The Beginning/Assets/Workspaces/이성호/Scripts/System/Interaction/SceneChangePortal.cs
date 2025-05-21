@@ -8,13 +8,23 @@ public class SceneChangePortal : MonoBehaviour, Interactable
     public SpawnPointDataSO targetData;
     public string targetSceneName;
 
-    private bool isTrigger = false;
+    public bool useTrigger = false;
+    private bool isTriggerd = false;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(useTrigger)
+        {
+            GameSceneManager.Instance.RequestSceneChange(targetSceneName, targetData);
+            isTriggerd = true;
+        }
+    }
 
     public void OnInteraction()
     {
-        if (isTrigger) return;
+        if (isTriggerd) return;
 
         GameSceneManager.Instance.RequestSceneChange(targetSceneName, targetData);
-        isTrigger = true;
+        isTriggerd = true;
     }
 }

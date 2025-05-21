@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class Test_06_PoolManager : TestBase
 {
+#if UNITY_EDITOR
+
     public Transform targetposition;
     public float duration = 0.25f;
     public float spawnDelay = 0.25f;
@@ -41,4 +43,5 @@ public class Test_06_PoolManager : TestBase
         yield return new WaitForSeconds(spawnDelay);
         PoolManager.Instance.Pop<PlayerSlideAfterImage>(PoolType.PlayerSlideAfterImage, targetposition.position + Vector3.right).Init(2);
     }
+#endif
 }

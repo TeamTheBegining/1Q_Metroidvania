@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class Test_07_ScrollUI : TestBase
 {
+#if UNITY_EDITOR
+
     public TextScroll scroll;
 
     protected override void OnTest1(InputAction.CallbackContext context)
@@ -14,4 +16,5 @@ public class Test_07_ScrollUI : TestBase
     {
         scroll.PlayScroll();
     }
+#endif
 }

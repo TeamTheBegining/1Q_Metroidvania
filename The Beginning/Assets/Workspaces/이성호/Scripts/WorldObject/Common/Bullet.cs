@@ -8,10 +8,20 @@ public class Bullet : MonoBehaviour, IPoolable
 
     public float damage = 1f;
 
+    private float timer = 0f;
+    public float maxTimer = 10f;
+
     public Action ReturnAction { get; set; }
 
     private void Update()
     {
+        timer += Time.deltaTime;    
+
+        if(timer > maxTimer)
+        {
+            this.gameObject.SetActive(false);
+        }
+
         if(moveDir != Vector3.zero && speed != 0f)
         {
             transform.position += speed * moveDir * Time.deltaTime;
@@ -47,5 +57,6 @@ public class Bullet : MonoBehaviour, IPoolable
     {
         moveDir = Vector3.zero;
         speed = 0f;
+        timer = 0f;
     }
 }

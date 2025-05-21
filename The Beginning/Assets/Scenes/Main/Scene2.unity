@@ -1970,6 +1970,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 96347a242105d494997eb470b04969ab, type: 2}
     - target: {fileID: 9089777072620725307, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}
+      propertyPath: useTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9089777072620725307, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}
       propertyPath: targetSceneName
       value: Scene4
       objectReference: {fileID: 0}
@@ -2960,6 +2964,10 @@ PrefabInstance:
       propertyPath: targetData
       value: 
       objectReference: {fileID: 11400000, guid: af83cbf02fc13ba4a84672c226ebb021, type: 2}
+    - target: {fileID: 9089777072620725307, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}
+      propertyPath: useTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9089777072620725307, guid: 7cb559557b3a06e41a71136e41308d9e, type: 3}
       propertyPath: targetSceneName
       value: Scene3
