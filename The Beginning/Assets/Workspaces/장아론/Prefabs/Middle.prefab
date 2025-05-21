@@ -162,34 +162,111 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentHealth: 0
-  _maxHealth: 30
+  _maxHealth: 100
   playerTransform: {fileID: 0}
-  detectionRange: 5
+  detectionRange: 7
   attackRange: 1.5
-  moveSpeed: 2.5
-  attackStopBuffer: 0
+  moveSpeed: 4
+  attackStopBuffer: 0.1
   enablePatrol: 0
   patrolLeftLimit: {x: 0, y: 0, z: 0}
   patrolRightLimit: {x: 0, y: 0, z: 0}
   postAttackWaitDuration: 0.5
   currentComboState: 0
-  comboChainDelay: 0.3
-  comboResetTime: 2.5
-  attack2Cooldown: 4
-  attack3Cooldown: 2
-  attack1HitboxObject: {fileID: 8636349439236697190}
-  attack2HitboxObject: {fileID: 7284608179196531827}
+  comboChainDelay: 0.2
+  comboResetTime: 1.5
+  attack2Cooldown: 0.8
+  attack3Cooldown: 1.5
+  attack1HitboxObject: {fileID: 7284608179196531827}
+  attack2HitboxObject: {fileID: 8636349439236697190}
   attack3HitboxObject: {fileID: 7971730487343713275}
-  attack1Cooldown: 3
-  attack1Value: 1.5
-  attack2Value: 2.5
-  attack3Value: 3.5
-  attack3DashSpeed: 7
-  attack3DashDuration: 3
-  heavyPunchFirstDelay: 0.6
-  heavyPunchSecondDelay: 0.8
-  offBeatFirstDelay: 0.7
-  offBeatSecondDelay: 0.3
+  attackPatterns:
+  - sequenceName: "\uBC29\uD328 \uC5F0\uD0C0 \uCF64\uBCF4"
+    phases:
+    - animationTriggerName: B_Attack1
+      hitboxIndex: 1
+      delayAfterThisPhase: 0.7
+      damageValue: 1.5
+    - animationTriggerName: B_Attack1
+      hitboxIndex: 1
+      delayAfterThisPhase: 0
+      damageValue: 1.7
+    minPlayerDistance: 0
+    maxPlayerDistance: 4
+    selectionChance: 0.372
+    cooldownAfterSequence: 1.5
+    minHpRatio: 0.5
+    maxHpRatio: 0
+  - sequenceName: "\uD558\uAC15 \uC5F0\uD0C0 \uCF64\uBCF4"
+    phases:
+    - animationTriggerName: B_Attack2
+      hitboxIndex: 2
+      delayAfterThisPhase: 1.1
+      damageValue: 2
+    - animationTriggerName: B_Attack2
+      hitboxIndex: 2
+      delayAfterThisPhase: 0
+      damageValue: 2.2
+    minPlayerDistance: 0.1
+    maxPlayerDistance: 4
+    selectionChance: 0.302
+    cooldownAfterSequence: 1.5
+    minHpRatio: 0.5
+    maxHpRatio: 1
+  - sequenceName: "\uD558\uAC15 3\uD0C0 \uCF64\uBCF4"
+    phases:
+    - animationTriggerName: B_Attack2
+      hitboxIndex: 2
+      delayAfterThisPhase: 0.8
+      damageValue: 2.2
+    - animationTriggerName: B_Attack2
+      hitboxIndex: 2
+      delayAfterThisPhase: 0.4
+      damageValue: 2.3
+    - animationTriggerName: B_Attack2
+      hitboxIndex: 2
+      delayAfterThisPhase: 0
+      damageValue: 2.5
+    minPlayerDistance: 0.1
+    maxPlayerDistance: 4
+    selectionChance: 0.393
+    cooldownAfterSequence: 1.5
+    minHpRatio: 0
+    maxHpRatio: 0.5
+  - sequenceName: "1, 1,2 \uD0C0 \uCF64\uBCF4"
+    phases:
+    - animationTriggerName: B_Attack1
+      hitboxIndex: 1
+      delayAfterThisPhase: 0.3
+      damageValue: 2.2
+    - animationTriggerName: B_Attack1
+      hitboxIndex: 1
+      delayAfterThisPhase: 0.7
+      damageValue: 2.3
+    - animationTriggerName: B_Attack2
+      hitboxIndex: 2
+      delayAfterThisPhase: 0
+      damageValue: 2.5
+    minPlayerDistance: 0.1
+    maxPlayerDistance: 4
+    selectionChance: 0.393
+    cooldownAfterSequence: 1.5
+    minHpRatio: 0
+    maxHpRatio: 0.5
+  - sequenceName: "\uD68C\uC624\uB9AC"
+    phases:
+    - animationTriggerName: B_Attack3
+      hitboxIndex: 3
+      delayAfterThisPhase: 0
+      damageValue: 2.3
+    minPlayerDistance: 1.2
+    maxPlayerDistance: 6
+    selectionChance: 0.337
+    cooldownAfterSequence: 1.5
+    minHpRatio: 0.2
+    maxHpRatio: 0.8
+  attack3DashSpeed: 4
+  attack3DashDuration: 2
   hurtColor: {r: 1, g: 0, b: 0, a: 1}
   hurtColorDuration: 0.2
 --- !u!61 &278362775629190335
@@ -290,12 +367,12 @@ GameObject:
   - component: {fileID: 8365653497963683572}
   - component: {fileID: 8577942537084657431}
   m_Layer: 10
-  m_Name: HitBox2
+  m_Name: HitBox1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8638052610913381231
 Transform:
   m_ObjectHideFlags: 0
@@ -474,12 +551,12 @@ GameObject:
   - component: {fileID: 753307439680008148}
   - component: {fileID: 3588456522265218387}
   m_Layer: 10
-  m_Name: HitBox1
+  m_Name: HitBox2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8437797541820128511
 Transform:
   m_ObjectHideFlags: 0

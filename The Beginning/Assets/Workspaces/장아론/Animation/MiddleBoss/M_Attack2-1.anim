@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Attack2
+  m_Name: M_Attack2-1
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,17 +21,25 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -2565773771084442975, guid: 34b807b5833508b458a9300d276a2755, type: 3}
+      value: {fileID: -923929600, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
     - time: 0.083333336
-      value: {fileID: 7610797424806198581, guid: 34b807b5833508b458a9300d276a2755, type: 3}
+      value: {fileID: 2120402370, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
     - time: 0.16666667
-      value: {fileID: 7917996571835079985, guid: 34b807b5833508b458a9300d276a2755, type: 3}
-    - time: 0.41666666
-      value: {fileID: -8181650646839486963, guid: 34b807b5833508b458a9300d276a2755, type: 3}
-    - time: 0.5
-      value: {fileID: -4165246495659256843, guid: 34b807b5833508b458a9300d276a2755, type: 3}
+      value: {fileID: -1881631144, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - time: 0.25
+      value: {fileID: -1734760085, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - time: 0.33333334
+      value: {fileID: -1060492830, guid: 4d3b7a3483c36524b97cc09b0900a7c8, type: 3}
     - time: 0.5833333
-      value: {fileID: -1748253548753828016, guid: 34b807b5833508b458a9300d276a2755, type: 3}
+      value: {fileID: -1518453846, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - time: 0.6666667
+      value: {fileID: -1387662642, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - time: 0.75
+      value: {fileID: -392527853, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - time: 0.8333333
+      value: {fileID: -392527853, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - time: 0.9166667
+      value: {fileID: -923929600, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -54,18 +62,22 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -2565773771084442975, guid: 34b807b5833508b458a9300d276a2755, type: 3}
-    - {fileID: 7610797424806198581, guid: 34b807b5833508b458a9300d276a2755, type: 3}
-    - {fileID: 7917996571835079985, guid: 34b807b5833508b458a9300d276a2755, type: 3}
-    - {fileID: -8181650646839486963, guid: 34b807b5833508b458a9300d276a2755, type: 3}
-    - {fileID: -4165246495659256843, guid: 34b807b5833508b458a9300d276a2755, type: 3}
-    - {fileID: -1748253548753828016, guid: 34b807b5833508b458a9300d276a2755, type: 3}
+    - {fileID: -923929600, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - {fileID: 2120402370, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - {fileID: -1881631144, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - {fileID: -1734760085, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - {fileID: -1060492830, guid: 4d3b7a3483c36524b97cc09b0900a7c8, type: 3}
+    - {fileID: -1518453846, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - {fileID: -1387662642, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - {fileID: -392527853, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - {fileID: -392527853, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
+    - {fileID: -923929600, guid: 25ecee2c8be63c840a3b07f98b09a3d5, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.6666667
+    m_StopTime: 1
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -85,28 +97,21 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.5
+  - time: 0.6666667
     functionName: EnableAttack2Hitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.5833333
+  - time: 0.8333333
     functionName: DisableAttack2Hitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.5833333
-    functionName: DisableAttack2Hitbox
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.6666667
+  - time: 1
     functionName: OnAttackAnimationEnd
     data: 
     objectReferenceParameter: {fileID: 0}
