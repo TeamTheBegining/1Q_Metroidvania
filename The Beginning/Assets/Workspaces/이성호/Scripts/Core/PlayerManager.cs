@@ -16,7 +16,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private float remainHp; // NOTE : 플레이어 체력 이벤트에 연결할 것
 
-    private bool[] isSkillUnlock;
+    [SerializeField]private bool[] isSkillUnlock;
 
     /// <summary>
     /// isSkillUnlock 접근용 프로퍼티

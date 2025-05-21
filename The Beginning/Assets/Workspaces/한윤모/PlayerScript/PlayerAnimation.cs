@@ -81,7 +81,7 @@ public class PlayerAnimation : MonoBehaviour
                 animator.Play("Skill2");
                 break;
             case Player.PlayerState.Skill2CutScene:
-                //animator.Play("Skill2CutScene");
+                animator.Play("Skill2CutScene");
                 break;
             case Player.PlayerState.Parrying:
                 animator.Play("Parrying");
