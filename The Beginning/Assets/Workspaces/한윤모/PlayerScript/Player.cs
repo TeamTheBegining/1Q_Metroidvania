@@ -59,17 +59,17 @@ public class Player : MonoBehaviour, IDamageable
     float dropDownTimer = 0f;
     float cutSceneTimer = 0f;
     float chargingmoveTime = 0f;
-     float jumpDisableGroundCheckTime = 0.3f;
-     float moveDelayTime = 0.3f;
-     float doubleJumpDelayTime = 0.2f;
-     float grabDelayTime = 0.2f;
-     float ladderDelayTime = 0.2f;
-     float attackDelayTime = 0.2f;
-     float slidingDelayTime = 1f;
-     float parryDelayTime = 0.8f;
-     float spawnDelayTime = 0.1f;
-     float parryCountTime = 0.3f;
-     float dropDownTime = 0.5f;
+    float jumpDisableGroundCheckTime = 0.3f;
+    float moveDelayTime = 0.2f;
+    float doubleJumpDelayTime = 0.2f;
+    float grabDelayTime = 0.2f;
+    float ladderDelayTime = 0.2f;
+    float attackDelayTime = 0.5f;
+    float slidingDelayTime = 1f;
+    float parryDelayTime = 0.8f;
+    float spawnDelayTime = 0.1f;
+    float parryCountTime = 0.3f;
+    float dropDownTime = 0.5f;
     float cutSceneTime;
 
     [Space(2)]
@@ -110,6 +110,7 @@ public class Player : MonoBehaviour, IDamageable
     bool isHit = false;
     bool isAttack = false;
     bool isSkill = false;
+    bool isAttackDealy = false;
     bool isMoveDelay = false;
     bool isGrapDelay = false;
     bool isLadderDelay = false;
@@ -135,7 +136,7 @@ public class Player : MonoBehaviour, IDamageable
 
     //차징 공격
     private Vector3 chargingStartPos;
-    [SerializeField]private float chargingDis = 3f;
+    [SerializeField]private float chargingDis = 1f;
 
     Interactable interactable;
     public float Damage
@@ -504,12 +505,12 @@ public class Player : MonoBehaviour, IDamageable
             ladderDelayTimer = 0;
         }
 
-        if (isAttack)
+        if (isAttackDealy)
             attackDelayTimer += Time.deltaTime;
 
         if (attackDelayTimer > attackDelayTime)
         {
-            isAttack = false;
+            isAttackDealy = false;
             attackDelayTimer = 0;
         }
 
@@ -694,7 +695,7 @@ public class Player : MonoBehaviour, IDamageable
         if (rb.linearVelocity.x != 0) rb.linearVelocity = Vector2.zero;
 
         // 공격 떼면 처리
-        if (!input.IsAttack)
+        if (!input.IsAttack&&!isAttackDealy)
         {
             isAttack = true;
             if (chargingAttackAble)
@@ -863,13 +864,13 @@ public class Player : MonoBehaviour, IDamageable
     void AttackAble()
     {
         if (isParrySuccess) return;
-        if (getCharging&& input.IsAttack)
+        if (getCharging&& input.IsAttack&&isGround)
         {
             currentState = PlayerState.Charging;
         }
         else
         {
-            if (input.IsAttack && !isAttack)
+            if (input.IsAttack && !isAttackDealy)
             {
                 input.IsAttack = false;
                 currentState = PlayerState.Attack1;
@@ -1035,9 +1036,9 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void ChargingFinish()
     {
-        currentState = PlayerState.Idle;
+        currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         chargingAttackColl.enabled = false;
-        isAttack = false;
+        isAttackDealy = true;
     }
     private void AttackCollider()
     {
@@ -1061,6 +1062,7 @@ public class Player : MonoBehaviour, IDamageable
         attackColl.enabled = false;
         attack2Able = false;
         isAttack = false;
+        isAttackDealy = true;
     }
     private void Attack2Finish()
     {
@@ -1068,12 +1070,14 @@ public class Player : MonoBehaviour, IDamageable
         attackColl2.enabled = false;
         attack3Able = false;
         isAttack = false;
+        isAttackDealy = true;
     }
     private void Attack3Finish()
     {
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         attackColl3.enabled = false;
         isAttack = false;
+        isAttackDealy = true;
     }
     private void Skill1Finish()
     {
