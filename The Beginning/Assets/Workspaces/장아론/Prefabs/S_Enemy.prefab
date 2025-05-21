@@ -217,7 +217,7 @@ MonoBehaviour:
   _maxHealth: 10
   playerTransform: {fileID: 0}
   detectionRange: 5
-  attackRange: 0.3
+  attackRange: 0.7
   moveSpeed: 4
   attackStopBuffer: 0.1
   enablePatrol: 0
@@ -246,6 +246,15 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.032769315
+      value: 1.1671273
+      inSlope: 0.34170172
+      outSlope: 0.34170172
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.4880761
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.2911499
       value: 1.1981506
@@ -338,7 +347,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   attackForwardSpeedMultiplier: 3.5
   attackBackwardSpeedMultiplier: 1.5
-  attackDashDistance: 1.2
+  attackDashDistance: 2
   stunDuration: 0.9
 --- !u!1 &5482706447290755084
 GameObject:
@@ -420,7 +429,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.15301025, y: -0.09686583}
+  m_Offset: {x: 0.1862607, y: -0.09686583}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -430,7 +439,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.9545991, y: 0.5678297}
+  m_Size: {x: 1.2850742, y: 0.5678297}
   m_EdgeRadius: 0
 --- !u!1 &6441139757984839689
 GameObject:
