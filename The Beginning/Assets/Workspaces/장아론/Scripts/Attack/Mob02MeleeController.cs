@@ -173,17 +173,14 @@ public class Mob02MeleeController : CommonEnemyController
             if (currentAttackAnimationLength == 0f && animator != null)
             {
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                // "Mob02_AttackA"는 Animator State의 이름입니다. 클립 이름과 다를 수 있습니다.
-                // 정확한 클립 이름을 사용하려면 GetCurrentAnimatorClipInfo를 사용합니다.
-                if (stateInfo.IsName("Mob02_AttackA_State")) // Animator State의 이름으로 변경하세요.
+                // Animator Controller의 State 이름이 "AttackA"이므로, 이 부분은 그대로 둡니다.
+                if (stateInfo.IsName("AttackA")) // <--- 이 부분은 "AttackA"가 맞습니다.
                 {
                     AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0);
                     if (clipInfo.Length > 0)
                     {
-                        // 클립의 이름을 명시적으로 확인하여 해당 클립의 길이를 가져옵니다.
-                        // 이 부분을 실제 Mob02_AttackA 애니메이션 클립의 이름으로 변경해야 합니다.
-                        // 예: "Mob02_AttackA_Clip"
-                        if (clipInfo[0].clip.name == "S_Attack") // <--- 이 부분을 실제 애니메이션 클립 이름으로 변경!!!
+                        // 이 "Mob02_AttackA_ClipName"을 실제 애니메이션 클립 이름인 "S_Attack"으로 변경해야 합니다.
+                        if (clipInfo[0].clip.name == "S_Attack") // <--- 이 부분을 "S_Attack"으로 변경!!!
                         {
                             currentAttackAnimationLength = clipInfo[0].clip.length;
                         }
