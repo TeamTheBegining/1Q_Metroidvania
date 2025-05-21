@@ -15,19 +15,22 @@ public class EffectObject2 : MonoBehaviour, IPoolable
     [SerializeField] float MoveSpeed = 25;
     Vector3 maxPos = Vector3.zero;
     Vector3 minPos = Vector3.zero;
+    Vector3 lastPos = Vector3.zero;
     bool iscol = false;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
     private void OnEnable()
     {
+        lastPos = Vector3.zero;
         maxPos = transform.position + new Vector3(posXmax, 0, 0);
         minPos = transform.position - new Vector3(posXmax, 0, 0);
+        player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        iscol = false;
     }
 
     public Action ReturnAction { get; set; }
@@ -82,9 +85,27 @@ public class EffectObject2 : MonoBehaviour, IPoolable
     {
         return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f;
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        transform.position = other.transform.position;
-        iscol = true;
+
+        if (collision.gameObject.GetComponent<IDamageable>() != null)
+        {
+            if (!iscol)
+            {
+                transform.position = new Vector3(collision.transform.position.x, transform.position.y, transform.position.z);
+                iscol = true;
+            }
+            collision.gameObject.GetComponent<IDamageable>().TakeDamage(player.Damage, gameObject);
+        }
+    }
+
+    private void ColliderEnable()
+    {
+        gameObject.GetComponent<Collider2D>().enabled = true;
+    }
+
+    private void ColliderDisable()
+    {
+        gameObject.GetComponent<Collider2D>().enabled = false;
     }
 }
