@@ -65,7 +65,7 @@ public class ProjectilePlayer : MonoBehaviour, IPoolable
     {
         if (collision.gameObject.GetComponent<IDamageable>() != null)
         {
-            collision.gameObject.GetComponent<IDamageable>().TakeDamage(player.Damage, gameObject);
+            collision.gameObject.GetComponent<IDamageable>().TakeDamage(player.Damage*2, gameObject);
         }
 
     }

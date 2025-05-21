@@ -93,7 +93,7 @@ public class EffectObject2 : MonoBehaviour, IPoolable
                 transform.position = new Vector3(collision.transform.position.x, transform.position.y, transform.position.z);
                 iscol = true;
             }
-            collision.gameObject.GetComponent<IDamageable>().TakeDamage(player.Damage, gameObject);
+            collision.gameObject.GetComponent<IDamageable>().TakeDamage(player.Damage*3, gameObject);
         }
     }
 

@@ -1095,8 +1095,8 @@ MonoBehaviour:
   maxMp: 25
   currentHp: 10
   currentMp: 0
-  baseDamage: 2
-  damage: 2
+  baseDamage: 1
+  damage: 1
   currentState: 0
   chargingDis: 1
   isDead: 0

@@ -42,8 +42,8 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] float currentMp = 0f;
     [Space(2)]
     [Header("플레이어 공격력")]
-    [SerializeField] float baseDamage = 2f;
-    [SerializeField] float damage = 2f;
+    [SerializeField] float baseDamage = 1f;
+    [SerializeField] float damage = 1f;
 
     float groundCheckRadius = 0.21f;//바닥 체크 거리
     float jumpTimer = 0f;
@@ -703,6 +703,7 @@ public class Player : MonoBehaviour, IDamageable
                 currentState = PlayerState.ChargingAttack;
                 chargingStartPos = transform.position;
                 chargingmoveTime = 0;
+                damage *= 1.5f;
             }
             else
             {
@@ -1039,6 +1040,7 @@ public class Player : MonoBehaviour, IDamageable
         currentState = isGround ? PlayerState.Idle : PlayerState.Jump;
         chargingAttackColl.enabled = false;
         isAttackDealy = true;
+        damage /= 1.5f;
     }
     private void AttackCollider()
     {
