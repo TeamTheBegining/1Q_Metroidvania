@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 public class ProjectilePlayer : MonoBehaviour, IPoolable
 {
     private Animator animator;
+    private Player player;
     float MoveSpeed;
     public AnimationCurve anicurv;
     AnimatorStateInfo stateInfo;
@@ -21,6 +22,11 @@ public class ProjectilePlayer : MonoBehaviour, IPoolable
     }
 
     public Action ReturnAction { get; set; }
+
+    private void OnEnable()
+    {
+        if(player  == null) player = GameObject.FindWithTag("Player").GetComponent<Player>();
+    }
 
     private void Update()
     {
@@ -54,5 +60,13 @@ public class ProjectilePlayer : MonoBehaviour, IPoolable
     private bool IsAnimationEnd()
     {
         return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetComponent<IDamageable>() != null)
+        {
+            collision.gameObject.GetComponent<IDamageable>().TakeDamage(player.Damage, gameObject);
+        }
+
     }
 }
