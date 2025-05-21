@@ -13,10 +13,13 @@ public class SceneChangePortal : MonoBehaviour, Interactable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(useTrigger)
+        if(collision.CompareTag("Player"))
         {
-            GameSceneManager.Instance.RequestSceneChange(targetSceneName, targetData);
-            isTriggerd = true;
+            if(useTrigger)
+            {
+                GameSceneManager.Instance.RequestSceneChange(targetSceneName, targetData);
+                isTriggerd = true;
+            }
         }
     }
 
