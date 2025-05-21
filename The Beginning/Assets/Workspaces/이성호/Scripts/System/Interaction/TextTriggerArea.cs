@@ -13,7 +13,7 @@ public class TextTriggerArea : MonoBehaviour
     private IEnumerator fadeIn;
     private IEnumerator fadeOut;
 
-    private float fadeOutDelayTime = 4f;
+    public float fadeOutDelayTime = 4f;
 
     private void Awake()
     {
