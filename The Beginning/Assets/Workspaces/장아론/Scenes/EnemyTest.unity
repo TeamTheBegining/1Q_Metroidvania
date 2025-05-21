@@ -318,6 +318,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1751584332979774525, guid: 185fc5fd4c3bb724480562bed0925d54, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.88
+      objectReference: {fileID: 0}
     - target: {fileID: 4637794757050582609, guid: 185fc5fd4c3bb724480562bed0925d54, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.247
@@ -357,6 +361,18 @@ PrefabInstance:
     - target: {fileID: 4637794757050582609, guid: 185fc5fd4c3bb724480562bed0925d54, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4654338855039152723, guid: 185fc5fd4c3bb724480562bed0925d54, type: 3}
+      propertyPath: m_Size.y
+      value: 0.87756413
+      objectReference: {fileID: 0}
+    - target: {fileID: 4654338855039152723, guid: 185fc5fd4c3bb724480562bed0925d54, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4654338855039152723, guid: 185fc5fd4c3bb724480562bed0925d54, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.0696874
       objectReference: {fileID: 0}
     - target: {fileID: 6441139757984839689, guid: 185fc5fd4c3bb724480562bed0925d54, type: 3}
       propertyPath: m_Name
@@ -418,6 +434,10 @@ PrefabInstance:
     - target: {fileID: 7615141092581372037, guid: bb346fcb8c8c0234ea50af6c6b2d0259, type: 3}
       propertyPath: m_Name
       value: Attacker
+      objectReference: {fileID: 0}
+    - target: {fileID: 7615141092581372037, guid: bb346fcb8c8c0234ea50af6c6b2d0259, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

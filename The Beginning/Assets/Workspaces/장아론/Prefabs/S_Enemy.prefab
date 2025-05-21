@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 3368205513827972223}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.125, y: 0.82, z: 0}
+  m_LocalPosition: {x: 1.125, y: 0.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -141,7 +141,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!61 &4654338855039152723
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -176,7 +176,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.118043184, y: 0.047955096}
+  m_Offset: {x: 0.118043184, y: -0.0696874}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5012046, y: 0.65850794}
@@ -186,7 +186,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.55907726, y: 0.8103398}
+  m_Size: {x: 0.55907726, y: 0.87756413}
   m_EdgeRadius: 0
 --- !u!114 &3123978801810778454
 MonoBehaviour:
@@ -202,9 +202,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 10
   playerTransform: {fileID: 0}
-  detectionRange: 5
-  attackRange: 1.5
-  moveSpeed: 2
+  detectionRange: 10
+  attackRange: 3
+  moveSpeed: 5
   attackStopBuffer: 0.1
   enablePatrol: 0
   patrolLeftLimit: {x: 0, y: 0, z: 0}
@@ -219,6 +219,10 @@ MonoBehaviour:
   mob02MaxHealth: 4
   attackAValue: 0.4
   attackACooldown: 1
+  detectionRange: 5
+  chaseSpeed: 3
+  attackForwardSpeedMultiplier: 1.5
+  attackBackwardSpeedMultiplier: 1
   stunDuration: 2
 --- !u!114 &8070249802320740770
 MonoBehaviour:
@@ -313,7 +317,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.08196306, y: -0.09686583}
+  m_Offset: {x: 0.15301025, y: -0.09686583}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -323,7 +327,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.7600236, y: 0.5678297}
+  m_Size: {x: 3.9545991, y: 0.5678297}
   m_EdgeRadius: 0
 --- !u!1 &6441139757984839689
 GameObject:
