@@ -35,8 +35,8 @@ public class Mob02MeleeController : CommonEnemyController
 
     [Header("잡몹02 감지 및 이동 설정")]
     [Tooltip("플레이어를 감지하는 범위입니다.")]
-    public new float detectionRange = 3f;
-    [Tooltip("플레이어를 감지했을 때 추적 속도입니다.")]
+   // public new float detectionRange = 3f;
+    //[Tooltip("플레이어를 감지했을 때 추적 속도입니다.")]
     public float chaseSpeed = 3f;
 
     // --- 인스펙터에서 직접 조절할 AnimationCurve 변수 추가 ---
@@ -183,7 +183,7 @@ public class Mob02MeleeController : CommonEnemyController
                         // 클립의 이름을 명시적으로 확인하여 해당 클립의 길이를 가져옵니다.
                         // 이 부분을 실제 Mob02_AttackA 애니메이션 클립의 이름으로 변경해야 합니다.
                         // 예: "Mob02_AttackA_Clip"
-                        if (clipInfo[0].clip.name == "Mob02_AttackA_ClipName") // <--- 이 부분을 실제 애니메이션 클립 이름으로 변경!!!
+                        if (clipInfo[0].clip.name == "S_Attack") // <--- 이 부분을 실제 애니메이션 클립 이름으로 변경!!!
                         {
                             currentAttackAnimationLength = clipInfo[0].clip.length;
                         }
