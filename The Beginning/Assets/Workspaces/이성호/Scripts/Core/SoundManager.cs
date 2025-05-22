@@ -33,7 +33,7 @@ public class SoundManager : Singleton<SoundManager>
         #region Lode Resource
         // BGMType 내용 정의 순서대로 클립추가하기
         bgmClips[0] = Resources.Load<AudioClip>("Audio/BGM/BGM01(Test)");   
-        bgmClips[1] = Resources.Load<AudioClip>("Audio/BGM/BGM_SCREEN_01");   
+        bgmClips[1] = Resources.Load<AudioClip>("Audio/BGM/BGM_SCREEN_01");
 
         // SFXType 내용 정의 순서대로 클립추가하기
 

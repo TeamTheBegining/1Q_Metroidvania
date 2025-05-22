@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      god_alien_idel_2_0: 2124783983666205031
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -8,10 +8,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3618497126192135802, guid: 1858ca65ccc8d8b428ec806d4ac1c105, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: addf42ad6d664114dabcc5f9a396f1db, type: 3}
     - target: {fileID: 3987856817284742167, guid: 1858ca65ccc8d8b428ec806d4ac1c105, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4
@@ -55,14 +51,6 @@ PrefabInstance:
     - target: {fileID: 5763905126587341067, guid: 1858ca65ccc8d8b428ec806d4ac1c105, type: 3}
       propertyPath: m_Name
       value: Platform_Rock No grab Variant
-      objectReference: {fileID: 0}
-    - target: {fileID: 8762980333693831119, guid: 1858ca65ccc8d8b428ec806d4ac1c105, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 2.03125
-      objectReference: {fileID: 0}
-    - target: {fileID: 8762980333693831119, guid: 1858ca65ccc8d8b428ec806d4ac1c105, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 0.375
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
