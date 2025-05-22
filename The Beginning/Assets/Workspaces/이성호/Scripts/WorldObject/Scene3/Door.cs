@@ -47,7 +47,10 @@ public class Door : MonoBehaviour
         for (int i = 0; i < targetObjects.Count; i++)
         {
             IDamageable target = targetObjects[i].GetComponentInChildren<IDamageable>();
-            target.OnDead += () => { RemainCount--; };
+            target.OnDead += () => 
+            { 
+                RemainCount--; 
+            };
         }
 #if UNITY_EDITOR
         TestInit();

@@ -174,6 +174,7 @@ public class B_GirlController : CommonEnemyController
                 Debug.Log($"[미니보스] 슈퍼 아머 상태에서 사망!");
                 HandleDeathLogic();
                 GetComponent<EnemyStatusBridge>()?.MarkAsDead();
+                OnDead?.Invoke(); // 0522 추가
             }
             else
             {

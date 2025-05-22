@@ -162,6 +162,24 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""K"",
+                    ""type"": ""Button"",
+                    ""id"": ""db89fae2-1c86-496b-b358-15da4450b39a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""M"",
+                    ""type"": ""Button"",
+                    ""id"": ""045a8e52-bc81-48aa-b879-b017dd174069"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -252,6 +270,28 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""F8"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3fddef5-0116-4ba9-b4e9-3fbc10efe62c"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""K"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d609bbf0-41d2-42bc-8c13-6c4e7cb52749"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -268,6 +308,8 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
         m_Cheat_F6 = m_Cheat.FindAction("F6", throwIfNotFound: true);
         m_Cheat_F7 = m_Cheat.FindAction("F7", throwIfNotFound: true);
         m_Cheat_F8 = m_Cheat.FindAction("F8", throwIfNotFound: true);
+        m_Cheat_K = m_Cheat.FindAction("K", throwIfNotFound: true);
+        m_Cheat_M = m_Cheat.FindAction("M", throwIfNotFound: true);
     }
 
     ~@CheatInputActions()
@@ -356,6 +398,8 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Cheat_F6;
     private readonly InputAction m_Cheat_F7;
     private readonly InputAction m_Cheat_F8;
+    private readonly InputAction m_Cheat_K;
+    private readonly InputAction m_Cheat_M;
     /// <summary>
     /// Provides access to input actions defined in input action map "Cheat".
     /// </summary>
@@ -399,6 +443,14 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Cheat/F8".
         /// </summary>
         public InputAction @F8 => m_Wrapper.m_Cheat_F8;
+        /// <summary>
+        /// Provides access to the underlying input action "Cheat/K".
+        /// </summary>
+        public InputAction @K => m_Wrapper.m_Cheat_K;
+        /// <summary>
+        /// Provides access to the underlying input action "Cheat/M".
+        /// </summary>
+        public InputAction @M => m_Wrapper.m_Cheat_M;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -449,6 +501,12 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
             @F8.started += instance.OnF8;
             @F8.performed += instance.OnF8;
             @F8.canceled += instance.OnF8;
+            @K.started += instance.OnK;
+            @K.performed += instance.OnK;
+            @K.canceled += instance.OnK;
+            @M.started += instance.OnM;
+            @M.performed += instance.OnM;
+            @M.canceled += instance.OnM;
         }
 
         /// <summary>
@@ -484,6 +542,12 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
             @F8.started -= instance.OnF8;
             @F8.performed -= instance.OnF8;
             @F8.canceled -= instance.OnF8;
+            @K.started -= instance.OnK;
+            @K.performed -= instance.OnK;
+            @K.canceled -= instance.OnK;
+            @M.started -= instance.OnM;
+            @M.performed -= instance.OnM;
+            @M.canceled -= instance.OnM;
         }
 
         /// <summary>
@@ -580,5 +644,19 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnF8(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "K" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnK(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "M" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnM(InputAction.CallbackContext context);
     }
 }

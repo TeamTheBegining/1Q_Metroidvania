@@ -5,7 +5,7 @@ using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Scene2Tutorial : MonoBehaviour, Interactable
+public class Scene2Tutorial : MonoBehaviour
 {
     private CinemachineCamera tutorialCam;
     private CinemachineCamera tutorialCamToEnemy;
@@ -46,6 +46,20 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
 
         tutorialCam = transform.GetChild(4).GetComponent<CinemachineCamera>();
         tutorialCamToEnemy = transform.GetChild(5).GetComponent<CinemachineCamera>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player"))
+        {
+            if (isTriggered) return;
+
+            input = FindFirstObjectByType<PlayerInput>();
+            tutorialCam.Priority = 100;
+
+            StartCoroutine(Tutorial());
+            isTriggered = true;
+        }
     }
 
     private void Update()
@@ -247,19 +261,6 @@ public class Scene2Tutorial : MonoBehaviour, Interactable
         enemy.PlayRun();
         enemy.SetMoveActive(true);
         isEnemyMove = true;
-    }
-    #endregion
-
-    #region Interaction
-    public void OnInteraction()
-    {
-        if (isTriggered) return;
-
-        input = FindFirstObjectByType<PlayerInput>();
-        tutorialCam.Priority = 100;
-
-        StartCoroutine(Tutorial());
-        isTriggered = true;
     }
     #endregion
 }

@@ -15,6 +15,8 @@ public class SoundManager : Singleton<SoundManager>
 
     protected override void Awake()
     {
+        base.Awake();
+
         bgmSource = this.gameObject.AddComponent<AudioSource>();
 
         sfxSources = new AudioSource[capacity];
@@ -66,7 +68,7 @@ public class SoundManager : Singleton<SoundManager>
         bgmSource.Play();
         bgmSource.loop = true;
         bgmSource.volume = bgmSoundValue;
-    }
+    }    
 
     public void PlaySound(SFXType type)
     {

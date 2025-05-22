@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -11,6 +12,7 @@ public class PausePanel : MonoBehaviour
     private PlayerInputActions actions;
     private CanvasGroup cg;
     private Button restartButton;
+    private Button returnMenuButton;
     private Button exitButton;
 
 
@@ -21,8 +23,11 @@ public class PausePanel : MonoBehaviour
         cg = GetComponent<CanvasGroup>();
         restartButton = transform.GetChild(1).GetChild(1).GetComponent<Button>();
         restartButton.onClick.AddListener(() => { ClosePanel(); });
-            
-        exitButton = transform.GetChild(1).GetChild(2).GetComponent<Button>();
+
+        returnMenuButton = transform.GetChild(1).GetChild(2).GetComponent<Button>();
+        returnMenuButton.onClick.AddListener(() => { ReturnMenu(); });
+
+        exitButton = transform.GetChild(1).GetChild(3).GetComponent<Button>();
         exitButton.onClick.AddListener(() => GameManager.Instance.ExitGame());
     }
 
@@ -71,5 +76,10 @@ public class PausePanel : MonoBehaviour
         cg.alpha = 0;
         cg.interactable = false;
         cg.blocksRaycasts = false;
+    }
+
+    private void ReturnMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

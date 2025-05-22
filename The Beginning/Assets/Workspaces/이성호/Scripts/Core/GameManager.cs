@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public enum GameState
 {
-    Menu = 0, // 프로그램 시작 후 State 호출 전 상태
+    Menu = 0,
     Play,
     CutScene,
     Pause,
@@ -59,11 +59,11 @@ public class GameManager : Singleton<GameManager>
 #if UNITY_EDITOR
         TestInit();
 #endif
-}
+    }
 
-    private void Update()
+    private void OnDisable()
     {
-        
+        CheatKeyDisable();
     }
 
     public void InitCamera()
@@ -80,9 +80,6 @@ public class GameManager : Singleton<GameManager>
 
         switch (state)
         {
-            case GameState.Menu:
-                OnMenu();
-                break;
             case GameState.Play:
                 OnPlay();
                 break;
@@ -100,11 +97,6 @@ public class GameManager : Singleton<GameManager>
     {
         Application.Quit();
     }
-
-    private void OnMenu()
-    {
-    }
-
     private void OnPlay()
     {
         globalCanvas.worldCamera = Camera.main;
@@ -132,6 +124,15 @@ public class GameManager : Singleton<GameManager>
         cheatActions.Cheat.F1.started += F1_started;
         cheatActions.Cheat.F2.started += F2_started;
         cheatActions.Cheat.F3.started += F3_started;
+    }
+
+    private void CheatKeyDisable()
+    {
+
+        cheatActions.Cheat.F3.started -= F3_started;
+        cheatActions.Cheat.F2.started -= F2_started;
+        cheatActions.Cheat.F1.started -= F1_started;
+        cheatActions.Disable();
     }
 
     private void F3_started(InputAction.CallbackContext context)
