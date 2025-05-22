@@ -83,6 +83,35 @@ public class SoundManager : Singleton<SoundManager>
         sfxClips[30] = Resources.Load<AudioClip>("Audio/MiniBossSound/Damaged/HIT_03");
 
         sfxClips[31] = Resources.Load<AudioClip>("Audio/MiniBossSound/Death/MiniBoss_Death_01");
+
+        // --------------------------------------------- S_Attacker ---------------------------------------
+        sfxClips[32] = Resources.Load<AudioClip>("Audio/S_AttackerSound/Attack/ATTACK_01");
+
+        sfxClips[33] = Resources.Load<AudioClip>("Audio/S_AttackerSound/Damaged/HIT_01");
+        sfxClips[34] = Resources.Load<AudioClip>("Audio/S_AttackerSound/Damaged/HIT_02");
+        sfxClips[35] = Resources.Load<AudioClip>("Audio/S_AttackerSound/Damaged/HIT_03");
+
+        sfxClips[36] = Resources.Load<AudioClip>("Audio/S_AttackerSound/Death/DOWN_01");
+
+        sfxClips[37] = Resources.Load<AudioClip>("Audio/S_AttackerSound/Move/FOOTSTEP_01");
+        sfxClips[38] = Resources.Load<AudioClip>("Audio/S_AttackerSound/Move/FOOTSTEP_02");
+        sfxClips[39] = Resources.Load<AudioClip>("Audio/S_AttackerSound/Move/FOOTSTEP_03");
+        sfxClips[40] = Resources.Load<AudioClip>("Audio/S_AttackerSound/Move/FOOTSTEP_04");
+
+        // -------------------------------------------- TrashMob ------------------------------------------
+        sfxClips[41] = Resources.Load<AudioClip>("Audio/TrashMob/Attack/T_ATTACK_01");
+        sfxClips[42] = Resources.Load<AudioClip>("Audio/TrashMob/Attack/T_ATTACK_02");
+        
+        sfxClips[43] = Resources.Load<AudioClip>("Audio/TrashMob/Damaged/T_HIT_01");
+        sfxClips[44] = Resources.Load<AudioClip>("Audio/TrashMob/Damaged/T_HIT_02");
+
+        sfxClips[45] = Resources.Load<AudioClip>("Audio/TrashMob/Death/T_DOWN_01");
+
+        sfxClips[46] = Resources.Load<AudioClip>("Audio/TrashMob/Move/T_FOOTSTEP_01");
+        sfxClips[47] = Resources.Load<AudioClip>("Audio/TrashMob/Move/T_FOOTSTEP_02");
+        sfxClips[48] = Resources.Load<AudioClip>("Audio/TrashMob/Move/T_FOOTSTEP_03");
+        sfxClips[49] = Resources.Load<AudioClip>("Audio/TrashMob/Move/T_FOOTSTEP_04");
+
         #endregion
     }
 

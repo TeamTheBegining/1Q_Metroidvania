@@ -16,6 +16,8 @@ public class Mob02MeleeController : CommonEnemyController
     private const string ANIM_TRIGGER_MOB02_STUN = "Mob02_Stun";
     private const string ANIM_TRIGGER_MOB02_DEATH = "Mob02_Death";
 
+    S_AttackerSoundEvent s_AttackerSoundEvent;
+
     [Header("잡몹02 공격 판정 설정")]
     [Tooltip("A 공격(내지르기) 시 활성화될 히트박스 게임 오브젝트를 연결하세요.")]
     public GameObject attackAHitboxObject;
@@ -87,6 +89,7 @@ public class Mob02MeleeController : CommonEnemyController
     {
         base.Awake();
 
+        s_AttackerSoundEvent = GetComponent<S_AttackerSoundEvent>();
         MaxHp = mob02MaxHealth;
         CurrentHp = MaxHp;
 
@@ -325,6 +328,8 @@ public class Mob02MeleeController : CommonEnemyController
     protected override void PlayDeathAnim()
     {
         if (animator != null)
+            s_AttackerSoundEvent.S_AttackerDeathSound();
+            Debug.Log("deathsound 출력 완료!");
             animator.SetTrigger(ANIM_TRIGGER_MOB02_DEATH);
     }
 

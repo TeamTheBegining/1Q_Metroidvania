@@ -142,6 +142,7 @@ public class B_GirlController : CommonEnemyController
     // Base 클래스의 Start 오버라이드
     protected override void Start()
     {
+        miniBossSoundEvent = GetComponent<MiniBossSoundEvent>();
         base.Start();
 
         GameObject playerGameObject = GameObject.FindWithTag("Player");
@@ -157,6 +158,7 @@ public class B_GirlController : CommonEnemyController
         SetSuperArmor(true);
     }
 
+    MiniBossSoundEvent miniBossSoundEvent;
     // Base 클래스의 TakeDamage 오버라이드
     public override void TakeDamage(float damage, GameObject attackObject)
     {
@@ -179,6 +181,7 @@ public class B_GirlController : CommonEnemyController
             else
             {
                 IndicateDamage();
+                miniBossSoundEvent.MiniBossDamagedSound();
             }
         }
         else

@@ -14,7 +14,7 @@ public class MiniBossSoundEvent : MonoBehaviour
     {
         SoundManager.Instance.PlaySound(SFXType.attack_C01);
     }
-    private void MiniBossDamagedSound()
+    public void MiniBossDamagedSound()
     {
         int rand = UnityEngine.Random.Range(28, 30);
         SoundManager.Instance.PlaySound((SFXType)rand);

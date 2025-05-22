@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2635450506110073842
 Transform:
   m_ObjectHideFlags: 0
@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 7441451889307716036}
   - component: {fileID: 252537480880580388}
   - component: {fileID: 8438546062210374945}
+  - component: {fileID: 3467791949189968958}
   m_Layer: 8
   m_Name: SilverBlue
   m_TagString: Untagged
@@ -331,3 +332,15 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.43439198, y: 0.670676}
   m_EdgeRadius: 0
+--- !u!114 &3467791949189968958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3114221152242218737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3785db8463619704296e6ad1626f3cdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
