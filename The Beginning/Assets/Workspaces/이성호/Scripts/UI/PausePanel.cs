@@ -24,8 +24,9 @@ public class PausePanel : MonoBehaviour
         restartButton = transform.GetChild(1).GetChild(1).GetComponent<Button>();
         restartButton.onClick.AddListener(() => { ClosePanel(); });
 
-        returnMenuButton = transform.GetChild(1).GetChild(2).GetComponent<Button>();
-        returnMenuButton.onClick.AddListener(() => { ReturnMenu(); });
+        // NOTE: 필요 시 추가 할 것
+        //returnMenuButton = transform.GetChild(1).GetChild(2).GetComponent<Button>();
+        //returnMenuButton.onClick.AddListener(() => { ReturnMenu(); });
 
         exitButton = transform.GetChild(1).GetChild(3).GetComponent<Button>();
         exitButton.onClick.AddListener(() => GameManager.Instance.ExitGame());

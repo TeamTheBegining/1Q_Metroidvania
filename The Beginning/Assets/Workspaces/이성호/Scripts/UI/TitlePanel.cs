@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 타이틀 패널 관리 클래스
@@ -29,7 +30,6 @@ public class TitlePanel : MonoBehaviour
         InitInput();
 
         cutSceneDelay = CutSceneManager.Instance.GetSequenceTime(0);
-        this.gameObject.SetActive(true);
 
 #if UNITY_EDITOR
         if (GameManager.Instance.isDebug)
@@ -38,6 +38,16 @@ public class TitlePanel : MonoBehaviour
             gameObject.SetActive(false);
         }
 #endif
+
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+    }
+
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        if(arg0.buildIndex == 1)
+        {
+            gameObject.SetActive(true);
+        }
     }
 
     public void InitInput()
