@@ -44,7 +44,7 @@ public class PlayerHpMpUI : MonoBehaviour
                 case 2:
                     text.color = new Color(255, 200, 0, 255);
                     break;
-                case 3:                                                     // parrying 3 단계 지속이 얼마나 됌?
+                case 3:
                     text.color = new Color(1.0f, 0f, 0f, 1.0f);
                     break;
             }
