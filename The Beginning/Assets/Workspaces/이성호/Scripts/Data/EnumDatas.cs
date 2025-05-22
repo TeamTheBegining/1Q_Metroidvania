@@ -24,6 +24,7 @@ public enum BGMType
 
 public enum SFXType
 {
+    // ---------------------- Player
     playerSword1 = 0,
     playerSword2,       // 1
     playerSword3,       // 2
@@ -46,9 +47,13 @@ public enum SFXType
     slide_02,           // 19
     armor_Hit_01,       // 20
     armor_Hit_02,       // 21
+    charging_01,        // 22
+    charging_Slash_01,  // 23
+    grab_01,            // 24
+    // ---------------------- Player
 
 
-    SoundTypeCount      
+    SoundTypeCount
 }
 
 public enum CameraType

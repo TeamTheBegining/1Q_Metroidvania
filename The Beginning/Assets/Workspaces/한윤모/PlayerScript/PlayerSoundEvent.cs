@@ -4,6 +4,7 @@ public class PlayerSoundEvent : MonoBehaviour
 {
     private void PlayerSwordSound()
     {
+        isCharging = false;
         int rand = UnityEngine.Random.Range(0, 3);
         SoundManager.Instance.PlaySound((SFXType)rand);
     }
@@ -60,6 +61,23 @@ public class PlayerSoundEvent : MonoBehaviour
         SoundManager.Instance.PlaySound(SFXType.armor_Hit_02);
     }
 
-
+    bool isCharging = false;
+    private void PlayerCharging()
+    {
+        if (!isCharging)
+        {
+        SoundManager.Instance.PlaySound(SFXType.charging_01);
+            isCharging = true;
+        }
+    }
+    private void PlayerChargingSlash()
+    {
+        isCharging = false;
+        SoundManager.Instance.PlaySound(SFXType.charging_Slash_01);
+    }
+    private void PlayerGrab()
+    {
+        SoundManager.Instance.PlaySound(SFXType.grab_01);
+    }
 
 }

@@ -695,7 +695,7 @@ public class Player : MonoBehaviour, IDamageable
         if (rb.linearVelocity.x != 0) rb.linearVelocity = Vector2.zero;
 
         // 공격 떼면 처리
-        if (!input.IsAttack&&!isAttackDealy)
+        if (!input.IsAttack)
         {
             isAttack = true;
             if (chargingAttackAble)
@@ -865,7 +865,7 @@ public class Player : MonoBehaviour, IDamageable
     void AttackAble()
     {
         if (isParrySuccess) return;
-        if (getCharging&& input.IsAttack&&isGround)
+        if (getCharging&& input.IsAttack&&isGround&& !isAttackDealy)
         {
             currentState = PlayerState.Charging;
         }
@@ -1206,7 +1206,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         //A_AttackerController enemyscr = enemy.GetComponent<A_AttackerController>();
         if (IsDead) return;
-        if (!isParryAble)
+        if (!isParryAble || enemy.layer == LayerMask.NameToLayer("Boss"))
         {
             CurrentHp -= damage;
             if (IsDead) return;
