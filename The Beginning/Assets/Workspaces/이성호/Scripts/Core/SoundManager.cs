@@ -112,6 +112,12 @@ public class SoundManager : Singleton<SoundManager>
         sfxClips[48] = Resources.Load<AudioClip>("Audio/TrashMob/Move/T_FOOTSTEP_03");
         sfxClips[49] = Resources.Load<AudioClip>("Audio/TrashMob/Move/T_FOOTSTEP_04");
 
+
+        // -------------------------------------------Quality UP ------------------------------------
+        sfxClips[50] = Resources.Load<AudioClip>("Audio/PlayerSound/Climbing/Climbing_01");
+
+        sfxClips[51] = Resources.Load<AudioClip>("Audio/PlayerSound/WallSliding/WALL_SLIDE_01");
+
         #endregion
     }
 

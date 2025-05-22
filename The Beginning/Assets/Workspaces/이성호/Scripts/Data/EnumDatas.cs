@@ -85,6 +85,10 @@ public enum SFXType
     t_FOOTSTEP_03,      // 48
     t_FOOTSTEP_04,      // 49
 
+    // --------------------- QualityUP
+    climbing_01,
+    wall_Slide_01,
+
     SoundTypeCount
 }
 

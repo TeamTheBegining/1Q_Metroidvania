@@ -80,4 +80,13 @@ public class PlayerSoundEvent : MonoBehaviour
         SoundManager.Instance.PlaySound(SFXType.grab_01);
     }
 
+    // ------------------------------ Quality UP ---------------------
+    private void PlayerClimbing()
+    {
+        SoundManager.Instance.PlaySound(SFXType.climbing_01);
+    }
+    private void PlayerWallSliding()
+    {
+        SoundManager.Instance.PlaySound(SFXType.wall_Slide_01);
+    }
 }

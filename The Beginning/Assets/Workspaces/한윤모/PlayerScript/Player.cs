@@ -778,6 +778,7 @@ public class Player : MonoBehaviour, IDamageable
         //슬라이딩키와 동일
         if (input.IsSliding)
         {
+            //SoundManager.Instance.PlaySound(SFXType.wall_Slide_01);
             rb.linearVelocity = Vector2.zero;
             rb.gravityScale = 0f;
         }
