@@ -37,5 +37,13 @@ public class MapStateManager : Singleton<MapStateManager>
         isScene2TutorialActived = true;
         Debug.Log("Scene2 튜토리얼 트리거 작동");
     }
+
+    public void AllActive()
+    {
+        isScene2FirstEnter = true;
+        isScene3DoorOpened = true;
+        isScene5DoorOpend = true;
+        isScene2TutorialActived = true;
+    }
     #endregion
 }

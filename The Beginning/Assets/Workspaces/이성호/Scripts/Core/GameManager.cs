@@ -28,6 +28,8 @@ public class GameManager : Singleton<GameManager>
 
     public AudioClip[] audioClips;
 
+    public PlayerHpMpUI playerHpUI;
+
     [Tooltip("치트를 위한 스폰 데이터 모음")]
     public SpawnPointDataSO[] spawnDatas;
 
@@ -50,6 +52,9 @@ public class GameManager : Singleton<GameManager>
         middleMessagePanel = transform.GetChild(0).GetChild(2).GetComponent<MessagePanel>();
         bottomMessagePanel = transform.GetChild(0).GetChild(3).GetComponent<MessagePanel>();
         globalCanvas = transform.GetChild(0).GetComponent<Canvas>();
+
+        playerHpUI = GetComponentInChildren<PlayerHpMpUI>();
+        playerHpUI.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -106,6 +111,7 @@ public class GameManager : Singleton<GameManager>
     private void OnPlay()
     {
         globalCanvas.worldCamera = Camera.main;
+        playerHpUI.gameObject.SetActive(true);         
     }
 
     private void OnPause()
@@ -154,24 +160,28 @@ public class GameManager : Singleton<GameManager>
     {
         // 6
         //GameSceneManager.Instance.RequestSceneChange("Scene6", spawnDatas[3]);
+        MapStateManager.Instance.AllActive();
     }
 
     private void F11_started(InputAction.CallbackContext context)
     {
         // 5
         GameSceneManager.Instance.RequestSceneChange("Scene5", spawnDatas[2]);
+        MapStateManager.Instance.AllActive();
     }
 
     private void F10_started(InputAction.CallbackContext context)
     {
         // 4
         GameSceneManager.Instance.RequestSceneChange("Scene4", spawnDatas[1]);
+        MapStateManager.Instance.AllActive();
     }
 
     private void F9_started(InputAction.CallbackContext context)
     {
         // 3
         GameSceneManager.Instance.RequestSceneChange("Scene3", spawnDatas[0]);
+        MapStateManager.Instance.AllActive();
     }
 
     private void F3_started(InputAction.CallbackContext context)

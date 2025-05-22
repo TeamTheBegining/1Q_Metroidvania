@@ -9,6 +9,7 @@ public class Scene4ShopNpc : MonoBehaviour, Interactable
 
     private float timer;
     private float maxTimer = 10f;
+    private int textIndex = 0;
 
     private void Awake()
     {
@@ -28,11 +29,12 @@ public class Scene4ShopNpc : MonoBehaviour, Interactable
             timer = 0f;        
             textObj.ResetText();
 
-            int rand = UnityEngine.Random.Range(0, textDatas.Length);
-            textObj.data = textDatas[rand];
-            textObj.maxIndex = textDatas[rand].text.Length;
+            textObj.data = textDatas[textIndex];
+            textObj.maxIndex = textDatas[textIndex].text.Length;
             textObj.currIndex = 0;
             textObj.PlayScroll();
+
+            textIndex = textIndex >= textDatas.Length ? 0 : textIndex++;
         }
     }
 

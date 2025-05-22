@@ -38,7 +38,21 @@ public class GameSceneManager : Singleton<GameSceneManager>
             }
         }
 
-        FindFirstObjectByType<LocalSceneManager>()?.Init();         // 해당 씬 로컬 매니저 초기화 함수 호출
+        LocalSceneManager manager = FindFirstObjectByType<LocalSceneManager>();         // 해당 씬 로컬 매니저 초기화 함수 호출
+        if(manager != null)
+        {
+            manager.Init();
+
+            if(manager as Scene5Manager)
+            {
+                Debug.Log("Scene5 Load -------");
+                CameraManager.Instance.SetCameraBlendingSpeed(0f);
+            }
+            else
+            {
+                CameraManager.Instance.SetCameraBlendingSpeed();
+            }
+        }
     }
 
     public void LoadSceneAddive(int buildIndex)

@@ -4,6 +4,7 @@ using UnityEngine;
 public class Scene1RootInteraction : MonoBehaviour, Interactable
 {
     private PlayerInputActions actions;
+    private PlayerInput targetInput;
 
     public Scene1RootController rootController;
     public GameObject rightBlockObject;
@@ -33,6 +34,12 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
         GameManager.Instance.MiddleMessagePanel.FadeInShow(enableDelay);
         GameManager.Instance.MiddleMessagePanel.SetGlowText(textData.text);
 
+        targetInput = FindFirstObjectByType<PlayerInput>();
+        if(targetInput != null)
+        {
+            targetInput.AllDisable();
+        }
+
         StartCoroutine(ClickEnableProcess());
     }
 
@@ -46,6 +53,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     {
         actions.UI.PanelInteraction.performed -= PanelInteraction_performed;
         actions.UI.Disable();
+
 
         GameManager.Instance.MiddleMessagePanel.AddGlowText(" ;");
         LightManager.Instance.SpreadPlayerLight(targetDuration, targetRadius, 1f);
@@ -62,6 +70,8 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+
+        targetInput.AllEnable();
 
         actions.UI.Enable();
         actions.UI.PanelInteraction.performed += PanelInteraction_performed;

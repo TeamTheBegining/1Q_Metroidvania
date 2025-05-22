@@ -4,6 +4,7 @@ using UnityEngine;
 public class KeyGuidePanel : MonoBehaviour
 {
     public TextDataSO data;
+    public PlayerHpMpUI playerUI;
 
     private TextMeshProUGUI text;
     private CheatInputActions inputAction;
@@ -14,6 +15,8 @@ public class KeyGuidePanel : MonoBehaviour
         inputAction = new CheatInputActions();
 
         text = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        playerUI = FindFirstObjectByType<PlayerHpMpUI>();
+
         cg = GetComponent<CanvasGroup>();
         cg.interactable = false;
         cg.blocksRaycasts = false;
@@ -50,10 +53,12 @@ public class KeyGuidePanel : MonoBehaviour
     private void Open()
     {
         cg.alpha = 1f;
+        playerUI.gameObject.SetActive(false);
     }
 
     private void Close()
     {
         cg.alpha = 0f;
+        playerUI.gameObject.SetActive(true);
     }
 }
