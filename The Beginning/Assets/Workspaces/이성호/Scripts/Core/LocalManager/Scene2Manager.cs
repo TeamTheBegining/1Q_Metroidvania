@@ -17,8 +17,6 @@ public class Scene2Manager : LocalSceneManager
 
     public override void Init()
     {
-        //SoundManager.Instance.Play
-        //(BGMType.bgm_Ambience_02);
         input = FindFirstObjectByType<PlayerInput>();
 
         if (!MapStateManager.Instance.IsScene2FirstEnter)
@@ -35,8 +33,10 @@ public class Scene2Manager : LocalSceneManager
             CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene2PlayerCamera, 20);
             CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene2CutSceneCamera, 0);
 
+            SoundManager.Instance.PlayBGM(BGMType.bgm_Credit_01);
         }
-
+        PlayerHpMpUI hp = FindFirstObjectByType<PlayerHpMpUI>();
+        hp.GetPlayer();
     }
 
     public void PlayText()

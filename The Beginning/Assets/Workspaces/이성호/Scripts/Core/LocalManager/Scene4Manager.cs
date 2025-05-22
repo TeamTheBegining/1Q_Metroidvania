@@ -7,5 +7,8 @@ public class Scene4Manager : LocalSceneManager
         GameObject playerObject = FindFirstObjectByType<Player>().gameObject;
         CameraManager.Instance.SetTarget(CameraType.Scene4Camera, playerObject.transform);
         CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene4Camera, 20);
+
+        PlayerHpMpUI hp = FindFirstObjectByType<PlayerHpMpUI>();
+        hp.GetPlayer();
     }
 }

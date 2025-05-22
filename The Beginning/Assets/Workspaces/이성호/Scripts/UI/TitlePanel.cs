@@ -63,9 +63,9 @@ public class TitlePanel : MonoBehaviour
         titleText.text += ";";
         StartCoroutine(ProcessGameIntro());
 
-        //SoundManager.Instance.PlaySound(SFXType.intro_01);
-        //SoundManager.Instance.PlaySound(SFXType.intro_02);
-        //Debug.Log("sound 재생!");
+        SoundManager.Instance.PlaySound(SFXType.intro_01);
+        SoundManager.Instance.PlaySound(SFXType.intro_02);
+        Debug.Log("sound 재생!");
     }
 
     private IEnumerator ProcessGameIntro()

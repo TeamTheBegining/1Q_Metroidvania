@@ -6,7 +6,7 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-        //SoundManager.Instance.Play(BGMType.menu);
+        SoundManager.Instance.PlayBGM(BGMType.menu);
     }
 
     private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)

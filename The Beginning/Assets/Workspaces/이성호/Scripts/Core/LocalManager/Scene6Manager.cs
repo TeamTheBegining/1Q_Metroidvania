@@ -14,5 +14,8 @@ public class Scene6Manager : LocalSceneManager
         LastBoss boss = FindFirstObjectByType<LastBoss>();
         boss.OnDead += () => { SceneManager.LoadScene("Ending"); };
         boss.FindPlayer();
+
+        PlayerHpMpUI hp = FindFirstObjectByType<PlayerHpMpUI>();
+        hp.GetPlayer();
     }
 }

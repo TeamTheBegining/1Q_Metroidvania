@@ -16,8 +16,8 @@ public class Scene2EnterTrigger : MonoBehaviour
 
             GameManager.Instance.State = GameState.CutScene;
             CutSceneManager.Instance.ShowCutscene(1);
-            //SoundManager.Instance.PlayBGM(BGMType.bgm_Credit_01);
-            //Debug.Log("credit 재생!");
+            SoundManager.Instance.PlayBGM(BGMType.bgm_Credit_01);
+            Debug.Log("credit 재생!");
             GameSceneManager.Instance.RequestSceneChange("Scene2", targetData);
         }
     }

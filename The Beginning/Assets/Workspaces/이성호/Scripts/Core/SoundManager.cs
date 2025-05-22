@@ -35,10 +35,10 @@ public class SoundManager : Singleton<SoundManager>
         bgmClips[0] = Resources.Load<AudioClip>("Audio/BGM/BGM01(Test)");   
         bgmClips[1] = Resources.Load<AudioClip>("Audio/BGM/01.BGM_SCREEN_01"); // menu
         bgmClips[2] = Resources.Load<AudioClip>("Audio/BGM/02.BGM_AMBIENCE_01"); // scene1 배경음, 반복재생 , 기어올라가는 크레딧 전까지
-        bgmClips[5] = Resources.Load<AudioClip>("Audio/BGM/03_BGM_CREDIT_01"); // 크레딧
-        bgmClips[6] = Resources.Load<AudioClip>("Audio/BGM/04_BGM_AMBIENCE_01"); // 미니보스 전까지는 반복재생
-        bgmClips[7] = Resources.Load<AudioClip>("Audio/BGM/05_BGM_GUARDIAN_01"); // 미니보스 전용 브금
-        bgmClips[8] = Resources.Load<AudioClip>("Audio/BGM/07_BGM_FINALBOSS_01"); // 최종보스 브금
+        bgmClips[3] = Resources.Load<AudioClip>("Audio/BGM/03_BGM_CREDIT_01"); // 크레딧
+        bgmClips[4] = Resources.Load<AudioClip>("Audio/BGM/04_BGM_AMBIENCE_01"); // 미니보스 전까지는 반복재생
+        bgmClips[5] = Resources.Load<AudioClip>("Audio/BGM/05_BGM_GUARDIAN_01"); // 미니보스 전용 브금
+        bgmClips[6] = Resources.Load<AudioClip>("Audio/BGM/07_BGM_FINALBOSS_01"); // 최종보스 브금
 
         // SFXType 내용 정의 순서대로 클립추가하기
 
