@@ -600,7 +600,7 @@ public class Player : MonoBehaviour, IDamageable
 
         foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
         {
-            if (col.gameObject.layer == LayerMask.NameToLayer("Invincibility")) continue;
+            if (col.gameObject.layer == LayerMask.NameToLayer("PAttack"))
             col.enabled = false;
         }
 
@@ -1242,8 +1242,8 @@ public class Player : MonoBehaviour, IDamageable
             //하위 콜라이더 전부 초기화
             foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
             {
-                if (col.gameObject.layer == LayerMask.NameToLayer("Invincibility")) continue;
-                col.enabled = false;
+                if (col.gameObject.layer == LayerMask.NameToLayer("PAttack"))
+                    col.enabled = false;
             }
             playerColl.enabled = true;
         }
