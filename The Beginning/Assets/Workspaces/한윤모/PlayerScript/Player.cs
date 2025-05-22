@@ -597,6 +597,13 @@ public class Player : MonoBehaviour, IDamageable
             gameObject.layer = LayerMask.NameToLayer("Player");
             rb.linearVelocity = Vector2.zero;
         }
+
+        foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
+        {
+            if (col.gameObject.layer == LayerMask.NameToLayer("Invincibility")) continue;
+            col.enabled = false;
+        }
+
         if (input.InputVec.x != 0)
             currentState = PlayerState.Move;
         JumpAble();
