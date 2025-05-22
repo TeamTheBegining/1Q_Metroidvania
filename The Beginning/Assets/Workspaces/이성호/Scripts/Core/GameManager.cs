@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -138,6 +139,8 @@ public class GameManager : Singleton<GameManager>
         cheatActions.Cheat.F2.started += F2_started;
         cheatActions.Cheat.F3.started += F3_started;
         cheatActions.Cheat.F4.started += F4_started;
+        cheatActions.Cheat.F5.started += F5_started;
+        cheatActions.Cheat.F6.started += F6_started;
 
         cheatActions.Cheat.F9.started += F9_started;
         cheatActions.Cheat.F10.started += F10_started;
@@ -145,10 +148,6 @@ public class GameManager : Singleton<GameManager>
         cheatActions.Cheat.F12.started += F12_started;
     }
 
-    private void F4_started(InputAction.CallbackContext obj)
-    {
-        MapStateManager.Instance.AllActive();
-    }
 
     private void CheatKeyDisable()
     {
@@ -158,6 +157,9 @@ public class GameManager : Singleton<GameManager>
         cheatActions.Cheat.F11.started -= F11_started;
         cheatActions.Cheat.F12.started -= F12_started;
 
+        cheatActions.Cheat.F6.started -= F6_started;
+        cheatActions.Cheat.F5.started -= F5_started;
+        cheatActions.Cheat.F4.started -= F4_started;
         cheatActions.Cheat.F3.started -= F3_started;
         cheatActions.Cheat.F2.started -= F2_started;
         cheatActions.Cheat.F1.started -= F1_started;
@@ -190,7 +192,31 @@ public class GameManager : Singleton<GameManager>
         GameSceneManager.Instance.RequestSceneChange("Scene3", spawnDatas[0]);
     }
 
+    private void F6_started(InputAction.CallbackContext context)
+    {
+        SceneManager.LoadScene("Ending");
+    }
 
+    private void F5_started(InputAction.CallbackContext context)
+    {
+        MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
+
+        foreach (MonoBehaviour mb in allBehaviours)
+        {
+            if (mb is IDamageable dmg)
+            {
+                if(mb is not Player)
+                {
+                    dmg.TakeDamage(100000f, this.gameObject);
+                }
+            }
+        }
+    }
+
+    private void F4_started(InputAction.CallbackContext obj)
+    {
+        MapStateManager.Instance.AllActive();
+    }
 
     private void F3_started(InputAction.CallbackContext context)
     {

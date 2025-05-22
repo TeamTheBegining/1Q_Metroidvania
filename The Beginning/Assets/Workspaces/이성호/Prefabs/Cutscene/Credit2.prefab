@@ -139,15 +139,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5410048851601998582, guid: 20cdbedd0b0207945917b272629d381e, type: 3}
       propertyPath: m_text
-      value: 'Name : abbbb'
+      value: "\uAE30\uD68D : \uC870\uBBFC\uAE30 "
       objectReference: {fileID: 0}
     - target: {fileID: 8242841939216622699, guid: 20cdbedd0b0207945917b272629d381e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -601
+      value: -639
       objectReference: {fileID: 0}
     - target: {fileID: 8242841939216622699, guid: 20cdbedd0b0207945917b272629d381e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -302
+      value: -280
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

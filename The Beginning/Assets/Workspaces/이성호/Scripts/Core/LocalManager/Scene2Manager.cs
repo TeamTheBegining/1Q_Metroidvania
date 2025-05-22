@@ -17,6 +17,8 @@ public class Scene2Manager : LocalSceneManager
 
     public override void Init()
     {
+        input = FindFirstObjectByType<PlayerInput>();
+
         if (!MapStateManager.Instance.IsScene2FirstEnter)
         {
             MapStateManager.Instance.SetIsScene2FirstEnterTrue();
@@ -31,7 +33,6 @@ public class Scene2Manager : LocalSceneManager
             CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene2PlayerCamera, 20);
             CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene2CutSceneCamera, 0);
 
-            input = FindFirstObjectByType<PlayerInput>();
         }
 
     }

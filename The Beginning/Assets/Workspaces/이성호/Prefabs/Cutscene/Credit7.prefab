@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 866738444029358632}
   - component: {fileID: 1750969803772797383}
   m_Layer: 5
-  m_Name: Credit3
+  m_Name: Credit7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,7 +139,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5410048851601998582, guid: 20cdbedd0b0207945917b272629d381e, type: 3}
       propertyPath: m_text
-      value: "\uC544\uD2B8 : \uBC15\uC900\uC2DD "
+      value: "\uD504\uB85C\uADF8\uB798\uBC0D : \uC774\uC131\uD638 "
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242841939216622699, guid: 20cdbedd0b0207945917b272629d381e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 113
+      objectReference: {fileID: 0}
+    - target: {fileID: 8242841939216622699, guid: 20cdbedd0b0207945917b272629d381e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 287
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
