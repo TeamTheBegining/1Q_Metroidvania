@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 6077976774416267120}
   - component: {fileID: 825842466514427293}
   m_Layer: 0
-  m_Name: count_vampire_floor_tile_2
+  m_Name: count_vampire_floor_tile_2 Grab Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
