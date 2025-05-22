@@ -54,11 +54,14 @@ public class GameManager : Singleton<GameManager>
         globalCanvas.renderMode = RenderMode.ScreenSpaceCamera;
         globalCanvas.worldCamera = Camera.main;
 
-        CheatInit();
-
 #if UNITY_EDITOR
         TestInit();
 #endif
+    }
+
+    private void OnEnable()
+    {
+        CheatInit();        
     }
 
     private void OnDisable()
