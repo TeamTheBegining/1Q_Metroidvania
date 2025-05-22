@@ -1,4 +1,4 @@
-using NUnit.Framework;
+ï»¿using NUnit.Framework;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,12 +8,12 @@ using static System.Net.Mime.MediaTypeNames;
 
 public class PlayerHpMpUI : MonoBehaviour
 {
-    // Inspector¿¡¼­ ¿¬°áÇÒ Slider
+    // Inspectorì—ì„œ ì—°ê²°í•  Slider
     public Slider hpSlider;
     public Slider mpSlider;
     public TextMeshProUGUI text;
 
-    // PlayerStats Å¸ÀÔ ½ºÅ©¸³Æ®¿¡¼­ Ã¼·Â °ª °¡Á®¿È
+    // PlayerStats íƒ€ì… ìŠ¤í¬ë¦½íŠ¸ì—ì„œ ì²´ë ¥ ê°’ ê°€ì ¸ì˜´
     public Player player;
     private void Start()
     {
@@ -22,11 +22,11 @@ public class PlayerHpMpUI : MonoBehaviour
         hpSlider.value = 1;
         mpSlider.value = 0;
 
-        if (player == null) Debug.LogWarning($"{gameObject.name} ¿¡¼­ ÇÃ·¹ÀÌ¾î¸¦ Ã£À» ¼ö ¾øÀ½ ");
+        if (player == null) Debug.LogWarning($"{gameObject.name} ì—ì„œ í”Œë ˆì´ì–´ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŒ ");
     }
     void FixedUpdate()
     {
-        // ÇöÀç Ã¼·Â / ÃÖ´ë Ã¼·Â ºñÀ²À» ½½¶óÀÌ´õ¿¡ ¹İ¿µ
+        // í˜„ì¬ ì²´ë ¥ / ìµœëŒ€ ì²´ë ¥ ë¹„ìœ¨ì„ ìŠ¬ë¼ì´ë”ì— ë°˜ì˜
         if (player != null)
         {
             hpSlider.value = (float)player.CurrentHp / player.MaxHp;
@@ -49,6 +49,9 @@ public class PlayerHpMpUI : MonoBehaviour
                     break;
             }
         }
-
+        else
+        {
+            player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        }
     }
 }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f24bd89d0f889fe45a6e27e548704d02, type: 3}
-  m_Name: CutsceneLine_Credit2
+  m_Name: CutsceneLine_Credit8
   m_EditorClassIdentifier: 
-  CutsceneObject: {fileID: 3780148697709083348, guid: 8483c04c99b3af749993c36d388bc705, type: 3}
+  CutsceneObject: {fileID: 4833154134387540325, guid: 56223eb92c4b26a4e85ddb8e50e0c6ea, type: 3}
   showTime: 3

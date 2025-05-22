@@ -11,6 +11,8 @@ public class SoundManager : Singleton<SoundManager>
     private float bgmSoundValue = 1.0f;
     private float sfxSoundValue = 0.8f;
 
+    private PopUpPanel popUpPanel;
+
     [SerializeField] private AudioClip[] bgmClips = new AudioClip[(int)BGMType.BGMTypeCount];
     [SerializeField] private AudioClip[] sfxClips = new AudioClip[(int)SFXType.SoundTypeCount];
 
@@ -25,6 +27,8 @@ public class SoundManager : Singleton<SoundManager>
         {
             sfxSources[i] = this.gameObject.AddComponent<AudioSource>();
         }
+
+        popUpPanel = FindAnyObjectByType<PopUpPanel>();
 
         #region Lode Resource
         // BGMType 내용 정의 순서대로 클립추가하기
@@ -127,6 +131,16 @@ public class SoundManager : Singleton<SoundManager>
         bgmSource.Play();
         bgmSource.loop = true;
         bgmSource.volume = bgmSoundValue;
+
+        if(popUpPanel == null)
+        {
+            popUpPanel = FindAnyObjectByType<PopUpPanel>();
+        }
+
+        if(popUpPanel != null)
+        {
+            popUpPanel.ShowPopUp(new Vector2(1, 0), type.ToString(), "Now Playing ...", 3f);
+        }
     }    
 
     /// <summary>
