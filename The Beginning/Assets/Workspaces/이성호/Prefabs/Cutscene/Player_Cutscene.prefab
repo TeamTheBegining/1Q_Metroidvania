@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 6031918938231906774}
   - component: {fileID: 2502129763235580557}
   - component: {fileID: 4156588266514309363}
-  - component: {fileID: 1028710432822116708}
+  - component: {fileID: 4250689168960078852}
   m_Layer: 0
   m_Name: Player_Cutscene
   m_TagString: Untagged
@@ -305,7 +305,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1028710432822116708
+--- !u!114 &4250689168960078852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -319,6 +319,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   datas:
   - {fileID: 11400000, guid: 5e786b3292a374945a78e60d360b2de9, type: 2}
-  - {fileID: 11400000, guid: 76401ea514440814fb7ae64c989d89c0, type: 2}
-  - {fileID: 11400000, guid: b963bba766ae56c4e9df848543b8e4ee, type: 2}
   textScroll: {fileID: 0}

@@ -51,7 +51,8 @@ public class PlayerHpMpUI : MonoBehaviour
         }
         else
         {
-            player = GameObject.FindWithTag("Player").GetComponent<Player>();
+            TryGetComponent(out Player comp);
+            player = comp;
         }
     }
 }

@@ -22,7 +22,7 @@ public class Scene2Manager : LocalSceneManager
         if (!MapStateManager.Instance.IsScene2FirstEnter)
         {
             MapStateManager.Instance.SetIsScene2FirstEnterTrue();
-            cutSceneTime = CutSceneManager.Instance.GetSequenceTime(1);
+            //cutSceneTime = CutSceneManager.Instance.GetSequenceTime(1);
             input.AllDisable();
             StartCoroutine(CameraSetProcess());
         }
@@ -89,7 +89,7 @@ public class Scene2Manager : LocalSceneManager
         yield return new WaitForSeconds(3f);
         PlayText();
 
-        yield return new WaitForSeconds(cutSceneTime);
+        yield return new WaitForSeconds(8f);
         DisableText();
 
         // 컷씬 종료 후 다시 시작 카메라로 변경

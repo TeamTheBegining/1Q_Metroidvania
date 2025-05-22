@@ -16,17 +16,11 @@ public class EndingManager : MonoBehaviour
 
     private IEnumerator EndingSceneProcess()
     {
-        player.ShowText(0);
-        yield return new WaitForSeconds(delay);
         ghost.ShowText(0);
-        yield return new WaitForSeconds(delay);
-        player.ShowText(1);
         yield return new WaitForSeconds(delay);
         ghost.ShowText(1);
         yield return new WaitForSeconds(delay);
-        player.ShowText(2);
-        yield return new WaitForSeconds(delay);
-        ghost.ShowText(2);
+        player.ShowText(0);
         yield return new WaitForSeconds(delay);
 
         SceneManager.LoadScene(0);

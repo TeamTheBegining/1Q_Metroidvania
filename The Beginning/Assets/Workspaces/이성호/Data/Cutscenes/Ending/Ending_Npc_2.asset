@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293dec649e04ae8419b1bd01b629f6d1, type: 3}
   m_Name: Ending_Npc_2
   m_EditorClassIdentifier: 
-  text: asdf
+  text: Existence precedes essence
