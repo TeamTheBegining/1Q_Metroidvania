@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6355267846556763877
 Transform:
   m_ObjectHideFlags: 0
@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 278362775629190335}
   - component: {fileID: 1559088278144273290}
   - component: {fileID: 5755833673258281902}
+  - component: {fileID: 341506762461842712}
   m_Layer: 8
   m_Name: MiddleBoss
   m_TagString: Untagged
@@ -371,6 +372,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyID: Boss
+--- !u!114 &341506762461842712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6850172266251670349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e48a5e6afd6d1541b90c8f69e91c145, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7284608179196531827
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,12 +3,22 @@ using UnityEngine;
 
 public class SilverBlue : MonoBehaviour, IDamageable
 {
-    GameObject      player;
-    Animator        animator;
-    Rigidbody2D     rb;
-    BoxCollider2D   boxCollider2D;
-    SpriteRenderer  spriteRenderer;
-    BoxCollider2D   hitBoxCollider;
+    public enum SilverBlueState
+    {
+        Idle,
+        Move,
+        Attack,
+        Freeze,     // 패링 받았을 때
+        Death
+    }
+
+    GameObject           player;
+    Animator             animator;
+    Rigidbody2D          rb;
+    BoxCollider2D        boxCollider2D;
+    SpriteRenderer       spriteRenderer;
+    BoxCollider2D        hitBoxCollider;
+    SilverBlueSoundEvent silverBlueSoundEvent;
 
     float distance;
     float randomdir;
@@ -37,16 +47,6 @@ public class SilverBlue : MonoBehaviour, IDamageable
     bool isPlayerFind = false;
     bool isDamaged    = false;
 
-
-    public enum SilverBlueState
-    {
-        Idle,
-        Move,
-        Attack,
-        Freeze,     // 패링 받았을 때
-        Death
-    }
-
     public SilverBlueState currentState = SilverBlueState.Idle;
     public float CurrentHp { get => currentHp; set => currentHp = value; }
     public float MaxHp { get => maxHp; set => maxHp = value; }
@@ -60,9 +60,12 @@ public class SilverBlue : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage, GameObject attackObject)
     {
+
         if (IsDead) return;
+
         isDamaged = true;
         currentHp -= damage;
+        silverBlueSoundEvent.SilverBlueDamagedSound();
         HitBoxDisable();
 
         if (CurrentHp <= 0)
@@ -94,14 +97,15 @@ public class SilverBlue : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        animator        = GetComponent<Animator>();
-        rb              = GetComponent<Rigidbody2D>();
-        boxCollider2D   = GetComponent<BoxCollider2D>();
-        spriteRenderer  = GetComponent<SpriteRenderer>();
-        hitBoxCollider  = transform.Find("HitBox").GetComponent<BoxCollider2D>();
-        moveChangetimer = 0;
-        randomdir       = 1.0f;
-        leftdir         = false;
+        animator             = GetComponent<Animator>();
+        rb                   = GetComponent<Rigidbody2D>();
+        boxCollider2D        = GetComponent<BoxCollider2D>();
+        spriteRenderer       = GetComponent<SpriteRenderer>();
+        silverBlueSoundEvent = GetComponent<SilverBlueSoundEvent>();
+        hitBoxCollider       = transform.Find("HitBox").GetComponent<BoxCollider2D>();
+        moveChangetimer      = 0;
+        randomdir            = 1.0f;
+        leftdir              = false;
     }
 
     private void OnEnable()

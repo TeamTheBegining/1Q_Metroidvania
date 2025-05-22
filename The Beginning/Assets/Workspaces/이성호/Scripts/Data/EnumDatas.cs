@@ -54,6 +54,7 @@ public enum SFXType
     // ---------------------- Player
 
     // ---------------------- Enemy
+    // --------------------- Mini Boss
     attack_A01,         // 25
     attack_B01,         // 26
     attack_C01,         // 27
@@ -61,6 +62,28 @@ public enum SFXType
     hit_02,             // 29
     hit_03,             // 30
     MiniBoss_Death_01,  // 31
+
+    // --------------------- S_Attacker
+    attack_01,          // 32
+    HIT_01,             // 33
+    HIT_02,             // 34
+    HIT_03,             // 35
+    down_01,            // 36
+    FOOTSTEP_01,        // 37
+    FOOTSTEP_02,        // 38
+    FOOTSTEP_03,        // 39
+    FOOTSTEP_04,        // 40
+
+    // --------------------- trashMob
+    t_ATTACK_01,        // 41
+    t_ATTACK_02,        // 42
+    t_HIT_01,           // 43
+    t_HIT_02,           // 44
+    t_DOWN_01,          // 45
+    t_FOOTSTEP_01,      // 46
+    t_FOOTSTEP_02,      // 47
+    t_FOOTSTEP_03,      // 48
+    t_FOOTSTEP_04,      // 49
 
     SoundTypeCount
 }
