@@ -10,6 +10,7 @@ public class Door : MonoBehaviour
     [Tooltip("직접 트리거가 될 오브젝트 넣어두기")]
     public List<GameObject> targetObjects;
     private Animator animator;
+    private Collider2D coll2d;
 
     [SerializeField] private int remainCount;
     private int RemainCount
@@ -23,6 +24,7 @@ public class Door : MonoBehaviour
                 Debug.Log($"-- {gameObject.name} 문 열림 --");
                 animator.Play("Open");
                 MapStateManager.Instance.SetIsScene3DoorOpened();
+                coll2d.enabled = false;
                 isAnimatoinPlay = true;
             }
         }
@@ -33,6 +35,7 @@ public class Door : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        coll2d = GetComponent<Collider2D>();
         remainCount = targetObjects.Count;
     }
 

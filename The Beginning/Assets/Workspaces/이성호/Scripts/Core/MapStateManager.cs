@@ -17,6 +17,7 @@ public class MapStateManager : Singleton<MapStateManager>
     public void SetIsScene3DoorOpened()
     {
         isScene3DoorOpened = true;
+        Debug.Log("Scene3 door 열림");
     }
     #endregion
 }

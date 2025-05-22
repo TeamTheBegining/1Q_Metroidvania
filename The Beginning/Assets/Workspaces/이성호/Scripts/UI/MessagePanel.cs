@@ -11,6 +11,7 @@ public class MessagePanel : MonoBehaviour
     private CanvasGroup cg;
     private TextMeshProUGUI messageText;
     private TextMeshProUGUI glowMessageText;
+    private TextMeshProUGUI koreanText;
     private Material glowMaterial; // -1 에서 1 사이값 조절하기 mat.SetFloat("_Dissolve_Thredshold", value);
 
     private void Awake()
@@ -18,6 +19,7 @@ public class MessagePanel : MonoBehaviour
         cg = GetComponent<CanvasGroup>();
         messageText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         glowMessageText = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        if(transform.childCount > 3)koreanText = transform.GetChild(3).GetComponent<TextMeshProUGUI>();
         glowMaterial = glowMessageText.materialForRendering;
 
         glowMaterial.SetFloat("_Dissolve_Thredshold", -1f);
@@ -123,6 +125,7 @@ public class MessagePanel : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float mapped = (2.0f * elapsedTime / duration) - 1.0f;
+            //koreanText.faceColor = new Color(1f, 1f, 1f, mapped);
             glowMaterial.SetFloat("_Dissolve_Thredshold", mapped);
             yield return null;
         }
@@ -135,6 +138,7 @@ public class MessagePanel : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float mapped = 1.0f - 2.0f * (elapsedTime / duration);
+            //koreanText.faceColor = new Color(1f, 1f, 1f, mapped);
             glowMaterial.SetFloat("_Dissolve_Thredshold", mapped);
             yield return null;
         }

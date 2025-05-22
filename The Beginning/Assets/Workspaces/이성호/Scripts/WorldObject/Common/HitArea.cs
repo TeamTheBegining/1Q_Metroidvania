@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class LavaArea : MonoBehaviour
+public class HitArea : MonoBehaviour
 {
     public float attackDamage = 10000;
 
