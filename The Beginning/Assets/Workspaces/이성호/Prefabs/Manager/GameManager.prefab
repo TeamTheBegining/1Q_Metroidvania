@@ -1797,7 +1797,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: af83cbf02fc13ba4a84672c226ebb021, type: 2}
   - {fileID: 11400000, guid: 96347a242105d494997eb470b04969ab, type: 2}
   - {fileID: 11400000, guid: becf7d27af7254249a1a1098f8a4c830, type: 2}
-  - {fileID: 11400000, guid: becf7d27af7254249a1a1098f8a4c830, type: 2}
+  - {fileID: 11400000, guid: 0d5fe08c2bf9bb84faea4b05776b5a70, type: 2}
   state: 0
   isDebug: 0
   nextSceneIndex: 0

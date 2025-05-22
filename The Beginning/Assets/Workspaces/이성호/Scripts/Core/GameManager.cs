@@ -100,6 +100,7 @@ public class GameManager : Singleton<GameManager>
             case GameState.CutScene:
                 break;
             default:
+                playerHpUI.gameObject.SetActive(false);
                 break;
         }
     }
@@ -136,6 +137,7 @@ public class GameManager : Singleton<GameManager>
         cheatActions.Cheat.F1.started += F1_started;
         cheatActions.Cheat.F2.started += F2_started;
         cheatActions.Cheat.F3.started += F3_started;
+        cheatActions.Cheat.F4.started += F4_started;
 
         cheatActions.Cheat.F9.started += F9_started;
         cheatActions.Cheat.F10.started += F10_started;
@@ -143,23 +145,30 @@ public class GameManager : Singleton<GameManager>
         cheatActions.Cheat.F12.started += F12_started;
     }
 
+    private void F4_started(InputAction.CallbackContext obj)
+    {
+        MapStateManager.Instance.AllActive();
+    }
+
     private void CheatKeyDisable()
     {
-        cheatActions.Cheat.F12.started -= F12_started;
-        cheatActions.Cheat.F11.started -= F11_started;
-        cheatActions.Cheat.F10.started -= F10_started;
+
         cheatActions.Cheat.F9.started -= F9_started;
+        cheatActions.Cheat.F10.started -= F10_started;
+        cheatActions.Cheat.F11.started -= F11_started;
+        cheatActions.Cheat.F12.started -= F12_started;
 
         cheatActions.Cheat.F3.started -= F3_started;
         cheatActions.Cheat.F2.started -= F2_started;
         cheatActions.Cheat.F1.started -= F1_started;
+
         cheatActions.Disable();
     }
 
     private void F12_started(InputAction.CallbackContext context)
     {
         // 6
-        //GameSceneManager.Instance.RequestSceneChange("Scene6", spawnDatas[3]);
+        GameSceneManager.Instance.RequestSceneChange("Scene6", spawnDatas[3]);
         MapStateManager.Instance.AllActive();
     }
 
@@ -167,22 +176,21 @@ public class GameManager : Singleton<GameManager>
     {
         // 5
         GameSceneManager.Instance.RequestSceneChange("Scene5", spawnDatas[2]);
-        MapStateManager.Instance.AllActive();
     }
 
     private void F10_started(InputAction.CallbackContext context)
     {
         // 4
         GameSceneManager.Instance.RequestSceneChange("Scene4", spawnDatas[1]);
-        MapStateManager.Instance.AllActive();
     }
 
     private void F9_started(InputAction.CallbackContext context)
     {
         // 3
         GameSceneManager.Instance.RequestSceneChange("Scene3", spawnDatas[0]);
-        MapStateManager.Instance.AllActive();
     }
+
+
 
     private void F3_started(InputAction.CallbackContext context)
     {

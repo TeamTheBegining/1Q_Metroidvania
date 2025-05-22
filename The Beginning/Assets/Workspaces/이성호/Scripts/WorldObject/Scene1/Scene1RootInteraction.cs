@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.Rendering.Universal;
 
 public class Scene1RootInteraction : MonoBehaviour, Interactable
 {
@@ -21,11 +23,15 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
     public float enableDelay = 1f;
     public float disableDelay = 3f;
     private bool isTrigger = false;
-    
+
+    [Space(20)]
+    public Light2D spotLight;
+
     private void Awake()
     {
         actions = new PlayerInputActions();
     }
+
     public void OnInteraction()
     {
         if (isTrigger) return;
@@ -86,6 +92,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
         while(timeElapsed < disableDelay)
         {
             timeElapsed += Time.deltaTime;
+            if(spotLight != null) spotLight.pointLightOuterRadius += timeElapsed * 2f;
             yield return null;
         }
 
@@ -93,5 +100,7 @@ public class Scene1RootInteraction : MonoBehaviour, Interactable
         LightManager.Instance.SetPlayerShadowActive(false);
         rightBlockObject.SetActive(false);
         rootController.ColliderActive();
+
+        if (spotLight != null) Destroy(spotLight);
     }
 }

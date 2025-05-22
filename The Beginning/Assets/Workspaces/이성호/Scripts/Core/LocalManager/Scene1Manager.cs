@@ -1,20 +1,17 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public class Scene1Manager : LocalSceneManager
 {
     public GameObject playerObj;
     public Transform spawnPosition;
+
     private bool isFirstGameStart = false;
 
     float duration = 3f;
     float targetRadius = 20f;
-
-    private void OnEnable()
-    {
-
-    }
 
     private IEnumerator Start()
     {

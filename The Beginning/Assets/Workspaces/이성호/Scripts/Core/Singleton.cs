@@ -31,7 +31,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void Awake()
     {
-        Debug.Log($"called from {this.gameObject.name}");
+        //Debug.Log($"called from {this.gameObject.name}");
         if(instance == null) // 싱글톤 생성
         {
             instance = this as T;

@@ -7,6 +7,8 @@ public class Scene2Manager : LocalSceneManager
     private TextScroll textScroll;
     public float cutSceneTime;
 
+    private PlayerInput input;
+
     private void Awake()
     {
         cg = transform.GetChild(0).GetComponent<CanvasGroup>();
@@ -19,6 +21,7 @@ public class Scene2Manager : LocalSceneManager
         {
             MapStateManager.Instance.SetIsScene2FirstEnterTrue();
             cutSceneTime = CutSceneManager.Instance.GetSequenceTime(1);
+            input.AllDisable();
             StartCoroutine(CameraSetProcess());
         }
         else
@@ -27,7 +30,10 @@ public class Scene2Manager : LocalSceneManager
             CameraManager.Instance.SetTarget(CameraType.Scene2PlayerCamera, playerObject.transform);
             CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene2PlayerCamera, 20);
             CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene2CutSceneCamera, 0);
+
+            input = FindFirstObjectByType<PlayerInput>();
         }
+
     }
 
     public void PlayText()
@@ -94,6 +100,7 @@ public class Scene2Manager : LocalSceneManager
 
         GameSceneManager.Instance.UnloadScene(3);
         GameManager.Instance.State = GameState.Play;
+        input.AllEnable();
         gameObject.SetActive(false);
     }
 }

@@ -13,7 +13,7 @@ public class GameSceneManager : Singleton<GameSceneManager>
 
     private void Start()
     {
-        sceneChangePanel = GetComponentInChildren<SceneChangePanel>(); // TODO : 이 코드 제거하고 인스펙터에서 패널 받게 변경
+        sceneChangePanel = GetComponentInChildren<SceneChangePanel>();
     }
 
     public void RequestSceneChange(string sceneName, SpawnPointDataSO data)
@@ -25,6 +25,12 @@ public class GameSceneManager : Singleton<GameSceneManager>
     private IEnumerator LoadSceneAsync(string sceneName)
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
+
+        if (nextSpawnData.id != "Scene2RootEnter")
+        {
+            sceneChangePanel.ShowPanel();
+        }
+
         yield return new WaitUntil(() => async.isDone);
 
         PlayerSpawnPoint[] points = FindObjectsByType<PlayerSpawnPoint>(FindObjectsSortMode.None);
@@ -42,8 +48,8 @@ public class GameSceneManager : Singleton<GameSceneManager>
         if(manager != null)
         {
             manager.Init();
-
-            if(manager as Scene5Manager)
+            
+            if (manager.GetComponent<Scene5Manager>())
             {
                 Debug.Log("Scene5 Load -------");
                 CameraManager.Instance.SetCameraBlendingSpeed(0f);
@@ -52,6 +58,11 @@ public class GameSceneManager : Singleton<GameSceneManager>
             {
                 CameraManager.Instance.SetCameraBlendingSpeed();
             }
+        }
+
+        if(nextSpawnData.id != "Scene2RootEnter")
+        {
+            sceneChangePanel.ClosePanel();
         }
     }
 
