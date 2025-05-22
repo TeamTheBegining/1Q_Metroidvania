@@ -4,21 +4,21 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static Player;
+using static System.Net.Mime.MediaTypeNames;
 
-public class PlayerHpUI : MonoBehaviour
+public class PlayerHpMpUI : MonoBehaviour
 {
     // Inspector에서 연결할 Slider
-    public  Slider           hpSlider;
-    public  Slider           mpSlider;
-    public  List<Sprite>     appleimage;
-    private Image           a_image;
+    public Slider hpSlider;
+    public Slider mpSlider;
+    public TextMeshProUGUI text;
 
     // PlayerStats 타입 스크립트에서 체력 값 가져옴
     public Player player;
     private void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
-        a_image = transform.Find("apple").GetComponent<Image>();        
+        text = transform.Find("ParryingCount").GetComponent<TextMeshProUGUI>();
         hpSlider.value = 1;
         mpSlider.value = 0;
 
@@ -27,23 +27,28 @@ public class PlayerHpUI : MonoBehaviour
     void FixedUpdate()
     {
         // 현재 체력 / 최대 체력 비율을 슬라이더에 반영
-        if(player != null)
+        if (player != null)
         {
             hpSlider.value = (float)player.CurrentHp / player.MaxHp;
             mpSlider.value = (float)player.CurrentMp / player.MaxMp;
             int count = player.CurParryCount > 3 ? 3 : player.CurParryCount;  // switch
+            text.text = player.CurParryCount == 0 ? "" : $"X{count}";
 
-            if (count == 0)
+            switch (count)
             {
-                a_image.enabled = false;
+                case 0:
+                    break;
+                case 1:
+                    text.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                    break;
+                case 2:
+                    text.color = new Color(255, 200, 0, 255);
+                    break;
+                case 3:                                                     // parrying 3 단계 지속이 얼마나 됌?
+                    text.color = new Color(1.0f, 0f, 0f, 1.0f);
+                    break;
             }
-            else
-            {
-                a_image.enabled = true;
-                a_image.sprite = appleimage[count - 1];
-            }               
         }
 
-        
     }
 }
