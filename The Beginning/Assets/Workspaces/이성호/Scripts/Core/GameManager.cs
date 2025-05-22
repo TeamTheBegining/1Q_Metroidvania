@@ -131,7 +131,6 @@ public class GameManager : Singleton<GameManager>
 
     private void CheatKeyDisable()
     {
-
         cheatActions.Cheat.F3.started -= F3_started;
         cheatActions.Cheat.F2.started -= F2_started;
         cheatActions.Cheat.F1.started -= F1_started;
