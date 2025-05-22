@@ -12,6 +12,7 @@ public class Scene5Manager : LocalSceneManager
         CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene5CameraUpper, 20);
 
         playerShaderLight = FindFirstObjectByType<PlayerShaderLight>();
+        playerShaderLight.SetRange(2f);
     }
 
     public void SetScene5Priority(CameraType type)

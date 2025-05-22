@@ -133,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: -605125999041912829, guid: 9f134d4d3c8081345b661a9ac0fb9133, type: 3}
     - target: {fileID: 3858068746306201189, guid: c0628a8d5c51e324ba264ac89635de5d, type: 3}
       propertyPath: m_Name
-      value: Item_1
+      value: Item_Charge
       objectReference: {fileID: 0}
     - target: {fileID: 4538863475004214239, guid: c0628a8d5c51e324ba264ac89635de5d, type: 3}
       propertyPath: m_Radius
@@ -143,6 +143,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: -1.03
       objectReference: {fileID: 0}
+    - target: {fileID: 5030227126221009617, guid: c0628a8d5c51e324ba264ac89635de5d, type: 3}
+      propertyPath: guideTextData
+      value: 
+      objectReference: {fileID: 11400000, guid: 11c071c47e142fc45bbbd052dc377a83, type: 2}
     - target: {fileID: 5317748679974811399, guid: c0628a8d5c51e324ba264ac89635de5d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -32.913147
@@ -1558,6 +1562,14 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: -1.07
       objectReference: {fileID: 0}
+    - target: {fileID: 3712418532626444843, guid: 10b34d79e062d1f4bbf99dfc0bbedec9, type: 3}
+      propertyPath: type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3712418532626444843, guid: 10b34d79e062d1f4bbf99dfc0bbedec9, type: 3}
+      propertyPath: guideTextData
+      value: 
+      objectReference: {fileID: 11400000, guid: 15f83ed8655557b428a852bc98efe382, type: 2}
     - target: {fileID: 5144398627836697207, guid: 10b34d79e062d1f4bbf99dfc0bbedec9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -26.913145
@@ -1600,7 +1612,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5759150528235941315, guid: 10b34d79e062d1f4bbf99dfc0bbedec9, type: 3}
       propertyPath: m_Name
-      value: Item_2
+      value: Item_DoubleJump
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -152,23 +152,26 @@ public class GameManager : Singleton<GameManager>
 
     private void F12_started(InputAction.CallbackContext context)
     {
-        // 3
-        //GameSceneManager.Instance.RequestSceneChange()
+        // 6
+        //GameSceneManager.Instance.RequestSceneChange("Scene6", spawnDatas[3]);
     }
 
     private void F11_started(InputAction.CallbackContext context)
     {
-        // 4
+        // 5
+        GameSceneManager.Instance.RequestSceneChange("Scene5", spawnDatas[2]);
     }
 
     private void F10_started(InputAction.CallbackContext context)
     {
-        // 5
+        // 4
+        GameSceneManager.Instance.RequestSceneChange("Scene4", spawnDatas[1]);
     }
 
     private void F9_started(InputAction.CallbackContext context)
     {
-        // 6
+        // 3
+        GameSceneManager.Instance.RequestSceneChange("Scene3", spawnDatas[0]);
     }
 
     private void F3_started(InputAction.CallbackContext context)
@@ -178,8 +181,8 @@ public class GameManager : Singleton<GameManager>
 
     private void F2_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
+        PlayerManager.Instance.UnlockPlayerSkill(PlayerSkillType.ChargAttack);
         PlayerManager.Instance.UnlockPlayerSkill(PlayerSkillType.DoubleJump);
-        PlayerManager.Instance.UnlockPlayerSkill(PlayerSkillType.ChargeAttack);
     }
 
     private void F1_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)

@@ -10,6 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293dec649e04ae8419b1bd01b629f6d1, type: 3}
-  m_Name: Text_Npc1
+  m_Name: Text_ItemGuide_Left
   m_EditorClassIdentifier: 
-  text: "\uC309\uB2C8\uB2E4 \uC2F8\uC694"
+  text: "\uACF5\uACA9 \uD0A4\uB97C \uB20C\uB7EC \uCC28\uC9C0 \uACF5\uACA9\uC744 \uD560
+    \uC218 \uC788\uC2B5\uB2C8\uB2E4."

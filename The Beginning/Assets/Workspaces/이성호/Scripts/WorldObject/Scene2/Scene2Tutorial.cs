@@ -50,6 +50,8 @@ public class Scene2Tutorial : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (MapStateManager.Instance.IsScene2TutorialActived) return;
+
         if(collision.CompareTag("Player"))
         {
             if (isTriggered) return;
@@ -59,6 +61,7 @@ public class Scene2Tutorial : MonoBehaviour
 
             StartCoroutine(Tutorial());
             isTriggered = true;
+            MapStateManager.Instance.SetIsScene2TutorialAcitived();
         }
     }
 

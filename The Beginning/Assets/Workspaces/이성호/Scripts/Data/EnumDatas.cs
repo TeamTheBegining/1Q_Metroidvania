@@ -84,8 +84,8 @@ public enum CameraType
 
 public enum PlayerSkillType
 {
-    DoubleJump = 0,
-    ChargeAttack,    
+    ChargAttack = 0,
+    DoubleJump,    
     PlayerSkillTypeCount,
 }
 
