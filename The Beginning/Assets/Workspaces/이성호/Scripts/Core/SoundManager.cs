@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -25,6 +26,7 @@ public class SoundManager : Singleton<SoundManager>
             sfxSources[i] = this.gameObject.AddComponent<AudioSource>();
         }
 
+        #region Lode Resource
         // BGMType 내용 정의 순서대로 클립추가하기
         bgmClips[0] = Resources.Load<AudioClip>("Audio/BGM/BGM01(Test)");
 
@@ -59,6 +61,7 @@ public class SoundManager : Singleton<SoundManager>
 
         sfxClips[20] = Resources.Load<AudioClip>("Audio/Damaged/Armor_Hit_01");
         sfxClips[21] = Resources.Load<AudioClip>("Audio/Damaged/Armor_Hit_02");
+        #endregion
 
     }
 
@@ -69,6 +72,53 @@ public class SoundManager : Singleton<SoundManager>
         bgmSource.loop = true;
         bgmSource.volume = bgmSoundValue;
     }    
+
+    /// <summary>
+    /// BGM Volume값이 1에서 0으로 선형적으로 줄어드는 함수 ( 결과적으로 음악은 안 변하고 볼륨값만 0 됨)
+    /// </summary>
+    /// <param name="duration">0까지 변화하는 시간</param>
+    public void FadeOutBGM(float duration)
+    {
+        // 0522 소리가 끊기는지 확인할 것 | TODO 코루틴 실행이 연속적으로 되는지 확인하고 어색하면 수정하기
+        StartCoroutine(FadeOutBGMProcess(duration)); 
+    }
+
+    /// <summary>
+    /// BGM Volume값이 1에서 0으로 선형적으로 줄어드는 함수 ( 결과적으로 음악은 안 변하고 볼륨값만 1 됨)
+    /// </summary>
+    /// <param name="duration">1까지 변화하는 시간</param>
+    public void FadeInBGM(float duration)
+    {
+        StartCoroutine(FadeInBGMProcess(duration));
+    }
+
+    private IEnumerator FadeOutBGMProcess(float duration)
+    {
+        float timeElapsed = 0.0f;
+
+        while(timeElapsed < duration)
+        {
+            timeElapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(timeElapsed / duration);
+            bgmSource.volume = t;
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator FadeInBGMProcess(float duration)
+    {
+        float timeElapsed = 0.0f;
+
+        while (timeElapsed < duration)
+        {
+            timeElapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(1 - timeElapsed / duration);
+            bgmSource.volume = 1 - t;
+
+            yield return null;
+        }
+    }
 
     public void PlaySound(SFXType type)
     {

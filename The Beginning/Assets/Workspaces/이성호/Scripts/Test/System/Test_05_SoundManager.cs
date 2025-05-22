@@ -17,5 +17,15 @@ public class Test_05_SoundManager : TestBase
     {
         SoundManager.Instance.PlaySound(sfxType);
     }
+
+    protected override void OnTest3(InputAction.CallbackContext context)
+    {
+        SoundManager.Instance.FadeOutBGM(0.5f);
+    }
+
+    protected override void OnTest4(InputAction.CallbackContext context)
+    {
+        SoundManager.Instance.FadeInBGM(0.5f);
+    }
 #endif
 }
