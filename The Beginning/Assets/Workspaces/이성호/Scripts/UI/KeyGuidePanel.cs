@@ -13,7 +13,7 @@ public class KeyGuidePanel : MonoBehaviour
     {
         inputAction = new CheatInputActions();
 
-        text = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        text = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         cg = GetComponent<CanvasGroup>();
         cg.interactable = false;
         cg.blocksRaycasts = false;
