@@ -18,7 +18,8 @@ public enum PoolType
 
 public enum BGMType
 {
-    main,
+    mainTest,
+    Menu,
     BGMTypeCount
 }
 

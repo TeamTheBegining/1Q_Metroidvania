@@ -28,7 +28,8 @@ public class SoundManager : Singleton<SoundManager>
 
         #region Lode Resource
         // BGMType 내용 정의 순서대로 클립추가하기
-        bgmClips[0] = Resources.Load<AudioClip>("Audio/BGM/BGM01(Test)");
+        bgmClips[0] = Resources.Load<AudioClip>("Audio/BGM/BGM01(Test)");   
+        bgmClips[1] = Resources.Load<AudioClip>("Audio/BGM/BGM_SCREEN_01");   
 
         // SFXType 내용 정의 순서대로 클립추가하기
 
@@ -97,22 +98,22 @@ public class SoundManager : Singleton<SoundManager>
     /// BGM Volume값이 1에서 0으로 선형적으로 줄어드는 함수 ( 결과적으로 음악은 안 변하고 볼륨값만 0 됨)
     /// </summary>
     /// <param name="duration">0까지 변화하는 시간</param>
-    public void FadeOutBGM(float duration)
+    public void FadeInBGM(float duration)
     {
         // 0522 소리가 끊기는지 확인할 것 | TODO 코루틴 실행이 연속적으로 되는지 확인하고 어색하면 수정하기
-        StartCoroutine(FadeOutBGMProcess(duration)); 
+        StartCoroutine(FadeInBGMProcess(duration)); 
     }
 
     /// <summary>
     /// BGM Volume값이 1에서 0으로 선형적으로 줄어드는 함수 ( 결과적으로 음악은 안 변하고 볼륨값만 1 됨)
     /// </summary>
     /// <param name="duration">1까지 변화하는 시간</param>
-    public void FadeInBGM(float duration)
+    public void FadeOutBGM(float duration)
     {
-        StartCoroutine(FadeInBGMProcess(duration));
+        StartCoroutine(FadeOutBGMProcess(duration));
     }
 
-    private IEnumerator FadeOutBGMProcess(float duration)
+    private IEnumerator FadeInBGMProcess(float duration)
     {
         float timeElapsed = 0.0f;
 
@@ -126,14 +127,14 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    private IEnumerator FadeInBGMProcess(float duration)
+    private IEnumerator FadeOutBGMProcess(float duration)
     {
         float timeElapsed = 0.0f;
 
         while (timeElapsed < duration)
         {
             timeElapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(1 - timeElapsed / duration);
+            float t = Mathf.Clamp01(timeElapsed / duration);
             bgmSource.volume = 1 - t;
 
             yield return null;
