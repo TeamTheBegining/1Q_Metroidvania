@@ -29,6 +29,7 @@ public class TitlePanel : MonoBehaviour
         InitInput();
 
         cutSceneDelay = CutSceneManager.Instance.GetSequenceTime(0);
+        this.gameObject.SetActive(true);
 
 #if UNITY_EDITOR
         if (GameManager.Instance.isDebug)

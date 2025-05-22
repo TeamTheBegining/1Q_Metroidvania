@@ -171,6 +171,7 @@ public class GameManager : Singleton<GameManager>
     {
         // 6
         GameSceneManager.Instance.RequestSceneChange("Scene6", spawnDatas[3]);
+        MapStateManager.Instance.SetIsScene2FirstEnterTrue();
         MapStateManager.Instance.AllActive();
     }
 
@@ -178,23 +179,27 @@ public class GameManager : Singleton<GameManager>
     {
         // 5
         GameSceneManager.Instance.RequestSceneChange("Scene5", spawnDatas[2]);
+        MapStateManager.Instance.SetIsScene2FirstEnterTrue();
     }
 
     private void F10_started(InputAction.CallbackContext context)
     {
         // 4
         GameSceneManager.Instance.RequestSceneChange("Scene4", spawnDatas[1]);
+        MapStateManager.Instance.SetIsScene2FirstEnterTrue();
     }
 
     private void F9_started(InputAction.CallbackContext context)
     {
         // 3
         GameSceneManager.Instance.RequestSceneChange("Scene3", spawnDatas[0]);
+        MapStateManager.Instance.SetIsScene2FirstEnterTrue();
     }
 
     private void F6_started(InputAction.CallbackContext context)
     {
         SceneManager.LoadScene("Ending");
+        MapStateManager.Instance.SetIsScene2FirstEnterTrue();
     }
 
     private void F5_started(InputAction.CallbackContext context)

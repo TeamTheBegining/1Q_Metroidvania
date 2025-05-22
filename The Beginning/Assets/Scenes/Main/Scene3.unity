@@ -3335,6 +3335,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LadderFlatform
       objectReference: {fileID: 0}
+    - target: {fileID: 7441257575362006808, guid: 72c166265bed58e43bece4fea588755c, type: 3}
+      propertyPath: m_TagString
+      value: DropDown
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
