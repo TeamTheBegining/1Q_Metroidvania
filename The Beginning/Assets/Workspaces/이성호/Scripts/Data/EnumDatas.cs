@@ -13,6 +13,7 @@ public enum PoolType
     ProjectileEnemy,
     UltEffect,
     ProjectileObstacle,
+    Thunder,
     PoolTypeCount
 }
 
