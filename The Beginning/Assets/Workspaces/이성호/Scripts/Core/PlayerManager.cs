@@ -14,7 +14,9 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     public int Coin => coin;
 
-    private float remainHp; // NOTE : 플레이어 체력 이벤트에 연결할 것
+    private float remainHp;         // NOTE : 플레이어 체력 이벤트에 연결할 것
+    private float remainMp;         // NOTE : 플레이어 마나 이벤트에 연결할 것
+    private int remainParryCount; // NOTE : 플레이어 패링 카운트 이벤트에 연결할 것
 
     [SerializeField]private bool[] isSkillUnlock;
 
@@ -41,6 +43,14 @@ public class PlayerManager : Singleton<PlayerManager>
     public void SetRemainHp(float value)
     {
         remainHp = value;
+    }
+    public void SetRemainMp(float value)
+    {
+        remainMp = value;
+    }
+    public void SetRemainParryCount(int value)
+    {
+        remainParryCount = value;
     }
 
     /// <summary>
@@ -120,6 +130,16 @@ public class PlayerManager : Singleton<PlayerManager>
             player.CurrentHp = remainHp;
         }
 
+        if (remainMp > 0f)
+        {
+            player.CurrentMp = remainMp;
+        }
+
+        if (remainParryCount > 0f)
+        {
+            player.CurParryCount = remainParryCount;
+        }
+
         PlayerDeadPanel deadPanel = FindFirstObjectByType<PlayerDeadPanel>();
         if (deadPanel != null)
         {
@@ -136,4 +156,6 @@ public class PlayerManager : Singleton<PlayerManager>
             isSkillUnlock[i] = false;
         }
     }
+
+
 }

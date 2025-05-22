@@ -30,9 +30,6 @@ public class Scene1Manager : LocalSceneManager
         CameraManager.Instance.SetTarget(CameraType.Scene1Camera, playerObj.transform);
         LightManager.Instance.SetPlayerShadowTarget(playerObj);
         LightManager.Instance.SetPlayerLightValue(200f);
-
-        PlayerHpMpUI hp = FindFirstObjectByType<PlayerHpMpUI>();
-        hp.GetPlayer();
     }
 
     private void Update()

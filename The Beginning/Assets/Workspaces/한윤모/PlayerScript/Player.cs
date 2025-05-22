@@ -80,7 +80,8 @@ public class Player : MonoBehaviour, IDamageable
     int curParryCount;//패링 카운트
     public int CurParryCount
     {
-        get { return curParryCount; } 
+        get { return curParryCount; }
+        set { curParryCount = value; }
     }
     int preParryCount;//패링 카운트
     int healingCount = 0;
@@ -253,6 +254,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
+        SaveData();
         //테스트용
         /*if (input.IsParrying&&input.InputVec.y<0)
         {
@@ -1267,7 +1269,12 @@ public class Player : MonoBehaviour, IDamageable
         
 
     }
-
+    public void SaveData()
+    {
+        PlayerManager.Instance.SetRemainHp(currentHp);
+        PlayerManager.Instance.SetRemainMp(currentMp);
+        PlayerManager.Instance.SetRemainParryCount(curParryCount);
+    }
     private void PlayerDead()
     {
         gameObject.layer = LayerMask.NameToLayer("Player");
