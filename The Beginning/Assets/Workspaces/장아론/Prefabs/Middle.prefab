@@ -194,7 +194,7 @@ MonoBehaviour:
     minPlayerDistance: 0
     maxPlayerDistance: 4
     selectionChance: 0.372
-    cooldownAfterSequence: 1.5
+    cooldownAfterSequence: 1.2
     minHpRatio: 0.5
     maxHpRatio: 0
   - sequenceName: "\uD558\uAC15 \uC5F0\uD0C0 \uCF64\uBCF4"
@@ -265,6 +265,22 @@ MonoBehaviour:
     cooldownAfterSequence: 1.5
     minHpRatio: 0.2
     maxHpRatio: 0.8
+  - sequenceName: "\uD68C\uC624\uB9AC"
+    phases:
+    - animationTriggerName: B_Attack1
+      hitboxIndex: 1
+      delayAfterThisPhase: 0.3
+      damageValue: 1.5
+    - animationTriggerName: B_Attack2
+      hitboxIndex: 2
+      delayAfterThisPhase: 0
+      damageValue: 2.2
+    minPlayerDistance: 1.2
+    maxPlayerDistance: 6
+    selectionChance: 0.337
+    cooldownAfterSequence: 1.5
+    minHpRatio: 0.33
+    maxHpRatio: 1
   attack3DashSpeed: 4
   attack3DashDuration: 2
   hurtColor: {r: 1, g: 0, b: 0, a: 1}
