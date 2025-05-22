@@ -82,14 +82,14 @@ AnimationClip:
   - time: 0.33333334
     functionName: ParryingCounterAttack
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: c85871d9cb7b49b409e4ca558ab970ec, type: 3}
+    objectReferenceParameter: {fileID: 11500000, guid: 2df5d07b8e3298347a974d8b7ab5a287, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.33333334
     functionName: PlayerParryingSwingSound
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 2dc05ff30aa293a4f98cd812d11d5fa3, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
