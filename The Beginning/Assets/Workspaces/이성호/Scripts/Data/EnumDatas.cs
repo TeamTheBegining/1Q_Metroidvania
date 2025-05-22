@@ -77,6 +77,7 @@ public enum CameraType
     Scene5CameraBottom,
     Scene5CameraBottomBossWay,
     Scene5CameraBottomRoom1,
+    Scene6Camera,
     CameraTypeCount
 }
 
