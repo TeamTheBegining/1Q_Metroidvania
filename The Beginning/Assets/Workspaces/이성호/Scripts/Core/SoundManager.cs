@@ -82,10 +82,7 @@ public class SoundManager : Singleton<SoundManager>
         sfxClips[30] = Resources.Load<AudioClip>("Audio/MiniBossSound/Damaged/HIT_03");
 
         sfxClips[31] = Resources.Load<AudioClip>("Audio/MiniBossSound/Death/MiniBoss_Death_01");
-<<<<<<< Updated upstream
         #endregion
-=======
->>>>>>> Stashed changes
     }
 
     public void PlayBGM(BGMType type)
