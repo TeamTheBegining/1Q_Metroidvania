@@ -5,15 +5,15 @@ using UnityEngine;
 /// target 사망하면 애니메이션 실행하는 스크립트
 /// </summary>
 [RequireComponent(typeof(Animator))]
-public class Door : MonoBehaviour
+public class Scene3Door : MonoBehaviour
 {
     [Tooltip("직접 트리거가 될 오브젝트 넣어두기")]
     public List<GameObject> targetObjects;
     private Animator animator;
     private Collider2D coll2d;
 
-    [SerializeField] private int remainCount;
-    private int RemainCount
+    private int remainCount;
+    public int RemainCount
     {
         get => remainCount;
         set
