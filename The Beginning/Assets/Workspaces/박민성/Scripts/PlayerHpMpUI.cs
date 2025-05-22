@@ -17,12 +17,15 @@ public class PlayerHpMpUI : MonoBehaviour
     public Player player;
     private void Start()
     {
-        player = GameObject.FindWithTag("Player").GetComponent<Player>();
         text = transform.Find("ParryingCount").GetComponent<TextMeshProUGUI>();
         hpSlider.value = 1;
         mpSlider.value = 0;
 
         if (player == null) Debug.LogWarning($"{gameObject.name} 에서 플레이어를 찾을 수 없음 ");
+    }
+    public void GetPlayer()
+    {
+        player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
     void FixedUpdate()
     {
