@@ -71,12 +71,18 @@ public class SoundManager : Singleton<SoundManager>
 
         // ---------------------------------------------- Enemy --------------------------------------------
 
+        // --------------------------------------------- MiniBoss ------------------------------------------
 
+        sfxClips[25] = Resources.Load<AudioClip>("Audio/MiniBossSound/Attack/ATTACK_A01");
+        sfxClips[26] = Resources.Load<AudioClip>("Audio/MiniBossSound/Attack/ATTACK_B01");
+        sfxClips[27] = Resources.Load<AudioClip>("Audio/MiniBossSound/Attack/ATTACK_C01");
 
-        sfxClips[20] = Resources.Load<AudioClip>("Audio/Damaged/Armor_Hit_01");
-        sfxClips[21] = Resources.Load<AudioClip>("Audio/Damaged/Armor_Hit_02");
+        sfxClips[28] = Resources.Load<AudioClip>("Audio/MiniBossSound/Damaged/HIT_01");
+        sfxClips[29] = Resources.Load<AudioClip>("Audio/MiniBossSound/Damaged/HIT_02");
+        sfxClips[30] = Resources.Load<AudioClip>("Audio/MiniBossSound/Damaged/HIT_03");
+
+        sfxClips[31] = Resources.Load<AudioClip>("Audio/MiniBossSound/Death/MiniBoss_Death_01");
         #endregion
-
     }
 
     public void PlayBGM(BGMType type)
