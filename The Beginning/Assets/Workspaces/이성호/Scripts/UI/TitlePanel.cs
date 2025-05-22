@@ -58,10 +58,14 @@ public class TitlePanel : MonoBehaviour
     }
 
     private void GameStart_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {       
+    {
         actions.UI.GameStart.Disable();
         titleText.text += ";";
         StartCoroutine(ProcessGameIntro());
+
+        //SoundManager.Instance.PlaySound(SFXType.intro_01);
+        //SoundManager.Instance.PlaySound(SFXType.intro_02);
+        //Debug.Log("sound 재생!");
     }
 
     private IEnumerator ProcessGameIntro()

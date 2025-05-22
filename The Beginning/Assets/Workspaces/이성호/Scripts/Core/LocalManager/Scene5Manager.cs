@@ -10,6 +10,7 @@ public class Scene5Manager : LocalSceneManager
         GameObject playerObject = FindFirstObjectByType<Player>().gameObject;
         CameraManager.Instance.SetTarget(CameraType.Scene5CameraUpper, playerObject.transform);
         CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene5CameraUpper, 20);
+        //SoundManager.Instance.PlayBGM(BGMType.bgm_Ambience_02);
 
         playerShaderLight = FindFirstObjectByType<PlayerShaderLight>();
         playerShaderLight.SetPlayer(playerObject);

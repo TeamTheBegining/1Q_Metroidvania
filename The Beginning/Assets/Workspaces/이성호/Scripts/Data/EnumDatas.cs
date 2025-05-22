@@ -20,7 +20,13 @@ public enum PoolType
 public enum BGMType
 {
     mainTest,
-    Menu,
+    menu,               // 01.BGM_SCREEN_01
+    bgm_Ambience_01,    // 02.BGM_AMBIENCE_01
+    bgm_Credit_01,      // 03_BGM_CREDIT_01
+    bgm_Ambience_02,    // 04_BGM_AMBIENCE_01
+    guardian_01,        // 05_BGM_GUARDIAN_01
+    bgm_Finalboss_01,   // 07_BGM_FINALBOSS_01
+
     BGMTypeCount
 }
 
@@ -87,8 +93,12 @@ public enum SFXType
     t_FOOTSTEP_04,      // 49
 
     // --------------------- QualityUP
-    climbing_01,
-    wall_Slide_01,
+    climbing_01,        // 50
+    wall_Slide_01,      // 51
+
+    // --------------------- Effect Sound
+    intro_01,           // 52
+    intro_02,           // 53
 
     SoundTypeCount
 }

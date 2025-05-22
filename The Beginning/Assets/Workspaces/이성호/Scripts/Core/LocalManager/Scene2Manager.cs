@@ -17,6 +17,8 @@ public class Scene2Manager : LocalSceneManager
 
     public override void Init()
     {
+        //SoundManager.Instance.Play
+        //(BGMType.bgm_Ambience_02);
         input = FindFirstObjectByType<PlayerInput>();
 
         if (!MapStateManager.Instance.IsScene2FirstEnter)

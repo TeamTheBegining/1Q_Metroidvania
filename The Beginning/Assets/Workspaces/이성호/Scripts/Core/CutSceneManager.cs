@@ -40,8 +40,7 @@ public class CutSceneManager : Singleton<CutSceneManager>
     {
         isPlay = true;
         gameObject.SetActive(true);
-        currentSceneIndex = 0;
-
+            currentSceneIndex = 0;
         StartCoroutine(ProcessShowCutscene(sequenceIndex, sequences[sequenceIndex].lines[currentSceneIndex].showTime));
     }
 

@@ -7,4 +7,5 @@
 public class CutsceneSequenceSO : ScriptableObject
 {
     public CutsceneLineSO[] lines;
+        
 }

@@ -26,6 +26,8 @@ public class Scene1Manager : LocalSceneManager
         }
 
         // 생성 완료 후 적용
+        //SoundManager.Instance.Play
+        //(BGMType.bgm_Ambience_01);
         CameraManager.Instance.SetTarget(CameraType.Scene1Camera, playerObj.transform);
         LightManager.Instance.SetPlayerShadowTarget(playerObj);
         LightManager.Instance.SetPlayerLightValue(200f);

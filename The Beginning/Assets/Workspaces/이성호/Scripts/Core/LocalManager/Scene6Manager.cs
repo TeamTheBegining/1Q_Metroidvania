@@ -9,6 +9,8 @@ public class Scene6Manager : LocalSceneManager
         CameraManager.Instance.SetTarget(CameraType.Scene6Camera, playerObject.transform);
         CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene6Camera, 20);
 
+        SoundManager.Instance.PlayBGM(BGMType.bgm_Finalboss_01);
+
         LastBoss boss = FindFirstObjectByType<LastBoss>();
         boss.OnDead += () => { SceneManager.LoadScene("Ending"); };
         boss.FindPlayer();
