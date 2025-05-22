@@ -161,7 +161,6 @@ GameObject:
   - component: {fileID: 323636307018826253}
   - component: {fileID: 4196437138990570422}
   - component: {fileID: 8435778730040560138}
-  - component: {fileID: 3518627239703611091}
   m_Layer: 12
   m_Name: LastBoss
   m_TagString: Untagged
@@ -281,6 +280,7 @@ MonoBehaviour:
   lerpT: 0
   damage: 3
   changeColorTime: 0.1
+  attackTime: 3
   laserLeftPos: {fileID: 0}
   laserRightPos: {fileID: 0}
 --- !u!61 &8435778730040560138
@@ -329,30 +329,3 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.15966809, y: 0.8017352}
   m_EdgeRadius: 0
---- !u!50 &3518627239703611091
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6171175522875174668}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4

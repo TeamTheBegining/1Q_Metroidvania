@@ -1,0 +1,272 @@
+fileFormatVersion: 2
+guid: 0297b41b4a854bb4bbcc149de4cd1828
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -259316383974179356
+    second: boss_thunder_4_0
+  - first:
+      213: 6066355770803503136
+    second: boss_thunder_4_1
+  - first:
+      213: -4398325269801061322
+    second: boss_thunder_4_2
+  - first:
+      213: 5430912263450356969
+    second: boss_thunder_4_3
+  - first:
+      213: -484443279680725846
+    second: boss_thunder_4_4
+  - first:
+      213: -1378822021502733868
+    second: boss_thunder_4_5
+  - first:
+      213: 8057439449715853998
+    second: boss_thunder_4_6
+  - first:
+      213: -2707736374843442760
+    second: boss_thunder_4_7
+  - first:
+      213: -6575660811009444859
+    second: boss_thunder_4_8
+  - first:
+      213: 2443877300387251693
+    second: boss_thunder_4_9
+  - first:
+      213: -4244191144138950327
+    second: boss_thunder_4_10
+  - first:
+      213: -8806676298495273553
+    second: boss_thunder_4_11
+  - first:
+      213: -8046337926693554639
+    second: boss_thunder_4_12
+  - first:
+      213: -6962200367819444453
+    second: boss_thunder_4_13
+  - first:
+      213: -6813636250046756460
+    second: boss_thunder_4_14
+  - first:
+      213: 492133975496625196
+    second: boss_thunder_4_15
+  - first:
+      213: -2638169678725470534
+    second: boss_thunder_4_16
+  - first:
+      213: 6415329863206663567
+    second: boss_thunder_4_17
+  - first:
+      213: 4764371789754959799
+    second: boss_thunder_4_18
+  - first:
+      213: -2614957948763679499
+    second: boss_thunder_4_19
+  - first:
+      213: -6283182688283151380
+    second: boss_thunder_4_20
+  - first:
+      213: -8998516872327118779
+    second: boss_thunder_4_21
+  - first:
+      213: -2986026743851034635
+    second: boss_thunder_4_22
+  - first:
+      213: 1140173784402185722
+    second: boss_thunder_4_23
+  - first:
+      213: 2732611873036033727
+    second: boss_thunder_4_24
+  - first:
+      213: 8253727034832182440
+    second: boss_thunder_4_25
+  - first:
+      213: -1980767346030252448
+    second: boss_thunder_4_26
+  - first:
+      213: 6715867674034855019
+    second: boss_thunder_4_27
+  - first:
+      213: 5730501377560102287
+    second: boss_thunder_4_28
+  - first:
+      213: -3214844250261099062
+    second: boss_thunder_4_29
+  - first:
+      213: 44993956835135529
+    second: boss_thunder_4_30
+  - first:
+      213: -8730811033202948187
+    second: boss_thunder_4_31
+  - first:
+      213: -4838555263813306534
+    second: boss_thunder_4_32
+  - first:
+      213: 640036065179247404
+    second: boss_thunder_4_33
+  - first:
+      213: -3936821194983158581
+    second: boss_thunder_4_34
+  - first:
+      213: 8012459935980784822
+    second: boss_thunder_4_35
+  - first:
+      213: -9125716683929941451
+    second: boss_thunder_4_36
+  - first:
+      213: 5768324519187367134
+    second: boss_thunder_4_37
+  - first:
+      213: -5659062792209386899
+    second: boss_thunder_4_38
+  - first:
+      213: -4322797485071879722
+    second: boss_thunder_4_39
+  - first:
+      213: 3522983763480311090
+    second: boss_thunder_4_40
+  - first:
+      213: -4927480431664512444
+    second: boss_thunder_4_41
+  - first:
+      213: -2867654013105754164
+    second: boss_thunder_4_42
+  - first:
+      213: -64290146973923930
+    second: boss_thunder_4_43
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: boss_thunder_4_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 110
+        height: 500
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4edb7c86f19b66cf0800000000000000
+      internalID: -259316383974179356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 066f14487b5b5dc4f819f6348f79b4d2
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      boss_thunder_4_0: -259316383974179356
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
