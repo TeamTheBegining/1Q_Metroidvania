@@ -33,6 +33,12 @@ public class Scene5Room1Manager : MonoBehaviour
                 {
                     door.Open();
                     MapStateManager.Instance.SetIsScene5DoorOpened();
+
+                    // NOTE: 모든 적을 죽인뒤에 다시 돌아갔을 때 리스폰되는지 안나오는지 테스트 안함
+                    foreach (var obj in enemies)
+                    {
+                        obj.SetActive(true);
+                    }
                 }
                 else
                 {

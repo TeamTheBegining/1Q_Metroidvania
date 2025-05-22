@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : Singleton<PlayerManager>
 {
     public GameObject playerPrefab;
-    private string spawnSceneName;
+    private string spawnSceneName = "Scene2";
     private SpawnPointDataSO spawnData;
 
     private int coin;
@@ -27,6 +27,11 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         base.Awake();
         isSkillUnlock = new bool[(int)PlayerSkillType.PlayerSkillTypeCount];
+    }
+
+    private void Start()
+    {
+        spawnData = Resources.Load<SpawnPointDataSO>("Data/SpawnData/SpawnPoint_Scene2Respawn");
     }
 
     /// <summary>

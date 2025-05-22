@@ -2,12 +2,16 @@
 
 public class Scene5Manager : LocalSceneManager
 {
+    PlayerShaderLight playerShaderLight;
+
     public override void Init()
     {
         // 임시
         GameObject playerObject = FindFirstObjectByType<Player>().gameObject;
         CameraManager.Instance.SetTarget(CameraType.Scene5CameraUpper, playerObject.transform);
         CameraManager.Instance.SetVirtualCameraPriority(CameraType.Scene5CameraUpper, 20);
+
+        playerShaderLight = FindFirstObjectByType<PlayerShaderLight>();
     }
 
     public void SetScene5Priority(CameraType type)

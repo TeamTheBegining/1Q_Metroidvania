@@ -26,7 +26,10 @@ public class GameManager : Singleton<GameManager>
     private MessagePanel bottomMessagePanel;
     public MessagePanel BottomMessagePanel => bottomMessagePanel;
 
-    public AudioClip[] audioClips; 
+    public AudioClip[] audioClips;
+
+    [Tooltip("치트를 위한 스폰 데이터 모음")]
+    public SpawnPointDataSO[] spawnDatas;
 
     [SerializeField] private GameState state;
     public GameState State
@@ -127,14 +130,45 @@ public class GameManager : Singleton<GameManager>
         cheatActions.Cheat.F1.started += F1_started;
         cheatActions.Cheat.F2.started += F2_started;
         cheatActions.Cheat.F3.started += F3_started;
+
+        cheatActions.Cheat.F9.started += F9_started;
+        cheatActions.Cheat.F10.started += F10_started;
+        cheatActions.Cheat.F11.started += F11_started;
+        cheatActions.Cheat.F12.started += F12_started;
     }
 
     private void CheatKeyDisable()
     {
+        cheatActions.Cheat.F12.started -= F12_started;
+        cheatActions.Cheat.F11.started -= F11_started;
+        cheatActions.Cheat.F10.started -= F10_started;
+        cheatActions.Cheat.F9.started -= F9_started;
+
         cheatActions.Cheat.F3.started -= F3_started;
         cheatActions.Cheat.F2.started -= F2_started;
         cheatActions.Cheat.F1.started -= F1_started;
         cheatActions.Disable();
+    }
+
+    private void F12_started(InputAction.CallbackContext context)
+    {
+        // 3
+        //GameSceneManager.Instance.RequestSceneChange()
+    }
+
+    private void F11_started(InputAction.CallbackContext context)
+    {
+        // 4
+    }
+
+    private void F10_started(InputAction.CallbackContext context)
+    {
+        // 5
+    }
+
+    private void F9_started(InputAction.CallbackContext context)
+    {
+        // 6
     }
 
     private void F3_started(InputAction.CallbackContext context)

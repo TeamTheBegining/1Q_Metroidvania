@@ -14,12 +14,10 @@ public class CameraSetTrigger : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             localManager.SetScene5Priority(targetType);
-            //Debug.Log($"stay {this.gameObject.name}");
         }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
-    {        
-  
+    {
     }
 }

@@ -164,6 +164,42 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""F9"",
+                    ""type"": ""Button"",
+                    ""id"": ""0c452cd5-8337-47b4-966b-464b97c81c79"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""F10"",
+                    ""type"": ""Button"",
+                    ""id"": ""dbca088b-5af1-4c74-b7cc-051784862c78"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""F11"",
+                    ""type"": ""Button"",
+                    ""id"": ""0049c4ec-7558-47f0-9a9e-6522f9266ef1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""F12"",
+                    ""type"": ""Button"",
+                    ""id"": ""17d422fe-65fb-4da7-8070-6929de293782"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""K"",
                     ""type"": ""Button"",
                     ""id"": ""db89fae2-1c86-496b-b358-15da4450b39a"",
@@ -273,6 +309,50 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""bde54804-e73b-4a0c-bc07-22920688245d"",
+                    ""path"": ""<Keyboard>/f9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""F9"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4a7aa1d2-050f-4d12-b19b-2795861bc4d2"",
+                    ""path"": ""<Keyboard>/f10"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""F10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba924526-5902-4839-b3e1-8f142eda6f66"",
+                    ""path"": ""<Keyboard>/f11"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""F11"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c2482c2-d781-4c40-b0f5-efffd46c447b"",
+                    ""path"": ""<Keyboard>/f12"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""F12"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""a3fddef5-0116-4ba9-b4e9-3fbc10efe62c"",
                     ""path"": ""<Keyboard>/k"",
                     ""interactions"": """",
@@ -308,6 +388,10 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
         m_Cheat_F6 = m_Cheat.FindAction("F6", throwIfNotFound: true);
         m_Cheat_F7 = m_Cheat.FindAction("F7", throwIfNotFound: true);
         m_Cheat_F8 = m_Cheat.FindAction("F8", throwIfNotFound: true);
+        m_Cheat_F9 = m_Cheat.FindAction("F9", throwIfNotFound: true);
+        m_Cheat_F10 = m_Cheat.FindAction("F10", throwIfNotFound: true);
+        m_Cheat_F11 = m_Cheat.FindAction("F11", throwIfNotFound: true);
+        m_Cheat_F12 = m_Cheat.FindAction("F12", throwIfNotFound: true);
         m_Cheat_K = m_Cheat.FindAction("K", throwIfNotFound: true);
         m_Cheat_M = m_Cheat.FindAction("M", throwIfNotFound: true);
     }
@@ -398,6 +482,10 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Cheat_F6;
     private readonly InputAction m_Cheat_F7;
     private readonly InputAction m_Cheat_F8;
+    private readonly InputAction m_Cheat_F9;
+    private readonly InputAction m_Cheat_F10;
+    private readonly InputAction m_Cheat_F11;
+    private readonly InputAction m_Cheat_F12;
     private readonly InputAction m_Cheat_K;
     private readonly InputAction m_Cheat_M;
     /// <summary>
@@ -443,6 +531,22 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Cheat/F8".
         /// </summary>
         public InputAction @F8 => m_Wrapper.m_Cheat_F8;
+        /// <summary>
+        /// Provides access to the underlying input action "Cheat/F9".
+        /// </summary>
+        public InputAction @F9 => m_Wrapper.m_Cheat_F9;
+        /// <summary>
+        /// Provides access to the underlying input action "Cheat/F10".
+        /// </summary>
+        public InputAction @F10 => m_Wrapper.m_Cheat_F10;
+        /// <summary>
+        /// Provides access to the underlying input action "Cheat/F11".
+        /// </summary>
+        public InputAction @F11 => m_Wrapper.m_Cheat_F11;
+        /// <summary>
+        /// Provides access to the underlying input action "Cheat/F12".
+        /// </summary>
+        public InputAction @F12 => m_Wrapper.m_Cheat_F12;
         /// <summary>
         /// Provides access to the underlying input action "Cheat/K".
         /// </summary>
@@ -501,6 +605,18 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
             @F8.started += instance.OnF8;
             @F8.performed += instance.OnF8;
             @F8.canceled += instance.OnF8;
+            @F9.started += instance.OnF9;
+            @F9.performed += instance.OnF9;
+            @F9.canceled += instance.OnF9;
+            @F10.started += instance.OnF10;
+            @F10.performed += instance.OnF10;
+            @F10.canceled += instance.OnF10;
+            @F11.started += instance.OnF11;
+            @F11.performed += instance.OnF11;
+            @F11.canceled += instance.OnF11;
+            @F12.started += instance.OnF12;
+            @F12.performed += instance.OnF12;
+            @F12.canceled += instance.OnF12;
             @K.started += instance.OnK;
             @K.performed += instance.OnK;
             @K.canceled += instance.OnK;
@@ -542,6 +658,18 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
             @F8.started -= instance.OnF8;
             @F8.performed -= instance.OnF8;
             @F8.canceled -= instance.OnF8;
+            @F9.started -= instance.OnF9;
+            @F9.performed -= instance.OnF9;
+            @F9.canceled -= instance.OnF9;
+            @F10.started -= instance.OnF10;
+            @F10.performed -= instance.OnF10;
+            @F10.canceled -= instance.OnF10;
+            @F11.started -= instance.OnF11;
+            @F11.performed -= instance.OnF11;
+            @F11.canceled -= instance.OnF11;
+            @F12.started -= instance.OnF12;
+            @F12.performed -= instance.OnF12;
+            @F12.canceled -= instance.OnF12;
             @K.started -= instance.OnK;
             @K.performed -= instance.OnK;
             @K.canceled -= instance.OnK;
@@ -644,6 +772,34 @@ public partial class @CheatInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnF8(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "F9" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnF9(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "F10" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnF10(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "F11" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnF11(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "F12" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnF12(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "K" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

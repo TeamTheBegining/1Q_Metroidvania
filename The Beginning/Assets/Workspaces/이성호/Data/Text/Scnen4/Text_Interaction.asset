@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293dec649e04ae8419b1bd01b629f6d1, type: 3}
-  m_Name: Scene4_Text_0
+  m_Name: Text_Interaction
   m_EditorClassIdentifier: 
   text: "\uC0C1\uD638\uC791\uC6A9 : E"

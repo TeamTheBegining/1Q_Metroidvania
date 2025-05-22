@@ -95,7 +95,7 @@ public class CameraManager : Singleton<CameraManager>
     /// </summary>
     /// <param name="type">카메라 타입</param>
     /// <param name="priority">우선순위 값</param>
-    public void SetVirtualCameraPriority(CameraType type, int priority) // 임시 함수 
+    public void SetVirtualCameraPriority(CameraType type, int priority)
     {
         cameraDictionary.TryGetValue(type, out CinemachineCamera camera);
         if (camera != null)
