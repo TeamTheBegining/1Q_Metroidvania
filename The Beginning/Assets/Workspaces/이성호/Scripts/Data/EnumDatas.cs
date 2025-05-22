@@ -52,6 +52,14 @@ public enum SFXType
     grab_01,            // 24
     // ---------------------- Player
 
+    // ---------------------- Enemy
+    attack_A01,         // 25
+    attack_B01,         // 26
+    attack_C01,         // 27
+    hit_01,             // 28
+    hit_02,             // 29
+    hit_03,             // 30
+    MiniBoss_Death_01,  // 31
 
     SoundTypeCount
 }
