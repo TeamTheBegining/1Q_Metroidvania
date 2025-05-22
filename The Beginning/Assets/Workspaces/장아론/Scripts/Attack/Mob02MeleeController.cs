@@ -468,6 +468,7 @@ public class Mob02MeleeController : CommonEnemyController
             if (attackAEnemyHitbox != null)
             {
                 attackAEnemyHitbox.attackDamage = attackAValue;
+                attackAEnemyHitbox.ResetHitPlayers();
             }
             else
             {
