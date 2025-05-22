@@ -4,6 +4,7 @@ using System.Net;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class LastBoss : MonoBehaviour, IDamageable
 {
@@ -16,6 +17,7 @@ public class LastBoss : MonoBehaviour, IDamageable
     private float movetime = 0f;
     private Vector3 centerPos; // 무한대 곡선의 중심 위치
     private bool isChangeColor = false;
+    private bool playerhit = false;
 
     private Vector3 targetWorldPos;
 
@@ -25,15 +27,18 @@ public class LastBoss : MonoBehaviour, IDamageable
 
     float changeColorTimer = 0f;
     float attackTimer = 0f;
+    int attack3count;
+    //[SerializeField]float attack3Timer = 0f;
 
 
-    [SerializeField]float upSpeed = 3f;
-    [SerializeField]float moveSpeed = 1f;
+    [SerializeField]float upSpeed = 0.1f;
+    [SerializeField]float moveSpeed = 1.5f;
     [SerializeField]float addSpeed = 2f;
     [SerializeField]float lerpT = 0f;
     [SerializeField]float damage = 3f;
     [SerializeField]float changeColorTime = 0.1f;
-    [SerializeField]float attackTime = 10f;
+    [SerializeField]float attackTime = 3f;
+    //[SerializeField]float attack3Time = 1f;
 
 
 
@@ -81,18 +86,20 @@ public class LastBoss : MonoBehaviour, IDamageable
             changeColorTimer = 0;
         }
     }
-    private void OnEnable()
+    public void FindPlayer()
     {
         player = GameObject.FindWithTag("Player");
     }
     private void Awake()
     {
         currentState = LastBossState.WaitingForPlayer;
-        bossani = GetComponent<Animator>();
+        bossani = GetComponentInChildren<Animator>();
+        spr = GetComponentInChildren<SpriteRenderer>();
         line = transform.Find("Laser").GameObject();
         lr = line.GetComponent<LineRenderer>();
-        spr = GetComponent<SpriteRenderer>();
         originalColor = spr.color;
+        attack3count = 0;
+        player = GameObject.FindWithTag("Player");// 추후 삭제
     }
 
     void FixedUpdate()
@@ -141,7 +148,9 @@ public class LastBoss : MonoBehaviour, IDamageable
     }
     float GetDistanceToPlayer()
     {
-        return Vector3.Distance(transform.position, player.transform.position);
+        if(player != null)
+            return Vector3.Distance(transform.position, player.transform.position);
+        return 999;
     }
     private void WaitingForPlayerUpdate()
     {
@@ -159,8 +168,7 @@ public class LastBoss : MonoBehaviour, IDamageable
         if (stateInfo.normalizedTime >= 0.99f && stateInfo.IsName("Start"))
         {
             movetime = Mathf.PI / 2f;
-            //currentState = LastBossState.Move;
-            currentState = LastBossState.Attack2;
+            currentState = LastBossState.Move;
 
         }
     }
@@ -179,7 +187,7 @@ public class LastBoss : MonoBehaviour, IDamageable
             if (Vector2.Distance(transform.position, targetWorldPos) < 0.01f)
             {
                 transform.position = targetWorldPos;
-                currentState = LastBossState.Attack1;
+                currentState = LastBossState.Attack3;
                 movetime = Mathf.PI / 2f;
                 attackTimer = 0;
                 addSpeed = 2;
@@ -194,7 +202,9 @@ public class LastBoss : MonoBehaviour, IDamageable
             float y = 3 * Mathf.Sin(movetime) * Mathf.Cos(movetime);
 
             Vector3 offset = new Vector3(x, y, 0);
-            transform.position = centerPos + offset;
+            transform.position = centerPos + offset; 
+            
+            Debug.DrawLine(centerPos, centerPos + offset, Color.red);
         }
     }
 
@@ -214,19 +224,25 @@ public class LastBoss : MonoBehaviour, IDamageable
         // Raycast 방향과 거리
         Vector2 direction = (currentPos - line.transform.position).normalized;
         float distance = Vector2.Distance(line.transform.position, currentPos);
-        // 충돌 검사 (2D Raycast)
-        RaycastHit2D hit = Physics2D.Raycast(line.transform.position, direction, distance, LayerMask.GetMask("Player"));
-        if (hit.collider != null && hit.collider.CompareTag("Player"))
+
+        if(!playerhit)
         {
-            if(hit.collider.gameObject.GetComponent<IDamageable>() != null)
+            // 충돌 검사 (2D Raycast)
+            RaycastHit2D hit = Physics2D.Raycast(line.transform.position, direction, distance, LayerMask.GetMask("Player"));
+            if (hit.collider != null && hit.collider.CompareTag("Player"))
             {
-                hit.collider.gameObject.GetComponent<IDamageable>().TakeDamage(damage,gameObject);
+                if (hit.collider.gameObject.GetComponent<IDamageable>() != null)
+                {
+                    hit.collider.gameObject.GetComponent<IDamageable>().TakeDamage(damage, gameObject);
+                    playerhit = true;
+                }
             }
         }
 
         if(Vector3.Distance(currentPos, laserLeftPos.position)<0.1f)
         {
             lr.enabled = false;
+            playerhit = false;
             transform.position = Vector3.Lerp(transform.position, targetWorldPos, Time.deltaTime * 2);
             if (Vector2.Distance(transform.position, targetWorldPos) < 0.01f)
             {
@@ -245,7 +261,22 @@ public class LastBoss : MonoBehaviour, IDamageable
 
     private void Attack3Update()
     {
+        if (attack3count < 4)
+        {
+            Camera cam = Camera.main;
+            float y = 0f; // Thunder의 Y 위치 (필요에 따라 플레이어 위치나 고정값 사용)
 
+            for (int i = 0; i < 4; i++) 
+            {
+                float viewportX = (i + 0.5f) / 4f; // 0.125, 0.375, 0.625
+                Vector3 worldPos = cam.ViewportToWorldPoint(new Vector3(viewportX, 0.5f, cam.nearClipPlane));
+                worldPos.y = y;
+                worldPos.z = 0f;
+
+                PoolManager.Instance.Pop<Thunder>(PoolType.Thunder, worldPos);
+                attack3count++;
+            }
+        }
     }
 
     private void DeadUpdate()
