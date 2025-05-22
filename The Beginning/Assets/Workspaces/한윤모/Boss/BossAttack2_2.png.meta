@@ -1,0 +1,2379 @@
+fileFormatVersion: 2
+guid: 7a65a5e378d393147b1efc1f550be01e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4022872030981793993
+    second: galaxy_cut_scene_24_0
+  - first:
+      213: -2160051703012278883
+    second: galaxy_cut_scene_24_1
+  - first:
+      213: 4819721401724578139
+    second: galaxy_cut_scene_24_2
+  - first:
+      213: 1531293651542615914
+    second: galaxy_cut_scene_24_3
+  - first:
+      213: -4865068038589813371
+    second: galaxy_cut_scene_24_4
+  - first:
+      213: -3496552723582219856
+    second: galaxy_cut_scene_24_5
+  - first:
+      213: 6318823020540026328
+    second: galaxy_cut_scene_24_6
+  - first:
+      213: -555502458657253881
+    second: galaxy_cut_scene_24_7
+  - first:
+      213: 1089626388567850001
+    second: galaxy_cut_scene_24_8
+  - first:
+      213: -2266480534158605331
+    second: galaxy_cut_scene_24_9
+  - first:
+      213: -7613564043842387319
+    second: galaxy_cut_scene_24_10
+  - first:
+      213: -7467074795801064208
+    second: galaxy_cut_scene_24_11
+  - first:
+      213: -8408541426003082157
+    second: galaxy_cut_scene_24_12
+  - first:
+      213: -7467817848318449874
+    second: galaxy_cut_scene_24_13
+  - first:
+      213: -4684808632104691559
+    second: galaxy_cut_scene_24_14
+  - first:
+      213: 6434803353523605099
+    second: galaxy_cut_scene_24_15
+  - first:
+      213: 1117707424550787688
+    second: galaxy_cut_scene_24_16
+  - first:
+      213: -9172429874266724622
+    second: galaxy_cut_scene_24_17
+  - first:
+      213: 5784572341444586922
+    second: galaxy_cut_scene_24_18
+  - first:
+      213: -8415979977338373930
+    second: galaxy_cut_scene_24_19
+  - first:
+      213: 9182997002293350881
+    second: galaxy_cut_scene_24_20
+  - first:
+      213: 896360151374207493
+    second: galaxy_cut_scene_24_21
+  - first:
+      213: -7930669578570229150
+    second: galaxy_cut_scene_24_22
+  - first:
+      213: 6698889264643313850
+    second: galaxy_cut_scene_24_23
+  - first:
+      213: -8102688039604478947
+    second: galaxy_cut_scene_24_24
+  - first:
+      213: 2278971557283522053
+    second: galaxy_cut_scene_24_25
+  - first:
+      213: 4237596756273621214
+    second: galaxy_cut_scene_24_26
+  - first:
+      213: -656540270861885272
+    second: galaxy_cut_scene_24_27
+  - first:
+      213: -4307129049727440565
+    second: galaxy_cut_scene_24_28
+  - first:
+      213: 5642327325727057330
+    second: galaxy_cut_scene_24_29
+  - first:
+      213: 5546403090261929545
+    second: galaxy_cut_scene_24_30
+  - first:
+      213: -2557968690702538600
+    second: galaxy_cut_scene_24_31
+  - first:
+      213: 58418567992777249
+    second: galaxy_cut_scene_24_32
+  - first:
+      213: 8316441528629911375
+    second: galaxy_cut_scene_24_33
+  - first:
+      213: -2071452152265534884
+    second: galaxy_cut_scene_24_34
+  - first:
+      213: -8874094763163694867
+    second: galaxy_cut_scene_24_35
+  - first:
+      213: 6090248258452811359
+    second: galaxy_cut_scene_24_36
+  - first:
+      213: -5320727757680514187
+    second: galaxy_cut_scene_24_37
+  - first:
+      213: 5895287089753053675
+    second: galaxy_cut_scene_24_38
+  - first:
+      213: 7265632918364818935
+    second: galaxy_cut_scene_24_39
+  - first:
+      213: 1757149658636335142
+    second: galaxy_cut_scene_24_40
+  - first:
+      213: 6813942940937896266
+    second: galaxy_cut_scene_24_41
+  - first:
+      213: 4950315432913538674
+    second: galaxy_cut_scene_24_42
+  - first:
+      213: -3666760991419096078
+    second: galaxy_cut_scene_24_43
+  - first:
+      213: 342902281169569751
+    second: galaxy_cut_scene_24_44
+  - first:
+      213: 8175482494779662493
+    second: galaxy_cut_scene_24_45
+  - first:
+      213: -1074262628628224682
+    second: galaxy_cut_scene_24_46
+  - first:
+      213: 368538760014244060
+    second: galaxy_cut_scene_24_47
+  - first:
+      213: 9220029958234293281
+    second: galaxy_cut_scene_24_48
+  - first:
+      213: -1332343341735614496
+    second: galaxy_cut_scene_24_49
+  - first:
+      213: -5146819392468834397
+    second: galaxy_cut_scene_24_50
+  - first:
+      213: 3741710039058630018
+    second: galaxy_cut_scene_24_51
+  - first:
+      213: -2120833147432431556
+    second: galaxy_cut_scene_24_52
+  - first:
+      213: -6195091941854783404
+    second: galaxy_cut_scene_24_53
+  - first:
+      213: -2917696448134177447
+    second: galaxy_cut_scene_24_54
+  - first:
+      213: 277037268755316339
+    second: galaxy_cut_scene_24_55
+  - first:
+      213: 1407934498841919435
+    second: galaxy_cut_scene_24_56
+  - first:
+      213: -4036958110054110496
+    second: galaxy_cut_scene_24_57
+  - first:
+      213: -4747752446660886843
+    second: galaxy_cut_scene_24_58
+  - first:
+      213: 747450266945813258
+    second: galaxy_cut_scene_24_59
+  - first:
+      213: 1714262608132945740
+    second: galaxy_cut_scene_24_60
+  - first:
+      213: 1705130637181776116
+    second: galaxy_cut_scene_24_61
+  - first:
+      213: -963670789548643133
+    second: galaxy_cut_scene_24_62
+  - first:
+      213: 7843696399354251789
+    second: galaxy_cut_scene_24_63
+  - first:
+      213: -1086359180815413596
+    second: galaxy_cut_scene_24_64
+  - first:
+      213: -5708709634728523367
+    second: galaxy_cut_scene_24_65
+  - first:
+      213: -3505429476401086440
+    second: galaxy_cut_scene_24_66
+  - first:
+      213: -7179325105970536279
+    second: galaxy_cut_scene_24_67
+  - first:
+      213: -1838399985845767837
+    second: galaxy_cut_scene_24_68
+  - first:
+      213: -6308996335913400016
+    second: galaxy_cut_scene_24_69
+  - first:
+      213: -2269951866720312153
+    second: galaxy_cut_scene_24_70
+  - first:
+      213: -3624690285324743299
+    second: galaxy_cut_scene_24_71
+  - first:
+      213: 7979144461347984788
+    second: galaxy_cut_scene_24_72
+  - first:
+      213: 6733547129887755244
+    second: galaxy_cut_scene_24_73
+  - first:
+      213: -8329086660001036974
+    second: galaxy_cut_scene_24_74
+  - first:
+      213: -2184186555928172265
+    second: galaxy_cut_scene_24_75
+  - first:
+      213: 6652767287749390026
+    second: galaxy_cut_scene_24_76
+  - first:
+      213: 1980491198517461282
+    second: galaxy_cut_scene_24_77
+  - first:
+      213: 4065045703319178429
+    second: galaxy_cut_scene_24_78
+  - first:
+      213: 7373484347159936500
+    second: galaxy_cut_scene_24_79
+  - first:
+      213: -636400009252400972
+    second: galaxy_cut_scene_24_80
+  - first:
+      213: 4509299209193228538
+    second: galaxy_cut_scene_24_81
+  - first:
+      213: -2082230907583325766
+    second: galaxy_cut_scene_24_82
+  - first:
+      213: 5351120611024795090
+    second: galaxy_cut_scene_24_83
+  - first:
+      213: -2929796444021005995
+    second: galaxy_cut_scene_24_84
+  - first:
+      213: -601956309362110452
+    second: galaxy_cut_scene_24_85
+  - first:
+      213: 4488277754416097116
+    second: galaxy_cut_scene_24_86
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_0
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 717
+        width: 31
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c8268f4ccc14d730800000000000000
+      internalID: 4022872030981793993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 709
+        width: 30
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9db979ab64f502e0800000000000000
+      internalID: -2160051703012278883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_2
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 583
+        width: 20
+        height: 205
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b592422341713e240800000000000000
+      internalID: 4819721401724578139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_3
+      rect:
+        serializedVersion: 2
+        x: 1002
+        y: 579
+        width: 21
+        height: 205
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a672203867f304510800000000000000
+      internalID: 1531293651542615914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_4
+      rect:
+        serializedVersion: 2
+        x: 1322
+        y: 691
+        width: 19
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58d6fb7256ecb7cb0800000000000000
+      internalID: -4865068038589813371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_5
+      rect:
+        serializedVersion: 2
+        x: 1337
+        y: 727
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b9057cc2dfb97fc0800000000000000
+      internalID: -3496552723582219856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_6
+      rect:
+        serializedVersion: 2
+        x: 1480
+        y: 617
+        width: 23
+        height: 183
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dd59d10f08f0b750800000000000000
+      internalID: 6318823020540026328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_7
+      rect:
+        serializedVersion: 2
+        x: 1639
+        y: 719
+        width: 23
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 706d0eff4757a48f0800000000000000
+      internalID: -555502458657253881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_8
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 674
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11c7a746d612f1f00800000000000000
+      internalID: 1089626388567850001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_9
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 592
+        width: 15
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de3832766f7db80e0800000000000000
+      internalID: -2266480534158605331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_10
+      rect:
+        serializedVersion: 2
+        x: 1645
+        y: 565
+        width: 16
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 982861c27df275690800000000000000
+      internalID: -7613564043842387319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_11
+      rect:
+        serializedVersion: 2
+        x: 1345
+        y: 664
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fc4105190f9f5890800000000000000
+      internalID: -7467074795801064208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_12
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 648
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3540ee79f1cde4b80800000000000000
+      internalID: -8408541426003082157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_13
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 601
+        width: 32
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2728afab3bfc5890800000000000000
+      internalID: -7467817848318449874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_14
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 628
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99857bace573cfeb0800000000000000
+      internalID: -4684808632104691559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_15
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 624
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6e44469e830d4950800000000000000
+      internalID: 6434803353523605099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_16
+      rect:
+        serializedVersion: 2
+        x: 1327
+        y: 572
+        width: 14
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86a9a231bf4e28f00800000000000000
+      internalID: 1117707424550787688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_17
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 517
+        width: 31
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f6a62180abf4b080800000000000000
+      internalID: -9172429874266724622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_18
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 509
+        width: 30
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aadaa5585ede64050800000000000000
+      internalID: 5784572341444586922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_19
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 502
+        width: 20
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d832f5ecce643b80800000000000000
+      internalID: -8415979977338373930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_20
+      rect:
+        serializedVersion: 2
+        x: 1002
+        y: 427
+        width: 21
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e11c27be1f807f70800000000000000
+      internalID: 9182997002293350881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_21
+      rect:
+        serializedVersion: 2
+        x: 1322
+        y: 491
+        width: 14
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50a997dfec2807c00800000000000000
+      internalID: 896360151374207493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_22
+      rect:
+        serializedVersion: 2
+        x: 1337
+        y: 527
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26a135a690a90f190800000000000000
+      internalID: -7930669578570229150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_23
+      rect:
+        serializedVersion: 2
+        x: 1480
+        y: 524
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab01eb04b4c37fc50800000000000000
+      internalID: 6698889264643313850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_24
+      rect:
+        serializedVersion: 2
+        x: 1639
+        y: 484
+        width: 21
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1c919968287d8f80800000000000000
+      internalID: -8102688039604478947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_25
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 474
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5066a1d8e8880af10800000000000000
+      internalID: 2278971557283522053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_26
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 419
+        width: 15
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed8690f4cc7feca30800000000000000
+      internalID: 4237596756273621214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_27
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 412
+        width: 15
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a0e9862a1083e6f0800000000000000
+      internalID: -656540270861885272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_28
+      rect:
+        serializedVersion: 2
+        x: 1345
+        y: 464
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b49ea3d03f00a34c0800000000000000
+      internalID: -4307129049727440565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_29
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 427
+        width: 32
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b5e074fec29d4e40800000000000000
+      internalID: 5642327325727057330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_30
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 428
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94ee0387938c8fc40800000000000000
+      internalID: 5546403090261929545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_31
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 424
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 898aa1c4705408cd0800000000000000
+      internalID: -2557968690702538600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_32
+      rect:
+        serializedVersion: 2
+        x: 1327
+        y: 419
+        width: 14
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12a1f79c06b8fc000800000000000000
+      internalID: 58418567992777249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_33
+      rect:
+        serializedVersion: 2
+        x: 1647
+        y: 412
+        width: 13
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4fda45028fe96370800000000000000
+      internalID: 8316441528629911375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_34
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 0
+        width: 171
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c529ef61e39b043e0800000000000000
+      internalID: -2071452152265534884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_35
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 0
+        width: 65
+        height: 402
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de8497274d1e8d480800000000000000
+      internalID: -8874094763163694867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_36
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 1
+        width: 66
+        height: 412
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5e65070688e48450800000000000000
+      internalID: 6090248258452811359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_37
+      rect:
+        serializedVersion: 2
+        x: 1332
+        y: 387
+        width: 6
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57b64e87b4af826b0800000000000000
+      internalID: -5320727757680514187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_38
+      rect:
+        serializedVersion: 2
+        x: 1327
+        y: 374
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be95da1af5440d150800000000000000
+      internalID: 5895287089753053675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_39
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 327
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fd058fe4a6b4d460800000000000000
+      internalID: 7265632918364818935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_40
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 357
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 628b7340e46a26810800000000000000
+      internalID: 1757149658636335142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_41
+      rect:
+        serializedVersion: 2
+        x: 1315
+        y: 333
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a414262c00dff8e50800000000000000
+      internalID: 6813942940937896266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_42
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 305
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27e02f888ad03b440800000000000000
+      internalID: 4950315432913538674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_43
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 302
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f3a43e3e4c0d1dc0800000000000000
+      internalID: -3666760991419096078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_44
+      rect:
+        serializedVersion: 2
+        x: 838
+        y: 215
+        width: 18
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d788c5decb32c400800000000000000
+      internalID: 342902281169569751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_45
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 301
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9024c07306257170800000000000000
+      internalID: 8175482494779662493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_46
+      rect:
+        serializedVersion: 2
+        x: 1458
+        y: 302
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6552329b4d37711f0800000000000000
+      internalID: -1074262628628224682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_47
+      rect:
+        serializedVersion: 2
+        x: 1311
+        y: 283
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd8ac94bc005d1500800000000000000
+      internalID: 368538760014244060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_48
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 219
+        width: 26
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 124c30fa56024ff70800000000000000
+      internalID: 9220029958234293281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_49
+      rect:
+        serializedVersion: 2
+        x: 1352
+        y: 253
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e7edfc2ac0928de0800000000000000
+      internalID: -1332343341735614496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_50
+      rect:
+        serializedVersion: 2
+        x: 1517
+        y: 256
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a7adc41803d298b0800000000000000
+      internalID: -5146819392468834397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_51
+      rect:
+        serializedVersion: 2
+        x: 1351
+        y: 229
+        width: 10
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2854a92c4793de330800000000000000
+      internalID: 3741710039058630018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_52
+      rect:
+        serializedVersion: 2
+        x: 1516
+        y: 235
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c309a633d794192e0800000000000000
+      internalID: -2120833147432431556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_53
+      rect:
+        serializedVersion: 2
+        x: 1331
+        y: 201
+        width: 8
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4585cdea3bc960aa0800000000000000
+      internalID: -6195091941854783404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_54
+      rect:
+        serializedVersion: 2
+        x: 1332
+        y: 187
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95d1b8ef9824287d0800000000000000
+      internalID: -2917696448134177447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_55
+      rect:
+        serializedVersion: 2
+        x: 1327
+        y: 174
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37e74b99deb38d300800000000000000
+      internalID: 277037268755316339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_56
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 109
+        width: 42
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcf7d7697fcf98310800000000000000
+      internalID: 1407934498841919435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_57
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 157
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0eaa715dcf7d9f7c0800000000000000
+      internalID: -4036958110054110496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_58
+      rect:
+        serializedVersion: 2
+        x: 1315
+        y: 133
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ce394fed489c1eb0800000000000000
+      internalID: -4747752446660886843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_59
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 101
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0b7390ce0a7f5a00800000000000000
+      internalID: 747450266945813258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_60
+      rect:
+        serializedVersion: 2
+        x: 1458
+        y: 102
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c47bf7172c84ac710800000000000000
+      internalID: 1714262608132945740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_61
+      rect:
+        serializedVersion: 2
+        x: 1311
+        y: 83
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f0fad4c747d9a710800000000000000
+      internalID: 1705130637181776116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_62
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 7
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cc688cc58a50a2f0800000000000000
+      internalID: -963670789548643133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_63
+      rect:
+        serializedVersion: 2
+        x: 663
+        y: 14
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0a458941586adc60800000000000000
+      internalID: 7843696399354251789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_64
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 0
+        width: 49
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ae4301b41a7ce0f0800000000000000
+      internalID: -1086359180815413596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_65
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 2
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 999082055d696c0b0800000000000000
+      internalID: -5708709634728523367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_66
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 13
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8100ee9b6763a5fc0800000000000000
+      internalID: -3505429476401086440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_67
+      rect:
+        serializedVersion: 2
+        x: 884
+        y: 14
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a025939ad9ed5c90800000000000000
+      internalID: -7179325105970536279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_68
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 2
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 361749004f0bc76e0800000000000000
+      internalID: -1838399985845767837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_69
+      rect:
+        serializedVersion: 2
+        x: 1048
+        y: 14
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03904ac4241f178a0800000000000000
+      internalID: -6308996335913400016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_70
+      rect:
+        serializedVersion: 2
+        x: 1185
+        y: 0
+        width: 24
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a4a6eecdc28f70e0800000000000000
+      internalID: -2269951866720312153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_71
+      rect:
+        serializedVersion: 2
+        x: 1202
+        y: 6
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7dc862d36382bdc0800000000000000
+      internalID: -3624690285324743299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_72
+      rect:
+        serializedVersion: 2
+        x: 1297
+        y: 11
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4951c2ebc9d9bbe60800000000000000
+      internalID: 7979144461347984788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_73
+      rect:
+        serializedVersion: 2
+        x: 1305
+        y: 26
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ceb8f43507d527d50800000000000000
+      internalID: 6733547129887755244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_74
+      rect:
+        serializedVersion: 2
+        x: 1311
+        y: 28
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2558137efc3296c80800000000000000
+      internalID: -8329086660001036974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_75
+      rect:
+        serializedVersion: 2
+        x: 1313
+        y: 18
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 719a7b256e530b1e0800000000000000
+      internalID: -2184186555928172265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_76
+      rect:
+        serializedVersion: 2
+        x: 1316
+        y: 13
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ace24afa990635c50800000000000000
+      internalID: 6652767287749390026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_77
+      rect:
+        serializedVersion: 2
+        x: 1322
+        y: 33
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 221cb60804e1c7b10800000000000000
+      internalID: 1980491198517461282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_78
+      rect:
+        serializedVersion: 2
+        x: 1327
+        y: 11
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbc41169781f96830800000000000000
+      internalID: 4065045703319178429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_79
+      rect:
+        serializedVersion: 2
+        x: 1328
+        y: 26
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fdfe5582f0e35660800000000000000
+      internalID: 7373484347159936500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_80
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 29
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b09479309d0b27f0800000000000000
+      internalID: -636400009252400972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_81
+      rect:
+        serializedVersion: 2
+        x: 1345
+        y: 0
+        width: 9
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af889ed4dbf349e30800000000000000
+      internalID: 4509299209193228538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_82
+      rect:
+        serializedVersion: 2
+        x: 1351
+        y: 29
+        width: 10
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab9182d850e6a13e0800000000000000
+      internalID: -2082230907583325766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_83
+      rect:
+        serializedVersion: 2
+        x: 1352
+        y: 53
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d5776228dff24a40800000000000000
+      internalID: 5351120611024795090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_84
+      rect:
+        serializedVersion: 2
+        x: 1353
+        y: 16
+        width: 13
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 551ece928a54757d0800000000000000
+      internalID: -2929796444021005995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_85
+      rect:
+        serializedVersion: 2
+        x: 1366
+        y: 13
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c009a2a0deb65a7f0800000000000000
+      internalID: -601956309362110452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: galaxy_cut_scene_24_86
+      rect:
+        serializedVersion: 2
+        x: 1472
+        y: 5
+        width: 199
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c57624576d0994e30800000000000000
+      internalID: 4488277754416097116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      galaxy_cut_scene_24_0: 4022872030981793993
+      galaxy_cut_scene_24_1: -2160051703012278883
+      galaxy_cut_scene_24_10: -7613564043842387319
+      galaxy_cut_scene_24_11: -7467074795801064208
+      galaxy_cut_scene_24_12: -8408541426003082157
+      galaxy_cut_scene_24_13: -7467817848318449874
+      galaxy_cut_scene_24_14: -4684808632104691559
+      galaxy_cut_scene_24_15: 6434803353523605099
+      galaxy_cut_scene_24_16: 1117707424550787688
+      galaxy_cut_scene_24_17: -9172429874266724622
+      galaxy_cut_scene_24_18: 5784572341444586922
+      galaxy_cut_scene_24_19: -8415979977338373930
+      galaxy_cut_scene_24_2: 4819721401724578139
+      galaxy_cut_scene_24_20: 9182997002293350881
+      galaxy_cut_scene_24_21: 896360151374207493
+      galaxy_cut_scene_24_22: -7930669578570229150
+      galaxy_cut_scene_24_23: 6698889264643313850
+      galaxy_cut_scene_24_24: -8102688039604478947
+      galaxy_cut_scene_24_25: 2278971557283522053
+      galaxy_cut_scene_24_26: 4237596756273621214
+      galaxy_cut_scene_24_27: -656540270861885272
+      galaxy_cut_scene_24_28: -4307129049727440565
+      galaxy_cut_scene_24_29: 5642327325727057330
+      galaxy_cut_scene_24_3: 1531293651542615914
+      galaxy_cut_scene_24_30: 5546403090261929545
+      galaxy_cut_scene_24_31: -2557968690702538600
+      galaxy_cut_scene_24_32: 58418567992777249
+      galaxy_cut_scene_24_33: 8316441528629911375
+      galaxy_cut_scene_24_34: -2071452152265534884
+      galaxy_cut_scene_24_35: -8874094763163694867
+      galaxy_cut_scene_24_36: 6090248258452811359
+      galaxy_cut_scene_24_37: -5320727757680514187
+      galaxy_cut_scene_24_38: 5895287089753053675
+      galaxy_cut_scene_24_39: 7265632918364818935
+      galaxy_cut_scene_24_4: -4865068038589813371
+      galaxy_cut_scene_24_40: 1757149658636335142
+      galaxy_cut_scene_24_41: 6813942940937896266
+      galaxy_cut_scene_24_42: 4950315432913538674
+      galaxy_cut_scene_24_43: -3666760991419096078
+      galaxy_cut_scene_24_44: 342902281169569751
+      galaxy_cut_scene_24_45: 8175482494779662493
+      galaxy_cut_scene_24_46: -1074262628628224682
+      galaxy_cut_scene_24_47: 368538760014244060
+      galaxy_cut_scene_24_48: 9220029958234293281
+      galaxy_cut_scene_24_49: -1332343341735614496
+      galaxy_cut_scene_24_5: -3496552723582219856
+      galaxy_cut_scene_24_50: -5146819392468834397
+      galaxy_cut_scene_24_51: 3741710039058630018
+      galaxy_cut_scene_24_52: -2120833147432431556
+      galaxy_cut_scene_24_53: -6195091941854783404
+      galaxy_cut_scene_24_54: -2917696448134177447
+      galaxy_cut_scene_24_55: 277037268755316339
+      galaxy_cut_scene_24_56: 1407934498841919435
+      galaxy_cut_scene_24_57: -4036958110054110496
+      galaxy_cut_scene_24_58: -4747752446660886843
+      galaxy_cut_scene_24_59: 747450266945813258
+      galaxy_cut_scene_24_6: 6318823020540026328
+      galaxy_cut_scene_24_60: 1714262608132945740
+      galaxy_cut_scene_24_61: 1705130637181776116
+      galaxy_cut_scene_24_62: -963670789548643133
+      galaxy_cut_scene_24_63: 7843696399354251789
+      galaxy_cut_scene_24_64: -1086359180815413596
+      galaxy_cut_scene_24_65: -5708709634728523367
+      galaxy_cut_scene_24_66: -3505429476401086440
+      galaxy_cut_scene_24_67: -7179325105970536279
+      galaxy_cut_scene_24_68: -1838399985845767837
+      galaxy_cut_scene_24_69: -6308996335913400016
+      galaxy_cut_scene_24_7: -555502458657253881
+      galaxy_cut_scene_24_70: -2269951866720312153
+      galaxy_cut_scene_24_71: -3624690285324743299
+      galaxy_cut_scene_24_72: 7979144461347984788
+      galaxy_cut_scene_24_73: 6733547129887755244
+      galaxy_cut_scene_24_74: -8329086660001036974
+      galaxy_cut_scene_24_75: -2184186555928172265
+      galaxy_cut_scene_24_76: 6652767287749390026
+      galaxy_cut_scene_24_77: 1980491198517461282
+      galaxy_cut_scene_24_78: 4065045703319178429
+      galaxy_cut_scene_24_79: 7373484347159936500
+      galaxy_cut_scene_24_8: 1089626388567850001
+      galaxy_cut_scene_24_80: -636400009252400972
+      galaxy_cut_scene_24_81: 4509299209193228538
+      galaxy_cut_scene_24_82: -2082230907583325766
+      galaxy_cut_scene_24_83: 5351120611024795090
+      galaxy_cut_scene_24_84: -2929796444021005995
+      galaxy_cut_scene_24_85: -601956309362110452
+      galaxy_cut_scene_24_86: 4488277754416097116
+      galaxy_cut_scene_24_9: -2266480534158605331
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
