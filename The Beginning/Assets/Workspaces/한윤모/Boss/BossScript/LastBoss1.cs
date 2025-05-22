@@ -5,8 +5,9 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
+using Random = UnityEngine.Random;
 
-public class LastBoss : MonoBehaviour, IDamageable
+public class LastBoss1 : MonoBehaviour, IDamageable
 {
     [SerializeField] private LastBossState currentState;
     private Animator bossani;
@@ -18,22 +19,18 @@ public class LastBoss : MonoBehaviour, IDamageable
     private Vector3 centerPos; // 무한대 곡선의 중심 위치
     private bool isChangeColor = false;
     private bool playerhit = false;
+    private bool isLeft = false;
+    private Vector3 randomSpecialPos;
 
     private Vector3 targetWorldPos;
-    private Collider2D bodycol;
-    private Collider2D anicol;
-
 
     AnimatorStateInfo stateInfo;
     GameObject line;
 
 
     float changeColorTimer = 0f;
-    float attack3timer = 0f;
-    private bool isend = false;
     float attackTimer = 0f;
-    int attack3count = 0;
-    int attackcount = 0;
+    int attack3count;
     //[SerializeField]float attack3Timer = 0f;
 
 
@@ -64,6 +61,7 @@ public class LastBoss : MonoBehaviour, IDamageable
 
     float currentHp = 100;
     float maxHp = 100;
+
     public float CurrentHp { get => currentHp; set => currentHp = value; }
     public float MaxHp { get => maxHp; set => maxHp = value; }
     public Action OnDead { get; set; }
@@ -105,18 +103,13 @@ public class LastBoss : MonoBehaviour, IDamageable
         lr = line.GetComponent<LineRenderer>();
         originalColor = spr.color;
         attack3count = 0;
-        bodycol = GetComponent<BoxCollider2D>();
-        anicol = transform.Find("Animation").GetComponent<BoxCollider2D>();
-        anicol.enabled = false;
+        player = GameObject.FindWithTag("Player");// 추후 삭제
     }
 
     void FixedUpdate()
     {
         attackTimer += Time.deltaTime;
         stateInfo = bossani.GetCurrentAnimatorStateInfo(0);
-        targetWorldPos = Camera.main.transform.position + new Vector3(2.5f, -0.27f, 0f);
-        targetWorldPos = new Vector3(targetWorldPos.x, targetWorldPos.y,0);
-        centerPos = targetWorldPos - new Vector3(3, 0, 0);
         HitCheck();
         switch (currentState)
         {
@@ -145,6 +138,7 @@ public class LastBoss : MonoBehaviour, IDamageable
                 break;
             case LastBossState.Attack3:
                 Attack3Update();
+                bossani.Play("Attack3");
                 break;
             case LastBossState.Dead:
                 DeadUpdate();
@@ -153,6 +147,7 @@ public class LastBoss : MonoBehaviour, IDamageable
         }
 
     }
+
     float GetDistanceToPlayer()
     {
         if(player != null)
@@ -174,8 +169,8 @@ public class LastBoss : MonoBehaviour, IDamageable
 
         if (stateInfo.normalizedTime >= 0.99f && stateInfo.IsName("Start"))
         {
-            movetime = Mathf.PI / 2f;
             currentState = LastBossState.Move;
+            SetRandomSidePosition();
         }
     }
 
@@ -187,29 +182,56 @@ public class LastBoss : MonoBehaviour, IDamageable
     private void MoveUpdate()
     {
         lr.enabled = false;
+
         if (attackTimer > attackTime)
         {
-            transform.position = Vector3.Lerp(transform.position, targetWorldPos, Time.deltaTime * 2);
-            if (Vector2.Distance(transform.position, targetWorldPos) < 0.01f)
+            Vector3 destination;
+
+            if (currentState == LastBossState.Attack1 || currentState == LastBossState.Attack2)
             {
-                transform.position = targetWorldPos;
-                switch (attackcount%3)
+                destination = targetWorldPos;
+            }
+            else if (currentState == LastBossState.Attack3)
+            {
+                destination = randomSpecialPos;
+            }
+            else
+            {
+                return; // 다른 상태면 이동 안함
+            }
+
+            transform.position = Vector3.Lerp(transform.position, destination, Time.deltaTime * 2f);
+
+            if (Vector3.Distance(transform.position, destination) < 0.01f)
+            {
+                transform.position = destination;
+
+                // 방향에 따른 회전 (좌우만 필요하면 Attack1,2만)
+                if (currentState == LastBossState.Attack1 || currentState == LastBossState.Attack2)
                 {
-                    case 0:
-                        currentState = LastBossState.Attack1;
-                        break;
-                    case 1:
-                        currentState = LastBossState.Attack2;
-                        break;
-                    case 2:
-                        currentState = LastBossState.Attack3;
-                        break;
+                    Vector3 dir = targetWorldPos - transform.position;
+                    if (dir.x < 0)
+                        transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                    else
+                        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 }
-                attackcount++;
-                movetime = Mathf.PI / 2f;
+
                 attackTimer = 0;
+                movetime = Mathf.PI / 2f;
                 addSpeed = 2;
-                ;
+
+                // 다음 상태 정하는 로직 (예시)
+                if (currentState == LastBossState.Attack1 || currentState == LastBossState.Attack2)
+                {
+                    SetRandomSidePosition(); // 좌우 위치 다시 설정
+                }
+                else if (currentState == LastBossState.Attack3)
+                {
+                    SetRandomSpecialPosition(); // 특수 위치 새로 설정
+                }
+
+                // 상태 전환 (필요 시)
+                // currentState = 다음 상태;
             }
         }
         else
@@ -222,13 +244,45 @@ public class LastBoss : MonoBehaviour, IDamageable
 
             Vector3 offset = new Vector3(x, y, 0);
             transform.position = centerPos + offset; 
+            
+            Debug.DrawLine(centerPos, centerPos + offset, Color.red);
         }
+    }
+
+    void SetRandomSidePosition()
+    {
+        Vector3 camPos = Camera.main.transform.position;
+        float y = -0.27f;
+        bool isLeft = Random.value < 0.5f;
+
+        if (isLeft)
+        {
+            targetWorldPos = camPos + new Vector3(-2.5f, y, 0f);
+            centerPos = targetWorldPos + new Vector3(3f, 0f, 0f);
+        }
+        else
+        {
+            targetWorldPos = camPos + new Vector3(2.5f, y, 0f);
+            centerPos = targetWorldPos - new Vector3(3f, 0f, 0f);
+        }
+
+        targetWorldPos.z = 0;
+    }
+
+    // Attack3용 특수 위치 랜덤 설정 예시
+    void SetRandomSpecialPosition()
+    {
+        // 예: 화면 좌우 범위 내 랜덤 위치, y는 고정
+        Vector3 camPos = Camera.main.transform.position;
+        float xRange = 3f;
+        float y = 1.0f; // 원하는 y값
+
+        float randomX = camPos.x + Random.Range(-xRange, xRange);
+        randomSpecialPos = new Vector3(randomX, y, 0f);
     }
 
     private void Attack1Update()
     {
-        bodycol.enabled = true;
-        anicol.enabled = false;
         if (lr.enabled == false)
             lr.enabled = true;
         addSpeed *= 1.1f;
@@ -236,8 +290,8 @@ public class LastBoss : MonoBehaviour, IDamageable
         float t = lerpT / 5;
         lr.widthMultiplier = 0.05f * (1- t);
         if (t > 1) t = 1f;
-        Vector3 startPos = new Vector3(line.transform.position.x, laserLeftPos.position.y, 0);
-        Vector3 currentPos = Vector3.Lerp(startPos, laserLeftPos.position, t);
+        Vector3 startPos = new Vector3(line.transform.position.x, !isLeft?laserLeftPos.position.y : laserRightPos.position.y, 0);
+        Vector3 currentPos = Vector3.Lerp(startPos, !isLeft ? laserLeftPos.position : laserRightPos.position, t);
         lr.SetPosition(0, line.transform.position);
         lr.SetPosition(1, currentPos);
         // Raycast 방향과 거리
@@ -258,7 +312,8 @@ public class LastBoss : MonoBehaviour, IDamageable
             }
         }
 
-        if(Vector3.Distance(currentPos, laserLeftPos.position)<0.1f)
+        
+        if (Vector3.Distance(currentPos, !isLeft ? laserLeftPos.position : laserRightPos.position) <0.1f)
         {
             lr.enabled = false;
             playerhit = false;
@@ -267,6 +322,7 @@ public class LastBoss : MonoBehaviour, IDamageable
             {
                 transform.position = targetWorldPos;
                 currentState = LastBossState.Move;
+                SetRandomSidePosition();
                 movetime = Mathf.PI / 2f;
                 lerpT = 0;
             }
@@ -275,22 +331,18 @@ public class LastBoss : MonoBehaviour, IDamageable
 
     private void Attack2Update()
     {
-        bodycol.enabled = false;
-        anicol.enabled = true;
-        if (stateInfo.normalizedTime >= 0.99f && stateInfo.IsName("Attack2"))
+        if (stateInfo.normalizedTime >= 0.95f && stateInfo.IsName("Attack2"))
         {
-            movetime = Mathf.PI / 2f;
             currentState = LastBossState.Move;
+            SetRandomSidePosition();
         }
+
     }
 
     private void Attack3Update()
     {
-        bodycol.enabled = true;
-        anicol.enabled = false;
         if (attack3count < 4)
         {
-            bossani.Play("Attack3");
             Camera cam = Camera.main;
             float y = 0f; // Thunder의 Y 위치 (필요에 따라 플레이어 위치나 고정값 사용)
 
@@ -303,32 +355,6 @@ public class LastBoss : MonoBehaviour, IDamageable
 
                 PoolManager.Instance.Pop<Thunder>(PoolType.Thunder, worldPos);
                 attack3count++;
-            }
-        }
-
-        if (transform.position.y > -2.25f &&!isend)
-            transform.position += Vector3.down * Time.deltaTime * moveSpeed / 2;
-        else
-        {
-            if (attack3timer > 5)
-            {
-                bossani.Play("Move");
-                isend = true;
-                transform.position = Vector3.Lerp(transform.position, targetWorldPos, Time.deltaTime * 2);
-                if (Vector2.Distance(transform.position, targetWorldPos) < 0.01f)
-                {
-                    transform.position = targetWorldPos;
-                    currentState = LastBossState.Move;
-                    movetime = Mathf.PI / 2f;
-                    lerpT = 0;
-                    attack3timer = 0;
-                    isend = false;
-                }
-            }
-            else
-            {
-                transform.position = new Vector3(transform.position.x, -2.25f, transform.position.z);
-                attack3timer += Time.deltaTime;
             }
         }
     }

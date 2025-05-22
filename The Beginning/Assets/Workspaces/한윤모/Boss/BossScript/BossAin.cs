@@ -5,7 +5,7 @@ public class BossAin : MonoBehaviour
     GameObject boss;
     void Start()
     {
-        boss = GetComponentInParent<GameObject>();
+        boss = transform.parent.gameObject;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

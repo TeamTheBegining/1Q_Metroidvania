@@ -160,6 +160,7 @@ GameObject:
   - component: {fileID: 637784442368874094}
   - component: {fileID: 7454141500607050432}
   - component: {fileID: 6744574132808960898}
+  - component: {fileID: 4840016468113471862}
   m_Layer: 12
   m_Name: Animation
   m_TagString: Untagged
@@ -305,6 +306,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.15966809, y: 0.8017352}
   m_EdgeRadius: 0
+--- !u!114 &4840016468113471862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2982769298068817782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecbfbed3c49f78e43a502f6519f1eba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6171175522875174668
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +372,7 @@ MonoBehaviour:
   lerpT: 0
   damage: 3
   changeColorTime: 0.1
-  attackTime: 3
+  attackTime: 5
   laserLeftPos: {fileID: 0}
   laserRightPos: {fileID: 0}
 --- !u!61 &8435778730040560138
